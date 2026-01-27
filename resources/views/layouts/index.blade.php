@@ -10,20 +10,21 @@
     data-vertical-style="default"
     loader="disable" foxified>
     <head>
+
         <!-- Meta Data -->
-        <meta charset="UTF-8">
-        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+        <title>{{ config('app.name') }} v{{ config('app.version') }} {{ Auth::check() ? '- '.Auth::user()->name : '' }}</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimal-ui">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title> Vyzor - Bootstrap 5 Premium Admin & Dashboard Template </title>
-        <meta name="Description" content="Bootstrap Responsive Admin Web Dashboard HTML5 Template">
-        <meta name="Author" content="Spruko Technologies Private Limited">
-        <meta name="keywords" content="">
+        <meta name="description" content="Sistem Manajemen Rumah Sakit PKU Muhammadiyah Sukoharjo" />
+        <meta name="keywords" content="simrs, simrsmu, sim rspkuskh, pkuskh, rspkuskh, sistem pku, sistem informasi majemen rumah sakit, rumah sakit pku, pku muhammadiyah sukoharjo, pku sukoharjo">
+        <meta name="author" content="Yussuf Faisal" />
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
-
         <!-- Favicon -->
-        <link rel="icon" href="https://demo.spruko.com/html/bootstrap/vyzor/dist/assets/images/brand-logos/favicon.ico" type="image/x-icon">
+        <link rel="shortcut icon" href="{{ asset('images/logo/onlylogo/logo_dark_verysmall.png') }}">
+        <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('images/logo/onlylogo/logo_dark_verysmall.png') }}">
+        <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('images/logo/onlylogo/logo_dark_verysmall.png') }}">
 
         <!-- JQUERY INIT -->
         <script src="{{ asset('libs/jquery/jquery.min.js') }}"></script>
@@ -40,8 +41,17 @@
         <!-- Style Css -->
         <link href="{{ asset('css/styles.css') }}" rel="stylesheet" >
 
-        <!-- Icons Css -->
+        <!-- Icons Css +_+ -->
         <link href="{{ asset('css/icons.css') }}" rel="stylesheet" >
+        <link rel="stylesheet" href="{{ asset('fonts/inter/inter.css') }}" id="main-font-link">
+        <!-- [phosphor Icons] https://phosphoricons.com/ -->
+        <link rel="stylesheet" href="{{ asset('fonts/phosphor/duotone/style.css') }}">
+        <!-- [Tabler Icons] https://tablericons.com -->
+        <link rel="stylesheet" href="{{ asset('fonts/tabler-icons.min.css') }}">
+        <!-- [Font Awesome Icons] https://fontawesome.com/icons -->
+        <link rel="stylesheet" href="{{ asset('fonts/fontawesome.css') }}">
+        <!-- [Material Icons] https://fonts.google.com/icons -->
+        <link rel="stylesheet" href="{{ asset('fonts/material.css') }}">
 
         <!-- Node Waves Css -->
         <link href="{{ asset('libs/node-waves/waves.min.css') }}" rel="stylesheet" >
@@ -51,7 +61,7 @@
 
         <!-- Color Picker Css -->
         <link rel="stylesheet" href="{{ asset('libs/flatpickr/flatpickr.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('libs/%40simonwep/pickr/themes/nano.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('libs/@simonwep/pickr/themes/nano.min.css') }}">
 
         <!-- Choices Css -->
         <link rel="stylesheet" href="{{ asset('libs/choices.js/public/assets/styles/choices.min.css') }}">
@@ -60,7 +70,7 @@
         <link rel="stylesheet" href="{{ asset('libs/flatpickr/flatpickr.min.css') }}">
 
         <!-- Auto Complete CSS -->
-        <link rel="stylesheet" href="{{ asset('libs/%40tarekraafat/autocomplete.js/css/autoComplete.css') }}">
+        <link rel="stylesheet" href="{{ asset('libs/@tarekraafat/autocomplete.js/css/autoComplete.css') }}">
 
         <!-- Scripts -->
         {{-- @vite([
