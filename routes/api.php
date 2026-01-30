@@ -14,19 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-use App\Http\Controllers\Auth\AuthController;
-
-// Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login'])->name('auth.login.process');
-
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout.process');
 
-    Route::get('/admin', function () {
-        return 'Halo Admin';
-    })->middleware('role:admin');
-
-    Route::get('/edit', function () {
-        return 'Bisa edit';
-    })->middleware('permission:edit data');
 });

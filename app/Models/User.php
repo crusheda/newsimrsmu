@@ -47,4 +47,10 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function foto()
+    {
+        return $this->hasOne(users_foto::class, 'user_id')
+                    ->whereNull('deleted_at');
+    }
 }

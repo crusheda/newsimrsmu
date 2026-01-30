@@ -8,8 +8,8 @@ return [
         't', 'u', 'v', 'w', 'x', 'y', 'z', 0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
     // 'fontsDirectory' => dirname(__DIR__) . '/assets/fonts',
     // 'bgsDirectory' => dirname(__DIR__) . '/assets/backgrounds',
-    'fontsDirectory' => [],
-    'bgsDirectory' => [],
+    // 'fontsDirectory' => [],
+    // 'bgsDirectory' => [],
     'default' => [
         'length' => 6,
         'width' => 345,
@@ -51,7 +51,8 @@ return [
     'math' => [
         'length' => 9,
         'width' => 120,
-        'height' => 36,
+        'height' => 38,
         'quality' => 90,
+        'math' => true,
     ],
 ];

@@ -10,6 +10,7 @@ class users_foto extends Model
 {
     use HasFactory;
     protected $table = 'users_foto';
+    protected $fillable = ['user_id', 'filename'];
     public $timestamps = true;
     use SoftDeletes;
 }

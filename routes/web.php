@@ -1,19 +1,26 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use \App\Http\Controllers\Auth\LoginController;
-use \App\Http\Controllers\Dashboard\DashboardController;
 
 Route::get('/', function () {
-    return view('pages.index');
+    return view('pages.v4.index');
 })->name('portal');
 
 // AUTHENTICATION ROUTES
+use App\Http\Controllers\Auth\v4\AuthController;
+use \App\Http\Controllers\Auth\v4\LoginController;
+
 Route::group(['prefix' => 'v4', 'as' => ''], function () {
-    Route::get('login', [LoginController::class, 'index'])->name('auth.login');
+    Route::get('login', [LoginController::class, 'index'])->name('v4.login');
+    Route::post('login', [AuthController::class, 'login'])->name('v4.login.process');
 });
 
 // PROTECTED ROUTES
+use \App\Http\Controllers\v4\Dashboard\DashboardController;
+
 Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function () {
-    Route::get('dashboard', [LoginController::class, 'dashboard'])->name('dashboard');
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('v4.dashboard');
+
+    // LOGOUT ROUTE
+    Route::post('logout', [AuthController::class, 'logout'])->name('v4.logout');
 });
