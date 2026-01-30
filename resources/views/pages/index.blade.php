@@ -1,8 +1,5 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr" data-nav-layout="horizontal" data-nav-style="menu-hover" data-menu-position="fixed" data-theme-mode="light">
-
-
-<!-- Mirrored from demo.spruko.com/html/bootstrap/vyzor/dist/html/landing.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 21 Oct 2025 09:35:10 GMT -->
 <head>
 
     <!-- Meta Data -->

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 
@@ -33,27 +34,25 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'name'     => 'required',
-            'password' => 'required'
+            'name'     => 'required|string',
+            'password' => 'required|string',
+            'captcha'  => 'required|captcha',
+        ], [
+            'captcha.captcha' => 'Captcha salah',
         ]);
 
-        $user = User::where('name', $request->name)->first();
+        $credentials = $request->only('name', 'password');
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json([
-                'message' => 'Username atau password salah'
-            ], 401);
+        if (!Auth::attempt($credentials, $request->boolean('remember'))) {
+            return back()
+                ->withErrors(['name' => 'Username atau password salah'])
+                ->withInput($request->except('password'));
         }
 
-        $token = $user->createToken('api-token')->plainTextToken;
+        // regenerate session (security best practice)
+        $request->session()->regenerate();
 
-        return response()->json([
-            'token' => $token,
-            'user'  => [
-                'name' => $user->name,
-                'role' => $user->getRoleNames(),
-            ]
-        ]);
+        return redirect()->intended(route('v4.dashboard'));
     }
 
     public function logout(Request $request)
