@@ -17,9 +17,11 @@ Route::group(['prefix' => 'v4', 'as' => ''], function () {
 
 // PROTECTED ROUTES
 use \App\Http\Controllers\v4\Dashboard\DashboardController;
+use \App\Http\Controllers\v4\Setting\ProfilController;
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('v4.dashboard');
+    Route::get('profil', [ProfilController::class, 'index'])->name('v4.profil');
 
     // LOGOUT ROUTE
     Route::post('logout', [AuthController::class, 'logout'])->name('v4.logout');

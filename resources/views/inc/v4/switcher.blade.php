@@ -218,7 +218,7 @@
                         <div class="col-xl-3 col-6">
                             <div class="form-check switch-select">
                                 <label class="form-check-label" for="switcher-flat">
-                                    Flat 
+                                    Flat
                                 </label>
                                 <input class="form-check-input" type="radio" name="page-styles" id="switcher-flat" checked>
                             </div>
@@ -458,44 +458,44 @@
                                 <input class="form-check-input bgimage-input bg-img1" type="radio"
                                     name="menu-background" id="switcher-bg-img">
                                 <div class="bg-img-container">
-                                    <img src="../assets/images/menu-bg-images/bg-img1.jpg" alt="">
+                                    <img src="{{ asset('images/menu-bg-images/bg-img1.jpg') }}" alt="">
                                 </div>
                             </div>
                             <div class="form-check switch-select menu-img-select m-2">
                                 <input class="form-check-input bgimage-input bg-img2" type="radio"
                                     name="menu-background" id="switcher-bg-img1">
                                 <div class="bg-img-container">
-                                    <img src="../assets/images/menu-bg-images/bg-img2.jpg" alt="">
+                                    <img src="{{ asset('images/menu-bg-images/bg-img2.jpg') }}" alt="">
                                 </div>
                             </div>
                             <div class="form-check switch-select menu-img-select m-2">
                                 <input class="form-check-input bgimage-input bg-img3" type="radio" name="menu-background"
                                     id="switcher-bg-img2">
                                 <div class="bg-img-container">
-                                    <img src="../assets/images/menu-bg-images/bg-img3.jpg" alt="">
+                                    <img src="{{ asset('images/menu-bg-images/bg-img3.jpg') }}" alt="">
                                 </div>
                             </div>
                             <div class="form-check switch-select menu-img-select m-2">
                                 <input class="form-check-input bgimage-input bg-img4" type="radio"
                                     name="menu-background" id="switcher-bg-img3">
                                 <div class="bg-img-container">
-                                    <img src="../assets/images/menu-bg-images/bg-img4.jpg" alt="">
+                                    <img src="{{ asset('images/menu-bg-images/bg-img4.jpg') }}" alt="">
                                 </div>
                             </div>
                             <div class="form-check switch-select menu-img-select m-2">
                                 <input class="form-check-input bgimage-input bg-img5" type="radio"
                                     name="menu-background" id="switcher-bg-img4">
                                 <div class="bg-img-container">
-                                    <img src="../assets/images/menu-bg-images/bg-img5.jpg" alt="">
+                                    <img src="{{ asset('images/menu-bg-images/bg-img5.jpg') }}" alt="">
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="d-flex justify-content-between canvas-footer flex-wrap"> 
-                <a href="https://1.envato.market/zxD4aM" target="_blank" class="btn btn-primary">Buy Now</a> 
-                <a href="https://1.envato.market/MGEaN" target="_blank" class="btn btn-secondary">Our Portfolio</a> 
+            <div class="d-flex justify-content-between canvas-footer flex-wrap">
+                <a href="https://1.envato.market/zxD4aM" target="_blank" class="btn btn-primary">Buy Now</a>
+                <a href="https://1.envato.market/MGEaN" target="_blank" class="btn btn-secondary">Our Portfolio</a>
                 <a href="javascript:void(0);" id="reset-all" class="btn btn-danger">Reset</a> </div>
         </div>
     </div>
