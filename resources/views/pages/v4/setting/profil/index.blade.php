@@ -34,16 +34,16 @@
                                 </a>
                                 <div class="mt-4 mb-3 d-flex align-items-center flex-wrap gap-3 justify-content-between">
                                     <div>
-                                        <h5 class="fw-semibold mb-1">xx</h5>
+                                        <h5 class="fw-semibold mb-1" id="username"><i class="fas fa-sync-alt fa-spin"></i></h5>
                                         <p class="fs-12 mb-0 fw-medium text-muted">
                                             <span class="me-3">
-                                                <i class="ri-shield-user-line me-1 align-middle"></i>Status Tidak Diketahui
+                                                <i class="ri-shield-user-line me-1 align-middle"></i>Status : <a id="status_jabatan"><i class="fas fa-sync-alt fa-spin ms-1"></i></a>
                                             </span>
                                             <span class="me-3">
-                                                <i class="ri-user-follow-line me-1 align-middle"></i>Akun Aktif
+                                                <i class="ri-user-follow-line me-1 align-middle"></i><a id="status_akun"><i class="fas fa-sync-alt fa-spin ms-1"></i></a>
                                             </span>
                                             <span>
-                                                <i class="ri-login-box-line me-1 align-middle"></i>Terakhir Login: xx
+                                                <i class="ri-login-box-line me-1 align-middle"></i>Terakhir Login: <a id="log_akun"><i class="fas fa-sync-alt fa-spin ms-1"></i></a>
                                             </span>
                                         </p>
                                     </div>

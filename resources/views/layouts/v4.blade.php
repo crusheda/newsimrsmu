@@ -29,6 +29,12 @@
         <!-- JQUERY INIT -->
         <script src="{{ asset('libs/jquery/jquery.min.js') }}"></script>
 
+        <!-- iziToast-->
+        <link rel="stylesheet" href="{{ asset('libs/iziToast/iziToast.css') }}" />
+
+        <!-- Sweet Alert-->
+        <link href="{{ asset('libs/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
+
         <!-- Choices JS -->
         <script src="{{ asset('libs/choices.js/public/assets/scripts/choices.min.js') }}"></script>
 
@@ -134,6 +140,12 @@
 
         <!-- Bootstrap JS -->
         <script src="{{ asset('libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+        <!-- iziToast JS -->
+        <script src="{{ asset('libs/iziToast/iziToast.js') }}"></script>
+
+        <!-- sweetalert2 JS -->
+        <script src="{{ asset('libs/sweetalert2/sweetalert2.min.js') }}"></script>
 
         <!-- Defaultmenu JS -->
         <script src="{{ asset('js/defaultmenu.min.js') }}"></script>

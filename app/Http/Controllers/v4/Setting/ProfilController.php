@@ -29,6 +29,11 @@ class ProfilController extends Controller
 
     function show()
     {
+        //     return response()->json([
+        //         'status' => false,
+        //         'message' => 'Autentikasi Gagal'
+        //     ], 401);
+
         $id_user = Auth::user()->id;
         $user = users::where('id',$id_user)->first();
         $foto_user = users_foto::where('user_id',$id_user)->first();
@@ -60,7 +65,10 @@ class ProfilController extends Controller
             'ref_dokumen' => $ref_dokumen,
         ];
 
-        return response()->json($data, 200);
+        return response()->json([
+            'status' => true,
+            'data' => $data
+        ], 200);
     }
 
     function store(Request $request)

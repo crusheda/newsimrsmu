@@ -34,7 +34,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <p class="text-muted mb-0">Tidak ada deskripsi pengalaman kerja.</p>
+                        <p class="text-muted mb-0" id="pengalaman_kerja"><i class="fas fa-sync-alt fa-spin ms-1"></i></p>
                     </div>
                 </div>
                 <div class="card custom-card">
@@ -52,8 +52,7 @@
                                 <span class="fw-medium text-default">
                                     NIP :
                                 </span>
-                                {user?.nip ||
-                                "-"}
+                                <a id="nip"><i class="fas fa-sync-alt fa-spin ms-1"></i></a>
                             </div>
                             <div class="mb-2 d-flex align-items-center gap-1 flex-wrap">
                                 <span class="avatar avatar-sm avatar-rounded text-default">
@@ -62,8 +61,7 @@
                                 <span class="fw-medium text-default">
                                     NIK :
                                 </span>
-                                {user?.nik ||
-                                "-"}
+                                <a id="nik"><i class="fas fa-sync-alt fa-spin ms-1"></i></a>
                             </div>
                             <div class="mb-2 d-flex align-items-center gap-1 flex-wrap">
                                 <span class="avatar avatar-sm avatar-rounded text-default">
@@ -72,8 +70,7 @@
                                 <span class="fw-medium text-default">
                                     Email :
                                 </span>
-                                {user?.email ||
-                                "-"}
+                                <a id="email"><i class="fas fa-sync-alt fa-spin ms-1"></i></a>
                             </div>
                             <div class="mb-0 d-flex align-items-center gap-1">
                                 <span class="avatar avatar-sm avatar-rounded text-default">
@@ -82,8 +79,7 @@
                                 <span class="fw-medium text-default">
                                     No.HP :
                                 </span>
-                                {user?.no_hp ||
-                                "-"}
+                                <a id="hp"><i class="fas fa-sync-alt fa-spin ms-1"></i></a>
                             </div>
                         </div>
                     </div>
@@ -109,14 +105,12 @@
                                         <span class="d-block fw-medium">
                                             Facebook
                                         </span>
-                                        <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer"
-                                            class="text-muted">
+                                        <a href="javascript:void(0);" rel="noopener noreferrer" class="text-muted">
                                             Facebook
                                             /
-                                            <mark>
-                                                {user?.fb ||
-                                                "xxx"}
-                                            </mark>
+                                            <span id="fb">
+                                                <i class="fas fa-sync-alt fa-spin ms-1"></i>
+                                            </span>
                                         </a>
                                     </div>
                                 </div>
@@ -132,14 +126,12 @@
                                         <span class="d-block fw-medium">
                                             Instagram
                                         </span>
-                                        <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer"
-                                            class="text-muted">
+                                        <a href="javascript:void(0);" rel="noopener noreferrer" class="text-muted">
                                             Instagram
                                             /
-                                            <mark>
-                                                {user?.ig ||
-                                                "xxx"}
-                                            </mark>
+                                            <span id="ig">
+                                                <i class="fas fa-sync-alt fa-spin ms-1"></i>
+                                            </span>
                                         </a>
                                     </div>
                                 </div>
@@ -155,14 +147,12 @@
                                         <span class="d-block fw-medium">
                                             Tiktok
                                         </span>
-                                        <a href="https://www.tiktok.com/@" target="_blank" rel="noopener noreferrer"
-                                            class="text-muted">
+                                        <a href="javascript:void(0);" rel="noopener noreferrer" class="text-muted">
                                             Tiktok
                                             /
-                                            <mark>
-                                                {user?.tt ||
-                                                "xxx"}
-                                            </mark>
+                                            <span id="tt">
+                                                <i class="fas fa-sync-alt fa-spin ms-1"></i>
+                                            </span>
                                         </a>
                                     </div>
                                 </div>
@@ -185,9 +175,9 @@
                                             rel="noopener noreferrer" class="text-muted">
                                             Youtube
                                             /
-                                            <mark>
+                                            <span class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover text-decoration-underline">
                                                 rspkusukoharjo
-                                            </mark>
+                                            </span>
                                         </a>
                                     </div>
                                 </div>
@@ -214,8 +204,7 @@
                                     Nama Lengkap
                                 </p>
                                 <p class="mb-0">
-                                    {user?.nama ||
-                                    "..."}
+                                    <a id="nama_lengkap"><i class="fas fa-sync-alt fa-spin ms-1"></i></a>
                                 </p>
                             </div>
                             <div class="col-md-6">
@@ -224,8 +213,7 @@
                                     Panggilan
                                 </p>
                                 <p class="mb-0">
-                                    {user?.nick ||
-                                    "..."}
+                                    <a id="nick"><i class="fas fa-sync-alt fa-spin ms-1"></i></a>
                                 </p>
                             </div>
                         </div>
@@ -237,8 +225,7 @@
                                     Tempat Lahir
                                 </p>
                                 <p class="mb-0">
-                                    {user?.temp_lahir ||
-                                    "..."}
+                                    <a id="temp_lahir"><i class="fas fa-sync-alt fa-spin ms-1"></i></a>
                                 </p>
                             </div>
                             <div class="col-md-6">
@@ -247,13 +234,7 @@
                                     Lahir
                                 </p>
                                 <p class="mb-0">
-                                    {user?.tgl_lahir
-                                    ? dayjs(
-                                    user.tgl_lahir
-                                    ).format(
-                                    "D MMMM YYYY"
-                                    )
-                                    : "..."}
+                                    <a id="tgl_lahir"><i class="fas fa-sync-alt fa-spin ms-1"></i></a>
                                 </p>
                             </div>
                         </div>
@@ -266,8 +247,7 @@
                                     Kelamin
                                 </p>
                                 <p class="mb-0">
-                                    {user?.jns_kelamin ||
-                                    "..."}
+                                    <a id="jk"><i class="fas fa-sync-alt fa-spin ms-1"></i></a>
                                 </p>
                             </div>
                             <div class="col-md-6">
@@ -275,8 +255,7 @@
                                     Status Kawin
                                 </p>
                                 <p class="mb-0">
-                                    {user?.status_kawin ||
-                                    "..."}
+                                    <a id="sk"><i class="fas fa-sync-alt fa-spin ms-1"></i></a>
                                 </p>
                             </div>
                         </div>
@@ -288,66 +267,24 @@
                                 Sesuai KTP
                             </strong>
                         </p>
-                        <p class="mb-0">...</p>
+                        <p class="mb-0"><a id="alamat_ktp"><i class="fas fa-sync-alt fa-spin ms-1"></i></a></p>
                     </li>
                     <li class="list-group-item px-0 pb-0">
                         <p class="mb-1 text-muted">
                             Alamat Domisili
                         </p>
-                        <p class="mb-0">Sama dengan alamat pada KTP</p>
+                        <p class="mb-0"><a id="alamat_dom"><i class="fas fa-sync-alt fa-spin ms-1"></i></a></p>
                     </li>
                 </ul>
             </div>
         </div>
         <div class="card custom-card">
             <div class="card-header">
-                <div class="card-title">
-                    Data Pendidikan
-                </div>
+                <div class="card-title">Data Pendidikan</div>
             </div>
             <div class="card-body">
-                <ul class="list-unstyled timeline-list-3">
-                    <li key={index}>
-                        <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
-                            <div class="fw-semibold fs-15">
-                                <span class="text-muted">
-                                    <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover text-decoration-underline"
-                                        role="button">
-                                        {
-                                        item.jurusan
-                                        }
-                                    </a>
-                                </span>
-                            </div>
-                            <span class="badge bg-${item.color}-transparent">
-                                Lulus
-                                {item.tahun ||
-                                "xxx"}
-                            </span>
-                        </div>
-                        <div class="fs-13 text-muted">
-                            Telah
-                            selesai
-                            Pendidikan
-                            jenjang
-                            <span class="fw-medium text-default">
-                                {
-                                item.jenjang
-                                }
-                            </span>
-                            di
-                            <span class="fw-medium text-default">
-                                {
-                                item.jurusan
-                                }
-                            </span>
-                            {item.tahun
-                            ? " pada tahun " +
-                            item.tahun
-                            : ""}
-                            .
-                        </div>
-                    </li>
+                <ul class="list-unstyled timeline-list-3" id="list_pendidikan">
+                    <li class="text-muted">Memuat Data Pendidikan <i class="fas fa-sync-alt fa-spin ms-1"></i></li>
                 </ul>
             </div>
         </div>
@@ -365,7 +302,7 @@
                                 Riwayat
                                 Penyakit?
                             </div>
-                            <p class="mb-0">Tidak Ada.</p>
+                            <p class="mb-0"><a id="rp"><i class="fas fa-sync-alt fa-spin ms-1"></i></a></p>
                         </div>
                     </li>
                     <li class="list-group-item d-sm-flex justify-content-between align-items-start">
@@ -374,7 +311,7 @@
                                 Riwayat Penyakit
                                 Keluarga?
                             </div>
-                            <p class="mb-0">Tidak Ada.</p>
+                            <p class="mb-0"><a id="rpk"><i class="fas fa-sync-alt fa-spin ms-1"></i></a></p>
                         </div>
                     </li>
                     <li class="list-group-item d-sm-flex justify-content-between align-items-start">
@@ -383,7 +320,7 @@
                                 Riwayat
                                 Penggunaan Obat?
                             </div>
-                            <p class="mb-0">Tidak Ada.</p>
+                            <p class="mb-0"><a id="rpo"><i class="fas fa-sync-alt fa-spin ms-1"></i></a></p>
                         </div>
                     </li>
                     <li class="list-group-item d-sm-flex justify-content-between align-items-start">
@@ -391,7 +328,7 @@
                             <div class="fw-medium fs-14 text-default">
                                 Riwayat Operasi?
                             </div>
-                            <p class="mb-0">Tidak Ada.</p>
+                            <p class="mb-0"><a id="ro"><i class="fas fa-sync-alt fa-spin ms-1"></i></a></p>
                         </div>
                     </li>
                 </ol>
@@ -405,20 +342,161 @@
 
     });
 
+    function formatTanggal(date) {
+        if (!date) return '-';
+
+        const [year, month, day] = date.split('-');
+        const bulan = [
+            'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+            'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+        ];
+
+        return `${parseInt(day)} ${bulan[parseInt(month) - 1]} ${year}`;
+    }
+
+    function formatTanggalJam(datetime) {
+        if (!datetime) return '-';
+
+        const [date, time] = datetime.split(' ');
+        const [year, month, day] = date.split('-');
+        const [hour, minute] = time.split(':');
+
+        const bulan = [
+            'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
+            'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'
+        ];
+
+        return `${parseInt(day)} ${bulan[parseInt(month) - 1]} ${year} ${hour}.${minute} WIB`;
+    }
+
     function loadDataDiri() {
         $.ajax({
             url: "/api/v4/profil/show",
             type: 'GET',
             dataType: 'json',
-            xhrFields: {
-                withCredentials: true
+            beforeSend: function () {
+                // Swal.fire({
+                //     title: 'Memproses...',
+                //     text: 'Sedang menghubungkan data formulir',
+                //     allowOutsideClick: false,
+                //     didOpen: () => Swal.showLoading()
+                // });
             },
             success: function(res) {
+                if (!res.status) {
+                    Swal.fire('Info', res.message, 'info');
+                    return;
+                }
 
+                $('#username').text(res.data.user?.name || 'xx');
+                $('#log_akun').empty().append(res.data.log_user?.log_date ? formatTanggalJam(res.data.log_user.log_date) : '-');
+                $('#status_jabatan').text(res.data.status_user?.nama_status || 'Tidak Diketahui');
+                $('#status_akun').text(res.data.user?.deleted_at == null ? 'Akun Aktif' : 'Akun Dinonaktifkan');
+                $('#pengalaman_kerja').text(res.data.user?.pengalaman_kerja ?? 'Tidak ada deskripsi pengalaman kerja.');
+
+                $('#nip').text(res.data.user?.nip ?? '-');
+                $('#nik').text(res.data.user?.nik ?? '-');
+                $('#email').text(res.data.user?.email ?? '-');
+                if (res.data.user && res.data.user.email) {
+                    $('#email').attr('href',`mailto:${res.data.user.email}`);
+                }
+                if (res.data.user && res.data.user.no_hp) {
+                    $('#hp').text(res.data.user.no_hp)
+                    if (res.data.user.no_hp.startsWith('628')) {
+                        $('#hp').attr('href', `https://wa.me/${res.data.user.no_hp}`).attr('target', '_blank');
+                    } else {
+                        $('#hp').removeAttr('href');
+                    }
+                } else {
+                    $('#hp').text('-')
+                }
+                $('#fb').empty().append(res.data.user?.fb ? `${res.data.user.fb}` : 'xx');
+                if (res.data.user && res.data.user.fb) {
+                    $('#fb').addClass('link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover text-decoration-underline').closest('a').attr('href', `https://www.facebook.com/${res.data.user.fb}`).attr('target','_blank');
+                }
+                $('#ig').empty().append(res.data.user?.ig ? `${res.data.user.ig}` : 'xx');
+                if (res.data.user && res.data.user.ig) {
+                    $('#ig').addClass('link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover text-decoration-underline').closest('a').attr('href', `https://www.facebook.com/${res.data.user.ig}`).attr('target','_blank');
+                }
+                $('#tt').empty().append(res.data.user?.tt ? `${res.data.user.tt}` : 'xx');
+                if (res.data.user && res.data.user.tt) {
+                    $('#tt').addClass('link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover text-decoration-underline').closest('a').attr('href', `https://www.facebook.com/@${res.data.user.tt}`).attr('target','_blank');
+                }
+                $('#nama_lengkap').text(res.data.user?.nama ?? '-');
+                $('#nick').text(res.data.user?.nick ?? '-');
+                $('#temp_lahir').text(res.data.user?.temp_lahir ?? '-');
+                $('#tgl_lahir').text(res.data.user?.tgl_lahir ? formatTanggal(res.data.user.tgl_lahir) : '-');
+                $('#jk').text(res.data.user?.jns_kelamin ?? '-');
+                $('#sk').text(res.data.user?.status_kawin ?? '-');
+                $('#alamat_ktp').text(res.data.user?.alamat_ktp ?? '-');
+                $('#alamat_dom').text(res.data.user?.alamat_dom ?? 'Sama dengan Alamat pada KTP.');
+
+                renderPendidikan(res.data.user);
+
+                $('#rp').text(res.data.user?.riwayat_penyakit ?? 'Tidak Ada.');
+                $('#rpk').text(res.data.user?.riwayat_penyakit_keluarga ?? 'Tidak Ada.');
+                $('#rpo').text(res.data.user?.riwayat_penggunaan_obat ?? 'Tidak Ada.');
+                $('#ro').text(res.data.user?.riwayat_operasi ?? 'Tidak Ada.');
             },
             error: function(xhr) {
-                console.log(xhr.status, xhr.responseText);
+                Swal.fire('Gagal', xhr.responseJSON?.message ?? 'Terjadi kesalahan', 'error');
+            },
+            complete: function() {
+
             }
         })
+    }
+
+    function buildPendidikan(user) {
+        return [
+            { jenjang: 'SD',  jurusan: user.sd,  tahun: user.th_sd,  color: 'primary' },
+            { jenjang: 'SMP', jurusan: user.smp, tahun: user.th_smp, color: 'info' },
+            { jenjang: 'SMA', jurusan: user.sma, tahun: user.th_sma, color: 'success' },
+            { jenjang: 'D1',  jurusan: user.d1,  tahun: user.th_d1,  color: 'warning' },
+            { jenjang: 'D2',  jurusan: user.d2,  tahun: user.th_d2,  color: 'warning' },
+            { jenjang: 'D3',  jurusan: user.d3,  tahun: user.th_d3,  color: 'warning' },
+            { jenjang: 'S1',  jurusan: user.s1,  tahun: user.th_s1,  color: 'danger' },
+            { jenjang: 'S2',  jurusan: user.s2,  tahun: user.th_s2,  color: 'danger' },
+            { jenjang: 'S3',  jurusan: user.s3,  tahun: user.th_s3,  color: 'danger' },
+        ].filter(item => item.jurusan); // hanya yang terisi
+    }
+
+    function renderPendidikan(user) {
+        const items = buildPendidikan(user);
+        const $list = $('#list_pendidikan');
+
+        $list.empty();
+
+        if (!items.length) {
+            $list.append('<li class="text-muted">Data pendidikan tidak tersedia</li>');
+            return;
+        }
+
+        items.forEach((item, index) => {
+            $list.append(`
+                <li>
+                    <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
+                        <div class="fw-semibold fs-15">
+                            <span class="text-muted">
+                                <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover text-decoration-underline"
+                                role="button">
+                                    ${item.jurusan}
+                                </a>
+                            </span>
+                        </div>
+                        <span class="badge bg-${item.color}-transparent">
+                            Lulus ${item.tahun ?? 'xxx'}
+                        </span>
+                    </div>
+                    <div class="fs-13 text-muted">
+                        Telah selesai Pendidikan jenjang
+                        <span class="fw-medium text-default">${item.jenjang}</span>
+                        di
+                        <span class="fw-medium text-default">${item.jurusan}</span>
+                        ${item.tahun ? ` pada tahun ${item.tahun}` : ''}.
+                    </div>
+                </li>
+            `);
+        });
     }
 </script>
