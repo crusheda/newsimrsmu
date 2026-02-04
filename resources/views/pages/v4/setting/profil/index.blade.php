@@ -54,7 +54,7 @@
                                     <li class="nav-item" role="presentation">
                                         <button class="nav-link active" id="" data-bs-toggle="tab"
                                             data-bs-target="#profil-tab" type="button" role="tab"
-                                            aria-controls="profil-tab" aria-selected="true">
+                                            aria-controls="profil-tab" aria-selected="true" onclick="loadDataDiri()">
                                             Data Diri
                                         </button>
                                     </li>
