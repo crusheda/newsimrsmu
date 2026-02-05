@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 use \App\Http\Controllers\v4\Setting\ProfilController;
+use \App\Http\Controllers\Whatsapp\HelpdeskController;
 
 Route::middleware(['web','auth'])->group(function () {
     // PROFIL AKUN
@@ -42,3 +43,11 @@ Route::middleware(['web','auth'])->group(function () {
         // Route::get('v4/sdi/pegawai/grafik/5', [PegawaiController::class, 'grafik5'])->name('apiGrafikSDI5'); // Status Pegawai
         // Route::get('v4/sdi/pegawai/grafik/6', [PegawaiController::class, 'grafik6'])->name('apiGrafikSDI6'); // Status Perkawinan
 });
+
+    // WHATSAPP API BAILEYS
+    Route::post('v4/perbaikanit/tiket/kirimgroup', [HelpdeskController::class, 'kirimTiketGroup']);
+    Route::post('v4/perbaikanit/tiket/callback', [HelpdeskController::class, 'callback']);
+    Route::post('v4/perbaikanit/tiket/{id}/terima', [HelpdeskController::class, 'kirimTerimaTiket']);
+    Route::post('v4/perbaikanit/tiket/{id}/kerjakan', [HelpdeskController::class, 'kirimKerjakanTiket']);
+    Route::post('v4/perbaikanit/tiket/{id}/selesai', [HelpdeskController::class, 'kirimSelesaiTiket']);
+    Route::post('v4/perbaikanit/tiket/{id}/tolak', [HelpdeskController::class, 'kirimTolakTiket']);
