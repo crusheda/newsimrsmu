@@ -47,6 +47,9 @@
         <!-- Style Css -->
         <link href="{{ asset('css/styles.css') }}" rel="stylesheet" >
 
+        <!-- Custom Developer Css -->
+        <link href="{{ asset('css/custom.css') }}" rel="stylesheet" >
+
         <!-- Icons Css +_+ -->
         <link href="{{ asset('css/icons.css') }}" rel="stylesheet" >
         <link rel="stylesheet" href="{{ asset('fonts/inter/inter.css') }}" id="main-font-link">
@@ -58,6 +61,9 @@
         <link rel="stylesheet" href="{{ asset('fonts/fontawesome.css') }}">
         <!-- [Material Icons] https://fonts.google.com/icons -->
         <link rel="stylesheet" href="{{ asset('fonts/material.css') }}">
+
+        <!-- LightBox Css -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="stylesheet">
 
         <!-- Node Waves Css -->
         <link href="{{ asset('libs/node-waves/waves.min.css') }}" rel="stylesheet" >
@@ -149,6 +155,9 @@
 
         <!-- Defaultmenu JS -->
         <script src="{{ asset('js/defaultmenu.min.js') }}"></script>
+
+        <!-- LightBox JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
 
         <!-- Node Waves JS-->
         <script src="{{ asset('libs/node-waves/waves.min.js') }}"></script>

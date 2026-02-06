@@ -29,9 +29,7 @@ class HeaderService
             'email' => $user->email,
             'role'  => optional($user->roles->first())->name,
             'foto' => optional($user->foto)->filename
-                ? asset(
-                    str_replace('public/', 'storage/', $user->foto->filename)
-                )
+                ? asset('storage/' . $user->foto->filename)
                 : asset('images/users/user-dummy-img.jpg'),
         ];
     }

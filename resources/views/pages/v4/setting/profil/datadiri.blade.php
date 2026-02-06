@@ -375,6 +375,9 @@
             type: 'GET',
             dataType: 'json',
             beforeSend: function () {
+                $('#avatarLoading').show();
+                $('#imgProfil').addClass('loading');
+
                 $('#username').empty().append(`<i class="fas fa-sync-alt fa-spin ms-1"></i>`)
                 $('#log_akun').empty().append(`<i class="fas fa-sync-alt fa-spin ms-1"></i>`)
                 $('#status_jabatan').empty().append(`<i class="fas fa-sync-alt fa-spin ms-1"></i>`)
@@ -411,6 +414,23 @@
                 if (!res.status) {
                     Swal.fire('Info', res.message, 'info');
                     return;
+                }
+
+                let defaultImg = "{{ asset('images/no-image-person.png') }}";
+
+                if(res.data.foto_user == null){
+
+                    // tidak ada foto
+                    $('#fotoProfil').attr('href', defaultImg);
+                    $('#imgProfil').attr('src', defaultImg);
+
+                }else{
+
+                    // ada foto
+                    let fotoUrl = "{{ url('storage') }}/" + res.data.foto_user.filename.replace('public/','');
+
+                    $('#fotoProfil').attr('href', fotoUrl);
+                    $('#imgProfil').attr('src', fotoUrl);
                 }
 
                 $('#username').text(res.data.user?.name || 'xx');
@@ -467,7 +487,8 @@
                 Swal.fire('Gagal', xhr.responseJSON?.message ?? 'Terjadi kesalahan', 'error');
             },
             complete: function() {
-
+                $('#avatarLoading').hide();
+                $('#imgProfil').removeClass('loading');
             }
         })
     }

@@ -20,6 +20,7 @@ use \App\Http\Controllers\Whatsapp\HelpdeskController;
 Route::middleware(['web','auth'])->group(function () {
     // PROFIL AKUN
     Route::get('v4/profil/show', [ProfilController::class, 'show']);
+    Route::post('v4/profil/foto/ubah', [ProfilController::class, 'ubahFotoProfil']);
     Route::get('v4/profil/dokumen/table/{id}', [ProfilController::class, 'tableDokumen']);
     Route::post('v4/profil/dokumen/add', [ProfilController::class, 'tambahDokumen']);
     Route::post('v4/profil/dokumen/ubah/{id}/proses', [ProfilController::class, 'ubahDokumen']);

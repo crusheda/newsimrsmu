@@ -27,9 +27,18 @@
                     <div class="card-body p-4 pb-0 position-relative">
                         <div class="d-flex align-items-end justify-content-between flex-wrap">
                             <div>
-                                <a href="" class="glightbox" data-gallery="fotoProfil" role="button">
+                                <a data-lightbox="fotoProfil" data-title="Foto Profil" role="button" id="fotoProfil">
                                     <span class="avatar avatar-xxl avatar-rounded bg-light-transparent online">
-                                        <img src="{{ asset('images/no-image-person.png') }}" alt="Foto Profil">
+                                        <img id="imgProfil"
+                                            src="{{ asset('images/white.jpg') }}"
+                                            alt="Foto Profil"
+                                            style="width:100%;height:100%;object-fit:cover">
+
+                                        <!-- LOADING -->
+                                        <div id="avatarLoading"
+                                            class="position-absolute top-50 start-50 translate-middle">
+                                            <div class="spinner-border spinner-border-sm"></div>
+                                        </div>
                                     </span>
                                 </a>
                                 <div class="mt-4 mb-3 d-flex align-items-center flex-wrap gap-3 justify-content-between">
@@ -61,7 +70,7 @@
                                     <li class="nav-item" role="presentation">
                                         <button class="nav-link" id="" data-bs-toggle="tab"
                                             data-bs-target="#ubah-profil-tab" type="button" role="tab"
-                                            aria-controls="ubah-profil-tab" aria-selected="false">
+                                            aria-controls="ubah-profil-tab" aria-selected="false" onclick="loadUbah()">
                                             Ubah
                                         </button>
                                     </li>

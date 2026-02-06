@@ -1,4 +1,3 @@
-
 <div class="card custom-card">
     <div class="card-header fw-bold justify-content-between">
         <div>
@@ -8,11 +7,7 @@
             </b>
         </div>
         <div>
-            (
-            <span class="text-danger">
-                *
-            </span>
-            ) Wajib Diisi
+            ( <span class="text-danger">*</span> ) Wajib Diisi
         </div>
     </div>
     <div class="card-body">
@@ -26,44 +21,40 @@
                             </label>
                             <div class="card mb-3">
                                 <div class="card-body">
-                                    <div class="d-flex flex-column gap-2">
-                                        <div class="d-flex align-items-center gap-3 flex-wrap">
-                                            <span class="avatar avatar-xxl">
-                                                <img src="" alt="Foto Profil" />
+                                    <div class="d-flex align-items-center gap-3 flex-wrap">
+                                        <span class="avatar avatar-xxl">
+                                            <img id="previewFoto" src="{{ asset('images/white.jpg') }}" alt="Foto Profil" style="width:100%;height:100%;object-fit:cover">
+                                            <!-- LOADING -->
+                                            <div id="avatarLoadingUbah"
+                                                class="position-absolute top-50 start-50 translate-middle">
+                                                <div class="spinner-border spinner-border-sm"></div>
+                                            </div>
+                                        </span>
+
+                                        <div class="d-flex flex-column">
+
+                                            <div class="d-flex align-items-center gap-2 flex-wrap">
+
+                                                <input type="file"
+                                                    id="foto_ubah"
+                                                    accept="image/*"
+                                                    class="form-control form-control-sm"
+                                                    style="width:auto">
+
+                                                <button type="button" class="btn btn-sm btn-primary" id="btnUploadFoto" onclick="ubahFotoProfil()" disabled>
+                                                    <i class="ri-upload-2-line me-1"></i> Upload Foto
+                                                </button>
+
+                                                <button type="button" class="btn btn-sm btn-light" id="btnHapusFoto" onclick="hapusFotoProfil()" disabled>
+                                                    <i class="ri-delete-bin-line me-1"></i> Hapus Foto
+                                                </button>
+
+                                            </div>
+
+                                            <span class="d-block fs-12 text-muted mt-1">
+                                                Ekstensi JPG / PNG. Ukuran ideal 200x200 pixels. Maksimal 3MB.
                                             </span>
 
-                                            <div class="d-flex flex-column">
-                                                <div
-                                                    class="d-flex align-items-center gap-2 flex-wrap">
-                                                    <input type="file" accept="image/*"
-                                                        class="form-control form-control-sm"
-                                                        style="width: auto" />
-
-                                                    <button type="button"
-                                                        class="btn btn-sm btn-primary">
-                                                        <i class="ri-upload-2-line me-1"></i>
-                                                        Ganti
-                                                    </button>
-
-                                                    <button type="button"
-                                                        class="btn btn-sm btn-light">
-                                                        <i class="ri-delete-bin-line me-1"></i>
-                                                        Hapus
-                                                    </button>
-                                                </div>
-                                                <span class="d-block fs-12 text-muted mt-1">
-                                                    Ekstensi
-                                                    JPG
-                                                    /
-                                                    PNG.
-                                                    Ukuran
-                                                    ideal
-                                                    200x200
-                                                    pixels.
-                                                    Maksimal
-                                                    3MB.
-                                                </span>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -97,8 +88,7 @@
                                                     *
                                                 </span>
                                             </label>
-                                            <input type="text" name="nik"
-                                                class="w-full form-control p-2" />
+                                            <input type="text" name="nik" class="w-full form-control p-2" />
                                         </div>
 
                                         <div class="col-sm-4 mb-3">
@@ -109,8 +99,7 @@
                                                     *
                                                 </span>
                                             </label>
-                                            <input type="email" name="email"
-                                                class="w-full form-control p-2" />
+                                            <input type="email" name="email" class="w-full form-control p-2" />
                                         </div>
                                     </div>
                                 </div>
@@ -140,8 +129,8 @@
                                             *
                                         </span>
                                     </label>
-                                    <input type="text" name="gelar_depan"
-                                        class="w-full form-control p-2" placeholder="dr." />
+                                    <input type="text" name="gelar_depan" class="w-full form-control p-2"
+                                        placeholder="dr." />
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="block font-medium mb-1">
@@ -153,8 +142,7 @@
                                             *
                                         </span>
                                     </label>
-                                    <input type="text" name="nama"
-                                        class="w-full form-control p-2"
+                                    <input type="text" name="nama" class="w-full form-control p-2"
                                         placeholder="Mayor Sunaryo Tiga Tujuh" />
                                 </div>
                                 <div class="col-md-3 mb-3">
@@ -165,8 +153,7 @@
                                             *
                                         </span>
                                     </label>
-                                    <input type="text" name="gelar_belakang"
-                                        class="w-full form-control p-2"
+                                    <input type="text" name="gelar_belakang" class="w-full form-control p-2"
                                         placeholder="Sp.x.FinaCS" />
                                 </div>
 
@@ -178,8 +165,7 @@
                                             *
                                         </span>
                                     </label>
-                                    <input type="text" name="nick"
-                                        class="w-full form-control p-2" />
+                                    <input type="text" name="nick" class="w-full form-control p-2" />
                                 </div>
 
                                 <div class="col-md-4 mb-3">
@@ -189,8 +175,8 @@
                                             *
                                         </span>
                                     </label>
-                                    <input type="text" name="no_hp"
-                                        class="w-full form-control p-2" placeholder="628xxx" />
+                                    <input type="text" name="no_hp" class="w-full form-control p-2"
+                                        placeholder="628xxx" />
                                 </div>
 
                                 <div class="col-md-3 mb-3">
@@ -218,18 +204,15 @@
 
                                 <div class="col-md-5 mb-3">
                                     <label class="block font-medium mb-1">
-                                        Tempat
-                                        Lahir
+                                        Tempat Lahir
                                         <span class="text-danger">
                                             *
                                         </span>
                                     </label>
-                                    <select id="temp_lahir" name="temp_lahir"
-                                        class="form-control" required>
+                                    <select id="temp_lahir" name="temp_lahir" class="form-control" required>
                                         <option value="">
                                             --
-                                            Pilih
-                                            Kota
+                                            Pilih Kota
                                             --
                                         </option>
                                     </select>
@@ -237,20 +220,17 @@
 
                                 <div class="col-md-3 mb-3">
                                     <label class="block font-medium mb-1">
-                                        Tanggal
-                                        Lahir
+                                        Tanggal Lahir
                                         <span class="text-danger">
                                             *
                                         </span>
                                     </label>
-                                    <input type="date" name="tgl_lahir"
-                                        class="w-full form-control p-2" />
+                                    <input type="date" name="tgl_lahir" class="w-full form-control p-2" />
                                 </div>
 
                                 <div class="col-md-4 mb-3">
                                     <label class="block font-medium mb-1">
-                                        Status
-                                        Perkawinan
+                                        Status Perkawinan
                                         <span class="text-danger">
                                             *
                                         </span>
@@ -262,21 +242,16 @@
                                             --
                                         </option>
                                         <option value="BELUM">
-                                            Belum
-                                            Kawin
+                                            Belum Kawin
                                         </option>
                                         <option value="SUDAH">
-                                            Sudah
-                                            Kawin
+                                            Sudah Kawin
                                         </option>
                                         <option value="CERAI">
                                             Cerai
                                         </option>
                                         <option value="RAHASIA">
-                                            Tidak
-                                            ingin
-                                            memberi
-                                            tahu
+                                            Tidak ingin memberi tahu
                                         </option>
                                     </select>
                                 </div>
@@ -291,27 +266,18 @@
                         <div class="card-body">
                             <div class="alert alert-light">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox"
-                                        id="checkbox_alamat" name="cek_dom" />
+                                    <input class="form-check-input" type="checkbox" id="checkbox_alamat"
+                                        name="cek_dom" />
                                     <label class="form-check-label" htmlFor="checkbox_alamat">
                                         <u>
                                             <b>
-                                                Alamat
-                                                Domisili
-                                                sama
-                                                dengan
-                                                KTP
+                                                Alamat Domisili sama dengan KTP
                                             </b>
                                         </u>
                                     </label>
                                 </div>
                                 <small>
-                                    Hilangkan
-                                    centang
-                                    untuk
-                                    menampilkan
-                                    Pilihan
-                                    Domisili
+                                    Hilangkan centang untuk menampilkan Pilihan Domisili
                                 </small>
                             </div>
 
@@ -323,8 +289,7 @@
                                             *
                                         </span>
                                     </label>
-                                    <select name="ktp_provinsi" class="w-full form-control p-2"
-                                        required>
+                                    <select name="ktp_provinsi" class="w-full form-control p-2" required>
                                         <option value="">
                                             --
                                             Pilih
@@ -342,8 +307,7 @@
                                             *
                                         </span>
                                     </label>
-                                    <select name="ktp_kabupaten" required
-                                        class="w-full form-control p-2">
+                                    <select name="ktp_kabupaten" required class="w-full form-control p-2">
                                         <option value="">
                                             --
                                             Pilih
@@ -360,8 +324,7 @@
                                             *
                                         </span>
                                     </label>
-                                    <select name="ktp_kecamatan" class="w-full form-control p-2"
-                                        required>
+                                    <select name="ktp_kecamatan" class="w-full form-control p-2" required>
                                         <option value="">
                                             --
                                             Pilih
@@ -379,8 +342,7 @@
                                             *
                                         </span>
                                     </label>
-                                    <select name="ktp_kelurahan" class="w-full form-control p-2"
-                                        required>
+                                    <select name="ktp_kelurahan" class="w-full form-control p-2" required>
                                         <option value="">
                                             --
                                             Pilih
@@ -597,3 +559,154 @@
         </form>
     </div>
 </div>
+<script>
+    $(document).ready(function() {
+
+        // PREVIEW FOTO UPLOAD
+        $('#foto_ubah').on('change', function(e){
+
+            const file = e.target.files[0];
+
+            if(!file) return;
+
+            // validasi ukuran 3MB
+            if(file.size > 3 * 1024 * 1024){
+                Swal.fire({title: 'Ahh Maaf!!', text: 'Ukuran maksimal Foto yg bisa diupload adalah 3 Mb', icon: 'info', timer: 5000, timerProgressBar: true});
+                $(this).val('');
+                return;
+            }
+
+            // if(!file.type.match('image.*')){
+            //     Swal.fire({title: 'Ahh Maaf!!', text: 'File yang diupload wajib berupa File Foto (Semua Ekstensi)', icon: 'info', timer: 5000, timerProgressBar: true});
+            //     $(this).val('');
+            //     return;
+            // }
+
+            const allowedTypes = ['image/jpeg', 'image/png'];
+
+            if(!allowedTypes.includes(file.type)){
+                Swal.fire({
+                    title: 'Ahh Maaf!!',
+                    text: 'File yang diupload wajib JPG atau PNG',
+                    icon: 'info',
+                    timer: 5000,
+                    timerProgressBar: true
+                });
+                $(this).val('');
+                return;
+            }
+
+            const reader = new FileReader();
+
+            reader.onload = function(e){
+                $('#previewFoto').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(file);
+
+            $('#btnHapusFoto,#btnUploadFoto').prop('disabled',false);
+        });
+
+    });
+
+    function loadUbah() {
+        $.ajax({
+            url: "/api/v4/profil/show",
+            type: 'GET',
+            dataType: 'json',
+            beforeSend: function () {
+                $('#avatarLoadingUbah').show();
+                $('#previewFoto').addClass('loading');
+            },
+            success: function(res) {
+                if (!res.status) {
+                    Swal.fire('Info', res.message, 'info');
+                    return;
+                }
+
+                let fotoUrlUbah = '';
+                if(res.data.foto_user != null){
+                    fotoUrlUbah = "{{ url('storage') }}/" + res.data.foto_user.filename.replace('public/','');
+                    $('#btnHapusFoto').prop('disabled',false);
+                } else {
+                    fotoUrlUbah = "{{ asset('images/no-image-person.png') }}";
+                    $('#btnHapusFoto').prop('disabled',true);
+                }
+
+                $('#previewFoto').attr('src', fotoUrlUbah);
+            },
+            error: function(xhr) {
+                Swal.fire('Gagal', xhr.responseJSON?.message ?? 'Terjadi kesalahan', 'error');
+            },
+            complete: function() {
+                $('#avatarLoadingUbah').hide();
+                $('#previewFoto').removeClass('loading');
+            }
+        })
+    }
+
+    function ubahFotoProfil() {
+
+        let file = $('#foto_ubah')[0].files[0];
+        let btn = $('#btnUploadFoto');
+
+        if(!file){
+            Swal.fire({title: 'Info!', text: 'Silakan pilih / masukkan foto terlebih dahulu', icon: 'info', timer: 5000, timerProgressBar: true});
+            return;
+        }
+
+        let formData = new FormData();
+        formData.append('file', file);
+
+        $.ajax({
+            headers:{
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: "/api/v4/profil/foto/ubah",
+            type: 'POST',
+            processData:false,
+            contentType:false,
+            data: formData,
+            dataType: 'json',
+            beforeSend: function () {
+                $('#avatarLoadingUbah').show();
+                $('#previewFoto').addClass('loading');
+                btn.prop('disabled', true);
+            },
+            success: function(res) {
+                if(!res.status){
+                    Swal.fire('Info', res.message, 'info');
+                    btn.prop('disabled', false);
+                    return;
+                }
+
+                Swal.fire({
+                    title:'Berhasil',
+                    text:res.message,
+                    icon:'success',
+                    timer:2000,
+                    showConfirmButton:false
+                });
+
+                loadDataDiri();
+
+                $('#foto_ubah').val('');
+                $('.profile-img').attr('src', "{{ url('storage') }}/" + res.path.replace('public/',''));
+                $('#btnUploadFoto').prop('disabled',true);
+                $('#btnHapusFoto').prop('disabled',false);
+            },
+            error: function(xhr) {
+                Swal.fire('Gagal', xhr.responseJSON?.message ?? 'Terjadi kesalahan', 'error');
+            },
+            complete: function() {
+                $('#avatarLoadingUbah').hide();
+                $('#previewFoto').removeClass('loading');
+                btn.prop('disabled', false);
+            }
+        })
+    }
+
+    function hapusFotoProfil() {
+        alert('function hapus foto profil dijalankan.');
+    }
+</script>

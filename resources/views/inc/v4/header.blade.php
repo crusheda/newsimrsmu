@@ -527,7 +527,7 @@
                 <!-- Start::header-link|dropdown-toggle -->
                 <a href="javascript:void(0);" class="header-link dropdown-toggle" id="mainHeaderProfile" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                     <div>
-                        <img src="{{ $headerUser['foto'] }}" alt="img" class="header-link-icon">
+                        <img src="{{ $headerUser['foto'] }}" alt="img" class="header-link-icon profile-img">
                     </div>
                 </a>
                 <!-- End::header-link|dropdown-toggle -->
@@ -543,7 +543,7 @@
                         <div class="d-flex align-items-start gap-2">
                             <div class="lh-1">
                                 <span class="avatar avatar-sm bg-primary-transparent avatar-rounded">
-                                    <img src="{{ $headerUser['foto'] }}" alt="">
+                                    <img src="{{ $headerUser['foto'] }}" alt="" class="profile-img">
                                 </span>
                             </div>
                             <div>

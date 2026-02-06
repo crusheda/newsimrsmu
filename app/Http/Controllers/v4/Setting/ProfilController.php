@@ -197,7 +197,7 @@ class ProfilController extends Controller
         //     ->with('message', 'Profil berhasil diperbarui.');
     }
 
-    public function ubahFoto(Request $request)
+    public function ubahFotoProfil(Request $request)
     {
         $request->validate([
             'file' => 'required|image|mimes:jpg,jpeg,png|max:3000',
@@ -206,9 +206,15 @@ class ProfilController extends Controller
         $user = Auth::user();
         $now  = Carbon::now();
 
+        // print_r($request->file);
+        // die();
+
         // Simpan file
         $uploadedFile = $request->file('file');
-        $path = $uploadedFile->store('public/files/foto_profil');
+
+        // simpan ke storage/app/public/files/foto_profil
+        $path = $uploadedFile->store('files/foto_profil', 'public');
+
         $title = $uploadedFile->getClientOriginalName();
 
         // Ambil role user
@@ -217,25 +223,29 @@ class ProfilController extends Controller
         // Simpan / update foto profil
         $data = users_foto::where('user_id', $user->id)->first();
 
-        if ($data) {
-            $data->name = $user->name;
-            $data->unit = json_encode($role);
-            $data->title = $title;
-            $data->filename = $path;
-            $data->updated_at = $now;
-            $data->save();
-        } else {
-            $data = new users_foto;
-            $data->user_id = $user->id;
-            $data->name = $user->name;
-            $data->unit = json_encode($role);
-            $data->title = $title;
-            $data->filename = $path;
-            $data->updated_at = $now;
-            $data->save();
+        // Hapus Foto Lama
+        if($data && Storage::disk('public')->exists($data->filename)){
+            Storage::disk('public')->delete($data->filename);
         }
 
-        return back()->with('message', 'Foto profil berhasil diperbarui.');
+        // Validasi
+        if(!$data){
+            $data = new users_foto;
+            $data->user_id = $user->id;
+        }
+
+        $data->name = $user->name;
+        $data->unit = json_encode($role);
+        $data->title = $title;
+        $data->filename = $path;
+        $data->updated_at = $now;
+        $data->save();
+
+        return response()->json([
+            'status' => true,
+            'path' => $path,
+            'message' => "Foto profil berhasil diperbarui."
+        ], 200);
     }
 
     public function hapusFoto()
