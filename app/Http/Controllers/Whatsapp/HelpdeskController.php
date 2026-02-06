@@ -14,7 +14,7 @@ class HelpdeskController extends Controller
     public function kirimTiketGroup(Request $request)
     {
         // generate tiket
-        $tiket = 'IT-'.now()->format('YmdHis');
+        $tiket = 'IT-'.now()->format('ymdHis');
 
         // simpan DB
         $lapor = perbaikan_it::create([
@@ -57,7 +57,7 @@ class HelpdeskController extends Controller
 
         } else {
 
-            $response = Http::timeout(5)->post('http://127.0.0.1:3000/send-group',[
+            $response = Http::timeout(5)->post(config('services.wa.url').'/send-group',[
                 'number'=>$lapor->no_wa,
                 'message'=>$pesan
             ]);
@@ -87,13 +87,9 @@ class HelpdeskController extends Controller
 
         $petugas = 'Admin' ?? '-'; // auth()->user()->nama
 
-        $pesan = "📣 Halo {$tiket->nama}
-Tiket {$tiket->tiket_id} Sudah kami TERIMA ✅
-Petugas: {$petugas}
+        $pesan = "📣 Halo {$tiket->nama}\nTiket `{$tiket->tiket_id}` Sudah kami TERIMA ✅\nPetugas: {$petugas}\n\nCatatan:\n> {$request->ket_terima}\n\nMohon ditunggu 🙏";
 
-Mohon ditunggu 🙏";
-
-        $response = Http::timeout(5)->post('http://127.0.0.1:3000/send-personal',[
+        $response = Http::timeout(5)->post(config('services.wa.url').'/send-personal',[
             'number'=>$tiket->no_wa,
             'message'=>$pesan
         ]);
@@ -123,13 +119,9 @@ Mohon ditunggu 🙏";
 
         $petugas = 'Admin' ?? '-'; // auth()->user()->nama
 
-        $pesan = "🔧 Halo {$tiket->nama}
-Tiket {$tiket->tiket_id} Sedang kami KERJAKAN 🚧
-Petugas: {$petugas}
+        $pesan = "🔧 Halo {$tiket->nama}\nTiket `{$tiket->tiket_id}` Sedang kami KERJAKAN 🚧\nPetugas: {$petugas}\n\nCatatan Pengerjaan:\n> {$request->ket_kerjakan}\n\nMohon ditunggu 🙏";
 
-Mohon ditunggu 🙏";
-
-        $response = Http::timeout(5)->post('http://127.0.0.1:3000/send-personal',[
+        $response = Http::timeout(5)->post(config('services.wa.url').'/send-personal',[
             'number'=>$tiket->no_wa,
             'message'=>$pesan
         ]);
@@ -159,13 +151,9 @@ Mohon ditunggu 🙏";
 
         $petugas = 'Admin' ?? '-';
 
-        $pesan = "✅ Halo {$tiket->nama}
-Tiket {$tiket->tiket_id} Sudah kami SELESAIKAN 🎉
-Petugas: {$petugas}
+        $pesan = "✅ Halo {$tiket->nama}\nTiket `{$tiket->tiket_id}` Sudah kami SELESAIKAN 🎉\nPetugas: {$petugas}\n\nCatatan Penyelesaian:\n> {$ket_selesai}\n\nSelamat Beraktivitas Kembali.";
 
-Selamat Beraktivitas Kembali.";
-
-        $response = Http::timeout(5)->post('http://127.0.0.1:3000/send-personal',[
+        $response = Http::timeout(5)->post(config('services.wa.url').'/send-personal',[
             'number'=>$tiket->no_wa,
             'message'=>$pesan
         ]);
@@ -195,15 +183,9 @@ Selamat Beraktivitas Kembali.";
 
         $petugas = auth()->user()->nama ?? '-';
 
-        $pesan = "❌ Halo {$tiket->nama}
-Tiket {$tiket->tiket_id} Ditolak oleh petugas: {$petugas}
+        $pesan = "❌ Halo {$tiket->nama}\nTiket `{$tiket->tiket_id}` Ditolak oleh petugas: {$petugas}\n\nAlasan Penolakan:\n{$request->ket_tolak}\n\nSilakan mengajukan kembali apabila diperlukan 🙏";
 
-Alasan:
-{$request->ket_tolak}
-
-Silakan mengajukan kembali apabila diperlukan 🙏";
-
-        $response = Http::timeout(5)->post('http://127.0.0.1:3000/send-personal',[
+        $response = Http::timeout(5)->post(config('services.wa.url').'/send-personal',[
             'number'=>$tiket->no_wa,
             'message'=>$pesan
         ]);
@@ -235,8 +217,24 @@ Silakan mengajukan kembali apabila diperlukan 🙏";
         if(!$tiket){
             return response()->json([
                 'status'=>false,
-                'message'=>'Tiket tidak ditemukan'
+                'message'=>'Tiket tidak ditemukan / telah terhapus di Database'
             ],404);
+        }
+
+        if($tiket->tgl_terima){
+            $tglterima = Carbon::parse($tiket->tgl_terima)->format('d/m/Y H:i');
+            return response()->json([
+                'status'=>false,
+                'message'=>"Tiket {$request->tiket_id} sudah DITERIMA sebelumnya oleh {$tiket->nama_user_terima} pada {$tglterima} WIB"
+            ],422);
+        }
+
+        if($tiket->tgl_tolak){
+            $tgltolak = Carbon::parse($tiket->tgl_tolak)->format('d/m/Y H:i');
+            return response()->json([
+                'status'=>false,
+                'message'=>"Tiket {$request->tiket_id} sudah DITOLAK sebelumnya oleh {$tiket->nama_user_tolak} pada {$tgltolak} WIB"
+            ],422);
         }
 
         $data = [];
@@ -246,17 +244,29 @@ Silakan mengajukan kembali apabila diperlukan 🙏";
         if($request->status == 'TERIMA'){
             $data['tgl_terima'] = now();
             $data['nama_user_terima'] = $request->petugas;
-            if ($request->catatan) {
-                $data['ket_terima'] = $request->catatan;
-            }
+            $data['ket_terima'] = $request->catatan;
+            $pesan = "📣 Halo {$tiket->nama}\nTiket `{$tiket->tiket_id}` telah kami TERIMA ✅\nPetugas: {$request->petugas}\n\nCatatan Penerimaan:\n> {$request->catatan}\n\nMohon ditunggu 🙏";
         }
 
         // kalau TOLAK → isi tgl_tolak (optional)
         if($request->status == 'TOLAK'){
             $data['tgl_tolak'] = now();
             $data['nama_user_tolak'] = $request->petugas;
-            if ($request->catatan) {
-                $data['ket_tolak'] = $request->catatan;
+            $data['ket_tolak'] = $request->catatan;
+            $pesan = "❗ Halo {$tiket->nama}\nTiket `{$tiket->tiket_id}` DITOLAK ❌\nPetugas: {$request->petugas}\n\Alasan Penolakan:\n> {$request->catatan}\n\nSilakan ajukan kembali bila diperlukan 🙏";
+        }
+
+        if ($tiket->no_wa) {
+            try{
+                Http::timeout(10)->post(config('services.wa.url').'/send-personal',[
+                    'number'=>$tiket->no_wa,
+                    'message'=>$pesan
+                ]);
+            }catch(\Exception $e){
+                return response()->json([
+                    'status'=>false,
+                    'message'=>"Tiket {$request->tiket_id} sudah DITERIMA sebelumnya oleh {$tiket->nama_user_terima} pada {$tglterima} WIB"
+                ],422);
             }
         }
 
@@ -266,30 +276,5 @@ Silakan mengajukan kembali apabila diperlukan 🙏";
             'status'    => true,
             'message'   => "Tiket {$request->tiket_id} berhasil di {$request->status} oleh {$request->petugas} pada {$now}"
         ]);
-    }
-
-    private function prosesTerima($id, $ket = null)
-    {
-        $tiket = perbaikan_it::findOrFail($id);
-
-        $tiket->update([
-            'tgl_terima' => now(),
-            'ket_terima' => $ket ?? "Tiket {$tiket->tiket_id} sudah diterima IT"
-        ]);
-
-        $petugas = 'Admin';
-
-        $pesan = "📣 Halo {$tiket->nama}
-
-Tiket {$tiket->tiket_id} Sudah DITERIMA otomatis oleh {$petugas} ✅
-
-Mohon ditunggu 🙏";
-
-        $response = Http::timeout(5)->post('http://127.0.0.1:3000/send-personal',[
-            'number'=>$tiket->no_wa,
-            'message'=>$pesan
-        ]);
-
-        return $response;
     }
 }

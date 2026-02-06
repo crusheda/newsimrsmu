@@ -35,4 +35,7 @@ return [
         ],
     ],
 
+    'wa' => [
+        'url' => env('SERVER_WA_URL'),
+    ],
 ];

@@ -30,6 +30,7 @@ class perbaikan_it extends Model
         'title',
         'filename',
         'nama',
+        'no_wa',
         'unit',
         'estimasi',
         'tgl_pengaduan',
