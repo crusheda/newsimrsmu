@@ -22,7 +22,7 @@
             <div class="col-xl-12">
                 <div class="card custom-card profile-card">
                     <div class="profile-banner-image">
-                        <img src="{{ asset('images/media/backgrounds/1.png') }}" class="card-img-top" alt="..." />
+                        <img src="{{ asset('images/media/backgrounds/bgsubcrop.png') }}" class="card-img-top" alt="..." />
                     </div>
                     <div class="card-body p-4 pb-0 position-relative">
                         <div class="d-flex align-items-end justify-content-between flex-wrap">

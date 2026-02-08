@@ -197,6 +197,214 @@ class ProfilController extends Controller
         //     ->with('message', 'Profil berhasil diperbarui.');
     }
 
+    function ubahProfil(Request $request)
+    {
+        $validator = Validator::make($request->all(),
+        [
+            'nip' => 'required',
+            'nik' => 'required',
+            'email' => 'required|email',
+
+            // 'gelar_depan' => 'required',
+            'nama' => 'required',
+            // 'gelar_belakang' => 'required',
+            'nick' => 'required',
+            'no_hp' => 'required',
+            'jns_kelamin' => 'required',
+            'temp_lahir' => 'required',
+            'tgl_lahir' => 'required|date',
+            'status_kawin' => 'required',
+
+            'pengalaman_kerja' => 'nullable',
+
+            'ktp_provinsi'   => 'required',
+            'ktp_kabupaten' => 'required',
+            'ktp_kecamatan' => 'required',
+            'ktp_kelurahan' => 'required',
+            'alamat_ktp' => 'required',
+
+            'dom_provinsi'   => 'nullable',
+            'dom_kabupaten' => 'nullable',
+            'dom_kecamatan' => 'nullable',
+            'dom_kelurahan' => 'nullable',
+            'alamat_dom'    => 'nullable',
+
+            'fb' => 'nullable',
+            'ig' => 'nullable',
+            'tt' => 'nullable',
+
+            'rp' => 'nullable',
+            'rpk' => 'nullable',
+            'ro' => 'nullable',
+            'rpo' => 'nullable',
+
+            // pendidikan
+            'sd' => 'nullable|string',
+            'th_sd' => 'nullable|digits:4',
+            'smp' => 'nullable|string',
+            'th_smp' => 'nullable|digits:4',
+            'sma' => 'nullable|string',
+            'th_sma' => 'nullable|digits:4',
+            'd2' => 'nullable|string',
+            'th_d2' => 'nullable|digits:4',
+            'd3' => 'nullable|string',
+            'th_d3' => 'nullable|digits:4',
+            'd4' => 'nullable|string',
+            'th_d4' => 'nullable|digits:4',
+            's1' => 'nullable|string',
+            'th_s1' => 'nullable|digits:4',
+            's1_profesi' => 'nullable|string',
+            'th_s1_profesi' => 'nullable|digits:4',
+            's2' => 'nullable|string',
+            'th_s2' => 'nullable|digits:4',
+            's3' => 'nullable|string',
+            'th_s3' => 'nullable|digits:4',
+
+            // file pdf
+            'upload_sd' => 'nullable|mimes:pdf|max:5120',
+            'upload_smp' => 'nullable|mimes:pdf|max:5120',
+            'upload_sma' => 'nullable|mimes:pdf|max:5120',
+            'upload_d2' => 'nullable|mimes:pdf|max:5120',
+            'upload_d3' => 'nullable|mimes:pdf|max:5120',
+            'upload_d4' => 'nullable|mimes:pdf|max:5120',
+            'upload_s1' => 'nullable|mimes:pdf|max:5120',
+            'upload_s1_profesi' => 'nullable|mimes:pdf|max:5120',
+            'upload_s2' => 'nullable|mimes:pdf|max:5120',
+            'upload_s3' => 'nullable|mimes:pdf|max:5120',
+        ],[
+            'required' => ':attribute wajib diisi'
+        ]);
+
+        print_r($request->all()); die();
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => $validator->errors()->first()
+            ],422);
+        }
+
+        // ================= TRANSACTION =================
+        DB::beginTransaction();
+
+        try {
+
+            $user = users::findOrFail($userId);
+
+            $user->fill([
+                'nip' => $request->nip,
+                'nik' => $request->nik,
+                'email' => $request->email,
+                'gelar_depan' => $request->gelar_depan,
+                'nama' => $request->nama,
+                'gelar_belakang' => $request->gelar_belakang,
+                'nick' => $request->nick,
+                'no_hp' => $request->no_hp,
+                'jns_kelamin' => $request->jns_kelamin,
+                'temp_lahir' => $request->temp_lahir,
+                'tgl_lahir' => $request->tgl_lahir,
+                'status_kawin' => $request->status_kawin,
+
+                // KTP
+                'ktp_provinsi' => $request->ktp_provinsi,
+                'ktp_kabupaten' => $request->ktp_kabupaten,
+                'ktp_kecamatan' => $request->ktp_kecamatan,
+                'ktp_kelurahan' => $request->ktp_kelurahan,
+                'alamat_ktp' => $request->alamat_ktp,
+
+                // sosmed
+                'fb' => $request->fb,
+                'ig' => $request->ig,
+                'tt' => $request->tt,
+
+                // riwayat
+                'rp' => $request->rp,
+                'rpk' => $request->rpk,
+                'ro' => $request->ro,
+                'rpo' => $request->rpo,
+
+                // pendidikan text
+                'sd'=>$request->sd,
+                'smp'=>$request->smp,
+                'sma'=>$request->sma,
+                'd2'=>$request->d2,
+                'd3'=>$request->d3,
+                'd4'=>$request->d4,
+                's1'=>$request->s1,
+                's1_profesi'=>$request->s1_profesi,
+                's2'=>$request->s2,
+                's3'=>$request->s3,
+
+                'th_sd'=>$request->th_sd,
+                'th_smp'=>$request->th_smp,
+                'th_sma'=>$request->th_sma,
+                'th_d2'=>$request->th_d2,
+                'th_d3'=>$request->th_d3,
+                'th_d4'=>$request->th_d4,
+                'th_s1'=>$request->th_s1,
+                'th_s1_profesi'=>$request->th_s1_profesi,
+                'th_s2'=>$request->th_s2,
+                'th_s3'=>$request->th_s3,
+
+                'updated_at'=>now()
+            ]);
+
+            if ($request->alamat_dom) {
+
+                $user->dom_provinsi = $request->dom_provinsi;
+                $user->dom_kabupaten = $request->dom_kabupaten;
+                $user->dom_kecamatan = $request->dom_kecamatan;
+                $user->dom_kelurahan = $request->dom_kelurahan;
+                $user->alamat_dom = $request->alamat_dom;
+
+            } else {
+
+                $user->dom_provinsi = null;
+                $user->dom_kabupaten = null;
+                $user->dom_kecamatan = null;
+                $user->dom_kelurahan = null;
+                $user->alamat_dom = null;
+            }
+
+            // ================= FILE =================
+            $files = ['sd','smp','sma','d2','d3','d4','s1','s1_profesi','s2','s3'];
+
+            foreach ($files as $f) {
+
+                $input = "upload_$f";
+
+                if ($request->hasFile($input)) {
+
+                    if ($user->{"filename_$f"} && Storage::exists($user->{"filename_$f"})) {
+                        Storage::delete($user->{"filename_$f"});
+                    }
+
+                    $path = $request->file($input)->store("files/profil/ijazah/$userId", 'public');
+
+                    $user->{"filename_$f"} = $path;
+                }
+            }
+
+            $user->save();
+
+            DB::commit();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Profil berhasil diperbarui'
+            ]);
+
+        } catch (\Throwable $e) {
+
+            DB::rollBack();
+
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function ubahFotoProfil(Request $request)
     {
         $request->validate([
@@ -248,21 +456,28 @@ class ProfilController extends Controller
         ], 200);
     }
 
-    public function hapusFoto()
+    public function hapusFotoProfil()
     {
         $user = Auth::user();
+
         $foto = users_foto::where('user_id', $user->id)->first();
 
         if ($foto) {
-            // Hapus file dari storage
-            if (Storage::exists($foto->filename)) {
-                // Storage::delete($foto->filename);
+
+            // hapus file fisik
+            if (Storage::disk('public')->exists($foto->filename)) {
+                Storage::disk('public')->delete($foto->filename);
             }
-            // Hapus record
+
+            // hapus record DB
             $foto->delete();
         }
 
-        return back()->with('message', 'Foto profil telah dikembalikan ke default.');
+        return response()->json([
+            'status' => true,
+            'path' => asset('images/no-image-person.png'),
+            'message' => "Foto profil telah terhapus dan dikembalikan ke foto default."
+        ], 200);
     }
 
     public function ubahPassword(Request $request)
