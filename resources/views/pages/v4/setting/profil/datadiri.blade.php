@@ -483,6 +483,9 @@
                 $('#rpk').text(res.data.user?.riwayat_penyakit_keluarga ?? 'Tidak Ada.');
                 $('#rpo').text(res.data.user?.riwayat_penggunaan_obat ?? 'Tidak Ada.');
                 $('#ro').text(res.data.user?.riwayat_operasi ?? 'Tidak Ada.');
+
+                // PAGE password
+                $('#last_update_password').text(formatTanggalJam(res.data.user?.last_update_password) ?? '-')
             },
             error: function(xhr) {
                 Swal.fire('Gagal', xhr.responseJSON?.message ?? 'Terjadi kesalahan', 'error');

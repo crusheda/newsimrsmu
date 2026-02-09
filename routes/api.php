@@ -19,19 +19,23 @@ use \App\Http\Controllers\Whatsapp\HelpdeskController;
 
 Route::middleware(['web','auth'])->group(function () {
     // PROFIL AKUN
+    Route::get('v4/provinsi/{id}', [ProfilController::class, 'apiProvinsi']);
+    Route::get('v4/kota/{id}', [ProfilController::class, 'apiKota']);
+    Route::get('v4/kecamatan/{id}', [ProfilController::class, 'apiKecamatan']);
+
     Route::get('v4/profil/show', [ProfilController::class, 'show']);
     Route::post('v4/profil/ubah', [ProfilController::class, 'ubahProfil']);
     Route::post('v4/profil/foto/ubah', [ProfilController::class, 'ubahFotoProfil']);
     Route::delete('v4/profil/foto/hapus', [ProfilController::class, 'hapusFotoProfil']);
+    Route::post('v4/profil/password',[ProfilController::class,'ubahPassword']);
+
     Route::get('v4/profil/dokumen/table/{id}', [ProfilController::class, 'tableDokumen']);
     Route::post('v4/profil/dokumen/add', [ProfilController::class, 'tambahDokumen']);
     Route::post('v4/profil/dokumen/ubah/{id}/proses', [ProfilController::class, 'ubahDokumen']);
     Route::delete('v4/profil/dokumen/hapus/{id}/proses', [ProfilController::class, 'hapusDokumen']);
     Route::get('v4/profil/dokumen/ubah/{id}', [ProfilController::class, 'showUbahDokumen']);
     Route::get('v4/profil/spkrkk/table/{id}', [ProfilController::class, 'tableSpkrkk']);
-    Route::get('v4/provinsi/{id}', [ProfilController::class, 'apiProvinsi']);
-    Route::get('v4/kota/{id}', [ProfilController::class, 'apiKota']);
-    Route::get('v4/kecamatan/{id}', [ProfilController::class, 'apiKecamatan']);
+
 
     // SDI
         // DAFTAR PEGAWAI
@@ -47,10 +51,10 @@ Route::middleware(['web','auth'])->group(function () {
         // Route::get('v4/sdi/pegawai/grafik/6', [PegawaiController::class, 'grafik6'])->name('apiGrafikSDI6'); // Status Perkawinan
 });
 
-    // WHATSAPP API BAILEYS
-    Route::post('v4/perbaikanit/tiket/kirimgroup', [HelpdeskController::class, 'kirimTiketGroup']);
-    Route::post('v4/perbaikanit/tiket/callback', [HelpdeskController::class, 'callback']);
-    Route::post('v4/perbaikanit/tiket/{id}/terima', [HelpdeskController::class, 'kirimTerimaTiket']);
-    Route::post('v4/perbaikanit/tiket/{id}/kerjakan', [HelpdeskController::class, 'kirimKerjakanTiket']);
-    Route::post('v4/perbaikanit/tiket/{id}/selesai', [HelpdeskController::class, 'kirimSelesaiTiket']);
-    Route::post('v4/perbaikanit/tiket/{id}/tolak', [HelpdeskController::class, 'kirimTolakTiket']);
+// WHATSAPP API BAILEYS
+Route::post('v4/perbaikanit/tiket/kirimgroup', [HelpdeskController::class, 'kirimTiketGroup']);
+Route::post('v4/perbaikanit/tiket/callback', [HelpdeskController::class, 'callback']);
+Route::post('v4/perbaikanit/tiket/{id}/terima', [HelpdeskController::class, 'kirimTerimaTiket']);
+Route::post('v4/perbaikanit/tiket/{id}/kerjakan', [HelpdeskController::class, 'kirimKerjakanTiket']);
+Route::post('v4/perbaikanit/tiket/{id}/selesai', [HelpdeskController::class, 'kirimSelesaiTiket']);
+Route::post('v4/perbaikanit/tiket/{id}/tolak', [HelpdeskController::class, 'kirimTolakTiket']);

@@ -14,8 +14,7 @@
             ) Wajib Diisi
         </div>
     </div>
-    <form class="needs-validation" noValidate onSubmit={handleSubmitPassword}
-        encType="multipart/form-data">
+    <form id="formPassword" class="needs-validation" novalidate>
         <div class="card-body">
             <div class="row">
                 <div class="col-sm-12 mb-3">
@@ -43,7 +42,7 @@
                                 </i>
                                 oleh sistem
                             </li>
-                            <li>
+                            <li class="mb-2">
                                 Apabila anda
                                 lupa Password
                                 akun Simrsmu,
@@ -56,6 +55,8 @@
                                 pada halaman
                                 Login
                             </li>
+                            <li class="mb-2">Password Baru harus memenuhi kriteria yang sudah tertera di bawah</li>
+                            <li>Tombol Perbarui Password akan <mark>Aktif</mark> apabila <b class="text-info fw-bold">Password Baru</b> dan <b class="text-info fw-bold">Konfirmasi Password Baru</b> sudah sesuai kriteria</li>
                         </ul>
                     </div>
                 </div>
@@ -113,24 +114,21 @@
                         sebagai berikut :
                     </h6>
                     <ul class="list-group list-group-flush mb-3">
-                        <li class="list-group-item requirements">
-                            <i class="ti ti-circle-check f-16 me-2 text-danger"></i>
+                        <li class="list-group-item requirements" id="req-length">
+                            <i class="ti ti-circle-check f-16 me-2"></i>
                             Melebihi 8 karakter
                         </li>
-                        <li class="list-group-item requirements">
-                            <i class="ti ti-circle-check f-16 me-2 text-danger"></i>
-                            Minimal 1 Huruf
-                            Kapital (A-Z)
+                        <li class="list-group-item requirements" id="req-uppercase">
+                            <i class="ti ti-circle-check f-16 me-2"></i>
+                            Minimal 1 Huruf Kapital (A-Z)
                         </li>
-                        <li class="list-group-item requirements">
-                            <i class="ti ti-circle-check f-16 me-2 text-danger"></i>
-                            Minimal 1 Angka
-                            (0-9)
+                        <li class="list-group-item requirements" id="req-number">
+                            <i class="ti ti-circle-check f-16 me-2"></i>
+                            Minimal 1 Angka (0-9)
                         </li>
-                        <li class="list-group-item requirements">
-                            <i class="ti ti-circle-check f-16 me-2 text-danger"></i>
-                            Minimal 1 Karakter
-                            Khusus (!@#$%^&*)
+                        <li class="list-group-item requirements" id="req-special">
+                            <i class="ti ti-circle-check f-16 me-2"></i>
+                            Minimal 1 Karakter Khusus (!@#$%^&*)
                         </li>
                     </ul>
                 </div>
@@ -145,13 +143,10 @@
                             diperbarui :
                         </small>
                         <br />
-                        <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover text-decoration-underline"
-                            role="button">-
-                        </a>
+                        <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover text-decoration-underline" role="button" id="last_update_password">...</a>
                     </p>
                 </div>
-                <button class="btn btn-secondary" type="submit" id="btn-submit-password"
-                    disabled={!isPasswordValid}>
+                <button class="btn btn-secondary" type="submit" id="btn-submit-password" disabled>
                     <i class="ri-rocket-2-line me-1"></i>
                     Perbarui
                 </button>
@@ -159,3 +154,141 @@
         </div>
     </form>
 </div>
+
+<script>
+    let loading = false;
+
+    $(document).ready(function() {
+
+        function toggleRequirement(id, status) {
+            if (status) {
+                $(id).removeClass('text-danger').addClass('text-success');
+            } else {
+                $(id).removeClass('text-success').addClass('text-danger');
+            }
+        }
+
+        function validatePassword() {
+
+            let password = $('#newPassword').val();
+            let confirm = $('#confirmPassword').val();
+
+            let length = password.length >= 8;
+            let uppercase = /[A-Z]/.test(password);
+            let number = /[0-9]/.test(password);
+            let special = /[!@#$%^&*]/.test(password);
+
+            toggleRequirement('#req-length', length);
+            toggleRequirement('#req-uppercase', uppercase);
+            toggleRequirement('#req-number', number);
+            toggleRequirement('#req-special', special);
+
+            let allValid = length && uppercase && number && special;
+
+            // RESET confirm dulu
+            $('#confirmPassword').removeClass('is-valid is-invalid');
+
+            // Confirm password
+            if(confirm.length > 0){
+                if(password === confirm){
+                    $('#confirmPassword').addClass('is-valid');
+                }else{
+                    $('#confirmPassword').addClass('is-invalid');
+                }
+            }
+
+            // Enable submit
+            $('#btn-submit-password').prop(
+                'disabled',
+                !(allValid && password === confirm)
+            );
+        }
+
+        $('#newPassword, #confirmPassword').on('input', function () {
+            validatePassword();
+        });
+
+        $('#formPassword').on('submit', function(e){
+
+            e.preventDefault();
+            if(loading) return;
+
+            let form = this;
+            let btn  = $('#btn-submit-password');
+
+            if(!form.checkValidity()){
+                form.classList.add('was-validated');
+                Swal.fire('Info','Lengkapi semua field password','info');
+                return;
+            }
+
+            loading = true;
+
+            let formData = new FormData(form);
+
+            $.ajax({
+                url:'/api/v4/profil/password',
+                type:'POST',
+                data:formData,
+                processData:false,
+                contentType:false,
+                headers:{
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                beforeSend:function(){
+                    btn.prop('disabled',true)
+                    .html('<i class="ri-loader-4-line ri-spin me-1"></i> Memproses...');
+                },
+                success:function(res){
+
+                    if(!res.status){
+                        Swal.fire({
+                            title:'Informasi!',
+                            text:res.message,
+                            icon:'warning',
+                            timer:4000,
+                            timerProgressBar:true
+                        });
+                        return;
+                    }
+
+                    Swal.fire({
+                        title:'Yeayy!',
+                        text:res.message,
+                        icon:'success',
+                        timer:4000,
+                        timerProgressBar:true
+                    });
+
+                    // reset form
+                    form.reset();
+                    form.classList.remove('was-validated');
+
+                    $('.requirements').removeClass('text-success').addClass('text-danger');
+                    $('#confirmPassword').removeClass('is-valid is-invalid');
+
+                    validatePassword();
+
+                    $('#last_update_password').text(res.last_update_password+' WIB');
+
+                },
+                error:function(xhr){
+
+                    Swal.fire({
+                        title:'Ahh Maaf!!',
+                        text:xhr.responseJSON?.message ?? 'Terjadi kesalahan',
+                        icon:'error',
+                        timer:6000,
+                        timerProgressBar:true
+                    });
+
+                },
+                complete:function(){
+                    loading = false;
+                    btn.prop('disabled',false).html('<i class="ri-rocket-2-line me-1"></i> Perbarui');
+                }
+            });
+
+        });
+    })
+</script>

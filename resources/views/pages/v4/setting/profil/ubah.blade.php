@@ -42,7 +42,7 @@
                                                     style="width:auto">
 
                                                 <button type="button" class="btn btn-sm btn-primary" id="btnUploadFoto" onclick="ubahFotoProfil()" disabled>
-                                                    <i class="ri-upload-2-line me-1"></i> Upload Foto
+                                                    <i class="ri-upload-2-line me-1"></i> Ganti Foto
                                                 </button>
 
                                                 <button type="button" class="btn btn-sm btn-light" id="btnHapusFoto" onclick="confirmHapusFotoProfil()" disabled>
@@ -856,12 +856,12 @@
                 // jadi wajib
                 sekolah.prop('required', true);
                 tahun.prop('required', true);
-                upload.prop('required', true);
+                // upload.prop('required', true);
 
                 // invalid hanya jika kosong
                 sekolah.toggleClass('is-invalid', !sekolah.val());
                 tahun.toggleClass('is-invalid', !tahun.val());
-                upload.toggleClass('is-invalid', upload[0].files.length === 0);
+                // upload.toggleClass('is-invalid', upload[0].files.length === 0);
 
             }else{
 
@@ -1010,6 +1010,21 @@
                 $('#previewFoto').removeClass('loading');
             }
         })
+
+        let form = document.getElementById('formProfil');
+
+        // hapus bootstrap validation state
+        form.classList.remove('was-validated');
+
+        // bersihkan invalid class manual
+        $('#formProfil')
+            .find('.is-invalid')
+            .removeClass('is-invalid');
+
+        // reset native validity
+        form.querySelectorAll('input,select,textarea').forEach(el=>{
+            el.setCustomValidity('');
+        });
     }
 
     function ubahProfil() {
@@ -1110,6 +1125,7 @@
                 }
                 Swal.fire({title: 'Yeayy!', text: res.message, icon: 'success', timer: 5000, timerProgressBar: true});
                 loadUbah();
+                $('#formProfil').removeClass('was-validated')[0].reset();
             },
             error:function(xhr){
                 Swal.fire('Gagal',xhr.responseJSON?.message ?? 'Terjadi kesalahan','error');

@@ -201,7 +201,7 @@ class ProfilController extends Controller
     {
         $validator = Validator::make($request->all(),
         [
-            'nip' => 'required',
+            // 'nip' => 'required',
             'nik' => 'required',
             'email' => 'required|email',
 
@@ -275,7 +275,7 @@ class ProfilController extends Controller
             'required' => ':attribute wajib diisi'
         ]);
 
-        print_r($request->all()); die();
+        // print_r($request->all()); die();
 
         if ($validator->fails()) {
             return response()->json([
@@ -286,13 +286,14 @@ class ProfilController extends Controller
 
         // ================= TRANSACTION =================
         DB::beginTransaction();
+        $userId = Auth::user()->id;
 
         try {
 
             $user = users::findOrFail($userId);
 
             $user->fill([
-                'nip' => $request->nip,
+                // 'nip' => $request->nip,
                 'nik' => $request->nik,
                 'email' => $request->email,
                 'gelar_depan' => $request->gelar_depan,
@@ -318,10 +319,10 @@ class ProfilController extends Controller
                 'tt' => $request->tt,
 
                 // riwayat
-                'rp' => $request->rp,
-                'rpk' => $request->rpk,
-                'ro' => $request->ro,
-                'rpo' => $request->rpo,
+                'riwayat_penyakit' => $request->rp,
+                'riwayat_penyakit_keluarga' => $request->rpk,
+                'riwayat_operasi' => $request->ro,
+                'riwayat_penggunaan_obat' => $request->rpo,
 
                 // pendidikan text
                 'sd'=>$request->sd,
@@ -381,8 +382,11 @@ class ProfilController extends Controller
 
                     $path = $request->file($input)->store("files/profil/ijazah/$userId", 'public');
 
-                    $user->{"filename_$f"} = $path;
+                } else {
+                    $path = null;
                 }
+
+                $user->{"filename_$f"} = $path;
             }
 
             $user->save();
@@ -484,42 +488,48 @@ class ProfilController extends Controller
     {
         $user = Auth::user();
 
-        // ✅ Validasi input
         $validator = Validator::make($request->all(), [
-            'current_password' => ['required'],
+            'current_password' => 'required',
             'new_password' => [
                 'required',
-                'string',
                 'min:8',
-                'regex:/[A-Z]/',        // huruf besar
-                'regex:/[a-z]/',        // huruf kecil
-                'regex:/[0-9]/',        // angka
-                'regex:/[@$!%*?&]/',    // karakter spesial
-                'confirmed',            // pastikan sama dengan new_password_confirmation
+                'confirmed',
+                'regex:/[A-Z]/',
+                'regex:/[0-9]/',
+                'regex:/[!@#$%^&*]/',
             ],
-        ], [
-            'new_password.confirmed' => 'Konfirmasi password baru tidak sesuai.',
-            'new_password.regex' => 'Password baru harus mengandung huruf besar, angka, dan karakter spesial.',
+        ],[
+            'current_password.required' => 'Password lama wajib diisi',
+            'new_password.required' => 'Password baru wajib diisi',
+            'new_password.confirmed' => 'Konfirmasi password tidak cocok',
+            'new_password.min' => 'Password minimal 8 karakter',
+            'new_password.regex' => 'Password harus mengandung huruf besar, angka, dan karakter khusus',
         ]);
 
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+        if($validator->fails()){
+            return response()->json([
+                'status'=>false,
+                'message'=>$validator->errors()->first()
+            ],422);
         }
 
-        // ✅ Cek password lama benar
-        if (!Hash::check($request->get('current_password'), $user->password)) {
-            return redirect()->back()->withErrors([
-                'current_password' => 'Password lama tidak sesuai.',
-            ]);
+        // cek password lama
+        if(!Hash::check($request->current_password, $user->password)){
+            return response()->json([
+                'status'=>false,
+                'message'=>'Password lama tidak sesuai'
+            ],400);
         }
 
-        // ✅ Simpan password baru dengan hash
-        $user->password = Hash::make($request->get('new_password'));
-        $user->last_updated_password = Carbon::now();
+        $user->password = Hash::make($request->new_password);
+        $user->last_update_password = now();
         $user->save();
 
-        return redirect()->route('v4.profil.index')
-            ->with('message', 'Password berhasil diperbarui!');
+        return response()->json([
+            'status'=>true,
+            'message'=>'Password berhasil diperbarui',
+            'last_update_password'=>$user->last_update_password->format('d-m-Y H:i')
+        ]);
     }
 
     public function apiProvinsi($id)
