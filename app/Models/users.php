@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Haruncpi\LaravelUserActivity\Traits\Loggable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Permission\Traits\HasRoles;
 
 class users extends Model
 {
-    use HasFactory, Loggable, SoftDeletes;
+    use HasFactory, Loggable, SoftDeletes, HasRoles;
 
     protected $table = 'users';
     public $timestamps = true;

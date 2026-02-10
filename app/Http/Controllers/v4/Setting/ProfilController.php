@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\referensi;
 use App\Models\logs;
+use App\Models\User;
 use App\Models\users;
 use App\Models\users_foto;
 use App\Models\users_status;
@@ -35,7 +36,7 @@ class ProfilController extends Controller
         //     ], 401);
 
         $id_user = Auth::user()->id;
-        $user = users::where('id',$id_user)->first();
+        $user = User::where('id',$id_user)->first();
         $foto_user = users_foto::where('user_id',$id_user)->first();
         $status_user = users_status::leftjoin('referensi','referensi.id','=','users_status.ref_id')
                                 ->select('referensi.deskripsi AS nama_status')
@@ -46,10 +47,17 @@ class ProfilController extends Controller
                                 ->whereNull('referensi.deleted_at')
                                 ->first();
         $log_user = logs::where('user_id', $id_user)->where('log_type', '=', 'login')->select('log_date')->orderBy('log_date', 'DESC')->first();
-        $role = model_has_roles::join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-                                ->select('model_has_roles.model_id as id_user','roles.name as nama_role')
-                                ->where('model_has_roles.model_id', '=', $id_user)
-                                ->get();
+        $role = $user->roles()->select('roles.id','roles.name','roles.deskripsi')->get();
+
+        // $role = model_has_roles::join('roles', 'model_has_roles.role_id', '=', 'roles.id')
+        // ->select(
+        //     'roles.id',
+        //     'roles.name as nama_role',
+        //     'roles.deskripsi'
+        // )
+        // ->where('model_has_roles.model_id', $id_user)
+        // ->get();
+
         $provinsi = alamat::select('provinsi')->groupBy('provinsi')->get();
         $kota = alamat::select('nama_kabkota')->groupBy('nama_kabkota')->get();
         $ref_dokumen = referensi::where('ref_jenis',8)->get(); // 8 is Jenis Dokumen User
@@ -292,12 +300,15 @@ class ProfilController extends Controller
 
             $user = users::findOrFail($userId);
 
+            $nama_lengkap = ($request->gelar_depan?$request->gelar_depan.'. ':'').$request->nama.($request->gelar_belakang?', '.$request->gelar_belakang:'');
+
             $user->fill([
                 // 'nip' => $request->nip,
                 'nik' => $request->nik,
                 'email' => $request->email,
-                'gelar_depan' => $request->gelar_depan,
                 'nama' => $request->nama,
+                'gelar_depan' => $request->gelar_depan,
+                'nama_lengkap' => $nama_lengkap,
                 'gelar_belakang' => $request->gelar_belakang,
                 'nick' => $request->nick,
                 'no_hp' => $request->no_hp,

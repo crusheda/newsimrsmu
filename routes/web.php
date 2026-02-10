@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('pages.v4.index');
-})->name('portal');
+})->name('v4.portal');
 
 // AUTHENTICATION ROUTES
 use App\Http\Controllers\Auth\v4\AuthController;
@@ -18,10 +18,14 @@ Route::group(['prefix' => 'v4', 'as' => ''], function () {
 // PROTECTED ROUTES
 use \App\Http\Controllers\v4\Dashboard\DashboardController;
 use \App\Http\Controllers\v4\Setting\ProfilController;
+use \App\Http\Controllers\v4\Akun\AksesJabatanController;
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('v4.dashboard');
     Route::get('profil', [ProfilController::class, 'index'])->name('v4.profil');
+
+    // AKUN PENGGUNA
+        Route::get('akun/jabatan-akses', [AksesJabatanController::class, 'index'])->name('v4.akun.aksesjabatan');
 
     // LOGOUT ROUTE
     Route::post('logout', [AuthController::class, 'logout'])->name('v4.logout');

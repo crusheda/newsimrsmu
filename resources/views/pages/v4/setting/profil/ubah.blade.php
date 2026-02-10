@@ -498,28 +498,28 @@
                                         Riwayat Penyakit
                                     </label>
                                     <textarea id="rp_ubah" rows="3"
-                                        class="form-control mb-3" placeholder="e.g. Tuliskan bila ada"></textarea>
+                                        class="form-control" placeholder="e.g. Tuliskan bila ada"></textarea>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="block font-medium mb-1">
                                         Riwayat Penyakit Keluarga
                                     </label>
                                     <textarea id="rpk_ubah" rows="3"
-                                        class="form-control mb-3" placeholder="e.g. Tuliskan bila ada"></textarea>
+                                        class="form-control" placeholder="e.g. Tuliskan bila ada"></textarea>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="block font-medium mb-1">
                                         Riwayat Operasi
                                     </label>
                                     <textarea id="ro_ubah" rows="3"
-                                        class="form-control mb-3" placeholder="e.g. Tuliskan bila ada"></textarea>
+                                        class="form-control" placeholder="e.g. Tuliskan bila ada"></textarea>
                                 </div>
-                                <div class="col-md-6 mb-3">
+                                <div class="col-md-6">
                                     <label class="block font-medium mb-1">
                                         Riwayat Penggunaan Obat
                                     </label>
                                     <textarea id="rpo_ubah" rows="3"
-                                        class="form-control mb-3" placeholder="e.g. Tuliskan bila ada"></textarea>
+                                        class="form-control" placeholder="e.g. Tuliskan bila ada"></textarea>
                                 </div>
                             </div>
                         </div>

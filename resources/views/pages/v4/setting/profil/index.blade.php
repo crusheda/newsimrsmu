@@ -81,14 +81,14 @@
                                             Password
                                         </button>
                                     </li>
-                                    <li class="nav-item" role="presentation">
+                                    <li class="nav-item" role="presentation" hidden>
                                         <button class="nav-link" id="" data-bs-toggle="tab"
                                             data-bs-target="#dokumen-tab" type="button" role="tab"
                                             aria-controls="dokumen-tab" aria-selected="false">
                                             Dokumen
                                         </button>
                                     </li>
-                                    <li class="nav-item" role="presentation">
+                                    <li class="nav-item" role="presentation" hidden>
                                         <button class="nav-link" id="" data-bs-toggle="tab"
                                             data-bs-target="#spkrkk-tab" type="button" role="tab"
                                             aria-controls="spkrkk-tab" aria-selected="false">
