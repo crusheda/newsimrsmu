@@ -53,4 +53,14 @@ class User extends Authenticatable
         return $this->hasOne(users_foto::class, 'user_id')
                     ->whereNull('deleted_at');
     }
+
+    // CEK ROLE / PERMISSION
+        // $user->can()
+        // $user->hasRole()
+        // $user->hasAnyRole()
+        // $user->hasAllRoles()
+
+    // FUNCTION
+
+
 }

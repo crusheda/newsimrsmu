@@ -84,6 +84,11 @@
         <!-- Auto Complete CSS -->
         <link rel="stylesheet" href="{{ asset('libs/@tarekraafat/autocomplete.js/css/autoComplete.css') }}">
 
+        <!-- Select2 -->
+        <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet" type="text/css" />
+
+        <!-- DataTable -->
+        <link href="https://cdn.datatables.net/v/bs5/jq-3.7.0/jszip-3.10.1/dt-2.3.7/b-3.2.6/b-colvis-3.2.6/b-html5-3.2.6/b-print-3.2.6/cc-1.2.0/fc-5.0.5/r-3.0.8/sb-1.8.4/datatables.min.css" rel="stylesheet" integrity="sha384-xE8CsVVujM0GkvuHxKaVX6wHHB3EF3z0ghhgyAdjySRvPjTrsQL7KyVIRfzZtA9f" crossorigin="anonymous">
     </head>
     <body class="font-sans antialiased">
         <div class="progress-top-bar"></div>
@@ -181,10 +186,21 @@
         <!-- Apex Charts JS -->
         <script src="{{ asset('libs/apexcharts/apexcharts.min.js') }}"></script>
 
+        <!-- Datatables Cdn -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js" integrity="sha384-VFQrHzqBh5qiJIU0uGU5CIW3+OWpdGGJM9LBnGbuIH2mkICcFZ7lPd/AAtI7SNf7" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js" integrity="sha384-/RlQG9uf0M2vcTw3CX7fbqgbj/h8wKxw7C3zu9/GxcBPRKOEcESxaxufwRXqzq6n" crossorigin="anonymous"></script>
+        <script src="https://cdn.datatables.net/v/bs5/jq-3.7.0/jszip-3.10.1/dt-2.3.7/b-3.2.6/b-colvis-3.2.6/b-html5-3.2.6/b-print-3.2.6/cc-1.2.0/fc-5.0.5/r-3.0.8/sb-1.8.4/datatables.min.js" integrity="sha384-DFeKu4OFli5ASXQpYStbj/YJRYWFCBkyQ446Fvve5pBqbW+U/AqtbzV17D2OQRNx" crossorigin="anonymous"></script>
+
+        <!-- Internal Datatables JS -->
+        <script src="{{ asset('js/datatables.js') }}"></script>
+
         <!-- Custom JS -->
         <script src="{{ asset('js/custom.js') }}"></script>
 
         <!-- Custom-Switcher JS -->
         <script src="{{ asset('js/custom-switcher.min.js') }}"></script>
+
+        <!-- Select2 -->
+        <script src="{{ asset('libs/select2/js/select2.min.js') }}"></script>
     </body>
 </html>

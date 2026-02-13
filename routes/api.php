@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 use \App\Http\Controllers\v4\Setting\ProfilController;
 use \App\Http\Controllers\Whatsapp\HelpdeskController;
+use \App\Http\Controllers\v4\Akun\AksesJabatanController;
 
 Route::middleware(['web','auth'])->group(function () {
     // PROFIL AKUN
@@ -36,6 +37,22 @@ Route::middleware(['web','auth'])->group(function () {
     Route::get('v4/profil/dokumen/ubah/{id}', [ProfilController::class, 'showUbahDokumen']);
     Route::get('v4/profil/spkrkk/table/{id}', [ProfilController::class, 'tableSpkrkk']);
 
+    // AKSES JABATAN
+    Route::get('v4/aksesjabatan/data', [AksesJabatanController::class, 'table']);
+    Route::post('v4/aksesjabatan/store', [AksesJabatanController::class, 'store']);
+    Route::get('v4/aksesjabatan/hapus/{id}', [AksesJabatanController::class, 'destroy']);
+        // AKSES
+        Route::get('v4/aksesjabatan/akses/data', [AksesJabatanController::class, 'tableAkses']);
+        Route::post('v4/aksesjabatan/akses/store', [AksesJabatanController::class, 'storeAkses']);
+        Route::get('v4/aksesjabatan/akses/hapus/{id}', [AksesJabatanController::class, 'hapusAkses']);
+        // JABATAN
+        Route::get('v4/aksesjabatan/jabatan/data', [AksesJabatanController::class, 'tableJabatan']);
+        Route::post('v4/aksesjabatan/jabatan/store', [AksesJabatanController::class, 'storeJabatan']);
+        Route::get('v4/aksesjabatan/jabatan/hapus/{id}', [AksesJabatanController::class, 'hapusJabatan']);
+
+    // AKUN PENGGUNA
+    // Route::get('hakakses/akunpengguna/verif/{id}', '\App\Http\Controllers\HakAkses\DataKaryawanController@verifName')->name('akunpengguna.verif');
+    // Route::get('hakakses/akunpengguna/hapus/{id}', '\App\Http\Controllers\HakAkses\DataKaryawanController@hapus')->name('akunpengguna.hapus');
 
     // SDI
         // DAFTAR PEGAWAI

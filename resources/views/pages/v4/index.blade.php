@@ -121,7 +121,7 @@
                     <!-- Start::header-element -->
                     <div class="header-element">
                         <div class="horizontal-logo">
-                            <a href="{{ route('portal') }}" class="header-logo">
+                            <a href="{{ route('v4.portal') }}" class="header-logo">
                                 <img src="{{ asset('images/brand-logos/toggle-logo.png') }}" alt="logo" class="toggle-logo">
                                 <img src="{{ asset('images/brand-logos/toggle-dark.png') }}" alt="logo" class="toggle-dark">
                             </a>
@@ -182,7 +182,7 @@
                     <nav class="main-menu-container nav nav-pills sub-open">
                         <div class="landing-logo-container">
                             <div class="horizontal-logo">
-                                <a href="{{ route('portal') }}" class="header-logo">
+                                <a href="{{ route('v4.portal') }}" class="header-logo">
                                     <img src="{{ asset('images/brand-logos/desktop-logo.png') }}" alt="logo" class="desktop-logo">
                                     <img src="{{ asset('images/brand-logos/desktop-dark.png') }}" alt="logo" class="desktop-dark">
                                 </a>
@@ -306,7 +306,7 @@
                             <h1 class="fw-semibold mt-3 landing-banner-heading">Sistem Informasi <br> RS <span class="text-primary">PKU Muhammadiyah</span> Sukoharjo</h1>
                             <span class="d-block fs-18">Platform yang mendukung manajemen data yang efektif, komunikasi yang lancar antar bagian manajemen, mempermudah proses administrasi, dan meningkatkan kinerja pegawai dengan dukungan sistem yang terintegrasi dan interkoneksi.</span>
                             <div class="btn-list banner-buttons">
-                                <a href="index.html" class="btn btn-primary btn-lg rounded-pill btn-w-lg">Masuk Sekarang</a>
+                                <a href="{{ route('v4.login') }}" class="btn btn-primary btn-lg rounded-pill btn-w-lg">Masuk Sekarang</a>
                                 <a class="btn btn-lg btn-light border rounded-pill btn-w-lg" href="javascript:void(0);">Web Resmi RS</a>
                             </div>
                         </div>

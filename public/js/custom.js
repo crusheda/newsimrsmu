@@ -612,12 +612,12 @@ headerbtn.forEach((button) => {
     cartCount = document.querySelectorAll(".dropdown-item-close").length;
     if (cartDataEl) {
         cartDataEl.innerText = `${cartCount}`;
-    } 
+    }
     if (cartBadgeEl) {
       cartBadgeEl.innerText = `${cartCount}`;
     }
     console.log(cartCount);
-    
+
     if (cartCount == 0) {
       let elementHide = document.querySelector(".empty-header-item");
       let elementShow = document.querySelector(".empty-item");
@@ -627,7 +627,7 @@ headerbtn.forEach((button) => {
       if (elementShow) {
         elementShow.classList.remove("d-none");
       }
-    } 
+    }
   });
 });
 /* for cart dropdown */
