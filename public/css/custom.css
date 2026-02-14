@@ -1,3 +1,8 @@
 #imgProfil.loading {
     opacity: .4;
 }
+.select2-container .select2-selection--multiple {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    white-space: normal !important;
+}

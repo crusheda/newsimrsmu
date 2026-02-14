@@ -5,7 +5,7 @@
         <div class="page-header-breadcrumb mb-3">
             <div class="d-flex align-center justify-content-between flex-wrap">
                 <h1 class="page-title fw-medium fs-18 mb-0">
-                    Pengaturan <b class="text-primary">Akses</b> & <b class="text-pink">Jabatan</b>
+                    Pengaturan <b class="text-primary link-underline-primary text-decoration-underline">Akses</b> & <b class="text-pink link-underline-pink text-decoration-underline">Jabatan</b>
                 </h1>
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item">
@@ -57,14 +57,14 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="collapse" id="formSync">
+                        <div class="collapse mb-2" id="formSync">
                             <hr>
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
                                         <label for="" class ="form-label">Pilih Salah Satu <b>Jabatan</b></label>
                                         <br>
-                                        <select class="select2 form-control" id="aksesjabatan-jabatan" style="width: 100%" data-bs-auto-close="outside" required></select>
+                                        <select class="select2-jabatan form-control" id="aksesjabatan-jabatan" onchange="loadAksesByJabatan(this.value)" style="width: 100%" data-bs-auto-close="outside" required></select>
                                         <br>
                                         <small>Refresh browser apabila tidak ditemukan <kbd>Jabatan</kbd> yang baru saja ditambahkan.</small>
                                     </div>
@@ -75,16 +75,16 @@
                                         <button type="button" class="btn btn-outline-primary btn-sm" onclick="selectAll()">Select All</button>
                                         <button type="button" class="btn btn-outline-danger btn-sm" onclick="deselectAll()">Deselect All</button>
                                         <br>
-                                        <select id="aksesjabatan-akses" class="select2 form-control" data-bs-auto-close="outside"
+                                        <select id="aksesjabatan-akses" class="select2-akses form-control" data-bs-auto-close="outside"
                                             required multiple="multiple" style="width: 100%"></select>
-                                        <br>
-                                        <small>Refresh browser apabila tidak ditemukan <kbd>Akses</kbd> yang baru saja ditambahkan.</small>
+                                        {{-- <br>
+                                        <small>Refresh browser apabila tidak ditemukan <kbd>Akses</kbd> yang baru saja ditambahkan.</small> --}}
                                     </div>
                                 </div>
                             </div>
                             <div class="btn-group">
                                 <button class="btn btn-primary" id="btn-simpan-sync" onclick="tambahAksesJabatan()"><i
-                                        class="fa-fw fas fa-save nav-icon"></i> Tambah</button>
+                                        class="fa-fw fas fa-save nav-icon"></i> Sync</button>
                                 <button class="btn btn-outline-dark" onclick="syncJabatanAkses(false)"><i
                                         class="fa-fw fas fa-times nav-icon"></i> Sembunyikan</button>
                             </div>
@@ -164,9 +164,16 @@
                     <button type="button" class="btn-close" onclick="closeModal()" aria-label="Tutup"></button>
                 </div>
                 <div class="modal-body">
-                    <label for="" class ="form-label">Jabatan</label>
-                    <input type="text" id="inp-jabatan" class="form-control" placeholder="Masukkan nama jabatan"
-                        required>
+                    <div class="form-group mb-3">
+                        <label for="" class ="form-label">Jabatan (<b class="link-underline-primary text-decoration-underline">Nama Khusus Sistem</b>)</label>
+                        <input type="text" id="inp-jabatan" class="form-control" placeholder="e.g. kepala-ruang-xx"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label for="" class ="form-label">Deskripsi (<b class="link-underline-info text-decoration-underline">Nama Sesuai Struktur Bagian</b>)</label>
+                        <input type="text" id="inp-jabatan-deskripsi" class="form-control" placeholder="e.g. Kepala Ruang XXX"
+                            required>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary" id="btn-simpan-jabatan" onclick="tambahJabatan()"><i
@@ -192,9 +199,9 @@
                         <table id="dttable-akses" class="table dt-responsive table-hover nowrap w-100">
                             <thead>
                                 <tr>
-                                    <th class="cell-fit">ID</th>
+                                    <th class="cell-fit text-center">ID</th>
                                     <th class="cell-fit">NAME</th>
-                                    <th class="cell-fit">UPDATE</th>
+                                    <th class="cell-fit"><center>UPDATE</center></th>
                                     <th class="cell-fit">
                                         <center>#</center>
                                     </th>
@@ -209,9 +216,9 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th class="cell-fit">ID</th>
+                                    <th class="cell-fit text-center">ID</th>
                                     <th class="cell-fit">NAME</th>
-                                    <th class="cell-fit">UPDATE</th>
+                                    <th class="cell-fit"><center>UPDATE</center></th>
                                     <th class="cell-fit">
                                         <center>#</center>
                                     </th>
@@ -237,7 +244,7 @@
     {{-- DAFTAR JABATAN --}}
     <div class="modal fade animate__animated animate__jackInTheBox" id="daftarJabatan" tabindex="-1"
         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">
@@ -252,6 +259,7 @@
                                 <tr>
                                     <th class="cell-fit">ID</th>
                                     <th class="cell-fit">NAME</th>
+                                    <th class="cell-fit">DESKRIPSI</th>
                                     <th class="cell-fit">UPDATE</th>
                                     <th class="cell-fit">
                                         <center>#</center>
@@ -260,7 +268,7 @@
                             </thead>
                             <tbody id="tampil-tbody-jabatan">
                                 <tr>
-                                    <td colspan="9">
+                                    <td colspan="5">
                                         <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
                                     </td>
                                 </tr>
@@ -269,12 +277,13 @@
                                 <tr>
                                     <th class="cell-fit">ID</th>
                                     <th class="cell-fit">NAME</th>
+                                    <th class="cell-fit">DESKRIPSI</th>
                                     <th class="cell-fit">UPDATE</th>
                                     <th class="cell-fit">
                                         <center>#</center>
                                     </th>
                                 </tr>
-                            </tfoot>&nbsp;
+                            </tfoot>
                         </table>
                     </div>
                 </div>
@@ -302,6 +311,17 @@
             refresh();
         })
 
+        // MODAL OPEN
+        function showAkses() {
+            $('.modal').modal('hide');
+            $('#formTambahAkses').modal('show');
+        }
+
+        function showJabatan() {
+            $('.modal').modal('hide');
+            $('#formTambahJabatan').modal('show');
+        }
+
         // Select & Deselect All Select2
         function selectAll() {
             $("#aksesjabatan-akses > option").prop("selected", true);
@@ -314,26 +334,98 @@
         }
 
         function syncJabatanAkses(params) {
-            if (params == true) {
-                $('#btn-tampil-sync').prop("disabled",true);
-                $('#btn-tampil-sync').toggleClass('btn-primary btn-secondary');
-                $(".select2").select2({
-                    placeholder: "",
-                    allowClear: true
-                }).val('').trigger('change');
+
+            if (params === true) {
+
+                $('#btn-tampil-sync')
+                    .prop("disabled", true)
+                    .toggleClass('btn-primary btn-secondary');
+
+                // reset
+                $("#aksesjabatan-jabatan").html('<option value="">Loading...</option>');
+                $("#aksesjabatan-akses").html('<option value="">Loading...</option>');
+
+                // LOAD JABATAN
+                $.ajax({
+                    url: '/api/v4/aksesjabatan/jabatan/data',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(res){
+
+                        let html = '<option value="">Pilih Jabatan</option>';
+
+                        res.show.forEach(function(item){
+                            html += `<option value="${item.id}">${item.name}</option>`;
+                        });
+
+                        $("#aksesjabatan-jabatan").html(html).select2({
+                            placeholder: "Pilih Jabatan",
+                            allowClear: true
+                        });
+                    }
+                });
+
+                // LOAD SEMUA AKSES
+                $.ajax({
+                    url: '/api/v4/aksesjabatan/akses/data',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(res){
+
+                        let html = '';
+
+                        res.show.forEach(function(item){
+                            html += `<option value="${item.id}">${item.name}</option>`;
+                        });
+
+                        $("#aksesjabatan-akses").html(html).select2({
+                            placeholder: " Pilih Akses",
+                            allowClear: true
+                        });
+                    }
+                });
+
                 $("#formSync").collapse("show");
-                // console.log($("#formSync").collapse());
+
             } else {
-                if (params == false) {
-                    $('#btn-tampil-sync').toggleClass('btn-secondary btn-primary');
-                    $('#btn-tampil-sync').prop("disabled",false);
-                    $("#formSync").collapse("hide");
-                } else {
-                    $('#btn-tampil-sync').removeClass('btn-secondary btn-primary').addClass('btn-primary');
-                    $('#btn-tampil-sync').prop("disabled",false);
-                    $("#formSync").collapse("hide");
-                }
+
+                $('#btn-tampil-sync')
+                    .toggleClass('btn-secondary btn-primary')
+                    .prop("disabled", false);
+
+                $("#formSync").collapse("hide");
             }
+        }
+
+        function loadAksesByJabatan(roleId) {
+
+            // loading state
+            $("#aksesjabatan-akses").val(null).trigger('change');
+
+            if (!roleId) return;
+
+            $.ajax({
+                url: `/api/v4/aksesjabatan/${roleId}/akses`,
+                type: 'GET',
+                dataType: 'json',
+                success: function(res){
+
+                    // reset dulu
+                    $("#aksesjabatan-akses option").prop("selected", false);
+
+                    // looping permission yg sudah melekat
+                    res.forEach(function(item){
+                        $("#aksesjabatan-akses option[value='"+item.id+"']")
+                            .prop("selected", true);
+                    });
+
+                    // refresh select2
+                    $("#aksesjabatan-akses").trigger("change");
+                },
+                error: function(){
+                    alert('Gagal mengambil akses');
+                }
+            });
         }
 
         function refresh() {
@@ -350,7 +442,7 @@
                 success: function(res) {
                     $("#tampil-tbody").empty();
                     res.show.forEach(item => {
-                        content = `<tr><td>` + item.name + `</td><td>`;
+                        content = `<tr><td>` + item.name + `</td><td class="text-wrap">`;
                         res.selection.forEach(val => {
                             if (val.id_role == item.role_id) {
                                 content += `<span class="badge bg-dark">` + val.name_permission + `</span>&nbsp;`;
@@ -375,7 +467,7 @@
                         displayLength: 15,
                         lengthChange: true,
                         lengthMenu: [15, 25, 50, 75, 100, 300 ,500, 750, 1000, 10000],
-                        buttons: ['copy', 'excel', 'pdf', 'colvis'],
+                        buttons: ['copy', 'excel', 'pdf'],
                         language: {
                             searchPlaceholder: 'Cari Data...',
                             sSearch: '',
@@ -391,6 +483,9 @@
         }
 
         function refreshAkses() {
+            if ($.fn.DataTable.isDataTable('#dttable-akses')) {
+                $('#dttable-akses').DataTable().clear().destroy();
+            }
             $("#tampil-tbody-akses").empty().append(
                 `<tr><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
             );
@@ -400,16 +495,13 @@
                 dataType: 'json', // added data type
                 success: function(res) {
                     $("#tampil-tbody-akses").empty();
-                    $('#dttable-akses').DataTable().clear().destroy();
                     res.show.forEach(item => {
                         content = `
                                 <tr>
-                                    <td>` + item.id + `</td>
-                                    <td>` + item.name + `</td>
-                                    <td>` + item.updated_at.substring(0, 19).replace('T', ' ') +
-                            `</td>
-                                    <td><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapusAkses(` +
-                            item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></td>
+                                    <td><center>${item.id}</center></td>
+                                    <td>${item.name}</td>
+                                    <td><center>${item.updated_at?item.updated_at.substring(0, 19).replace('T', ' '):''}</center></td>
+                                    <td><center><a href='javascript:void(0);' class='btn btn-outline-danger btn-wave' onclick="hapusAkses(${item.id})"><i class="fa-fw fas fa-trash nav-icon me-1"></i> Hapus</a></center></td>
                                 </tr>
                             `;
                         $('#tampil-tbody-akses').append(content);
@@ -418,14 +510,11 @@
                         order: [
                             [2, "desc"]
                         ],
-                        displayLength: 7,
+                        displayLength: 15,
                         lengthChange: true,
-                        lengthMenu: [7, 10, 25, 50, 75, 100],
+                        lengthMenu: [15, 25, 50, 75, 100, 300, 700, 1000],
                         buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
-
-                    table.buttons().container()
-                        .appendTo('#dttable-akses_wrapper .col-md-6:eq(0)');
 
                     // Showing Tooltip
                     $('[data-bs-toggle="tooltip"]').tooltip({
@@ -436,6 +525,9 @@
         }
 
         function refreshJabatan() {
+            if ($.fn.DataTable.isDataTable('#dttable-jabatan')) {
+                $('#dttable-jabatan').DataTable().destroy();
+            }
             $("#tampil-tbody-jabatan").empty().append(
                 `<tr><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
             );
@@ -445,32 +537,23 @@
                 dataType: 'json', // added data type
                 success: function(res) {
                     $("#tampil-tbody-jabatan").empty();
-                    $('#dttable-jabatan').DataTable().clear().destroy();
                     res.show.forEach(item => {
-                        content = `
-                                <tr>
-                                    <td>` + item.id + `</td>
-                                    <td>` + item.name + `</td>
-                                    <td>` + item.updated_at.substring(0, 19).replace('T', ' ') +
-                            `</td>
-                                    <td><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapusJabatan(` +
-                            item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></td>
-                                </tr>
-                            `;
+                        content = `<tr>
+                                        <td>${item.id}</td>
+                                        <td>${item.name}</td>
+                                        <td>${item.deskripsi?item.deskripsi:'-'}</td>
+                                        <td>${item.updated_at?item.updated_at.substring(0, 19).replace('T', ' '):''}</td>
+                                        <td><center><a href='javascript:void(0);' class='btn btn-outline-danger btn-wave' onclick="hapusJabatan(${item.id})"><i class="fa-fw fas fa-trash nav-icon me-1"></i> Hapus</a></center></td>
+                                    </tr>`;
                         $('#tampil-tbody-jabatan').append(content);
                     })
-                    var table = $('#dttable-jabatan').DataTable({
-                        order: [
-                            [2, "desc"]
-                        ],
-                        displayLength: 7,
+                    $('#dttable-jabatan').DataTable({
+                        order: [[3, "desc"]],
+                        displayLength: 15,
                         lengthChange: true,
-                        lengthMenu: [7, 10, 25, 50, 75, 100],
+                        lengthMenu: [15, 25, 50, 75, 100, 300, 700, 1000],
                         buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
-
-                    table.buttons().container()
-                        .appendTo('#dttable-jabatan_wrapper .col-md-6:eq(0)');
 
                     // Showing Tooltip
                     $('[data-bs-toggle="tooltip"]').tooltip({
@@ -480,11 +563,17 @@
             })
         }
 
-        // $("#tambah").one('submit', function() {
-        //     $("#btn-simpan").attr('disabled', 'disabled');
-        //     $("#btn-simpan").find("i").toggleClass("fa-save fa-sync fa-spin");
-        //     return true;
-        // });
+        function showDaftarAkses() {
+            syncJabatanAkses();
+            refreshAkses();
+            $('#daftarAkses').modal('show');
+        }
+
+        function showDaftarJabatan() {
+            syncJabatanAkses();
+            refreshJabatan();
+            $('#daftarJabatan').modal('show');
+        }
 
         function tambahAkses() {
             var akses = $("#inp-akses").val();
@@ -534,9 +623,10 @@
         }
         function tambahJabatan() {
             var jabatan = $("#inp-jabatan").val();
+            var inp_jabatan_deskripsi = $("#inp-jabatan-deskripsi").val();
             var user = '{{ Auth::user()->nama }}';
 
-            if (jabatan == "") {
+            if (jabatan == "" || inp_jabatan_deskripsi == "") {
                 iziToast.warning({
                     title: 'Pesan Ambigu!',
                     message: 'Pastikan Anda tidak mengosongi semua isian',
@@ -552,6 +642,7 @@
                     dataType: 'json',
                     data: {
                         jabatan: jabatan,
+                        deskripsi: inp_jabatan_deskripsi,
                         user: user,
                     },
                     success: function(res) {
@@ -626,149 +717,50 @@
             }
         }
 
-        // MODAL OPEN
-        function showAkses() {
-            $('.modal').modal('hide');
-            $('#formTambahAkses').modal('show');
-        }
-
-        function showJabatan() {
-            $('.modal').modal('hide');
-            $('#formTambahJabatan').modal('show');
-        }
-
-        function showDaftarAkses() {
-            syncJabatanAkses();
-            $('#daftarAkses').modal('show');
-            $.ajax({
-                url: "/api/v4/aksesjabatan/akses/data",
-                type: 'GET',
-                dataType: 'json', // added data type
-                success: function(res) {
-                    $("#tampil-tbody-akses").empty();
-                    $('#dttable-akses').DataTable().clear().destroy();
-                    res.show.forEach(item => {
-                        content = `
-                                <tr>
-                                    <td>` + item.id + `</td>
-                                    <td>` + item.name + `</td>
-                                    <td>` + item.updated_at.substring(0, 19).replace('T', ' ') +
-                            `</td>
-                                    <td><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapusAkses(` +
-                            item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></td>
-                                </tr>
-                            `;
-                        $('#tampil-tbody-akses').append(content);
-                    })
-                    var table = $('#dttable-akses').DataTable({
-                        order: [
-                            [2, "desc"]
-                        ],
-                        displayLength: 7,
-                        lengthChange: true,
-                        lengthMenu: [7, 10, 25, 50, 75, 100],
-                        buttons: ['copy', 'excel', 'pdf', 'colvis']
-                    });
-
-                    table.buttons().container()
-                        .appendTo('#dttable-akses_wrapper .col-md-6:eq(0)');
-
-                    // Showing Tooltip
-                    $('[data-bs-toggle="tooltip"]').tooltip({
-                        trigger: 'hover'
-                    })
-                }
-            })
-        }
-
-        function showDaftarJabatan() {
-            syncJabatanAkses();
-            $('#daftarJabatan').modal('show');
-            $.ajax({
-                url: "/api/v4/aksesjabatan/jabatan/data",
-                type: 'GET',
-                dataType: 'json', // added data type
-                success: function(res) {
-                    $("#tampil-tbody-jabatan").empty();
-                    $('#dttable-jabatan').DataTable().clear().destroy();
-                    res.show.forEach(item => {
-                        content = `
-                                <tr>
-                                    <td>` + item.id + `</td>
-                                    <td>` + item.name + `</td>
-                                    <td>` + item.updated_at.substring(0, 19).replace('T', ' ') +
-                            `</td>
-                                    <td><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapusJabatan(` +
-                            item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></td>
-                                </tr>
-                            `;
-                        $('#tampil-tbody-jabatan').append(content);
-                    })
-                    var table = $('#dttable-jabatan').DataTable({
-                        order: [
-                            [2, "desc"]
-                        ],
-                        displayLength: 7,
-                        lengthChange: true,
-                        lengthMenu: [7, 10, 25, 50, 75, 100],
-                        buttons: ['copy', 'excel', 'pdf', 'colvis']
-                    });
-
-                    table.buttons().container()
-                        .appendTo('#dttable-jabatan_wrapper .col-md-6:eq(0)');
-
-                    // Showing Tooltip
-                    $('[data-bs-toggle="tooltip"]').tooltip({
-                        trigger: 'hover'
-                    })
-                }
-            })
-        }
-
         // HAPUS AKSES JABATAN
         function hapusAksesJabatan(id) {
-            iziToast.error({
-                title: 'Pesan Perhatian!',
-                message: 'Maaf, Reset belum tersedia untuk saat ini. Silakan tunggu Update selanjutnya :)',
-                position: 'topRight'
-            });
-            // Swal.fire({
-            //     title: 'Apakah anda yakin?',
-            //     text: 'Hapus Permanen Akses Jabatan ID : ' + id,
-            //     icon: 'warning',
-            //     reverseButtons: false,
-            //     showDenyButton: false,
-            //     showCloseButton: false,
-            //     showCancelButton: true,
-            //     focusCancel: true,
-            //     confirmButtonColor: '#FF4845',
-            //     confirmButtonText: `<i class="fa fa-trash me-1" style="font-size:13px"></i> Hapus`,
-            //     cancelButtonText: `<i class="fa fa-times me-1" style="font-size:13px"></i>  Batal`,
-            //     backdrop: `rgba(26,27,41,0.8)`,
-            // }).then((result) => {
-            //     if (result.isConfirmed) {
-            //         $.ajax({
-            //             url: "/api/v4/aksesjabatan/hapus/" + id,
-            //             type: 'GET',
-            //             dataType: 'json', // added data type
-            //             success: function(res) {
-            //                 iziToast.success({
-            //                     title: 'Sukses!',
-            //                     message: 'Hapus Akses Jabatan berhasil pada ' + res,
-            //                     position: 'topRight'
-            //                 });
-            //                 refresh();
-            //             },
-            //             error: function(res) {
-            //                 iziToast.error({
-            //                     title: 'Pesan Galat!',
-            //                     message: 'Hapus Akses Jabatan gagal!',
-            //                     position: 'topRight'
-            //                 });
-            //             }
-            //         });
-            //     }
-            // })
+            // iziToast.error({
+            //     title: 'Pesan Perhatian!',
+            //     message: 'Maaf, Reset belum tersedia untuk saat ini. Silakan tunggu Update selanjutnya :)',
+            //     position: 'topRight'
+            // });
+            Swal.fire({
+                title: 'Apakah anda yakin?',
+                text: 'Hapus Permanen Akses Jabatan ID : ' + id,
+                icon: 'warning',
+                reverseButtons: false,
+                showDenyButton: false,
+                showCloseButton: false,
+                showCancelButton: true,
+                focusCancel: true,
+                confirmButtonColor: '#FF4845',
+                confirmButtonText: `<i class="fa fa-trash me-1" style="font-size:13px"></i> Hapus`,
+                cancelButtonText: `<i class="fa fa-times me-1" style="font-size:13px"></i> Batal`,
+                backdrop: `rgba(26,27,41,0.8)`,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "/api/v4/aksesjabatan/hapus/" + id,
+                        type: 'GET',
+                        dataType: 'json', // added data type
+                        success: function(res) {
+                            iziToast.success({
+                                title: 'Sukses!',
+                                message: 'Hapus Akses Jabatan berhasil pada ' + res,
+                                position: 'topRight'
+                            });
+                            refresh();
+                        },
+                        error: function(res) {
+                            iziToast.error({
+                                title: 'Pesan Galat!',
+                                message: 'Hapus Akses Jabatan gagal!',
+                                position: 'topRight'
+                            });
+                        }
+                    });
+                }
+            })
         }
 
         // HAPUS AKSES

@@ -44,13 +44,25 @@ class AksesJabatanController extends Controller
     //     ],200);
     // }
 
+    function getAkses($id)
+    {
+        $role = Role::findOrFail($id);
 
-    function store(Request $request)
+        return response()->json(
+            $role->permissions()->select('id','name')->get()
+        );
+    }
+
+    function storeAksesJabatan(Request $request)
     {
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
         $role = Role::findOrFail($request->jabatan);
-        $role->syncPermissions($request->akses);
+
+        // ambil permission berdasarkan ID
+        $permissions = Permission::whereIn('id', $request->akses)->get();
+
+        $role->syncPermissions($permissions);
 
         app(PermissionRegistrar::class)->forgetCachedPermissions();
 
@@ -77,6 +89,7 @@ class AksesJabatanController extends Controller
 
         Role::create([
             'name' => $request->jabatan,
+            'deskripsi' => $request->deskripsi,
             'guard_name' => 'web'
         ]);
 
@@ -123,7 +136,7 @@ class AksesJabatanController extends Controller
 
     function tableJabatan()
     {
-        $show = roles::get();
+        $show = roles::where('name', '<>','administrator')->get();
 
         $data = [
             'show' => $show,
@@ -155,7 +168,7 @@ class AksesJabatanController extends Controller
         return response()->json($tgl, 200);
     }
 
-    function destroy($id){
+    function hapusAksesJabatan($id){
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
         $role = Role::findOrFail($id);
