@@ -101,26 +101,23 @@ class AksesJabatanController extends Controller
     // API
     function table() // Tabel Utama
     {
-        $role = roles::where('name', '<>','administrator')->orderBy('updated_at','desc')->get();
-        $permission = permissions::orderBy('name','asc')->get();
-        $show = role_has_permissions::select('role_id','roles.name')
-                ->join('roles','roles.id','=','role_has_permissions.role_id')
-                ->groupBy('role_id','roles.name')
-                ->orderBy('roles.name')
-                ->get();
-        $selection = role_has_permissions::join('permissions','permissions.id','=','role_has_permissions.permission_id')
-                ->join('roles','roles.id','=','role_has_permissions.role_id')
-                ->select('roles.id as id_role','permissions.id as id_permission','permissions.name as name_permission','role_has_permissions.*')
-                ->get();
+        $roles = Role::where('name','<>','administrator')
+            ->with([
+                'permissions:id,name',
+                'users:id,name,nama',
+                'users.foto:id,user_id,filename'
+            ])
+            ->orderBy('updated_at','desc')
+            ->get([
+                'id',
+                'name',
+                'deskripsi',
+                'guard_name',
+                'created_at',
+                'updated_at'
+            ]);
 
-        $data = [
-            'role' => $role,
-            'permission' => $permission,
-            'selection' => $selection,
-            'show' => $show
-        ];
-
-        return response()->json($data, 200);
+        return response()->json($roles, 200);
     }
 
     function tableAkses()

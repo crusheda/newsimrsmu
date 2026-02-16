@@ -22611,7 +22611,7 @@ ul.sub-tasks-list li:last-child {
   transition: transform ease 200ms;
 }
 .avatar-list-stacked .avatar:last-child {
-  margin-inline-end: 0 !important;
+  /* margin-inline-end: 0 !important; */
 }
 .avatar-list-stacked .avatar:hover {
   z-index: 1;

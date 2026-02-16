@@ -94,12 +94,16 @@
             </div>
             <div class="col-xl-12">
                 <div class="card custom-card">
-                    <div class="card-body position-relative text-nowrap">
-                        <table id="dttable" class="table dt-responsive table-hover display w-100">
+                    <div class="card-body position-relative text-nowrap table-responsive">
+                        <table id="dttable" class="table table-hover w-100">
                             <thead>
                                 <tr>
+                                    <th class="cell-fit">ID</th>
                                     <th class="cell-fit">JABATAN</th>
+                                    <th>DESKRIPSI</th>
                                     <th>AKSES</th>
+                                    <th>AVATAR</th>
+                                    <th>TGL. UPDATE</th>
                                     <th class="cell-fit">
                                         <center>#</center>
                                     </th>
@@ -114,8 +118,12 @@
                             </tbody>
                             <tfoot>
                                 <tr>
+                                    <th class="cell-fit">ID</th>
                                     <th class="cell-fit">JABATAN</th>
+                                    <th>DESKRIPSI</th>
                                     <th>AKSES</th>
+                                    <th>AVATAR</th>
+                                    <th>TGL. UPDATE</th>
                                     <th class="cell-fit">
                                         <center>#</center>
                                     </th>
@@ -429,11 +437,8 @@
         }
 
         function refresh() {
-            if ($.fn.DataTable.isDataTable('#dttable')) {
-                $('#dttable').DataTable().clear().destroy();
-            }
             $("#tampil-tbody").empty().append(
-                `<tr><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
+                `<tr><td colspan="7"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
             );
             $.ajax({
                 url: "/api/v4/aksesjabatan/data",
@@ -441,43 +446,105 @@
                 dataType: 'json', // added data type
                 success: function(res) {
                     $("#tampil-tbody").empty();
-                    res.show.forEach(item => {
-                        content = `<tr><td>` + item.name + `</td><td class="text-wrap">`;
-                        res.selection.forEach(val => {
-                            if (val.id_role == item.role_id) {
-                                content += `<span class="badge bg-dark">` + val.name_permission + `</span>&nbsp;`;
+
+                    res.forEach(item => {
+
+                        /* ======================
+                        PERMISSIONS BADGE
+                        ====================== */
+                        let badges = '';
+
+                        item.permissions.forEach(p => {
+                            badges += `<span class="badge bg-dark">${p.name}</span>&nbsp;`;
+                        });
+
+                        /* ======================
+                        USERS AVATAR
+                        ====================== */
+                        let avatars = '';
+                        let maxShow = 5;
+                        let totalUsers = item.users?.length ?? 0;
+
+                        if (totalUsers > 0) {
+
+                            item.users.slice(0, maxShow).forEach(u => {
+
+                                // let foto = u.foto?.filename
+                                //     ? `/public/files/foto_profil/${u.foto.filename}`
+                                //     : "{{ asset('images/users/user-dummy-img.jpg') }}";
+                                let foto = "{{ asset('images/users/user-dummy-img.jpg') }}";
+
+                                let nama = u.nama ?? u.name ?? 'Unknown User';
+
+                                avatars += `
+                                    <span class="avatar avatar-rounded avatar-sm bg-light"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="bottom"
+                                        title="${nama}">
+                                        <img src="${foto}">
+                                    </span>
+                                `;
+                            });
+
+                            // SISA USER → +X
+                            if (totalUsers > maxShow) {
+
+                                let sisa = totalUsers - maxShow;
+
+                                avatars += `
+                                    <a class="avatar bg-primary avatar-rounded avatar-sm text-fixed-white"
+                                        data-bs-toggle="tooltip"
+                                        title="${sisa} user lainnya"
+                                        href="javascript:void(0);">
+                                        +${sisa}
+                                    </a>
+                                `;
                             }
-                        })
-                        content +=
-                            `</td><td><center><a href='javascript:void(0);' class='btn btn-danger-light btn-sm' onclick="hapusAksesJabatan(` +
-                            item.role_id +
-                            `)"><i class="fa-fw fas fa-undo nav-icon"></i> Reset</a></center></td></tr>`;
+
+                        } else {
+                            avatars = '-';
+                        }
+
+                        let updated = moment(item.updated_at).local().format('YYYY-MM-DD HH:mm:ss');
+
+                        let content = `
+                            <tr>
+                                <td>${item.id}</td>
+                                <td>${item.name}</td>
+                                <td>${item.deskripsi ?? '-'}</td>
+                                <td class="text-wrap">${badges}</td>
+                                <td class="text-wrap">
+                                    <div class="avatar-list-stacked">
+                                        ${avatars}
+                                    </div>
+                                </td>
+                                <td>${updated}</td>
+                                <td class="text-center">
+                                    <a href="javascript:void(0);"
+                                    class="btn btn-danger-light btn-sm"
+                                    onclick="hapusAksesJabatan(${item.id})">
+                                        Reset
+                                    </a>
+                                </td>
+                            </tr>
+                        `;
+
                         $('#tampil-tbody').append(content);
-                    })
-                    var table = $('#dttable').DataTable({
-                        dom: 'Bfrtip',
-                        order: [
-                            [0, "asc"]
-                        ],
-                        columnDefs: [
-                            { width: "30%", targets: 0 },
-                            { width: "60%", targets: 1 },
-                            { width: "10%", targets: 2 },
-                        ],
+
+                        /* TOOLTIP */
+                        $('[data-bs-toggle="tooltip"]').tooltip();
+                    });
+
+                    $('#dttable').DataTable({
+                        destroy: true,
+                        order: [[5,"desc"]],
                         displayLength: 15,
-                        lengthChange: true,
-                        lengthMenu: [15, 25, 50, 75, 100, 300 ,500, 750, 1000, 10000],
-                        buttons: ['copy', 'excel', 'pdf'],
+                        lengthMenu: [15,25,50,100,300,500],
                         language: {
                             searchPlaceholder: 'Cari Data...',
                             sSearch: '',
-                        },
+                        }
                     });
-
-                    // Showing Tooltip
-                    $('[data-bs-toggle="tooltip"]').tooltip({
-                        trigger: 'hover'
-                    })
                 }
             })
         }
@@ -501,7 +568,7 @@
                                     <td><center>${item.id}</center></td>
                                     <td>${item.name}</td>
                                     <td><center>${item.updated_at?item.updated_at.substring(0, 19).replace('T', ' '):''}</center></td>
-                                    <td><center><a href='javascript:void(0);' class='btn btn-outline-danger btn-wave' onclick="hapusAkses(${item.id})"><i class="fa-fw fas fa-trash nav-icon me-1"></i> Hapus</a></center></td>
+                                    <td><center><a href='javascript:void(0);' class='btn btn-link text-danger btn-wave' onclick="hapusAkses(${item.id})"><i class="fa-fw fas fa-trash nav-icon me-1"></i> Hapus</a></center></td>
                                 </tr>
                             `;
                         $('#tampil-tbody-akses').append(content);

@@ -17,6 +17,9 @@
     <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('images/logo/onlylogo/logo_dark_verysmall.png') }}">
     <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('images/logo/onlylogo/logo_dark_verysmall.png') }}">
 
+    <!-- JQUERY INIT -->
+    <script src="{{ asset('libs/jquery/jquery.min.js') }}"></script>
+
     <!-- Main Theme Js -->
     {{-- <script src="{{ asset('js/authentication-main.js') }}"></script> --}}
 
@@ -31,6 +34,9 @@
 
     <!-- Icons Css -->
     <link href="{{ asset('css/icons.css') }}" rel="stylesheet" >
+
+    <!-- Custom Css -->
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet" >
 
 </head>
 
@@ -54,7 +60,7 @@
                             </div>
 
                             {{-- FORM LOGIN --}}
-                            <form method="POST" action="{{ route('v4.login.process') }}" class="row gy-3">
+                            <form id="loginForm" method="POST" action="{{ route('v4.login.process') }}" class="row gy-3">
                                 @csrf
 
                                 {{-- Username --}}
@@ -158,8 +164,8 @@
 
                                 {{-- Submit --}}
                                 <div class="col-12 d-grid mt-3">
-                                    <button type="submit" class="btn btn-primary">
-                                        Sign In
+                                    <button type="submit" id="btnLogin" class="btn btn-primary">
+                                        <i class="ri-login-box-line fs-16 me-1"></i> Sign In
                                     </button>
                                 </div>
 
@@ -267,11 +273,25 @@
         }
 
         /* =========================
-           INIT
+            INIT
         ========================== */
-        document.addEventListener('DOMContentLoaded', () => {
+        $(document).ready(function() {
             startProgressTimer();
-        });
+
+            $('#loginForm').on('submit', function () {
+
+                $('#btnLogin')
+                    .prop('disabled', true)
+                    .html(`
+                        <span class="loading">
+                            <i class="ri-loader-4-line fs-16 me-1"></i>
+                        </span>
+                        Memproses...
+                    `);
+
+                return true;
+            });
+        })
     </script>
 </body>
 </html>

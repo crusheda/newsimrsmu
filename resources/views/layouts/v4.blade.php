@@ -148,6 +148,9 @@
         <!-- Scroll To Top -->
 
         <!-- Popper JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+
+        <!-- Popper JS -->
         <script src="{{ asset('libs/@popperjs/core/umd/popper.min.js') }}"></script>
 
         <!-- Bootstrap JS -->
@@ -193,7 +196,6 @@
         <script src="https://cdn.datatables.net/v/bs5/jq-3.7.0/jszip-3.10.1/dt-2.3.7/b-3.2.6/b-colvis-3.2.6/b-html5-3.2.6/b-print-3.2.6/cc-1.2.1/sb-1.8.4/sp-2.3.5/datatables.min.js" integrity="sha384-SXwI3wNL77XIDCT2k19C4IUcyvREECbZ8rokpH2v4myQ+VqjX4Bxz0n+XzvpOys3" crossorigin="anonymous"></script>
 
         <!-- Internal Datatables JS -->
-        <script src="{{ asset('js/datatables.js') }}"></script>
 
         <!-- Custom JS -->
         <script src="{{ asset('js/custom.js') }}"></script>
