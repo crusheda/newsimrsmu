@@ -5,11 +5,11 @@
         <div class="page-header-breadcrumb mb-3">
             <div class="d-flex align-center justify-content-between flex-wrap">
                 <h1 class="page-title fw-medium fs-18 mb-0">
-                    Pengaturan <b class="text-primary link-underline-primary text-decoration-underline">Akses</b> & <b class="text-pink link-underline-pink text-decoration-underline">Jabatan</b>
+                    Pengaturan <b class="text-info link-underline-info text-decoration-underline">Akses</b> & <b class="text-pink link-underline-pink text-decoration-underline">Jabatan</b>
                 </h1>
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item">
-                        <a role="button">Akun Pengguna</a>
+                        <a role="button">Manajemen Akun</a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">
                         Akses & Jabatan
@@ -47,7 +47,7 @@
                                     </div>
                                     <div class="vr"></div>
                                     <div class="btn-group">
-                                        <button class="btn btn-info" onclick="showJabatan()" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                                        <button class="btn btn-pink" onclick="showJabatan()" data-bs-toggle="tooltip" data-bs-offset="0,4"
                                             data-bs-placement="bottom" data-bs-html="true" title="Tambah Jabatan"><i
                                                 class="bx bxs-traffic-barrier"></i></button>
                                         <button class="btn btn-outline-warning" onclick="showDaftarJabatan()" data-bs-toggle="tooltip"
@@ -98,11 +98,11 @@
                         <table id="dttable" class="table table-hover w-100">
                             <thead>
                                 <tr>
-                                    <th class="cell-fit">ID</th>
+                                    <th class="cell-fit">IDROLE</th>
                                     <th class="cell-fit">JABATAN</th>
                                     <th>DESKRIPSI</th>
                                     <th>AKSES</th>
-                                    <th>AVATAR</th>
+                                    <th>USER</th>
                                     <th>TGL. UPDATE</th>
                                     <th class="cell-fit">
                                         <center>#</center>
@@ -118,11 +118,11 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th class="cell-fit">ID</th>
+                                    <th class="cell-fit">IDROLE</th>
                                     <th class="cell-fit">JABATAN</th>
                                     <th>DESKRIPSI</th>
                                     <th>AKSES</th>
-                                    <th>AVATAR</th>
+                                    <th>USER</th>
                                     <th>TGL. UPDATE</th>
                                     <th class="cell-fit">
                                         <center>#</center>
@@ -438,7 +438,7 @@
 
         function refresh() {
             $("#tampil-tbody").empty().append(
-                `<tr><td colspan="7"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
+                `<tr><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
             );
             $.ajax({
                 url: "/api/v4/aksesjabatan/data",
@@ -454,15 +454,29 @@
                         ====================== */
                         let badges = '';
 
-                        item.permissions.forEach(p => {
-                            badges += `<span class="badge bg-dark">${p.name}</span>&nbsp;`;
+                        let colors = [
+                            'bg-primary',
+                            'bg-info',
+                            'bg-warning',
+                            'bg-success',
+                            'bg-danger',
+                            'bg-secondary'
+                        ];
+
+                        colors.sort(() => Math.random() - 0.5);
+
+                        item.permissions.forEach((p, i) => {
+
+                            let color = colors[i % colors.length]; // muter warna
+
+                            badges += `<span class="badge rounded-pill ${color}-transparent me-1">${p.name}</span>`;
                         });
 
                         /* ======================
                         USERS AVATAR
                         ====================== */
                         let avatars = '';
-                        let maxShow = 5;
+                        let maxShow = 2;
                         let totalUsers = item.users?.length ?? 0;
 
                         if (totalUsers > 0) {
@@ -568,7 +582,7 @@
                                     <td><center>${item.id}</center></td>
                                     <td>${item.name}</td>
                                     <td><center>${item.updated_at?item.updated_at.substring(0, 19).replace('T', ' '):''}</center></td>
-                                    <td><center><a href='javascript:void(0);' class='btn btn-link text-danger btn-wave' onclick="hapusAkses(${item.id})"><i class="fa-fw fas fa-trash nav-icon me-1"></i> Hapus</a></center></td>
+                                    <td><center><a href='javascript:void(0);' class='link-danger' onclick="hapusAkses(${item.id})"><i class="fa-fw fas fa-trash nav-icon me-1"></i> Hapus</a></center></td>
                                 </tr>
                             `;
                         $('#tampil-tbody-akses').append(content);
@@ -610,7 +624,7 @@
                                         <td>${item.name}</td>
                                         <td>${item.deskripsi?item.deskripsi:'-'}</td>
                                         <td>${item.updated_at?item.updated_at.substring(0, 19).replace('T', ' '):''}</td>
-                                        <td><center><a href='javascript:void(0);' class='btn btn-outline-danger btn-wave' onclick="hapusJabatan(${item.id})"><i class="fa-fw fas fa-trash nav-icon me-1"></i> Hapus</a></center></td>
+                                        <td><center><a href='javascript:void(0);' class='link-danger' onclick="hapusJabatan(${item.id})"><i class="fa-fw fas fa-trash nav-icon me-1"></i> Hapus</a></center></td>
                                     </tr>`;
                         $('#tampil-tbody-jabatan').append(content);
                     })

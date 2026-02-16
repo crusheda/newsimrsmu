@@ -19,13 +19,22 @@ Route::group(['prefix' => 'v4', 'as' => ''], function () {
 use \App\Http\Controllers\v4\Dashboard\DashboardController;
 use \App\Http\Controllers\v4\Setting\ProfilController;
 use \App\Http\Controllers\v4\Akun\AksesJabatanController;
+use \App\Http\Controllers\v4\Akun\StrukturOrganisasiController;
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('v4.dashboard');
     Route::get('profil', [ProfilController::class, 'index'])->name('v4.profil');
 
-    // AKUN PENGGUNA
+    // MANAJEMEN AKUN
+        // AKSES & JABATAN
         Route::get('akun/aksesjabatan', [AksesJabatanController::class, 'index'])->name('v4.akun.aksesjabatan');
+
+        // STRUKTUR ORGANISASI
+        Route::get('akun/strukturorganisasi', [StrukturOrganisasiController::class, 'index'])->name('v4.akun.strukturorganisasi');
+        Route::get('akun/strukturorganisasi/tambah', [StrukturOrganisasiController::class, 'create'])->name('v4.akun.strukturorganisasi.tambah');
+        Route::post('akun/strukturorganisasi', [StrukturOrganisasiController::class, 'store'])->name('v4.akun.strukturorganisasi.simpan');
+        Route::get('akun/strukturorganisasi/{id}/ubah', [StrukturOrganisasiController::class, 'edit'])->name('v4.akun.strukturorganisasi.ubah');
+        Route::put('akun/strukturorganisasi/{id}', [StrukturOrganisasiController::class, 'update'])->name('v4.akun.strukturorganisasi.update');
 
     // LOGOUT ROUTE
     Route::post('logout', [AuthController::class, 'logout'])->name('v4.logout');

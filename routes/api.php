@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\v4\Setting\ProfilController;
 use \App\Http\Controllers\Whatsapp\HelpdeskController;
 use \App\Http\Controllers\v4\Akun\AksesJabatanController;
+use \App\Http\Controllers\v4\Akun\StrukturOrganisasiController;
 
 Route::middleware(['web','auth'])->group(function () {
     // PROFIL AKUN
