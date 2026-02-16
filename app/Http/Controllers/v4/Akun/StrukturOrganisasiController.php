@@ -47,7 +47,7 @@ class StrukturOrganisasiController extends Controller
             'role' => $role,
         ];
 
-        return view('pages.strukturorganisasi.tambah')->with('list', $data);
+        return view('pages.v4.akun.strukturorganisasi.tambah')->with('list', $data);
     }
 
     function store(Request $request)
@@ -75,7 +75,7 @@ class StrukturOrganisasiController extends Controller
         // die();
         $data->save();
 
-        return redirect()->route('strukturorganisasi.index')->with('message','Tambah Bawahan Struktur '.$getUser->nama.' Berhasil');
+        return redirect()->route('v4.akun.strukturorganisasi.index')->with('message','Tambah Bawahan Struktur '.$getUser->nama.' Berhasil');
     }
 
     function edit($id)
@@ -92,7 +92,7 @@ class StrukturOrganisasiController extends Controller
             'role' => $role,
         ];
 
-        return view('pages.strukturorganisasi.ubah')->with('list', $data);
+        return view('pages.v4.akun.strukturorganisasi.ubah')->with('list', $data);
     }
 
     function update(Request $request, $id)
@@ -120,7 +120,7 @@ class StrukturOrganisasiController extends Controller
         // die();
         $data->save();
 
-        return redirect()->route('strukturorganisasi.index')->with('message','Tambah Bawahan Struktur '.$getUser->nama.' Berhasil');
+        return redirect()->route('v4.akun.strukturorganisasi.index')->with('message','Tambah Bawahan Struktur '.$getUser->nama.' Berhasil');
     }
 
     public function destroy($id)

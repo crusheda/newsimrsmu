@@ -8,7 +8,7 @@
                     Pengaturan <b class="text-info link-underline-info text-decoration-underline">Akses</b> & <b class="text-pink link-underline-pink text-decoration-underline">Jabatan</b>
                 </h1>
                 <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item">
+                    <li class="breadcrumb-item pe-none">
                         <a role="button">Manajemen Akun</a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">
