@@ -20,6 +20,7 @@ use \App\Http\Controllers\v4\Dashboard\DashboardController;
 use \App\Http\Controllers\v4\Setting\ProfilController;
 use \App\Http\Controllers\v4\Akun\AksesJabatanController;
 use \App\Http\Controllers\v4\Akun\StrukturOrganisasiController;
+use \App\Http\Controllers\v4\Akun\AkunPenggunaController;
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('v4.dashboard');
@@ -35,6 +36,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function 
         Route::post('akun/strukturorganisasi', [StrukturOrganisasiController::class, 'store'])->name('v4.akun.strukturorganisasi.simpan');
         Route::get('akun/strukturorganisasi/{id}/ubah', [StrukturOrganisasiController::class, 'edit'])->name('v4.akun.strukturorganisasi.ubah');
         Route::put('akun/strukturorganisasi/{id}', [StrukturOrganisasiController::class, 'update'])->name('v4.akun.strukturorganisasi.update');
+
+        // AKUN PENGGUNA
+        Route::resource('akun/pengguna', AkunPenggunaController::class);
 
     // LOGOUT ROUTE
     Route::post('logout', [AuthController::class, 'logout'])->name('v4.logout');

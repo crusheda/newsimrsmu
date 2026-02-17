@@ -120,7 +120,7 @@ class StrukturOrganisasiController extends Controller
         // die();
         $data->save();
 
-        return redirect()->route('v4.akun.strukturorganisasi.index')->with('message','Tambah Bawahan Struktur '.$getUser->nama.' Berhasil');
+        return redirect()->route('v4.akun.strukturorganisasi')->with('message','Tambah Bawahan Struktur '.$getUser->nama.' Berhasil');
     }
 
     public function destroy($id)

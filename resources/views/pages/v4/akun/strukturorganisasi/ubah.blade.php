@@ -81,7 +81,7 @@
                                 <sub>Pilih semua Role <b class="text-pink">bawahan</b></sub>
                             </div>
 
-                            <button type="button" class="btn btn-primary" id="btn-simpan" onclick="saveData()">
+                            <button type="submit" class="btn btn-primary" id="btn-simpan" onclick="saveData()">
                                 <i class="fas fa-save fa-md"></i>&nbsp;&nbsp;
                                 <span class="align-middle d-sm-inline-block d-none me-sm-1">Ubah</span>
                             </button>

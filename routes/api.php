@@ -18,6 +18,7 @@ use \App\Http\Controllers\v4\Setting\ProfilController;
 use \App\Http\Controllers\Whatsapp\HelpdeskController;
 use \App\Http\Controllers\v4\Akun\AksesJabatanController;
 use \App\Http\Controllers\v4\Akun\StrukturOrganisasiController;
+use \App\Http\Controllers\v4\Akun\AkunPenggunaController;
 
 Route::middleware(['web','auth'])->group(function () {
     // PROFIL AKUN
@@ -53,8 +54,8 @@ Route::middleware(['web','auth'])->group(function () {
         Route::get('v4/aksesjabatan/jabatan/hapus/{id}', [AksesJabatanController::class, 'hapusJabatan']);
 
     // AKUN PENGGUNA
-    // Route::get('hakakses/akunpengguna/verif/{id}', '\App\Http\Controllers\HakAkses\DataKaryawanController@verifName')->name('akunpengguna.verif');
-    // Route::get('hakakses/akunpengguna/hapus/{id}', '\App\Http\Controllers\HakAkses\DataKaryawanController@hapus')->name('akunpengguna.hapus');
+    Route::get('v4/akun/pengguna/verif/{id}', [AkunPenggunaController::class, 'verifName']);
+    Route::get('v4/akun/pengguna/hapus/{id}', [AkunPenggunaController::class, 'hapus']);
 
     // SDI
         // DAFTAR PEGAWAI
