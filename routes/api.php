@@ -54,6 +54,7 @@ Route::middleware(['web','auth'])->group(function () {
         Route::get('v4/aksesjabatan/jabatan/hapus/{id}', [AksesJabatanController::class, 'hapusJabatan']);
 
     // AKUN PENGGUNA
+    Route::get('v4/akun/pengguna', [AkunPenggunaController::class, 'get']);
     Route::get('v4/akun/pengguna/verif/{id}', [AkunPenggunaController::class, 'verifName']);
     Route::get('v4/akun/pengguna/hapus/{id}', [AkunPenggunaController::class, 'hapus']);
 

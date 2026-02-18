@@ -38,7 +38,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function 
         Route::put('akun/strukturorganisasi/{id}', [StrukturOrganisasiController::class, 'update'])->name('v4.akun.strukturorganisasi.update');
 
         // AKUN PENGGUNA
-        Route::resource('akun/pengguna', AkunPenggunaController::class);
+        Route::resource('akun/pengguna', AkunPenggunaController::class)->names('v4.akun.akunpengguna');
 
     // LOGOUT ROUTE
     Route::post('logout', [AuthController::class, 'logout'])->name('v4.logout');
