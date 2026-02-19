@@ -13,3 +13,17 @@
     from { transform: rotate(0deg); }
     to   { transform: rotate(360deg); }
 }
+
+/* AGAR SELECT2 BISA TAMPIL DI DEPAN MODAL */
+.select2-container{
+    z-index:100000;
+    /* width:100%!important; */
+}
+/* .select2-selection { overflow: hidden; }
+.select2-selection__rendered { white-space: normal; word-break: break-all; }
+.btn-group-sm>.btn,.btn-sm {
+    --bs-btn-padding-y: 0.05rem;
+    --bs-btn-padding-x: 0.5rem;
+    --bs-btn-font-size: 0.7109375rem;
+    --bs-btn-border-radius: var(--bs-border-radius-sm)
+} */

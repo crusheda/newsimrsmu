@@ -1,6 +1,20 @@
 @extends('layouts.v4')
 
 @section('content')
+    {{-- <style>
+        .select2-container{
+            z-index:100000;
+            width:100%!important;
+        }
+        .select2-selection { overflow: hidden; }
+        .select2-selection__rendered { white-space: normal; word-break: break-all; }
+        .btn-group-sm>.btn,.btn-sm {
+            --bs-btn-padding-y: 0.05rem;
+            --bs-btn-padding-x: 0.5rem;
+            --bs-btn-font-size: 0.7109375rem;
+            --bs-btn-border-radius: var(--bs-border-radius-sm)
+        }
+    </style> --}}
     <div class="container-fluid page-container main-body-container">
         <div class="page-header-breadcrumb mb-3">
             <div class="d-flex align-center justify-content-between flex-wrap">
@@ -112,13 +126,10 @@
                         </div>
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
-                                <label for="defaultFormControlInput" class="form-label">Role <b class="text-danger">*</b></label>
-                                <div class="select2-dark">
-                                    <select id="role" name="role[]" class="select2 form-control select2-multiple"
-                                        data-bs-auto-close="outside" required multiple="multiple"
-                                        data-placeholder="Pilih Role ..." style="width: 100%">
-                                    </select>
-                                </div>
+                                <label for="defaultFormControlInput" class="form-label">Jabatan <b class="text-danger">*</b></label>
+                                <select id="role" name="role[]" class="form-control" data-bs-auto-close="outside"
+                                    multiple="multiple" style="width: 100%" required>
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
@@ -164,6 +175,11 @@
 
     <script>
         $(document).ready(function() {
+            // $(".select2").select2({
+            //     placeholder: "",
+            //     allowClear: true
+            // }).val('').trigger('change');
+
             refresh();
         })
 
@@ -304,10 +320,17 @@
         }
 
         function tambah() {
+            const btn = $('#btn-tambah');
             $.ajax({
                 url: "/api/v4/aksesjabatan/jabatan/data",
                 type: 'GET',
                 dataType: 'json', // added data type
+                beforeSend: function () {
+                    btn.prop('disabled', true)
+                        .find('i')
+                        .addClass('ri-loop-left-line fa-spin')
+                        .removeClass('ri-user-add-line');
+                },
                 success: function(res) {
                     if (res === 1) {
                         iziToast.error({
@@ -318,6 +341,18 @@
                         $("#btn-simpan").prop('disabled', true);
                         return;
                     }
+
+                    let html = '<option value="">Pilih Jabatan</option>';
+
+                    res.show.forEach(function(item){
+                        html += `<option value="${item.id}">${item.deskripsi}</option>`;
+                    });
+
+                    $("#role").html(html).select2({
+                        placeholder: "Pilih Jabatan",
+                        allowClear: true
+                    });
+
                     $('#tambah').modal('show');
                     $('#name').on('keyup', function () {
                         let value = $(this).val();
@@ -331,6 +366,13 @@
                         position: 'topRight'
                     });
                     $("#btn-simpan").prop('disabled', true);
+                },
+                complete: function () {
+                    // always reset button (baik success maupun error)
+                    btn.prop('disabled', false)
+                        .find('i')
+                        .removeClass('ri-loop-left-line fa-spin')
+                        .addClass('ri-user-add-line');
                 }
             });
         }
