@@ -86,6 +86,7 @@ class ProfilController extends Controller
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
         $data = users::find($id);
+
         if (!$data) {
             return response()->json(['message' => 'Data pengguna tidak ditemukan'], 404);
         }
@@ -106,16 +107,28 @@ class ProfilController extends Controller
 
         // ====== DATA UTAMA ======
         $data->nik = $request->nik;
-        // $data->gelar_depan = $request->gelar_depan;
+
+        // $nama_lengkap = ($request->gelar_depan?$request->gelar_depan.'. ':'').$request->nama.($request->gelar_belakang?', '.$request->gelar_belakang:'');
+
+        $data->gelar_depan = $request->gelar_depan;
         $data->nama = $request->nama;
-        // $data->gelar_belakang = $request->gelar_belakang;
+        $data->gelar_belakang = $request->gelar_belakang;
+        $data->nama_lengkap = $request->nama_lengkap;
+
         $data->nick = $request->nick;
         $data->temp_lahir = $request->temp_lahir;
         $data->tgl_lahir = $request->tgl_lahir;
         $data->jns_kelamin = $request->jns_kelamin;
         $data->status_kawin = $request->status_kawin;
         $data->email = $request->email;
-        $data->no_hp = $request->no_hp;
+
+        if ($request->no_hp != '62-') {
+            $noHp = preg_replace('/\D/', '', $request->no_hp);
+        } else {
+            $noHp = null;
+        }
+
+        $data->no_hp = $noHp;
         $data->fb = $request->fb;
         $data->ig = $request->ig;
         $data->tt = $request->tt;
@@ -300,7 +313,13 @@ class ProfilController extends Controller
 
             $user = users::findOrFail($userId);
 
-            $nama_lengkap = ($request->gelar_depan?$request->gelar_depan.'. ':'').$request->nama.($request->gelar_belakang?', '.$request->gelar_belakang:'');
+            if ($request->no_hp != '62-') {
+                $noHp = preg_replace('/\D/', '', $request->no_hp);
+            } else {
+                $noHp = null;
+            }
+
+            // $nama_lengkap = ($request->gelar_depan?$request->gelar_depan.'. ':'').$request->nama.($request->gelar_belakang?', '.$request->gelar_belakang:'');
 
             $user->fill([
                 // 'nip' => $request->nip,
@@ -308,10 +327,10 @@ class ProfilController extends Controller
                 'email' => $request->email,
                 'nama' => $request->nama,
                 'gelar_depan' => $request->gelar_depan,
-                'nama_lengkap' => $nama_lengkap,
+                'nama_lengkap' => $request->nama_lengkap,
                 'gelar_belakang' => $request->gelar_belakang,
                 'nick' => $request->nick,
-                'no_hp' => $request->no_hp,
+                'no_hp' => $noHp,
                 'jns_kelamin' => $request->jns_kelamin,
                 'temp_lahir' => $request->temp_lahir,
                 'tgl_lahir' => $request->tgl_lahir,

@@ -23,9 +23,17 @@ class HeaderService
             'roles',
         ]);
 
+        if ($user->nama_lengkap) {
+            $nama = $user->nama_lengkap;
+        } elseif ($user->nama) {
+            $nama = $user->nama;
+        } else {
+            $nama = $user->name;
+        }
+
         return [
             'id'    => $user->id,
-            'nama'  => $user->nama,
+            'nama'  => $nama,
             'email' => $user->email,
             'role'  => optional($user->roles->first())->name,
             'foto' => optional($user->foto)->filename

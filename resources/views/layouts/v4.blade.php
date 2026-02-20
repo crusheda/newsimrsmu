@@ -206,7 +206,6 @@
         <script src="{{ asset('libs/cleave.js/cleave.min.js') }}"></script>
 
         <!-- Internal Datatables JS -->
-        <script src="{{ asset('js/form-input-mask.js') }}"></script>
 
         <!-- Select2 -->
         {{-- <script src="{{ asset('libs/select2/js/select2.min.js') }}"></script> --}}

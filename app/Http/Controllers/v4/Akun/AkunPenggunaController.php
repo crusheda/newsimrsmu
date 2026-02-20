@@ -235,17 +235,48 @@ class AkunPenggunaController extends Controller
      */
     public function destroy($id)
     {
-        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+        $user = User::find($id);
 
-        $data = User::find($id);
-        $data->status = 1;
-        $data->user_hapus = Auth::user()->id;
-        $data->save();
+        if (!$user) {
+            return response()->json([
+                'message' => 'User tidak ditemukan pada database'
+            ], 404);
+        }
 
-        $data->delete();
-        model_has_roles::where('model_id', $id)->delete();
+        DB::beginTransaction();
 
-        return response()->json($tgl, 200);
+        try {
+
+            $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+            // Update metadata
+            $user->status = 1;
+            $user->user_hapus = Auth::id();
+            $user->save();
+
+            // ✅ Lepas semua role (cara resmi)
+            $user->syncRoles([]);
+
+            // Soft delete
+            $user->delete();
+
+            DB::commit();
+
+            app(PermissionRegistrar::class)->forgetCachedPermissions();
+
+            return response()->json([
+                'message' => 'Penghapusan User berhasil dan Jabatan berhasil ditangguhkan',
+                'time'    => $tgl
+            ], 200);
+
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+
+            return response()->json([
+                'message' => 'Gagal menghapus user, silakan ulangi sekali lagi'
+            ], 500);
+        }
     }
 
     // API

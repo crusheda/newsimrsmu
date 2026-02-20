@@ -69,7 +69,7 @@
                                     <div class="row">
                                         <div class="col-sm-3 mb-3">
                                             <label class="block font-medium mb-1">
-                                                Nomor
+                                                No.
                                                 Induk
                                                 Pegawai
                                                 (NIP)
@@ -80,7 +80,7 @@
                                         </div>
                                         <div class="col-sm-5 mb-3">
                                             <label class="block font-medium mb-1">
-                                                Nomor
+                                                No.
                                                 Induk
                                                 Kependudukan
                                                 (NIK)
@@ -121,23 +121,27 @@
                     <div class="card custom-card">
                         <div class="card-body">
                             <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <div class="input-group">
+                                        <div class="input-group-text bg-primary-transparent">Preview</div>
+                                        <input type="text" class="form-control form-control-sm border-dashed shadow-sm" id="nama_lengkap_ubah"
+                                            placeholder="Nama Lengkap + Gelar (Terisi Otomatis)" required readonly>
+                                    </div>
+                                </div>
                                 <div class="col-md-3 mb-3">
                                     <label class="block font-medium mb-1">
                                         Gelar
                                         Depan
-                                        <span class="text-danger">
-                                            *
-                                        </span>
                                     </label>
                                     <input type="text" id="gelar_depan_ubah" class="w-full form-control p-2"
-                                        placeholder="dr." />
+                                        placeholder="dr" />
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="block font-medium mb-1">
                                         Nama
                                         Lengkap
-                                        (Tanpa
-                                        Gelar)
+                                        (<b class="text-primary link-underline-primary text-decoration-underline">Tanpa
+                                        Gelar</b>)
                                         <span class="text-danger">
                                             *
                                         </span>
@@ -149,13 +153,12 @@
                                     <label class="block font-medium mb-1">
                                         Gelar
                                         Belakang
-                                        <span class="text-danger">
-                                            *
-                                        </span>
                                     </label>
                                     <input type="text" id="gelar_belakang_ubah" class="w-full form-control p-2"
                                         placeholder="Sp.x.FinaCS" />
                                 </div>
+
+                                <hr>
 
                                 <div class="col-sm-5 mb-3">
                                     <label class="block font-medium mb-1">
@@ -165,7 +168,7 @@
                                             *
                                         </span>
                                     </label>
-                                    <input type="text" id="nick_ubah" class="w-full form-control p-2" required />
+                                    <input type="text" id="nick_ubah" class="w-full form-control p-2" placeholder="Sunaryo" required />
                                 </div>
 
                                 <div class="col-md-4 mb-3">
@@ -265,24 +268,24 @@
                     <div class="card custom-card">
                         <div class="card-body">
                             <div class="alert alert-light">
-                                <div class="form-check">
-                                    <input class="form-check-input skip-submit" type="checkbox" id="cek_dom" />
+                                <div class="form-check form-check-lg">
+                                    <input class="form-check-input skip-submit border border-3" type="checkbox" id="cek_dom" />
                                     <label class="form-check-label" htmlFor="cek_dom">
                                         <u>
                                             <b>
-                                                Alamat Domisili sama dengan KTP
+                                                Alamat <b class="text-danger">Domisili</b> <b class="text-pink">Berbeda</b> dengan KTP?
                                             </b>
                                         </u>
                                     </label>
                                 </div>
                                 <small>
-                                    Hilangkan centang untuk menampilkan Pilihan Domisili
+                                    Silakan isi Centang <i class="ri-checkbox-line fs-15 text-primary align-middle"></i> di atas ini untuk menampilkan Pilihan Alamat Domisili saat ini, diisi apabila alamat domisili Anda saat ini berbeda dengan alamat yang tertera pada KTP
                                 </small>
                             </div>
 
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label class="block mb-1">
+                                    <label class="form-label">
                                         Provinsi
                                         <span class="text-danger">
                                             *
@@ -299,7 +302,7 @@
                                 </div>
 
                                 <div class="col-md-6 mb-3">
-                                    <label class="block mb-1">
+                                    <label class="form-label">
                                         Kabupaten
                                         / Kota
                                         <span class="text-danger">
@@ -317,7 +320,7 @@
                                 </div>
 
                                 <div class="col-md-6 mb-3">
-                                    <label class="block mb-1">
+                                    <label class="form-label">
                                         Kecamatan
                                         <span class="text-danger">
                                             *
@@ -334,7 +337,7 @@
                                 </div>
 
                                 <div class="col-md-6 mb-3">
-                                    <label class="block mb-1">
+                                    <label class="form-label">
                                         Kelurahan
                                         / Desa
                                         <span class="text-danger">
@@ -352,7 +355,7 @@
                                 </div>
 
                                 <div class="col-md-12">
-                                    <label class="block mb-1">
+                                    <label class="form-label">
                                         Alamat
                                         Lengkap
                                         (KTP)
@@ -360,7 +363,7 @@
                                             *
                                         </span>
                                     </label>
-                                    <textarea id="alamat_ktp_ubah" rows="2" class="w-full form-control p-2" required></textarea>
+                                    <textarea id="alamat_ktp_ubah" rows="2" class="w-full form-control p-2" placeholder="Tuliskan alamat lengkap (Sesuai KTP)" required></textarea>
                                 </div>
                             </div>
                         </div>
@@ -368,7 +371,7 @@
 
                     <div id="input_dom" hidden>
                         <label class="form-label fw-bold">
-                            Alamat Domisili
+                            Alamat Domisili (<i class="text-pink">Tempat Tinggal Anda Sekarang</i>)
                         </label>
                         <div class="card custom-card mt-2">
                             <div class="card-body">
@@ -444,12 +447,12 @@
                                     <div class="col-sm-12">
                                         <label class="form-label">
                                             Alamat
-                                            Lengkap
+                                            Lengkap (Saat Ini)
                                             <span class="text-danger">
                                                 *
                                             </span>
                                         </label>
-                                        <textarea class="form-control" id="alamat_dom_ubah" rows="4" placeholder="Tuliskan alamat lengkap domisili Anda" disabled></textarea>
+                                        <textarea class="form-control" id="alamat_dom_ubah" rows="4" placeholder="Tuliskan alamat lengkap domisili" disabled></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -646,6 +649,7 @@
     </div>
 </div>
 <script>
+    let cleaveNoHp;
     $(document).ready(function() {
 
         // PREVIEW FOTO UPLOAD
@@ -875,6 +879,29 @@
         });
     }
 
+    function generateNamaLengkap() {
+        let gelarDepan = $('#gelar_depan_ubah').val().trim();
+        let nama = $('#nama_ubah').val().trim();
+        let gelarBelakang = $('#gelar_belakang_ubah').val().trim();
+
+        // Format Gelar Depan
+        if (gelarDepan !== '') {
+            gelarDepan = gelarDepan.replace(/\.+$/, '') + '.';
+        }
+
+        // Format Gelar Belakang
+        if (gelarBelakang !== '') {
+            gelarBelakang = ', ' + gelarBelakang.replace(/^,?\s*/, '');
+        }
+
+        let fullNama =
+            (gelarDepan ? gelarDepan + ' ' : '') +
+            nama +
+            (gelarBelakang ? gelarBelakang : '');
+
+        $('#nama_lengkap_ubah').val(fullNama);
+    }
+
     function loadUbah() {
         $.ajax({
             url: "/api/v4/profil/show",
@@ -907,11 +934,60 @@
                     $('#nik_ubah').val(res.data.user.nik);
                     $('#email_ubah').val(res.data.user.email);
                     $('#pengalaman_kerja_ubah').val(res.data.user.pengalaman_kerja);
+
+                    $('#nama_lengkap_ubah').val(res.data.user.nama_lengkap);
                     $('#gelar_depan_ubah').val(res.data.user.gelar_depan);
                     $('#nama_ubah').val(res.data.user.nama);
                     $('#gelar_belakang_ubah').val(res.data.user.gelar_belakang);
+                    generateNamaLengkap(); // init FIRST
+                    $('#gelar_depan_ubah, #nama_ubah, #gelar_belakang_ubah').on('input', function () {
+                        generateNamaLengkap();
+                    });
+
                     $('#nick_ubah').val(res.data.user.nick);
-                    $('#no_hp_ubah').val(res.data.user.no_hp);
+
+                    // NO. HANDPHONE
+                    if (!cleaveNoHp) {
+                        cleaveNoHp = new Cleave('#no_hp_ubah', { // INPUT MASK No.HP{
+                            prefix: '62',
+                            delimiter: '-',
+                            noImmediatePrefix: false, // langsung tampil 62
+                            blocks: [2, 3, 4, 5], // sesuaikan format
+                            numericOnly: true
+                        });
+                    }
+                    let noHp = res.data.user.no_hp;
+                    if (noHp) {
+                        // hapus semua selain angka dulu
+                        noHp = noHp.replace(/\D/g, '');
+
+                        if (noHp.startsWith('0')) {
+                            noHp = '62' + noHp.substring(1);
+                        }
+                        else if (!noHp.startsWith('62')) {
+                            noHp = '62' + noHp;
+                        }
+                    }
+                    // $('#no_hp_ubah').val(noHp);
+                    cleaveNoHp.setRawValue(noHp);
+                    $('#no_hp_ubah').on('input', function() {
+                        if (!this.value.startsWith('62')) {
+                            this.value = '62';
+                        }
+
+                        let valHp = this.value;
+                        let clean = valHp.replace(/\D/g, ''); // hapus selain angka
+                        if (clean.length < 11) {
+                            if (clean == '62') {
+                                $(this).removeClass('is-valid is-invalid');
+                            } else {
+                                $(this).removeClass('is-valid').addClass('is-invalid');
+                            }
+                        } else {
+                            $(this).removeClass('is-invalid').addClass('is-valid');
+                        }
+                    });
+
                     $('#jns_kelamin_ubah').val(res.data.user.jns_kelamin);
                     res.data?.kota?.forEach(v=>{
                         $('#temp_lahir_ubah').append(`<option value="${v.nama_kabkota}" ${v.nama_kabkota == res.data.user.temp_lahir?'selected':''}>${v.nama_kabkota}</option>`);
@@ -968,11 +1044,32 @@
                         syncPendidikanRequired();
                     }
 
+                    $('#dom_kabupaten_ubah').empty().prop('disabled',false).append('<option value="">-- Pilih Kabupaten --</option>');
+                    $('#dom_kecamatan_ubah').empty().prop('disabled',true).append(`<option value="">-- Pilih Kecamatan --</option>`);
+                    $('#dom_kelurahan_ubah').empty().prop('disabled',true).append(`<option value="">-- Pilih Kelurahan --</option>`);
                     // $('#ktp_provinsi_ubah').val(res.data.user.ktp_provinsi);
-                    $('#ktp_kabupaten_ubah').empty().append(`<option value="${res.data.user.ktp_kabupaten}">${res.data.user.ktp_kabupaten}</option>`);
-                    $('#ktp_kecamatan_ubah').empty().append(`<option value="${res.data.user.ktp_kecamatan}">${res.data.user.ktp_kecamatan}</option>`);
-                    $('#ktp_kelurahan_ubah').empty().append(`<option value="${res.data.user.ktp_kelurahan}">${res.data.user.ktp_kelurahan}</option>`);
-                    $('#alamat_ktp_ubah').val(res.data.user.alamat_ktp);
+                    if (res.data.user.ktp_kabupaten) {
+                        $('#ktp_kabupaten_ubah').empty().append(`<option value="${res.data.user.ktp_kabupaten}">${res.data.user.ktp_kabupaten}</option>`);
+                    } else {
+                        $('#ktp_kabupaten_ubah').empty().append(`<option value="">-- Pilih Kabupaten --</option>`);
+                    }
+
+                    if (res.data.user.ktp_kecamatan) {
+                        $('#ktp_kecamatan_ubah').empty().append(`<option value="${res.data.user.ktp_kecamatan}">${res.data.user.ktp_kecamatan}</option>`);
+                    } else {
+                        $('#ktp_kecamatan_ubah').empty().append(`<option value="">-- Pilih Kecamatan --</option>`);
+                    }
+
+                    if (res.data.user.ktp_kelurahan) {
+                        $('#ktp_kelurahan_ubah').empty().append(`<option value="${res.data.user.ktp_kelurahan}">${res.data.user.ktp_kelurahan}</option>`);
+                    } else {
+                        $('#ktp_kelurahan_ubah').empty().append(`<option value="">-- Pilih Kelurahan --</option>`);
+                    }
+
+                    if (res.data.user.alamat_ktp) {
+                        $('#alamat_ktp_ubah').val(res.data.user.alamat_ktp);
+                    }
+
                     if (res.data.user.alamat_dom) {
                         $('#input_dom').removeAttr('hidden');
 
@@ -1039,6 +1136,7 @@
             $(this).data('req', this.required);
             this.required = false;
         });
+
         if (!form.checkValidity()) {
 
             // restore required
@@ -1074,6 +1172,16 @@
         $('.skip-submit').each(function(){
             this.required = $(this).data('req');
         });
+
+        let noHpInput = $('#no_hp_ubah');
+        let noHpClean = noHpInput.val().replace(/\D/g, '');
+        if (noHpClean.length < 11) {
+            noHpInput.removeClass('is-valid').addClass('is-invalid');
+            noHpInput.focus();
+            return;
+        } else {
+            noHpInput.removeClass('is-invalid').addClass('is-valid');
+        }
 
         // mulai simpan data
         let formData = new FormData();
@@ -1124,8 +1232,9 @@
                     return;
                 }
                 Swal.fire({title: 'Yeayy!', text: res.message, icon: 'success', timer: 5000, timerProgressBar: true});
-                loadUbah();
                 $('#formProfil').removeClass('was-validated')[0].reset();
+                $('#no_hp_ubah').removeClass('is-valid is-invalid');
+                loadUbah();
             },
             error:function(xhr){
                 Swal.fire('Gagal',xhr.responseJSON?.message ?? 'Terjadi kesalahan','error');
