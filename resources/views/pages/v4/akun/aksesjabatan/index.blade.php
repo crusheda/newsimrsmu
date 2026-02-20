@@ -62,7 +62,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
-                                        <label for="" class ="form-label">Pilih Salah Satu <b>Jabatan</b></label>
+                                        <label for="" class="form-label">Pilih Salah Satu <b>Jabatan</b></label>
                                         <br>
                                         <select class="select2-jabatan form-control" id="aksesjabatan-jabatan" onchange="loadAksesByJabatan(this.value)" style="width: 100%" data-bs-auto-close="outside" required></select>
                                         <br>
@@ -71,7 +71,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
-                                        <label for="" class ="form-label">Pilih <b>Akses</b> (Bisa lebih dari satu)</label>
+                                        <label for="" class="form-label">Pilih <b>Akses</b> (Bisa lebih dari satu)</label>
                                         <button type="button" class="btn btn-outline-primary btn-sm" onclick="selectAll()">Select All</button>
                                         <button type="button" class="btn btn-outline-danger btn-sm" onclick="deselectAll()">Deselect All</button>
                                         <br>
@@ -148,7 +148,7 @@
                     <button type="button" class="btn-close" onclick="closeModal()" aria-label="Tutup"></button>
                 </div>
                 <div class="modal-body">
-                    <label for="" class ="form-label">Akses</label>
+                    <label for="" class="form-label">Akses</label>
                     <input type="text" id="inp-akses" class="form-control" placeholder="Masukkan nama akses">
                 </div>
                 <div class="modal-footer">
@@ -173,12 +173,12 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group mb-3">
-                        <label for="" class ="form-label">Jabatan (<b class="link-underline-primary text-decoration-underline">Nama Khusus Sistem</b>)</label>
+                        <label for="" class="form-label">Jabatan (<b class="link-underline-primary text-decoration-underline">Nama Khusus Sistem</b>)</label>
                         <input type="text" id="inp-jabatan" class="form-control" placeholder="e.g. kepala-ruang-xx"
                             required>
                     </div>
                     <div class="form-group">
-                        <label for="" class ="form-label">Deskripsi (<b class="link-underline-info text-decoration-underline">Nama Sesuai Struktur Bagian</b>)</label>
+                        <label for="" class="form-label">Deskripsi (<b class="link-underline-info text-decoration-underline">Nama Sesuai Struktur Bagian</b>)</label>
                         <input type="text" id="inp-jabatan-deskripsi" class="form-control" placeholder="e.g. Kepala Ruang XXX"
                             required>
                     </div>
@@ -370,6 +370,12 @@
                             placeholder: "Pilih Jabatan",
                             allowClear: true
                         });
+                    }, error: function(xhr, status, error) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: xhr.responseJSON.error,
+                            position: 'topRight'
+                        });
                     }
                 });
 
@@ -389,6 +395,12 @@
                         $("#aksesjabatan-akses").html(html).select2({
                             placeholder: " Pilih Akses",
                             allowClear: true
+                        });
+                    }, error: function(xhr, status, error) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: xhr.responseJSON.error,
+                            position: 'topRight'
                         });
                     }
                 });
@@ -430,8 +442,12 @@
                     // refresh select2
                     $("#aksesjabatan-akses").trigger("change");
                 },
-                error: function(){
-                    alert('Gagal mengambil akses');
+                error: function(xhr, status, error) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: xhr.responseJSON.error,
+                        position: 'topRight'
+                    });
                 }
             });
         }
@@ -559,6 +575,12 @@
                             sSearch: '',
                         }
                     });
+                }, error: function(xhr, status, error) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: xhr.responseJSON.error,
+                        position: 'topRight'
+                    });
                 }
             })
         }
@@ -601,6 +623,13 @@
                     $('[data-bs-toggle="tooltip"]').tooltip({
                         trigger: 'hover'
                     })
+                },
+                error: function(xhr, status, error) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: xhr.responseJSON.error,
+                        position: 'topRight'
+                    });
                 }
             })
         }
@@ -640,6 +669,12 @@
                     $('[data-bs-toggle="tooltip"]').tooltip({
                         trigger: 'hover'
                     })
+                }, error: function(err) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: xhr.responseJSON.error,
+                        position: 'topRight'
+                    });
                 }
             })
         }
@@ -692,10 +727,10 @@
                             refreshAkses();
                         }
                     },
-                    error: function (res) {
+                    error: function (xhr, status, error) {
                         iziToast.error({
                             title: 'Pesan Galat!',
-                            message: res.responseJSON.error,
+                            message: xhr.responseJSON.error,
                             position: 'topRight'
                         });
                     }
@@ -740,10 +775,10 @@
                             refreshJabatan();
                         }
                     },
-                    error: function (res) {
+                    error: function (xhr, status, error) {
                         iziToast.error({
                             title: 'Pesan Galat!',
-                            message: res.responseJSON.error,
+                            message: xhr.responseJSON.error,
                             position: 'topRight'
                         });
                     }
@@ -787,10 +822,10 @@
                             refresh();
                         }
                     },
-                    error: function (res) {
+                    error: function (xhr, status, error) {
                         iziToast.error({
                             title: 'Pesan Galat!',
-                            message: res.responseJSON.error,
+                            message: xhr.responseJSON.error,
                             position: 'topRight'
                         });
                     }
@@ -832,10 +867,10 @@
                             });
                             refresh();
                         },
-                        error: function(res) {
+                        error: function(xhr, status, error) {
                             iziToast.error({
                                 title: 'Pesan Galat!',
-                                message: 'Hapus Akses Jabatan gagal!',
+                                message: xhr.responseJSON.error,
                                 position: 'topRight'
                             });
                         }
@@ -874,10 +909,10 @@
                             refreshAkses();
                             refresh();
                         },
-                        error: function(res) {
+                        error: function(xhr, status, error) {
                             Swal.fire({
                                 title: `Gagal di hapus!`,
-                                text: 'Pada ' + res,
+                                text: xhr.responseJSON.error,
                                 icon: `error`,
                                 showConfirmButton: false,
                                 showCancelButton: false,
@@ -925,10 +960,10 @@
                             // $('.modal').modal('hide');
                             // $('#daftarJabatan').modal('show');
                         },
-                        error: function(res) {
+                        error: function(xhr, status, error) {
                             Swal.fire({
                                 title: `Gagal di hapus!`,
-                                text: 'Pada ' + res,
+                                text: xhr.responseJSON.error,
                                 icon: `error`,
                                 showConfirmButton: false,
                                 showCancelButton: false,

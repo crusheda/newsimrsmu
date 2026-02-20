@@ -4,6 +4,10 @@ namespace App\Http\Controllers\v4\Akun;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\PermissionRegistrar;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\roles;
@@ -32,11 +36,11 @@ class AkunPenggunaController extends Controller
     function get()
     {
         $user = User::with('roles')
-                    ->select('id','name','nama','nama_lengkap','email','updated_at')
+                    ->select('id','name','nip','nama','nama_lengkap','email','updated_at')
                     ->whereNotIn('name',['admin','it','demo'])
                     ->whereNull('deleted_at')
                     ->whereNull('status')
-                    ->orderBy('nama', 'asc')
+                    ->orderBy('updated_at', 'desc')
                     ->get();
 
         return response()->json($user, 200);
@@ -62,29 +66,53 @@ class AkunPenggunaController extends Controller
      */
     public function store(Request $request)
     {
-        $cekUser = User::where('name', $request->name)->whereNull('status')->whereNull('deleted_at')->first();
+        $validator = Validator::make($request->all(), [
+            'name'     => 'required|string|max:255|unique:users,name,NULL,id,deleted_at,NULL',
+            'email'    => 'required|email|max:255|unique:users,email,NULL,id,deleted_at,NULL',
+            'password' => 'required|min:8',
+            'role'     => 'required|array|min:1'
+        ]);
 
-        if ($cekUser) {
-            return Redirect::back()->withErrors(['msg' => 'Username '.$request->name.' sudah terdaftar! Silakan ganti Username Lainnya.'])->withInput();
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => $validator->errors()->first()
+            ], 422);
         }
 
-        $data = new User;
-        $data->name = $request->name;
-        $data->email = $request->email;
-        $data->password = bcrypt($request->password);
-        $data->save();
+        DB::beginTransaction();
 
-        foreach ($request->role as $key => $value) {
-            $model = new model_has_roles;
-            $model->role_id = $value;
-            $model->model_type = 'App\Models\User';
-            $model->model_id = $data->id;
-            // print_r($model);
-            // die();
-            $model->save();
+        try {
+
+            $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+            // ✅ CREATE USER
+            $user = User::create([
+                'name'     => $request->name,
+                'email'    => $request->email,
+                'password' => bcrypt($request->password)
+            ]);
+
+            // ✅ ASSIGN ROLE (Spatie)
+            $roles = Role::whereIn('id', $request->role)->pluck('name');
+            $user->assignRole($roles);
+
+            DB::commit();
+
+            app(PermissionRegistrar::class)->forgetCachedPermissions();
+
+            return response()->json([
+                'message' => 'Akun pengguna berhasil dibuat',
+                'time'    => $tgl
+            ], 200);
+
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+
+            return response()->json([
+                'message' => 'Gagal menyimpan data: '.$e->getMessage()
+            ], 500);
         }
-
-        return redirect()->route('v4.akun.akunpengguna.index')->with('message','Tambah Akun '.$data->name.' Berhasil');
     }
 
     /**
@@ -95,20 +123,28 @@ class AkunPenggunaController extends Controller
      */
     public function show($id)
     {
-        $user = User::find($id);
-        $model = model_has_roles::where('model_id', $id)->get();
-        $role = roles::get();
+        $user = User::with('roles')
+                    ->select('id','nip','name','nama','nama_lengkap','email')
+                    ->where('id', $id)
+                    ->whereNull('deleted_at')
+                    ->whereNull('status')
+                    ->first();
 
-        // print_r($model);
-        // die();
+        $roles = roles::where('name', '<>','administrator')->get();
 
-        $data = [
-            'user' => $user,
-            'model' => $model,
-            'role' => $role,
-        ];
+        if ($roles->isEmpty()) {
+            return response()->json([
+                'message' => 'Roles tidak ditemukan'
+            ], 404);
+        }
 
-        return view('pages.v4.akun.akunpengguna.ubah')->with('list', $data);
+        if (!$user) {
+            return response()->json([
+                'message' => 'User tidak ditemukan'
+            ], 404);
+        }
+
+        return response()->json(['user' => $user, 'roles' => $roles], 200);
     }
 
     /**
@@ -131,27 +167,64 @@ class AkunPenggunaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data = User::find($id);
-        $data->name = $request->name;
-        $data->email = $request->email;
-        if (!empty($request->password)) {
-            $data->password = bcrypt($request->password);
-        }
-        $data->save();
+        $user = User::find($id);
 
-        model_has_roles::where('model_id', $id)->delete();
-
-        foreach ($request->role as $key => $value) {
-            $model = new model_has_roles;
-            $model->role_id = $value;
-            $model->model_type = 'App\Models\User';
-            $model->model_id = $id;
-            // print_r($model);
-            // die();
-            $model->save();
+        if (!$user) {
+            return response()->json([
+                'message' => 'User tidak ditemukan'
+            ], 404);
         }
 
-        return redirect()->route('v4.akun.akunpengguna.index')->with('message','Ubah Akun '.$data->name.' Berhasil');
+        // ✅ VALIDATION
+        $validator = Validator::make($request->all(), [
+            'name'  => 'required|string|max:255|unique:users,name,'.$id.',id,deleted_at,NULL',
+            'email' => 'required|email|max:255|unique:users,email,'.$id.',id,deleted_at,NULL',
+            'password' => 'nullable|min:8',
+            'role'  => 'required|array|min:1'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => $validator->errors()->first()
+            ], 422);
+        }
+
+        DB::beginTransaction();
+
+        try {
+
+            $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+            $user->name  = $request->name;
+            $user->email = $request->email;
+
+            if (!empty($request->password)) {
+                $user->password = bcrypt($request->password);
+            }
+
+            $user->save();
+
+            // ✅ Sync Roles (otomatis hapus lama + insert baru)
+            $roles = Role::whereIn('id', $request->role)->pluck('name');
+            $user->syncRoles($roles);
+
+            DB::commit();
+
+            app(PermissionRegistrar::class)->forgetCachedPermissions();
+
+            return response()->json([
+                'message' => 'Akun berhasil diperbarui',
+                'time'    => $tgl
+            ], 200);
+
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+
+            return response()->json([
+                'message' => 'Gagal memperbarui data: '.$e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -161,24 +234,6 @@ class AkunPenggunaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    {
-        //
-    }
-
-    // API
-    public function verifName($name)
-    {
-        $data = User::where('name',$name)->first();
-        if (!empty($data)) {
-            $retur = 1;
-        } else {
-            $retur = 0;
-        }
-
-        return response()->json($retur, 200);
-    }
-
-    public function hapus($id)
     {
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
@@ -191,5 +246,19 @@ class AkunPenggunaController extends Controller
         model_has_roles::where('model_id', $id)->delete();
 
         return response()->json($tgl, 200);
+    }
+
+    // API
+    public function verifName($name)
+    {
+        $data = User::where('name',$name)->first();
+
+        if (!empty($data)) {
+            $retur = 1;
+        } else {
+            $retur = 0;
+        }
+
+        return response()->json($retur, 200);
     }
 }

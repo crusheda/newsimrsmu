@@ -1,20 +1,6 @@
 @extends('layouts.v4')
 
 @section('content')
-    {{-- <style>
-        .select2-container{
-            z-index:100000;
-            width:100%!important;
-        }
-        .select2-selection { overflow: hidden; }
-        .select2-selection__rendered { white-space: normal; word-break: break-all; }
-        .btn-group-sm>.btn,.btn-sm {
-            --bs-btn-padding-y: 0.05rem;
-            --bs-btn-padding-x: 0.5rem;
-            --bs-btn-font-size: 0.7109375rem;
-            --bs-btn-border-radius: var(--bs-border-radius-sm)
-        }
-    </style> --}}
     <div class="container-fluid page-container main-body-container">
         <div class="page-header-breadcrumb mb-3">
             <div class="d-flex align-center justify-content-between flex-wrap">
@@ -49,6 +35,7 @@
                                 <thead>
                                     <tr>
                                         <th class="cell-fit text-center">ID</th>
+                                        <th class="cell-fit">NIP RS</th>
                                         <th class="cell-fit">USERNAME</th>
                                         <th>NAMA</th>
                                         <th>EMAIL</th>
@@ -66,6 +53,7 @@
                                 <tfoot>
                                     <tr>
                                         <th class="cell-fit text-center">ID</th>
+                                        <th class="cell-fit">NIP RS</th>
                                         <th class="cell-fit">USERNAME</th>
                                         <th>NAMA</th>
                                         <th>EMAIL</th>
@@ -162,8 +150,73 @@
                     </div>
                 </div>
                 <div class="modal-footer d-flex align-items-center justify-content-between">
-                    <button class="btn btn-primary" id="btn-simpan" onclick="saveData()" disabled>
+                    <button class="btn btn-primary" id="btn-simpan" onclick="prosesTambah()" disabled>
                         <i class="fas fa-save fa-md me-1"></i> Simpan Data
+                    </button>
+                    <button class="btn btn-outline-dark btn-wave" onclick="closeModal()">
+                        <i class="fas fa-times me-1"></i> Tutup
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade animate__animated animate__jackInTheBox" id="modalEdit" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Ubah Akun Pengguna <span class="badge bg-outline-primary align-middle ms-1" id="edit_id_text"><i class="fas fa-sync fa-spin"></i></span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body row">
+
+                    <input type="hidden" id="edit_id">
+
+                    <div class="col-md-2 mb-3">
+                        <div class="form-group">
+                            <label class="form-label">NIP RS <b class="text-danger">*</b></label>
+                            <input type="text" id="edit_nip" class="form-control delimiters" placeholder="xx.xx.xxx" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <div class="form-group">
+                            <label class="form-label">Username <b class="text-danger">*</b></label>
+                            <input type="text" id="edit_name" class="form-control" placeholder="Username Login Pegawai" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <div class="form-group">
+                            <label class="form-label">Email <b class="text-danger">*</b></label>
+                            <input type="email" id="edit_email" class="form-control" placeholder="Email Aktif Pegawai" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <div class="form-group">
+                            <label class="form-label">Jabatan <b class="text-danger">*</b></label>
+                            <select id="edit_role" class="form-control" multiple="multiple" style="width:100%" required></select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="form-label">Password (<b class="text-danger link-underline-danger text-decoration-underline">Kosongkan jika tidak diubah</b>)</label>
+                            <div class="input-group">
+                                <input type="password" id="edit_password" class="form-control" placeholder="Minimal 8 Karakter" minlength="8">
+                                <button class="btn btn-outline-primary" type="button" id="open-password3">
+                                    <i class="fas fa-eye-slash" id="icon-password3"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer d-flex align-items-center justify-content-between">
+                    <button class="btn btn-primary" id="btn-update" onclick="prosesUbah()">
+                        <i class="fa fa-edit me-1"></i> Ubah Data
                     </button>
                     <button class="btn btn-outline-dark btn-wave" onclick="closeModal()">
                         <i class="fas fa-times me-1"></i> Tutup
@@ -180,10 +233,50 @@
             //     allowClear: true
             // }).val('').trigger('change');
 
+            $('#open-password1').on('click', function () {
+                const input = $('#password1');
+                const icon = $('#icon-password1');
+
+                if (input.attr('type') === 'password') {
+                    input.attr('type', 'text');
+                    icon.removeClass('fa-eye-slash').addClass('fa-eye');
+                } else {
+                    input.attr('type', 'password');
+                    icon.removeClass('fa-eye').addClass('fa-eye-slash');
+                }
+            });
+            $('#open-password2').on('click', function () {
+                const input = $('#password2');
+                const icon = $('#icon-password2');
+
+                if (input.attr('type') === 'password') {
+                    input.attr('type', 'text');
+                    icon.removeClass('fa-eye-slash').addClass('fa-eye');
+                } else {
+                    input.attr('type', 'password');
+                    icon.removeClass('fa-eye').addClass('fa-eye-slash');
+                }
+            });
+            $('#open-password3').on('click', function () {
+                const input = $('#edit_password');
+                const icon = $('#icon-password3');
+
+                if (input.attr('type') === 'password') {
+                    input.attr('type', 'text');
+                    icon.removeClass('fa-eye-slash').addClass('fa-eye');
+                } else {
+                    input.attr('type', 'password');
+                    icon.removeClass('fa-eye').addClass('fa-eye-slash');
+                }
+            });
+
             refresh();
         })
 
         function refresh() {
+            if ($.fn.DataTable.isDataTable('#dttable')) {
+                $('#dttable').DataTable().clear().destroy();
+            }
             $("#tampil-tbody").empty().append(
                 `<tr><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
             );
@@ -236,6 +329,7 @@
                                             <i class="fa-fw fas fa-trash nav-icon me-1"></i> Hapus</a></li>
                                     </ul>
                                 </td>
+                                <td>${item.nip ?? '-'}</td>
                                 <td>${item.name}</td>
                                 <td>${nama_lengkap}</td>
                                 <td> ${item.email}</td>
@@ -251,8 +345,7 @@
                     });
 
                     $('#dttable').DataTable({
-                        destroy: true,
-                        order: [[5,"desc"]],
+                        order: [[6,"desc"]],
                         displayLength: 15,
                         lengthMenu: [15,25,50,100,300,500],
                         language: {
@@ -262,11 +355,11 @@
                     });
                 },
                 error: function (xhr) {
-                    Swal.fire(
-                        'Gagal',
-                        xhr.responseJSON?.message ?? 'Terjadi kesalahan / Gagal memanggil Function',
-                        'error'
-                    );
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: xhr.responseJSON?.message ?? 'Terjadi kesalahan / Gagal memanggil Function',
+                        position: 'topRight'
+                    });
                 },
                 complete: function () {
                     // always reset button (baik success maupun error)
@@ -308,10 +401,10 @@
                         $("#btn-simpan").prop('disabled', false);
                     }
                 },
-                error: function(res) {
+                error: function(xhr, status, error) {
                     iziToast.error({
                         title: 'Pesan Galat!',
-                        message: 'Mohon maaf, username sudah ada, silakan coba lagi dengan username yang berbeda',
+                        message: xhr.responseJSON?.message ?? 'Terjadi kesalahan / Gagal memanggil Function',
                         position: 'topRight'
                     });
                     $("#btn-simpan").prop('disabled', true);
@@ -359,10 +452,10 @@
                         $("#btn-simpan").prop('disabled', true);
                     });
                 },
-                error: function(res) {
+                error: function(xhr, status, error) {
                     iziToast.error({
                         title: 'Pesan Galat!',
-                        message: 'Mohon maaf, daftar Role gagal dimuat',
+                        message: xhr.responseJSON?.message ?? 'Terjadi kesalahan / Gagal memanggil Function',
                         position: 'topRight'
                     });
                     $("#btn-simpan").prop('disabled', true);
@@ -377,8 +470,188 @@
             });
         }
 
-        function ubah(id) {
+        function prosesTambah() {
+            var name = $("#name").val();
+            var email = $("input[name='email']").val();
+            var role = $("#role").val();
+            var password = $("#password1").val();
+            var repassword = $("#password2").val();
+            const btn = $('#btn-simpan');
 
+            if (name == '' || email == '' || role.length == 0 || password == '' || repassword == '') {
+                iziToast.error({
+                    title: 'Pesan Galat!',
+                    message: 'Mohon maaf, semua isian wajib terisi',
+                    position: 'topRight'
+                });
+                return;
+            }
+
+            if (password !== repassword) {
+                iziToast.error({
+                    title: 'Pesan Galat!',
+                    message: 'Mohon maaf, password dan retype password tidak cocok',
+                    position: 'topRight'
+                });
+                return;
+            }
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "/api/v4/akun/pengguna/tambah",
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    name: name,
+                    email: email,
+                    role: role,
+                    password: password
+                },
+                beforeSend: function () {
+                    btn.prop('disabled', true)
+                        .find('i')
+                        .addClass('fa-sync fa-spin')
+                        .removeClass('fa-save');
+                },
+                success: function(res) {
+                    iziToast.success({
+                        title: 'Pesan Sukses!',
+                        message: res.message + ' pada ' + res.time,
+                        position: 'topRight'
+                    });
+
+                    refresh();
+                    $('#tambah').modal('hide');
+                },
+                error: function(xhr, status, error) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: xhr.responseJSON?.message ?? 'Terjadi kesalahan / Gagal memanggil Function',
+                        position: 'topRight'
+                    });
+                }, complete: function () {
+                    // always reset button (baik success maupun error)
+                    btn.prop('disabled', false)
+                        .find('i')
+                        .removeClass('fa-sync fa-spin')
+                        .addClass('fa-save');
+                }
+            });
+        }
+
+        function ubah(id) {
+            $.ajax({
+                url: "/api/v4/akun/pengguna/" + id,
+                type: 'GET',
+                dataType: 'json',
+                success: function(res) {
+                    $('#edit_id').val(res.user.id);
+                    $('#edit_nip').val(res.user.nip);
+                    $('#edit_name').val(res.user.name);
+                    $('#edit_email').val(res.user.email);
+                    $('#edit_password').val('');
+
+                    let html = '<option value="">Pilih Jabatan</option>';
+
+                    res.roles.forEach(function(item){
+                        html += `<option value="${item.id}">${item.deskripsi}</option>`;
+                    });
+
+                    $("#edit_role").html(html).select2({
+                        placeholder: " Pilih Jabatan",
+                        allowClear: true
+                    });
+
+                    // set selected role
+                    let roleIds = Array.isArray(res.user.roles)
+                                ? res.user.roles.map(r => r.id)
+                                : [];
+                    $('#edit_role').val(roleIds).trigger('change');
+
+                    new Cleave('#edit_nip', {
+                        delimiters: ['.', '.'],
+                        blocks: [2, 2, 3],
+                        // uppercase: true
+                        numericOnly: true
+                    });
+
+                    $('#modalEdit').modal('show');
+                },
+                error: function(xhr, status, error) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: xhr.responseJSON?.message ?? 'Terjadi kesalahan / Gagal memanggil Function',
+                        position: 'topRight'
+                    });
+                }, complete: function () {
+                    $('#edit_id_text').text('ID # '+id);
+                }
+            });
+        }
+
+        function prosesUbah() {
+
+            let id = $('#edit_id').val();
+            let name = $('#edit_name').val();
+            let email = $('#edit_email').val();
+            let role = $('#edit_role').val();
+            let password = $('#edit_password').val();
+            const btn = $('#btn-update');
+
+            if (name === '' || email === '' || role.length === 0) {
+                iziToast.error({
+                    title: 'Pesan Galat!',
+                    message: 'Semua field wajib diisi',
+                    position: 'topRight'
+                });
+                return;
+            }
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "/api/v4/akun/pengguna/ubah/" + id,
+                type: 'PUT',
+                dataType: 'json',
+                data: {
+                    name: name,
+                    email: email,
+                    role: role,
+                    password: password
+                },
+                beforeSend: function () {
+                    btn.prop('disabled', true)
+                        .find('i')
+                        .addClass('fa-sync fa-spin')
+                        .removeClass('fa-edit');
+                },
+                success: function(res) {
+                    iziToast.success({
+                        title: 'Sukses!',
+                        message: res.message + ' pada ' + res.time,
+                        position: 'topRight'
+                    });
+
+                    refresh();
+                    $('#modalEdit').modal('hide');
+                },
+                error: function(xhr) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: xhr.responseJSON?.message ?? 'Terjadi kesalahan',
+                        position: 'topRight'
+                    });
+                },
+                complete: function () {
+                    btn.prop('disabled', false)
+                        .find('i')
+                        .removeClass('fa-sync fa-spin')
+                        .addClass('fa-edit');
+                }
+            });
         }
 
         function hapus(id) {
@@ -398,8 +671,11 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
                         url: "/api/v4/akun/pengguna/hapus/" + id,
-                        type: 'GET',
+                        type: 'delete',
                         dataType: 'json', // added data type
                         success: function(res) {
                             iziToast.success({
@@ -407,20 +683,13 @@
                                 message: 'Hapus Akun berhasil pada ' + res,
                                 position: 'topRight'
                             });
-                            window.location.reload();
+                            refresh();
                         },
-                        error: function(res) {
-                            Swal.fire({
-                                title: `Gagal di hapus!`,
-                                text: 'Pada ' + res,
-                                icon: `error`,
-                                showConfirmButton: false,
-                                showCancelButton: false,
-                                allowOutsideClick: true,
-                                allowEscapeKey: true,
-                                timer: 3000,
-                                timerProgressBar: true,
-                                backdrop: `rgba(26,27,41,0.8)`,
+                        error: function(xhr, status, error) {
+                            iziToast.error({
+                                title: 'Pesan Galat!',
+                                message: xhr.responseJSON?.message ?? 'Terjadi kesalahan / Gagal memanggil Function',
+                                position: 'topRight'
                             });
                         }
                     });

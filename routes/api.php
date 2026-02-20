@@ -55,8 +55,11 @@ Route::middleware(['web','auth'])->group(function () {
 
     // AKUN PENGGUNA
     Route::get('v4/akun/pengguna', [AkunPenggunaController::class, 'get']);
+    Route::get('v4/akun/pengguna/{id}', [AkunPenggunaController::class, 'show']);
+    Route::post('v4/akun/pengguna/tambah', [AkunPenggunaController::class, 'store']);
+    Route::put('v4/akun/pengguna/ubah/{id}', [AkunPenggunaController::class, 'update']);
     Route::get('v4/akun/pengguna/verif/{id}', [AkunPenggunaController::class, 'verifName']);
-    Route::get('v4/akun/pengguna/hapus/{id}', [AkunPenggunaController::class, 'hapus']);
+    Route::delete('v4/akun/pengguna/hapus/{id}', [AkunPenggunaController::class, 'destroy']);
 
     // SDI
         // DAFTAR PEGAWAI

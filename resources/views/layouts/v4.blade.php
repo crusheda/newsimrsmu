@@ -195,13 +195,18 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js" integrity="sha384-/RlQG9uf0M2vcTw3CX7fbqgbj/h8wKxw7C3zu9/GxcBPRKOEcESxaxufwRXqzq6n" crossorigin="anonymous"></script>
         <script src="https://cdn.datatables.net/v/bs5/jq-3.7.0/jszip-3.10.1/dt-2.3.7/b-3.2.6/b-colvis-3.2.6/b-html5-3.2.6/b-print-3.2.6/cc-1.2.1/sb-1.8.4/sp-2.3.5/datatables.min.js" integrity="sha384-SXwI3wNL77XIDCT2k19C4IUcyvREECbZ8rokpH2v4myQ+VqjX4Bxz0n+XzvpOys3" crossorigin="anonymous"></script>
 
-        <!-- Internal Datatables JS -->
+
+        <!-- Custom-Switcher JS -->
+        <script src="{{ asset('js/custom-switcher.min.js') }}"></script>
 
         <!-- Custom JS -->
         <script src="{{ asset('js/custom.js') }}"></script>
 
-        <!-- Custom-Switcher JS -->
-        <script src="{{ asset('js/custom-switcher.min.js') }}"></script>
+        <!-- Cleave JS / Delimiter / Input Mask -->
+        <script src="{{ asset('libs/cleave.js/cleave.min.js') }}"></script>
+
+        <!-- Internal Datatables JS -->
+        <script src="{{ asset('js/form-input-mask.js') }}"></script>
 
         <!-- Select2 -->
         {{-- <script src="{{ asset('libs/select2/js/select2.min.js') }}"></script> --}}
