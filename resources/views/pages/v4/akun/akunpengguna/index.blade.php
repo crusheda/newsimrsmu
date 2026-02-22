@@ -114,7 +114,11 @@
                         </div>
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
-                                <label for="defaultFormControlInput" class="form-label">Jabatan <b class="text-danger">*</b></label>
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <label class="form-label">Jabatan <b class="text-danger">*</b></label>
+                                    <a type="button" class="form-label link-info link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover text-decoration-underline"
+                                        href="{{ route('v4.akun.aksesjabatan') }}"><i>Tidak menemukan Jabatan?</i></a>
+                                </div>
                                 <select id="role" name="role[]" class="form-control" data-bs-auto-close="outside"
                                     multiple="multiple" style="width: 100%" required>
                                 </select>
@@ -195,7 +199,11 @@
 
                     <div class="col-md-12 mb-3">
                         <div class="form-group">
-                            <label class="form-label">Jabatan <b class="text-danger">*</b></label>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <label class="form-label">Jabatan <b class="text-danger">*</b></label>
+                                <a type="button" class="form-label link-info link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover text-decoration-underline"
+                                    href="{{ route('v4.akun.aksesjabatan') }}"><i>Tidak menemukan Jabatan?</i></a>
+                            </div>
                             <select id="edit_role" class="form-control" multiple="multiple" style="width:100%" required></select>
                         </div>
                     </div>
@@ -302,7 +310,7 @@
                         ====================== */
                         badges = ``;
                         item.roles.forEach((p, i) => {
-                            badges += `<span class="badge rounded-pill bg-primary-transparent me-1">${p.deskripsi}</span>`;
+                            badges += `<span class="badge rounded-pill bg-primary-transparent me-1">${p.deskripsi ?? p.name}</span>`;
                         })
 
                         let updated = moment(item.updated_at).local().format('YYYY-MM-DD HH:mm:ss');
@@ -556,7 +564,7 @@
                     let html = '<option value="">Pilih Jabatan</option>';
 
                     res.roles.forEach(function(item){
-                        html += `<option value="${item.id}">${item.deskripsi}</option>`;
+                        html += `<option value="${item.id}">${item.deskripsi??item.name}</option>`;
                     });
 
                     $("#edit_role").html(html).select2({
@@ -594,13 +602,14 @@
         function prosesUbah() {
 
             let id = $('#edit_id').val();
+            let nip = $('#edit_nip').val();
             let name = $('#edit_name').val();
             let email = $('#edit_email').val();
             let role = $('#edit_role').val();
             let password = $('#edit_password').val();
             const btn = $('#btn-update');
 
-            if (name === '' || email === '' || role.length === 0) {
+            if (name === '' || nip === '' || email === '' || role.length === 0) {
                 iziToast.error({
                     title: 'Pesan Galat!',
                     message: 'Semua field wajib diisi',
@@ -618,6 +627,7 @@
                 dataType: 'json',
                 data: {
                     name: name,
+                    nip: nip,
                     email: email,
                     role: role,
                     password: password

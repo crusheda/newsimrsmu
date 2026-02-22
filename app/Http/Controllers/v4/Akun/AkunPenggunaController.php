@@ -5,6 +5,7 @@ namespace App\Http\Controllers\v4\Akun;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\PermissionRegistrar;
@@ -68,6 +69,7 @@ class AkunPenggunaController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name'     => 'required|string|max:255|unique:users,name,NULL,id,deleted_at,NULL',
+            // 'nip'      => 'required|min:7',
             'email'    => 'required|email|max:255|unique:users,email,NULL,id,deleted_at,NULL',
             'password' => 'required|min:8',
             'role'     => 'required|array|min:1'
@@ -177,10 +179,42 @@ class AkunPenggunaController extends Controller
 
         // ✅ VALIDATION
         $validator = Validator::make($request->all(), [
-            'name'  => 'required|string|max:255|unique:users,name,'.$id.',id,deleted_at,NULL',
-            'email' => 'required|email|max:255|unique:users,email,'.$id.',id,deleted_at,NULL',
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('users', 'name')
+                    ->ignore($id)
+                    ->whereNull('deleted_at'),
+            ],
+
+            'nip' => [
+                'required',
+                'regex:/^\d{2}\.\d{2}\.\d{3}$/',
+                Rule::unique('users', 'nip')
+                    ->ignore($id)
+                    ->whereNull('deleted_at'),
+            ],
+
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('users', 'email')
+                    ->ignore($id)
+                    ->whereNull('deleted_at'),
+            ],
+
             'password' => 'nullable|min:8',
-            'role'  => 'required|array|min:1'
+
+            'role' => 'required|array|min:1',
+            'role.*' => 'exists:roles,id',
+
+        ], [
+            'nip.regex' => 'NIP wajib berformat XX.XX.XXX',
+            'name.unique' => 'Nama sudah digunakan oleh user lain',
+            'nip.unique' => 'NIP sudah digunakan oleh user lain',
+            'email.unique' => 'Email sudah digunakan oleh user lain',
         ]);
 
         if ($validator->fails()) {
@@ -195,6 +229,7 @@ class AkunPenggunaController extends Controller
 
             $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
+            $user->nip   = $request->nip;
             $user->name  = $request->name;
             $user->email = $request->email;
 
