@@ -18,13 +18,15 @@ Route::group(['prefix' => 'v4', 'as' => ''], function () {
 // PROTECTED ROUTES
 use \App\Http\Controllers\v4\Dashboard\DashboardController;
 use \App\Http\Controllers\v4\Setting\ProfilController;
+use \App\Http\Controllers\v4\IT\TiketController;
 use \App\Http\Controllers\v4\Akun\AksesJabatanController;
 use \App\Http\Controllers\v4\Akun\StrukturOrganisasiController;
 use \App\Http\Controllers\v4\Akun\AkunPenggunaController;
 
-Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function () {
+Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function () { // SIMRSMU v.4
     Route::get('dashboard', [DashboardController::class, 'index'])->name('v4.dashboard');
     Route::get('profil', [ProfilController::class, 'index'])->name('v4.profil');
+    Route::get('tiket/it', [TiketController::class, 'index'])->name('v4.tiket.it');
 
     // MANAJEMEN AKUN
         // AKSES & JABATAN
