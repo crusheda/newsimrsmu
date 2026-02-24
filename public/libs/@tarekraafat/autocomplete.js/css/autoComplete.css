@@ -1,17 +1,19 @@
 .autoComplete_wrapper {
-  display: inline-block;
-  position: relative;
+  /* display: inline-block; */
+    position: relative;
+    width: 100% !important;
 }
 
 .autoComplete_wrapper > input {
-  height: 3rem;
-  width: 370px;
+  /* height: 3rem; */
+  width: 100% !important;
   margin: 0;
-  padding: 0 2rem 0 3.2rem;
+  padding: 0.25rem 0.8rem !important;
+  line-height: inherit;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
-  font-size: 1rem;
+  font-size: 0.8rem !important;
   text-overflow: ellipsis;
   color: rgba(255, 122, 122, 0.3);
   outline: none;

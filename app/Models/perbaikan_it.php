@@ -26,7 +26,9 @@ class perbaikan_it extends Model
     // ];
 
     protected $fillable = [
+        'pegawai_id',
         'tiket_id',
+        'kategori_id',
         'title',
         'filename',
         'nama',

@@ -135,14 +135,14 @@
 
                 <div class="row">
                     <div class="col-md-4">
-                        <div class="card custom-card mb-3">
+                        <div class="card custom-card">
                             <div class="card-header justify-content-between">
                                 <div class="card-title">
-                                    Buat Tiket
+                                    Buat <b class="text-pink">Tiket</b>
                                 </div>
                                 <div class="d-flex">
-                                    <button class="btn btn-sm btn-primary btn-wave waves-light"><i class="ri-add-line fw-medium align-middle me-1"></i> Buat Sekarang</button>
-                                    <div class="dropdown ms-2">
+                                    {{-- <button class="btn btn-sm btn-primary btn-wave waves-light"><i class="ri-add-line fw-medium align-middle me-1"></i> Buat Sekarang</button> --}}
+                                    {{-- <div class="dropdown ms-2">
                                         <button class="btn btn-icon btn-secondary-light btn-sm btn-wave waves-light" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             <i class="ti ti-dots-vertical"></i>
                                         </button>
@@ -152,19 +152,20 @@
                                             <li><a class="dropdown-item" href="javascript:void(0);">Completed Tasks</a></li>
                                             <li><a class="dropdown-item" href="javascript:void(0);">Inprogress Tasks</a></li>
                                         </ul>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group mb-3">
-                                            <label for="judulTiket" class="form-label">Judul Tiket <b class="text-danger">*</b></label>
-                                            <input type="text" class="form-control form-control-sm" id="judul" placeholder="Masukkan judul tiket...">
+                                            <label for="judulTiket" class="form-label">Judul Permasalahan <b class="text-danger">*</b></label>
+                                            <input type="text" class="form-control form-control-sm" id="judul" spellcheck=false autocomplete="off"
+                                                autocapitalize="off" placeholder="Masukkan judul permasalahan..." disabled>
                                         </div>
                                         <div class="form-group mb-3">
-                                            <label for="kategoriTiket" class="form-label">Kategori Tiket <b class="text-danger">*</b></label>
-                                            <select id="kategori" class="form-control form-control-sm">
+                                            <label for="kategoriTiket" class="form-label">Kategori <b class="text-danger">*</b></label>
+                                            <select id="kategori" class="form-control form-control-sm" disabled>
                                                 <option value="" selected disabled>Pilih kategori...</option>
                                                 @if ($kategori->isNotEmpty())
                                                     @foreach ($kategori as $k)
@@ -173,22 +174,32 @@
                                                 @endif
                                             </select>
                                         </div>
-                                        <div class="form-group mb-3">
+                                        <div class="form-group">
                                             <label for="deskripsiTiket" class="form-label">Deskripsi Masalah <b class="text-danger">*</b></label>
-                                            <textarea class="form-control form-control-sm" id="deskripsi" rows="3" placeholder="Jelaskan masalah yang Anda alami..."></textarea>
+                                            <textarea class="form-control form-control-sm" id="deskripsi" rows="10" placeholder="Jelaskan masalah yang Anda alami..." disabled></textarea>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <div class="d-flex">
+                                    <button id="btn-submit" class="btn btn-sm btn-primary btn-wave waves-light me-2" onclick="buatTiket()" disabled>
+                                        <i class="ri-add-line fw-medium align-middle me-1"></i> Buat Sekarang
+                                    </button>
+                                    <button id="btn-reset" class="btn btn-sm btn-secondary btn-wave waves-light" onclick="resetForm()" disabled>
+                                        <i class="ri-refresh-line fw-medium align-middle me-1"></i> Reset Form
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-8">
-                        <div class="card custom-card mb-3">
+                        <div class="card custom-card">
                             <div class="card-header justify-content-between">
                                 <div class="card-title">
-                                    Daftar Tiket
+                                    Daftar <b class="text-pink">Tiket</b>
                                 </div>
-                                <button id="btn-refresh" class="btn btn-sm btn-secondary btn-wave waves-light" onclick="refresh()">
+                                <button id="btn-refresh" class="btn btn-sm btn-warning btn-wave waves-light" onclick="refresh()">
                                     <i class="ri-refresh-line fw-medium align-middle me-1"></i> Refresh
                                 </button>
                             </div>
@@ -257,6 +268,28 @@
             refresh();
         });
 
+        function initAutoComplete(dataSource) {
+            new autoComplete({
+                selector: "#judul",
+                placeHolder: "Masukkan judul permasalahan...",
+                data: {
+                    src: dataSource,
+                    cache: true,
+                },
+                resultItem: {
+                    highlight: true
+                },
+                events: {
+                    input: {
+                        selection: (event) => {
+                            const selection = event.detail.selection.value;
+                            document.querySelector("#judul").value = selection;
+                        }
+                    }
+                }
+            });
+        }
+
         function refresh() {
             if ($.fn.DataTable.isDataTable('#dttable')) {
                 $('#dttable').DataTable().clear().destroy();
@@ -278,8 +311,12 @@
                 },
                 success: function(res) {
                     $("#tampil-tbody").empty();
+                    let judulList = []; // reset judul list setiap refresh
 
                     res.forEach(item => {
+                        if (item.title) {
+                            judulList.push(item.title.trim()); // untuk autocomplete nanti
+                        }
 
                         /* ======================
                         BADGE
@@ -328,7 +365,7 @@
                             <tr>
                                 <td>
                                     <a href="javascript:void(0);" class='link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle'
-                                        data-bs-toggle='dropdown' aria-expanded='false'>${item.id}
+                                        data-bs-toggle='dropdown' aria-expanded='false'>${item.tiket_id}
                                     </a>
                                     <ul class='dropdown-menu dropdown-menu-end'>
                                         <li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="ubah(${item.id})">
@@ -374,6 +411,20 @@
                             sSearch: '',
                         }
                     });
+
+                    // AUTOCOMPLETE INPUT JUDUL
+                    // remove duplicate (ignore case)
+                    judulList = judulList.filter((value, index, self) =>
+                        index === self.findIndex(v => v.toLowerCase() === value.toLowerCase())
+                    );
+
+                    initAutoComplete(judulList);
+
+                    $('#judul').prop('disabled', false);
+                    $('#kategori').prop('disabled', false);
+                    $('#deskripsi').prop('disabled', false);
+                    $('#btn-submit').prop('disabled', false);
+                    $('#btn-reset').prop('disabled', false);
                 },
                 error: function (xhr) {
                     iziToast.error({
@@ -387,6 +438,61 @@
                     btn.prop('disabled', false)
                         .find('i')
                         .removeClass('fa-spin');
+                }
+            })
+        }
+
+        function buatTiket() {
+            let btn = $('#btn-submit');
+
+            btn.prop('disabled', true)
+                .find('i')
+                .removeClass('ri-add-line')
+                .addClass('ri-loader-line fa-spin');
+
+            let data = {
+                title: $('#judul').val(),
+                kategori: $('#kategori').val(),
+                ket_pengaduan: $('#deskripsi').val()
+            };
+
+            let formData = new FormData();
+            for (let key in data) {
+                formData.append(key, data[key]);
+            }
+
+            $.ajax({
+                url: "/api/perbaikanit/tiket/kirimgroup", // API WA Baileys
+                type: "POST",
+                data: formData,
+                processData:false,
+                contentType:false,
+                headers:{
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (response) {
+                    iziToast.success({
+                        title: 'Pesan Berhasil!',
+                        message: response.data,
+                        position: 'topRight'
+                    });
+
+                    // reload table
+                    refresh();
+                },
+                error: function (xhr) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: xhr.responseJSON?.message ?? 'Terjadi kesalahan / Gagal memanggil Function',
+                        position: 'topRight'
+                    });
+                },
+                complete: function () {
+                    // always reset button (baik success maupun error)
+                    btn.prop('disabled', false)
+                        .find('i')
+                        .removeClass('ri-loader-line fa-spin')
+                        .addClass('ri-add-line');
                 }
             })
         }

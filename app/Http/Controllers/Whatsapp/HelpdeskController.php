@@ -5,74 +5,128 @@ namespace App\Http\Controllers\Whatsapp;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\perbaikan_it;
+use App\Models\perbaikan_it_kategori;
+use App\Models\perbaikan_it_lampiran;
 use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
 use Str;
 
 class HelpdeskController extends Controller
 {
+    private function waClient()
+    {
+        return Http::withHeaders([
+            'x-api-key' => config('services.wa.key')
+        ])->timeout(10);
+    }
+
     public function kirimTiketGroup(Request $request)
     {
-        // generate tiket
+        // generate tiket dulu (belum simpan DB)
         $tiket = 'IT-'.now()->format('ymdHis');
 
-        // simpan DB
-        $lapor = perbaikan_it::create([
+        $getKategori = perbaikan_it_kategori::where('id', $request->kategori)->where('status', 1)->first();
+        if(!$getKategori){
+            return response()->json([
+                'status'=>false,
+                'message'=>'Mohon maaf, Kategori tidak ditemukan di Database'
+            ],404);
+        }
 
-            'tiket_id'       => $tiket,
-            'title'          => $request->title,
-            'nama'           => auth()->user()->name ?? $request->nama,
-            'no_wa'          => $request->no_wa,
-            'unit'           => $request->unit,
-            'tgl_pengaduan'  => now(),
-            'ket_pengaduan'  => $request->ket_pengaduan
+        $waktu = now();
 
-        ]);
+        $nama_push = optional(auth()->user())->nama_lengkap
+                        ?? optional(auth()->user())->nama
+                        ?? optional(auth()->user())->name
+                        ?? $request->nama;
 
-        // FORMAT PESAN DULU
+        $roles = auth()->user()
+            ? auth()->user()->getRoleNames()->toArray()
+            : [];
+
+        $unit_push = !empty($roles)
+            ? json_encode($roles)
+            : json_encode([$request->unit]);
+
+        // FORMAT PESAN
         $pesan = "🚨 *TIKET PERBAIKAN IT BARU*
-🎫 Tiket : *{$lapor->tiket_id}*
+🎫 Tiket : *{$tiket}*
 
-📌 Judul : _{$lapor->title}_
-👤 Pelapor : _{$lapor->nama}_
-🏥 Unit : _{$lapor->unit}_
-🕒 Waktu : _".Carbon::parse($lapor->tgl_pengaduan)->format('d/m/Y H:i')." WIB_
+📌 Judul : _{$request->title}_
+📋 Kategori : _{$getKategori->deskripsi}_
+👤 Pelapor : _{$nama_push}_
+🏥 Unit : _{$unit_push}_
+🕒 Waktu : _".\Carbon\Carbon::parse($waktu)->format('d/m/Y H:i')." WIB_
 
 📝 Keluhan :
-> {$lapor->ket_pengaduan}";
+> {$request->ket_pengaduan}";
 
-        // kalau ada foto
+        $groupId = config('services.wa.group_id');
+
+        // =============================
+        // 1️⃣ KIRIM WA DULU
+        // =============================
+
+        $path = null;
+
         if($request->hasFile('filename')){
 
-            // $path = $request->file('filename')->store('perbaikan_it','public');
+            $path = $request->file('filename')->store('perbaikan_it','public');
+            $imageUrl = asset('storage/'.$path);
 
-            // $lapor->update([
-            //     'filename'=>$path
-            // ]);
-
-            // Http::timeout(5)->post('http://127.0.0.1:3000/send-group-image',[
-            //     'caption'=>$pesan,
-            //     'image'=>asset('storage/'.$path)
-            // ]);
+            $response = Http::timeout(10)
+                ->withHeaders([
+                    'x-api-key' => env('API_KEY_WA')
+                ])
+                ->post(config('services.wa.url').'/send-group-image', [
+                    'group_id' => $groupId,
+                    'image'    => $imageUrl,
+                    'caption'  => $pesan
+                ]);
 
         } else {
 
-            $response = Http::timeout(5)->post(config('services.wa.url').'/send-group',[
-                'number'=>$lapor->no_wa,
-                'message'=>$pesan
-            ]);
-
-            if($response->failed()){
-                return response()->json([
-                    'status'=>false,
-                    'message'=>'Tiket ID#'.$lapor->tiket_id.' diterima, tapi WA gagal terkirim. Pesan : '.$response->body()
-                ],500);
-            }
+            $response = Http::timeout(5)
+                ->withHeaders([
+                    'x-api-key' => env('API_KEY_WA')
+                ])
+                ->post(config('services.wa.url').'/send-group', [
+                    'group_id' => $groupId,
+                    'message'  => $pesan
+                ]);
         }
+
+        // =============================
+        // 2️⃣ CEK HASIL WA
+        // =============================
+
+        if($response->failed()){
+            return response()->json([
+                'status'=>false,
+                'message'=>'WA gagal terkirim. Pesan : '.$response->body()
+            ],500);
+        }
+
+        // =============================
+        // 3️⃣ BARU SIMPAN KE DATABASE
+        // =============================
+
+        $lapor = perbaikan_it::create([
+            'pegawai_id'     => auth()->id() ?? null,
+            'tiket_id'       => $tiket,
+            'kategori_id'    => $request->kategori,
+            'title'          => $request->title,
+            'nama'           => $nama_push,
+            'no_wa'          => $request->no_wa,
+            'unit'           => $unit_push,
+            'tgl_pengaduan'  => $waktu,
+            'ket_pengaduan'  => $request->ket_pengaduan,
+            'filename'       => $path
+        ]);
 
         return response()->json([
             'status' => true,
-            'data' => "Laporan berhasil dikirim"
+            'data'   => "Tiket berhasil dikirim & disimpan"
         ], 200);
     }
 

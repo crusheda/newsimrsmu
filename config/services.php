@@ -37,5 +37,7 @@ return [
 
     'wa' => [
         'url' => env('SERVER_WA_URL'),
+        'key' => env('API_KEY_WA'),
+        'group_id' => env('GROUP_ID'),
     ],
 ];
