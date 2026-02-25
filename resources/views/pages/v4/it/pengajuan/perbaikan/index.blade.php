@@ -462,7 +462,7 @@
             }
 
             $.ajax({
-                url: "/api/perbaikanit/tiket/kirimgroup", // API WA Baileys
+                url: "/api/perbaikanit/tiket/kirimgroup", // API WA Baileysid
                 type: "POST",
                 data: formData,
                 processData:false,

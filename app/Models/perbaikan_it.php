@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\perbaikan_it_kategori;
 
 class perbaikan_it extends Model
 {
@@ -54,4 +55,9 @@ class perbaikan_it extends Model
         'user_selesai',
         'user_tolak',
     ];
+
+    public function kategori()
+    {
+        return $this->belongsTo(perbaikan_it_kategori::class, 'kategori_id');
+    }
 }

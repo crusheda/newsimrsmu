@@ -7,12 +7,65 @@ use Illuminate\Http\Request;
 use App\Models\perbaikan_it;
 use App\Models\perbaikan_it_kategori;
 use App\Models\perbaikan_it_lampiran;
+use App\Services\WhatsAppService;
 use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
 use Str;
 
 class HelpdeskController extends Controller
 {
+    public function kirim($id, WhatsAppService $wa)
+    {
+        $tiket = perbaikan_it::with('kategori')->findOrFail($id);
+
+        if (!$tiket->no_wa) {
+            return response()->json(['error' => 'Nomor WA kosong'], 400);
+        }
+
+        $no = preg_replace('/[^0-9]/', '', $tiket->no_wa);
+        if (substr($no, 0, 1) === '0') {
+            $no = '62' . substr($no, 1);
+        }
+
+        $pesan =
+            "📌 *TIKET IT*\n\n".
+            "No Tiket : {$tiket->tiket_id}\n".
+            "Nama : {$tiket->nama}\n".
+            "Unit : {$tiket->unit}\n".
+            "Kategori : {$tiket->kategori?->nama}\n".
+            "Keluhan : {$tiket->title}\n".
+            "Status : ".($tiket->tgl_selesai ? 'Selesai' : 'Diproses');
+
+        // print_r($pesan); die();
+        $response = $wa->sendText($no, $pesan);
+
+        return response()->json([
+            'success' => true,
+            'wa_response' => $response->json()
+        ]);
+    }
+
+    public function store(Request $request, WhatsAppService $wa)
+    {
+        $tiket = perbaikan_it::create([
+            'judul' => $request->judul,
+            'deskripsi' => $request->deskripsi,
+        ]);
+
+        $wa->sendText(
+            $tiket->no_wa,
+            "📌 *TIKET IT BERHASIL DIBUAT*\n\n".
+            "No Tiket : {$tiket->tiket_id}\n".
+            "Nama : {$tiket->nama}\n".
+            "Unit : {$tiket->unit}\n".
+            "Kategori : {$tiket->kategori->nama}\n".
+            "Keluhan : {$tiket->title}\n\n".
+            "Tim IT akan segera memproses."
+        );
+
+        return response()->json(['success' => true]);
+    }
+
     private function waClient()
     {
         return Http::withHeaders([

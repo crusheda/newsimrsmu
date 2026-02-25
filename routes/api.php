@@ -77,6 +77,10 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
         // Route::get('sdi/pegawai/grafik/4', [PegawaiController::class, 'grafik4'])->name('apiGrafikSDI4'); // Profesi
         // Route::get('sdi/pegawai/grafik/5', [PegawaiController::class, 'grafik5'])->name('apiGrafikSDI5'); // Status Pegawai
         // Route::get('sdi/pegawai/grafik/6', [PegawaiController::class, 'grafik6'])->name('apiGrafikSDI6'); // Status Perkawinan
+
+    // WHATSAPP API
+    Route::post('whatsapp/send-message', [HelpdeskController::class, 'store']);
+    Route::get('whatsapp/send-message/{id}', [HelpdeskController::class, 'kirim']);
 });
 
 // WHATSAPP API BAILEYS
