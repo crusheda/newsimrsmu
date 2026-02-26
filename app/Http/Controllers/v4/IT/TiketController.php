@@ -45,9 +45,9 @@ class TiketController extends Controller
                             ->orderBy('perbaikan_it.updated_at', 'desc')
                             ->get();
 
-        if ($show->isEmpty()) {
-            return response()->json(['message' => 'Data Tiket Perbaikan IT tidak ditemukan'], 404);
-        }
+        // if ($show->isEmpty()) {
+        //     return response()->json(['message' => 'Data Tiket Perbaikan IT tidak ditemukan'], 404);
+        // }
 
         return response()->json($show, 200);
     }

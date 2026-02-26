@@ -47,13 +47,24 @@ class HelpdeskController extends Controller
 
     public function store(Request $request, WhatsAppService $wa)
     {
+        $user = Auth::user();
+        $no_wa = $user->no_hp;
+
+        if (!$no_wa) {
+            return response()->json(['error' => 'Nomor WA pengguna tidak ditemukan, silakan melengkapi profil dibagian no.HP'], 400);
+        }
+
         $tiket = perbaikan_it::create([
             'judul' => $request->judul,
             'deskripsi' => $request->deskripsi,
         ]);
 
-        $wa->sendText(
-            $tiket->no_wa,
+        $no = preg_replace('/[^0-9]/', '', $no_wa);
+        if (substr($no, 0, 1) === '0') {
+            $no = '62' . substr($no, 1);
+        }
+
+        $pesan =
             "📌 *TIKET IT BERHASIL DIBUAT*\n\n".
             "No Tiket : {$tiket->tiket_id}\n".
             "Nama : {$tiket->nama}\n".
@@ -61,20 +72,32 @@ class HelpdeskController extends Controller
             "Kategori : {$tiket->kategori->nama}\n".
             "Keluhan : {$tiket->title}\n\n".
             "Tim IT akan segera memproses."
-        );
+        ;
+
+        $response = $wa->sendText($no, $pesan);
 
         return response()->json(['success' => true]);
     }
 
-    private function waClient()
+    public function kirimTiket(Request $request, WhatsAppService $wa)
     {
-        return Http::withHeaders([
-            'x-api-key' => config('services.wa.key')
-        ])->timeout(10);
-    }
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'kategori' => 'required|exists:perbaikan_it_kategori,id',
+            'ket_pengaduan' => 'required|string'
+        ]);
 
-    public function kirimTiketGroup(Request $request)
-    {
+        $no_wa = optional(auth()->user())->no_hp;
+
+        if (!$no_wa) {
+            return response()->json(['error' => 'Nomor WA pengguna tidak ditemukan, silakan melengkapi profil dibagian no.HP'], 400);
+        }
+
+        $no = preg_replace('/[^0-9]/', '', $no_wa);
+        if (substr($no, 0, 1) === '0') {
+            $no = '62' . substr($no, 1);
+        }
+
         // generate tiket dulu (belum simpan DB)
         $tiket = 'IT-'.now()->format('ymdHis');
 
@@ -97,7 +120,11 @@ class HelpdeskController extends Controller
             ? auth()->user()->getRoleNames()->toArray()
             : [];
 
-        $unit_push = !empty($roles)
+        $unit_push_wa = !empty($roles)
+            ? implode(', ', $roles)
+            : $request->unit;
+
+        $unit_push_db = !empty($roles)
             ? json_encode($roles)
             : json_encode([$request->unit]);
 
@@ -108,60 +135,14 @@ class HelpdeskController extends Controller
 📌 Judul : _{$request->title}_
 📋 Kategori : _{$getKategori->deskripsi}_
 👤 Pelapor : _{$nama_push}_
-🏥 Unit : _{$unit_push}_
+🏥 Unit : _{$unit_push_wa}_
 🕒 Waktu : _".\Carbon\Carbon::parse($waktu)->format('d/m/Y H:i')." WIB_
 
 📝 Keluhan :
 > {$request->ket_pengaduan}";
 
-        $groupId = config('services.wa.group_id');
-
         // =============================
-        // 1️⃣ KIRIM WA DULU
-        // =============================
-
-        $path = null;
-
-        if($request->hasFile('filename')){
-
-            $path = $request->file('filename')->store('perbaikan_it','public');
-            $imageUrl = asset('storage/'.$path);
-
-            $response = Http::timeout(10)
-                ->withHeaders([
-                    'x-api-key' => env('API_KEY_WA')
-                ])
-                ->post(config('services.wa.url').'/send-group-image', [
-                    'group_id' => $groupId,
-                    'image'    => $imageUrl,
-                    'caption'  => $pesan
-                ]);
-
-        } else {
-
-            $response = Http::timeout(5)
-                ->withHeaders([
-                    'x-api-key' => env('API_KEY_WA')
-                ])
-                ->post(config('services.wa.url').'/send-group', [
-                    'group_id' => $groupId,
-                    'message'  => $pesan
-                ]);
-        }
-
-        // =============================
-        // 2️⃣ CEK HASIL WA
-        // =============================
-
-        if($response->failed()){
-            return response()->json([
-                'status'=>false,
-                'message'=>'WA gagal terkirim. Pesan : '.$response->body()
-            ],500);
-        }
-
-        // =============================
-        // 3️⃣ BARU SIMPAN KE DATABASE
+        // 3️⃣ SIMPAN KE DATABASE
         // =============================
 
         $lapor = perbaikan_it::create([
@@ -170,16 +151,16 @@ class HelpdeskController extends Controller
             'kategori_id'    => $request->kategori,
             'title'          => $request->title,
             'nama'           => $nama_push,
-            'no_wa'          => $request->no_wa,
-            'unit'           => $unit_push,
+            'no_wa'          => $no,
+            'unit'           => $unit_push_db,
             'tgl_pengaduan'  => $waktu,
             'ket_pengaduan'  => $request->ket_pengaduan,
-            'filename'       => $path
+            'filename'       => $path ?? null
         ]);
 
         return response()->json([
             'status' => true,
-            'data'   => "Tiket berhasil dikirim & disimpan"
+            'data'   => "Tiket dan notifikasi whatsapp berhasil dikirim & tersimpan di database"
         ], 200);
     }
 

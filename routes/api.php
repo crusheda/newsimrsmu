@@ -81,10 +81,12 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
     // WHATSAPP API
     Route::post('whatsapp/send-message', [HelpdeskController::class, 'store']);
     Route::get('whatsapp/send-message/{id}', [HelpdeskController::class, 'kirim']);
+
+    Route::post('perbaikanit/tiket/kirim', [HelpdeskController::class, 'kirimTiket']);
 });
 
 // WHATSAPP API BAILEYS
-Route::post('perbaikanit/tiket/kirimgroup', [HelpdeskController::class, 'kirimTiketGroup']);
+// Route::post('perbaikanit/tiket/kirimgroup', [HelpdeskController::class, 'kirimTiketGroup']);
 Route::post('perbaikanit/tiket/callback', [HelpdeskController::class, 'callback']);
 Route::post('perbaikanit/tiket/{id}/terima', [HelpdeskController::class, 'kirimTerimaTiket']);
 Route::post('perbaikanit/tiket/{id}/kerjakan', [HelpdeskController::class, 'kirimKerjakanTiket']);

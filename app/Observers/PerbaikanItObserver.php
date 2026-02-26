@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Log;
 class PerbaikanItObserver
 {
     /**
+     * Tambah Worker Queue send whatsapp message untuk mengirim notifikasi WA saat tiket dibuat
+     */
+    // SendWhatsAppNotification::dispatch($tiket);
+
+    /**
      * Saat tiket dibuat
      */
     public function created(perbaikan_it $tiket): void
@@ -18,19 +23,44 @@ class PerbaikanItObserver
         try {
 
             $no = $this->formatNomor($tiket->no_wa);
+            $kategori = optional($tiket->kategori)->deskripsi ?? '-';
 
-            app(WhatsAppService::class)->sendText(
-                $no,
-                "📌 *TIKET IT BERHASIL DIBUAT*\n\n".
-                "No Tiket : {$tiket->tiket_id}\n".
-                "Nama : {$tiket->nama}\n".
-                "Unit : {$tiket->unit}\n".
-                "Keluhan : {$tiket->title}\n\n".
-                "Tim IT akan segera memproses."
-            );
+            $message =
+                "🚨 *TIKET PERBAIKAN IT*\n".
+                "🎫 Tiket : *{$tiket->tiket_id}*\n\n".
+                "📌 Judul : _{$tiket->title}_\n".
+                "📋 Kategori : _{$kategori}_\n".
+                "👤 Pelapor : _{$tiket->nama}_\n".
+                "🏥 Unit : _{$tiket->unit}_\n".
+                "🕒 Waktu : _".\Carbon\Carbon::parse($tiket->tgl_pengaduan)->format('d/m/Y H:i')." WIB_\n\n".
+                "📝 Keluhan :\n".
+                "{$tiket->ket_pengaduan}";
 
-        } catch (\Exception $e) {
+            $response = app(WhatsAppService::class)->sendText($no, $message);
+
+            if ($response->successful()) {
+
+                $tiket->updateQuietly([
+                    'wa_sent' => true,
+                    'wa_error' => null
+                ]);
+
+            } else {
+
+                $tiket->updateQuietly([
+                    'wa_sent' => false,
+                    'wa_error' => $response->json('error.message') ?? $response->body()
+                ]);
+            }
+
+        } catch (\Throwable $e) {
+
             Log::error('WA Created Error: '.$e->getMessage());
+
+            $tiket->updateQuietly([
+                'wa_sent' => false,
+                'wa_error' => $e->getMessage()
+            ]);
         }
     }
 

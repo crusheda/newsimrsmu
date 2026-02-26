@@ -462,7 +462,7 @@
             }
 
             $.ajax({
-                url: "/api/perbaikanit/tiket/kirimgroup", // API WA Baileysid
+                url: "/api/v4/perbaikanit/tiket/kirim", // API WA Baileysid
                 type: "POST",
                 data: formData,
                 processData:false,
@@ -471,14 +471,19 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function (response) {
+                    if(response.wa_sent === false){
+                        iziToast.warning({
+                            title: 'Tiket berhasil dibuat',
+                            message: 'Notifikasi Whatsapp gagal dikirim, silakan hubungi IT untuk memastikan tiket Anda diproses.',
+                        });
+                        return;
+                    }
+
                     iziToast.success({
                         title: 'Pesan Berhasil!',
                         message: response.data,
                         position: 'topRight'
                     });
-
-                    // reload table
-                    refresh();
                 },
                 error: function (xhr) {
                     iziToast.error({
@@ -493,6 +498,8 @@
                         .find('i')
                         .removeClass('ri-loader-line fa-spin')
                         .addClass('ri-add-line');
+
+                    refresh();
                 }
             })
         }
