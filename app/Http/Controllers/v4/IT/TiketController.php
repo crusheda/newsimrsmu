@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
 use App\Models\User;
 use App\Models\perbaikan_it_kategori;
 use App\Models\perbaikan_it_lampiran;
@@ -45,10 +46,23 @@ class TiketController extends Controller
                             ->orderBy('perbaikan_it.updated_at', 'desc')
                             ->get();
 
+        $allUnits = $show->pluck('unit')
+        ->flatten()
+        ->unique()
+        ->values();
+
+        $roles = Role::whereIn('name', $allUnits)
+        ->pluck('deskripsi', 'name');
+
         // if ($show->isEmpty()) {
         //     return response()->json(['message' => 'Data Tiket Perbaikan IT tidak ditemukan'], 404);
         // }
 
-        return response()->json($show, 200);
+        $data = [
+            'roles' => $roles,
+            'show' => $show,
+        ];
+
+        return response()->json($data, 200);
     }
 }

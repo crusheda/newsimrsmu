@@ -14,6 +14,10 @@ class perbaikan_it extends Model
     public $timestamps = true;
     use SoftDeletes;
 
+    protected $casts = [
+        'unit' => 'array',
+    ];
+
     // protected $fillable = [
     //     'tiket_id',
     //     'title',

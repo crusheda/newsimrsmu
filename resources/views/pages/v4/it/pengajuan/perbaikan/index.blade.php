@@ -313,7 +313,7 @@
                     $("#tampil-tbody").empty();
                     let judulList = []; // reset judul list setiap refresh
 
-                    res.forEach(item => {
+                    res.show.forEach(item => {
                         if (item.title) {
                             judulList.push(item.title.trim()); // untuk autocomplete nanti
                         }
@@ -361,6 +361,13 @@
                             kategori = '<span class="badge bg-secondary ms-1">' + nama_kategori + '</span>';
                         }
 
+                        let unit = '';
+                        if (item.unit) {
+                            unit = item.unit
+                                .map(u => res.roles[u] ?? u)
+                                .join(', ');
+                        }
+
                         let content = `
                             <tr>
                                 <td>
@@ -381,7 +388,7 @@
                                                 <a href='javascript:void(0);' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-html='true' title='Lihat Detail Pengaduan'><u>${item.title}</u> ${kategori}</a>
                                             </h6>
                                             <small class='text-truncate text-muted'>Diajukan Oleh ${nama_lengkap}</small>
-                                            <small class='text-truncate text-muted'>Unit ${item.unit ?? '-'}</small>
+                                            <small class='text-truncate text-muted fs-10'><i>${unit ?? ''}</i></small>
                                         </div>
                                     </div>
                                 </td>
