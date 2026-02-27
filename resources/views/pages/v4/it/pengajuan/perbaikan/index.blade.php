@@ -24,118 +24,134 @@
         <div class="row justify-content-center">
             <div class="col-xl-12">
 
-                <div class="row">
+                <div class="row" id="dashboardCards">
+
                     <div class="col-xl-3 col-lg-6">
-                        <div class="card custom-card dashboard-main-card info">
+                        <div class="card custom-card dashboard-main-card info" data-card="diterima">
                             <div class="card-body p-4">
                                 <div class="d-flex align-items-start gap-3">
                                     <div class="flex-fill">
                                         <h6 class="mb-2 fs-12">Pengaduan Diterima</h6>
                                         <div>
                                             <div class="d-flex align-items-center gap-2 mb-2">
-                                                <h4 class="fw-medium mb-0"><span class="count-up" data-count="320">320</span></h4>
-                                                <span class="badge bg-info">4,176</span>
+                                                <h4 class="fw-medium mb-0">
+                                                    <span class="count-up" data-count="0">0</span>
+                                                </h4>
+                                                <span class="badge bg-info badge-month">Bulan ini</span>
                                             </div>
                                             <p class="text-muted fs-11 mb-0 lh-1">
-                                                <span class="text-info me-1 fw-medium">
-                                                    <i class="ri-arrow-down-s-line me-1 align-middle"></i>1.16%
+                                                <span class="percent text-info me-1 fw-medium">
+                                                    <i class="ri-arrow-down-s-line me-1 align-middle"></i>0%
                                                 </span>
                                                 <span>this month</span>
                                             </p>
                                         </div>
                                     </div>
                                     <div class="avatar avatar-lg bg-info-transparent mb-3 svg-info mx-auto">
+                                        <!-- SVG tetap -->
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"/><path d="M200,75.64V40a16,16,0,0,0-16-16H72A16,16,0,0,0,56,40V76a16.07,16.07,0,0,0,6.4,12.8L114.67,128,62.4,167.2A16.07,16.07,0,0,0,56,180v36a16,16,0,0,0,16,16H184a16,16,0,0,0,16-16V180.36a16.09,16.09,0,0,0-6.35-12.77L141.27,128l52.38-39.59A16.09,16.09,0,0,0,200,75.64ZM184,40V64H72V40Zm0,176H72V180l56-42,56,42.35Z"/></svg>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     <div class="col-xl-3 col-lg-6">
-                        <div class="card custom-card dashboard-main-card warning">
+                        <div class="card custom-card dashboard-main-card warning" data-card="dikerjakan">
                             <div class="card-body p-4">
                                 <div class="d-flex align-items-start gap-3">
                                     <div class="flex-fill">
                                         <h6 class="mb-2 fs-12">Pengaduan Dikerjakan</h6>
                                         <div>
                                             <div class="d-flex align-items-center gap-2 mb-2">
-                                                <h4 class="fw-medium mb-0"><span class="count-up" data-count="81">81</span></h4>
-                                                <span class="badge bg-warning">7,064</span>
+                                                <h4 class="fw-medium mb-0">
+                                                    <span class="count-up" data-count="0">0</span>
+                                                </h4>
+                                                <span class="badge bg-warning badge-month">Bulan ini</span>
                                             </div>
                                             <p class="text-muted fs-11 mb-0 lh-1">
-                                                <span class="text-warning me-1 fw-medium">
-                                                    <i class="ri-arrow-up-s-line me-1 align-middle"></i>0.25%
+                                                <span class="percent text-warning me-1 fw-medium">
+                                                    <i class="ri-arrow-up-s-line me-1 align-middle"></i>0%
                                                 </span>
                                                 <span>this month</span>
                                             </p>
                                         </div>
                                     </div>
                                     <div class="avatar avatar-lg bg-warning-transparent mb-3 svg-warning mx-auto">
+                                        <!-- SVG tetap -->
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"/><path d="M100,116.43a8,8,0,0,0,4-6.93v-72A8,8,0,0,0,93.34,30,104.06,104.06,0,0,0,25.73,147a8,8,0,0,0,4.52,5.81,7.86,7.86,0,0,0,3.35.74,8,8,0,0,0,4-1.07ZM88,49.62v55.26L40.12,132.51C40,131,40,129.48,40,128A88.12,88.12,0,0,1,88,49.62ZM232,128A104,104,0,0,1,38.32,180.7a8,8,0,0,1,2.87-11L120,123.83V32a8,8,0,0,1,8-8,104.05,104.05,0,0,1,89.74,51.48c.11.16.21.32.31.49s.2.37.29.55A103.34,103.34,0,0,1,232,128Z"/></svg>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     <div class="col-xl-3 col-lg-6">
-                        <div class="card custom-card dashboard-main-card success">
+                        <div class="card custom-card dashboard-main-card success" data-card="selesai">
                             <div class="card-body p-4">
                                 <div class="d-flex align-items-start gap-3">
                                     <div class="flex-fill">
                                         <h6 class="mb-2 fs-12">Pengaduan Diselesaikan</h6>
                                         <div>
                                             <div class="d-flex align-items-center gap-2 mb-2">
-                                                <h4 class="fw-medium mb-0"><span class="count-up" data-count="33">33</span>K</h4>
-                                                <span class="badge bg-success border">1,105</span>
+                                                <h4 class="fw-medium mb-0">
+                                                    <span class="count-up" data-count="0">0</span>
+                                                </h4>
+                                                <span class="badge bg-success border badge-month">Bulan ini</span>
                                             </div>
                                             <p class="text-muted fs-11 mb-0 lh-1">
-                                                <span class="text-success me-1 fw-semibFold">
-                                                    <i class="ri-arrow-down-s-line me-1 align-middle"></i>0.46%
+                                                <span class="percent text-success me-1 fw-medium">
+                                                    <i class="ri-arrow-down-s-line me-1 align-middle"></i>0%
                                                 </span>
                                                 <span>this month</span>
                                             </p>
                                         </div>
                                     </div>
                                     <div class="avatar avatar-lg bg-success-transparent mb-3 svg-success mx-auto">
+                                        <!-- SVG tetap -->
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"/><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm45.66,85.66-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35a8,8,0,0,1,11.32,11.32Z"/></svg>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     <div class="col-xl-3 col-lg-6">
-                        <div class="card custom-card dashboard-main-card danger">
+                        <div class="card custom-card dashboard-main-card danger" data-card="ditolak">
                             <div class="card-body p-4">
                                 <div class="d-flex align-items-start gap-3">
                                     <div class="flex-fill">
                                         <h6 class="mb-2 fs-12">Pengaduan Ditolak</h6>
-                                        <div class="pb-0 mt-0">
-                                            <div>
-                                                <div class="d-flex align-items-center gap-2 mb-2">
-                                                    <h4 class="fw-medium mb-0"><span class="count-up" data-count="42">42</span> </h4>
-                                                    <span class="badge bg-danger">12,345</span>
-                                                </div>
-                                                <p class="text-muted fs-11 mb-0 lh-1">
-                                                    <span class="text-danger me-1 fw-medium">
-                                                        <i class="ri-arrow-up-s-line me-1 align-middle"></i>3.25%
-                                                    </span>
-                                                    <span>this month</span>
-                                                </p>
+                                        <div>
+                                            <div class="d-flex align-items-center gap-2 mb-2">
+                                                <h4 class="fw-medium mb-0">
+                                                    <span class="count-up" data-count="0">0</span>
+                                                </h4>
+                                                <span class="badge bg-danger badge-month">Bulan ini</span>
                                             </div>
+                                            <p class="text-muted fs-11 mb-0 lh-1">
+                                                <span class="percent text-danger me-1 fw-medium">
+                                                    <i class="ri-arrow-up-s-line me-1 align-middle"></i>0%
+                                                </span>
+                                                <span>this month</span>
+                                            </p>
                                         </div>
                                     </div>
                                     <div class="avatar avatar-lg bg-danger-transparent mb-3 svg-danger mx-auto">
+                                        <!-- SVG tetap -->
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"/><path d="M216,40H40A16,16,0,0,0,24,56V208a8,8,0,0,0,11.58,7.15L64,200.94l28.42,14.21a8,8,0,0,0,7.16,0L128,200.94l28.42,14.21a8,8,0,0,0,7.16,0L192,200.94l28.42,14.21A8,8,0,0,0,232,208V56A16,16,0,0,0,216,40ZM176,144H80a8,8,0,0,1,0-16h96a8,8,0,0,1,0,16Zm0-32H80a8,8,0,0,1,0-16h96a8,8,0,0,1,0,16Z"/></svg>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
 
                 <div class="row">
-                    <div class="col-md-4">
-                        <div class="card custom-card">
+
+                    <div class="col-md-12">
+                        <div class="card custom-card mb-3">
                             <div class="card-header justify-content-between">
                                 <div class="card-title">
                                     Buat <b class="text-pink">Tiket</b>
@@ -157,12 +173,14 @@
                             </div>
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-md-12">
+                                    <div class="col-md-8">
                                         <div class="form-group mb-3">
                                             <label for="judulTiket" class="form-label">Judul Permasalahan <b class="text-danger">*</b></label>
                                             <input type="text" class="form-control form-control-sm" id="judul" spellcheck=false autocomplete="off"
                                                 autocapitalize="off" placeholder="Masukkan judul permasalahan..." disabled>
                                         </div>
+                                    </div>
+                                    <div class="col-md-4">
                                         <div class="form-group mb-3">
                                             <label for="kategoriTiket" class="form-label">Kategori <b class="text-danger">*</b></label>
                                             <select id="kategori" class="form-control form-control-sm" disabled>
@@ -174,30 +192,30 @@
                                                 @endif
                                             </select>
                                         </div>
+                                    </div>
+                                    <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="deskripsiTiket" class="form-label">Deskripsi Masalah <b class="text-danger">*</b></label>
-                                            <textarea class="form-control form-control-sm" id="deskripsi" rows="10" placeholder="Jelaskan masalah yang Anda alami..." disabled></textarea>
+                                            <textarea class="form-control form-control-sm" id="deskripsi" rows="3" placeholder="Jelaskan masalah yang Anda alami..." disabled></textarea>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-footer">
-                                <div class="d-flex">
-                                    <button id="btn-submit" class="btn btn-sm btn-primary btn-wave waves-light me-2" onclick="buatTiket()" disabled>
-                                        <i class="ri-add-line fw-medium align-middle me-1"></i> Buat Sekarang
-                                    </button>
+                                <div class="d-flex justify-content-between">
                                     <button id="btn-reset" class="btn btn-sm btn-secondary btn-wave waves-light" onclick="resetForm()" disabled>
                                         <i class="ri-refresh-line fw-medium align-middle me-1"></i> Reset Form
+                                    </button>
+                                    <button id="btn-submit" class="btn btn-sm btn-primary btn-wave waves-light me-2" onclick="buatTiket()" disabled>
+                                        <i class="ri-add-line fw-medium align-middle me-1"></i> Buat Sekarang
                                     </button>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-8">
                         <div class="card custom-card">
                             <div class="card-header justify-content-between">
                                 <div class="card-title">
-                                    Daftar <b class="text-pink">Tiket</b>
+                                    Daftar <b class="text-primary">Tiket</b>
                                 </div>
                                 <button id="btn-refresh" class="btn btn-sm btn-warning btn-wave waves-light" onclick="refresh()">
                                     <i class="ri-refresh-line fw-medium align-middle me-1"></i> Refresh
@@ -290,6 +308,74 @@
             });
         }
 
+        function updateCard(key, item) {
+
+            const card = document.querySelector(`[data-card="${key}"]`);
+            if (!card) return;
+
+            card.querySelector('.count-up').innerText = item.total;
+
+            const percentEl = card.querySelector('.percent');
+            if (!percentEl) return;
+
+            percentEl.classList.remove('text-success', 'text-danger');
+
+            let arrowClass = '';
+            let colorClass = '';
+
+            if (item.is_up) {
+                arrowClass = 'ri-arrow-up-s-line';
+                colorClass = 'text-success';
+            } else {
+                arrowClass = 'ri-arrow-down-s-line';
+                colorClass = 'text-danger';
+            }
+
+            percentEl.classList.add(colorClass);
+
+            percentEl.innerHTML = `
+                <i class="${arrowClass} me-1 align-middle"></i>
+                ${Math.abs(item.percent)}%
+            `;
+        }
+
+        function updateDashboardCards(data) {
+
+            if (!data) return;
+
+            document.querySelectorAll('.dashboard-main-card').forEach(card => {
+
+                let key = card.getAttribute('data-card'); // diterima, dikerjakan, dst
+
+                if (data[key]) {
+
+                    let item = data[key];
+
+                    let total   = item.total ?? 0;
+                    let percent = item.percent ?? 0;
+                    let isUp    = item.is_up ?? true;
+
+                    let countEl   = card.querySelector('.count-up');
+                    let percentEl = card.querySelector('.percent');
+
+                    // Update total
+                    countEl.innerText = total;
+                    countEl.setAttribute('data-count', total);
+
+                    // Update percent
+                    let iconClass = isUp
+                        ? 'ri-arrow-up-s-line'
+                        : 'ri-arrow-down-s-line';
+
+                    percentEl.innerHTML = `
+                        <i class="${iconClass} me-1 align-middle"></i>
+                        ${percent}%
+                    `;
+                }
+
+            });
+        }
+
         function refresh() {
             if ($.fn.DataTable.isDataTable('#dttable')) {
                 $('#dttable').DataTable().clear().destroy();
@@ -310,6 +396,9 @@
                         .addClass('fa-spin');
                 },
                 success: function(res) {
+
+                    updateDashboardCards(res.summary);
+
                     $("#tampil-tbody").empty();
                     let judulList = []; // reset judul list setiap refresh
 
@@ -363,15 +452,28 @@
 
                         let unit = '';
                         if (item.unit) {
-                            unit = item.unit
-                                .map(u => res.roles[u] ?? u)
-                                .join(', ');
+                            let units = item.unit;
+
+                            // Kalau masih string JSON → parse dulu
+                            if (typeof units === 'string') {
+                                try {
+                                    units = JSON.parse(units);
+                                } catch (e) {
+                                    units = [units]; // fallback kalau bukan JSON valid
+                                }
+                            }
+
+                            if (Array.isArray(units)) {
+                                unit = units
+                                    .map(u => res.roles[u] ?? u)
+                                    .join(', ');
+                            }
                         }
 
                         let content = `
                             <tr>
                                 <td>
-                                    <a href="javascript:void(0);" class='link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle'
+                                    <a href="javascript:void(0);" class='link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle'
                                         data-bs-toggle='dropdown' aria-expanded='false'>${item.tiket_id}
                                     </a>
                                     <ul class='dropdown-menu dropdown-menu-end'>
@@ -491,6 +593,8 @@
                         message: response.data,
                         position: 'topRight'
                     });
+
+                    resetForm();
                 },
                 error: function (xhr) {
                     iziToast.error({
@@ -509,6 +613,12 @@
                     refresh();
                 }
             })
+        }
+
+        function resetForm() {
+            $('#judul').val('');
+            $('#kategori').val('').change();
+            $('#deskripsi').val('');
         }
     </script>
 @endsection

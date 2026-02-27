@@ -25,13 +25,24 @@ class PerbaikanItObserver
             $no = $this->formatNomor($tiket->no_wa);
             $kategori = optional($tiket->kategori)->deskripsi ?? '-';
 
+            $unitData = $tiket->unit;
+
+            if (is_string($unitData)) {
+                $decoded = json_decode($unitData, true);
+                $unitData = is_array($decoded) ? $decoded : [$unitData];
+            }
+
+            $unit = is_array($unitData)
+                ? implode(', ', $unitData)
+                : $unitData;
+
             $message =
                 "🚨 *TIKET PERBAIKAN IT*\n".
                 "🎫 Tiket : *{$tiket->tiket_id}*\n\n".
                 "📌 Judul : _{$tiket->title}_\n".
                 "📋 Kategori : _{$kategori}_\n".
                 "👤 Pelapor : _{$tiket->nama}_\n".
-                "🏥 Unit : _{$tiket->unit}_\n".
+                "🏥 Unit : _{$unit}_\n".
                 "🕒 Waktu : _".\Carbon\Carbon::parse($tiket->tgl_pengaduan)->format('d/m/Y H:i')." WIB_\n\n".
                 "📝 Keluhan :\n".
                 "{$tiket->ket_pengaduan}";

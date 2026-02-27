@@ -30,6 +30,98 @@ class TiketController extends Controller
 
     function table()
     {
+        // hitung total tiket per status bulan ini dan bulan lalu, lalu hitung persentasenya
+        $now = now();
+        $startThisMonth = $now->copy()->startOfMonth();
+        $startLastMonth = $now->copy()->subMonth()->startOfMonth();
+        $endLastMonth = $now->copy()->subMonth()->endOfMonth();
+
+        $summary = [];
+
+        /*
+        |--------------------------------------------------------------------------
+        | DITERIMA
+        |--------------------------------------------------------------------------
+        */
+        $thisMonth = perbaikan_it::whereNull('deleted_at')
+            ->whereNotNull('tgl_terima')
+            ->whereNull('tgl_kerjakan')
+            ->whereNull('tgl_selesai')
+            ->whereNull('tgl_tolak')
+            ->whereBetween('created_at', [$startThisMonth, $now])
+            ->count();
+
+        $lastMonth = perbaikan_it::whereNull('deleted_at')
+            ->whereNotNull('tgl_terima')
+            ->whereNull('tgl_kerjakan')
+            ->whereNull('tgl_selesai')
+            ->whereNull('tgl_tolak')
+            ->whereBetween('created_at', [$startLastMonth, $endLastMonth])
+            ->count();
+
+        $summary['diterima'] = $this->calculatePercent($thisMonth, $lastMonth);
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | DIKERJAKAN
+        |--------------------------------------------------------------------------
+        */
+        $thisMonth = perbaikan_it::whereNull('deleted_at')
+            ->whereNotNull('tgl_kerjakan')
+            ->whereNull('tgl_selesai')
+            ->whereNull('tgl_tolak')
+            ->whereBetween('created_at', [$startThisMonth, $now])
+            ->count();
+
+        $lastMonth = perbaikan_it::whereNull('deleted_at')
+            ->whereNotNull('tgl_kerjakan')
+            ->whereNull('tgl_selesai')
+            ->whereNull('tgl_tolak')
+            ->whereBetween('created_at', [$startLastMonth, $endLastMonth])
+            ->count();
+
+        $summary['dikerjakan'] = $this->calculatePercent($thisMonth, $lastMonth);
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | SELESAI
+        |--------------------------------------------------------------------------
+        */
+        $thisMonth = perbaikan_it::whereNull('deleted_at')
+            ->whereNotNull('tgl_selesai')
+            ->whereNull('tgl_tolak')
+            ->whereBetween('created_at', [$startThisMonth, $now])
+            ->count();
+
+        $lastMonth = perbaikan_it::whereNull('deleted_at')
+            ->whereNotNull('tgl_selesai')
+            ->whereNull('tgl_tolak')
+            ->whereBetween('created_at', [$startLastMonth, $endLastMonth])
+            ->count();
+
+        $summary['selesai'] = $this->calculatePercent($thisMonth, $lastMonth);
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | DITOLAK
+        |--------------------------------------------------------------------------
+        */
+        $thisMonth = perbaikan_it::whereNull('deleted_at')
+            ->whereNotNull('tgl_tolak')
+            ->whereBetween('created_at', [$startThisMonth, $now])
+            ->count();
+
+        $lastMonth = perbaikan_it::whereNull('deleted_at')
+            ->whereNotNull('tgl_tolak')
+            ->whereBetween('created_at', [$startLastMonth, $endLastMonth])
+            ->count();
+
+        $summary['ditolak'] = $this->calculatePercent($thisMonth, $lastMonth);
+
+        // ambil data tiket perbaikan IT dengan relasi user dan kategori, urutkan berdasarkan updated_at desc
         $show = perbaikan_it::leftJoin('users', 'perbaikan_it.pegawai_id', '=', 'users.id')
                             ->leftJoin('perbaikan_it_kategori', function($join) {
                                 $join->on('perbaikan_it.kategori_id', '=', 'perbaikan_it_kategori.id')
@@ -59,10 +151,27 @@ class TiketController extends Controller
         // }
 
         $data = [
+            'summary' => $summary,
             'roles' => $roles,
             'show' => $show,
         ];
 
         return response()->json($data, 200);
+    }
+
+    // fungsi untuk menghitung persentase perubahan dari bulan lalu ke bulan ini
+    private function calculatePercent($thisMonth, $lastMonth)
+    {
+        if ($lastMonth > 0) {
+            $percent = (($thisMonth - $lastMonth) / $lastMonth) * 100;
+        } else {
+            $percent = $thisMonth > 0 ? 100 : 0;
+        }
+
+        return [
+            'total' => $thisMonth,
+            'percent' => round($percent, 2),
+            'is_up' => $percent >= 0
+        ];
     }
 }
