@@ -8,76 +8,136 @@ use App\Models\perbaikan_it;
 use App\Models\perbaikan_it_kategori;
 use App\Models\perbaikan_it_lampiran;
 use App\Services\WhatsAppService;
+use App\Services\WebhookRouter;
 use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
 use Str;
 
 class HelpdeskController extends Controller
 {
-    public function kirim($id, WhatsAppService $wa)
+    // public function kirim($id, WhatsAppService $wa)
+    // {
+    //     $tiket = perbaikan_it::with('kategori')->findOrFail($id);
+
+    //     if (!$tiket->no_wa) {
+    //         return response()->json(['error' => 'Nomor WA kosong'], 400);
+    //     }
+
+    //     $no = preg_replace('/[^0-9]/', '', $tiket->no_wa);
+    //     if (substr($no, 0, 1) === '0') {
+    //         $no = '62' . substr($no, 1);
+    //     }
+
+    //     $pesan =
+    //         "📌 *TIKET IT*\n\n".
+    //         "No Tiket : {$tiket->tiket_id}\n".
+    //         "Nama : {$tiket->nama}\n".
+    //         "Unit : {$tiket->unit}\n".
+    //         "Kategori : {$tiket->kategori?->nama}\n".
+    //         "Keluhan : {$tiket->title}\n".
+    //         "Status : ".($tiket->tgl_selesai ? 'Selesai' : 'Diproses');
+
+    //     // print_r($pesan); die();
+    //     $response = $wa->sendText($no, $pesan);
+
+    //     return response()->json([
+    //         'success' => true,
+    //         'wa_response' => $response->json()
+    //     ]);
+    // }
+
+    // public function store(Request $request, WhatsAppService $wa)
+    // {
+    //     $user = Auth::user();
+    //     $no_wa = $user->no_hp;
+
+    //     if (!$no_wa) {
+    //         return response()->json(['error' => 'Nomor WA pengguna tidak ditemukan, silakan melengkapi profil dibagian no.HP'], 400);
+    //     }
+
+    //     $tiket = perbaikan_it::create([
+    //         'judul' => $request->judul,
+    //         'deskripsi' => $request->deskripsi,
+    //     ]);
+
+    //     $no = preg_replace('/[^0-9]/', '', $no_wa);
+    //     if (substr($no, 0, 1) === '0') {
+    //         $no = '62' . substr($no, 1);
+    //     }
+
+    //     $pesan =
+    //         "📌 *TIKET IT BERHASIL DIBUAT*\n\n".
+    //         "No Tiket : {$tiket->tiket_id}\n".
+    //         "Nama : {$tiket->nama}\n".
+    //         "Unit : {$tiket->unit}\n".
+    //         "Kategori : {$tiket->kategori->nama}\n".
+    //         "Keluhan : {$tiket->title}\n\n".
+    //         "Tim IT akan segera memproses."
+    //     ;
+
+    //     $response = $wa->sendText($no, $pesan);
+
+    //     return response()->json(['success' => true]);
+    // }
+
+    // ###########
+    // Method verify() hanya dipakai sekali saja, yaitu saat kamu klik:
+    // Verify & Save di dashboard Webhook Facebook Developer, untuk memastikan bahwa endpoint
+    // webhook kamu benar-benar valid dan bisa menerima request dari Facebook/WhatsApp.
+    public function verify(Request $request)
     {
-        $tiket = perbaikan_it::with('kategori')->findOrFail($id);
+        $verify_token = env('WHATSAPP_VERIFY_TOKEN');
 
-        if (!$tiket->no_wa) {
-            return response()->json(['error' => 'Nomor WA kosong'], 400);
+        if ($request->hub_verify_token === $verify_token) {
+            return response($request->hub_challenge, 200);
         }
 
-        $no = preg_replace('/[^0-9]/', '', $tiket->no_wa);
-        if (substr($no, 0, 1) === '0') {
-            $no = '62' . substr($no, 1);
-        }
-
-        $pesan =
-            "📌 *TIKET IT*\n\n".
-            "No Tiket : {$tiket->tiket_id}\n".
-            "Nama : {$tiket->nama}\n".
-            "Unit : {$tiket->unit}\n".
-            "Kategori : {$tiket->kategori?->nama}\n".
-            "Keluhan : {$tiket->title}\n".
-            "Status : ".($tiket->tgl_selesai ? 'Selesai' : 'Diproses');
-
-        // print_r($pesan); die();
-        $response = $wa->sendText($no, $pesan);
-
-        return response()->json([
-            'success' => true,
-            'wa_response' => $response->json()
-        ]);
+        return response('Invalid verification token', 403);
     }
 
-    public function store(Request $request, WhatsAppService $wa)
+    // Method handle() akan menerima semua request masuk dari WhatsApp, baik itu pesan baru, status pengiriman, dsb.
+    public function handle(Request $request)
     {
-        $user = Auth::user();
-        $no_wa = $user->no_hp;
+        app(WebhookRouter::class)->process($request->all());
 
-        if (!$no_wa) {
-            return response()->json(['error' => 'Nomor WA pengguna tidak ditemukan, silakan melengkapi profil dibagian no.HP'], 400);
-        }
-
-        $tiket = perbaikan_it::create([
-            'judul' => $request->judul,
-            'deskripsi' => $request->deskripsi,
-        ]);
-
-        $no = preg_replace('/[^0-9]/', '', $no_wa);
-        if (substr($no, 0, 1) === '0') {
-            $no = '62' . substr($no, 1);
-        }
-
-        $pesan =
-            "📌 *TIKET IT BERHASIL DIBUAT*\n\n".
-            "No Tiket : {$tiket->tiket_id}\n".
-            "Nama : {$tiket->nama}\n".
-            "Unit : {$tiket->unit}\n".
-            "Kategori : {$tiket->kategori->nama}\n".
-            "Keluhan : {$tiket->title}\n\n".
-            "Tim IT akan segera memproses."
-        ;
-
-        $response = $wa->sendText($no, $pesan);
-
-        return response()->json(['success' => true]);
+        return response()->json(['status' => 'ok']);
     }
+
+    // public function handle(Request $request)
+    // {
+    //     $data = $request->all();
+
+        // if (!isset($data['entry'][0]['changes'][0]['value']['messages'][0])) {
+        //     return response()->json(['status' => 'no message']);
+        // }
+
+    //     $messageData = $data['entry'][0]['changes'][0]['value']['messages'][0];
+
+    //     if (!isset($messageData['type']) || $messageData['type'] !== 'text') {
+    //         return response()->json(['status' => 'ignored']);
+    //     }
+
+    //     $from = $messageData['from']; // nomor pengirim
+    //     $text = $messageData['text']['body'] ?? '';
+
+    //     // Auto reply welcome
+    //     app(WhatsAppService::class)->sendButtons(
+    //         $from,
+    //         "👋 Halo!\n\nTerima kasih sudah menghubungi IT Support.\nKami siap membantu 😊",
+    //         [
+    //             [
+    //                 "id" => "buat_tiket",
+    //                 "title" => "Buat Tiket"
+    //             ],
+    //             [
+    //                 "id" => "status_tiket",
+    //                 "title" => "Status Tiket"
+    //             ]
+    //         ]
+    //     );
+
+    //     return response()->json(['status' => 'success']);
+    // }
 
     public function kirimTiket(Request $request, WhatsAppService $wa)
     {
