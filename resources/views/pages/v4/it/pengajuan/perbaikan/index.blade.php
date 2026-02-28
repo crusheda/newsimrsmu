@@ -4,17 +4,17 @@
     <div class="container-fluid page-container main-body-container">
         <div class="page-header-breadcrumb mb-3">
             <div class="d-flex align-center justify-content-between flex-wrap">
-                <h1 class="page-title fw-medium fs-18 mb-0">
+                <h1 class="page-title fw-medium fs-18 mb-0 pe-none">
                     Pengajuan <b class="text-primary link-underline-primary text-decoration-underline">Perbaikan IT</b>
                 </h1>
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item pe-none">
                         <a role="button">IT</a>
                     </li>
-                    <li class="breadcrumb-item" aria-current="page">
+                    <li class="breadcrumb-item pe-none" aria-current="page">
                         Tiket Pengajuan
                     </li>
-                    <li class="breadcrumb-item active" aria-current="page">
+                    <li class="breadcrumb-item pe-none active" aria-current="page">
                         Perbaikan IT
                     </li>
                 </ol>
@@ -41,7 +41,7 @@
                                             </div>
                                             <p class="text-muted fs-11 mb-0 lh-1">
                                                 <span class="percent text-info me-1 fw-medium">
-                                                    <i class="ri-arrow-down-s-line me-1 align-middle"></i>0%
+                                                    <i class="ri-subtract-line me-1 align-middle"></i>0%
                                                 </span>
                                                 <span>this month</span>
                                             </p>
@@ -71,7 +71,7 @@
                                             </div>
                                             <p class="text-muted fs-11 mb-0 lh-1">
                                                 <span class="percent text-warning me-1 fw-medium">
-                                                    <i class="ri-arrow-up-s-line me-1 align-middle"></i>0%
+                                                    <i class="ri-subtract-line me-1 align-middle"></i>0%
                                                 </span>
                                                 <span>this month</span>
                                             </p>
@@ -101,7 +101,7 @@
                                             </div>
                                             <p class="text-muted fs-11 mb-0 lh-1">
                                                 <span class="percent text-success me-1 fw-medium">
-                                                    <i class="ri-arrow-down-s-line me-1 align-middle"></i>0%
+                                                    <i class="ri-subtract-line me-1 align-middle"></i>0%
                                                 </span>
                                                 <span>this month</span>
                                             </p>
@@ -131,7 +131,7 @@
                                             </div>
                                             <p class="text-muted fs-11 mb-0 lh-1">
                                                 <span class="percent text-danger me-1 fw-medium">
-                                                    <i class="ri-arrow-up-s-line me-1 align-middle"></i>0%
+                                                    <i class="ri-subtract-line me-1 align-middle"></i>0%
                                                 </span>
                                                 <span>this month</span>
                                             </p>
@@ -151,10 +151,10 @@
                 <div class="row">
 
                     <div class="col-md-12">
-                        <div class="card custom-card mb-3">
+                        <div class="card custom-card card-bg-light mb-3">
                             <div class="card-header justify-content-between">
                                 <div class="card-title">
-                                    Buat <b class="text-pink">Tiket</b>
+                                    <i class="ri-add-box-line me-1"></i> Buat <b class="text-pink">Tiket</b>
                                 </div>
                                 <div class="d-flex">
                                     {{-- <button class="btn btn-sm btn-primary btn-wave waves-light"><i class="ri-add-line fw-medium align-middle me-1"></i> Buat Sekarang</button> --}}
@@ -215,7 +215,7 @@
                         <div class="card custom-card">
                             <div class="card-header justify-content-between">
                                 <div class="card-title">
-                                    Daftar <b class="text-primary">Tiket</b>
+                                    <i class="ri-table-line me-1"></i> Daftar <b class="text-primary">Tiket</b>
                                 </div>
                                 <button id="btn-refresh" class="btn btn-sm btn-warning btn-wave waves-light" onclick="refresh()">
                                     <i class="ri-refresh-line fw-medium align-middle me-1"></i> Refresh
@@ -494,11 +494,17 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td>
-                                    ${item.ket_pengaduan}
-                                    <figcaption class="blockquote-footer mt-0 mb-0 text-muted op-7">
-                                        <cite title="Source Title" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" title="Tanggal Pengaduan">${item.tgl_pengaduan}</cite>
-                                    </figcaption>
+                                <td style='white-space: normal !important;word-wrap: break-word;'>
+                                    <div class='d-flex justify-content-start align-items-center'>
+                                        <div class='d-flex flex-column'>
+                                            <h6 class='mb-0 text-truncate fs-14'>
+                                                ${item.ket_pengaduan}
+                                            </h6>
+                                            <figcaption class="blockquote-footer mt-0 mb-0 text-muted op-7">
+                                                <cite data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" title="Tanggal Pengaduan">${item.tgl_pengaduan}</cite>
+                                            </figcaption>
+                                        </div>
+                                    </div>
                                 </td>
                                 <td>${status}</td>
                                 <td class="text-start">${updated}</td>
@@ -518,7 +524,15 @@
                         language: {
                             searchPlaceholder: 'Cari Data...',
                             sSearch: '',
-                        }
+                        },
+                        bAutoWidth: false,
+                        aoColumns : [
+                            { sWidth: '10%' },
+                            { sWidth: '20%' },
+                            { sWidth: '50%' },
+                            { sWidth: '10%' },
+                            { sWidth: '10%' },
+                        ],
                     });
 
                     // AUTOCOMPLETE INPUT JUDUL

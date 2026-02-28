@@ -20,8 +20,16 @@ use \App\Http\Controllers\Whatsapp\HelpdeskController;
 use \App\Http\Controllers\v4\Akun\AksesJabatanController;
 use \App\Http\Controllers\v4\Akun\StrukturOrganisasiController;
 use \App\Http\Controllers\v4\Akun\AkunPenggunaController;
+use \App\Http\Controllers\v4\Administrasi\Berkas\LaporanBulananController;
 
 Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU v.4
+
+    // PERBAIKAN TIKET IT
+    Route::post('perbaikanit/tiket/kirim', [HelpdeskController::class, 'kirimTiket']);
+    // WHATSAPP API
+    // Route::post('whatsapp/send-message', [HelpdeskController::class, 'store']);
+    // Route::get('whatsapp/send-message/{id}', [HelpdeskController::class, 'kirim']);
+
     // PROFIL AKUN
     Route::get('provinsi/{id}', [ProfilController::class, 'apiProvinsi']);
     Route::get('kota/{id}', [ProfilController::class, 'apiKota']);
@@ -78,13 +86,25 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
         // Route::get('sdi/pegawai/grafik/5', [PegawaiController::class, 'grafik5'])->name('apiGrafikSDI5'); // Status Pegawai
         // Route::get('sdi/pegawai/grafik/6', [PegawaiController::class, 'grafik6'])->name('apiGrafikSDI6'); // Status Perkawinan
 
-    // WHATSAPP API
-    // Route::post('whatsapp/send-message', [HelpdeskController::class, 'store']);
-    // Route::get('whatsapp/send-message/{id}', [HelpdeskController::class, 'kirim']);
-
-    Route::post('perbaikanit/tiket/kirim', [HelpdeskController::class, 'kirimTiket']);
+    // ADMINISTRASI
+        // BERKAS
+        Route::get('administrasi/berkas/laporan/preview/{id}', [LaporanBulananController::class, 'previewLaporan']);
+        Route::get('administrasi/berkas/laporan/catatan/{id}', [LaporanBulananController::class, 'showCatatan']);
+        Route::post('administrasi/berkas/laporan/catatan/store', [LaporanBulananController::class, 'storeCatatan']);
+        Route::delete('administrasi/berkas/laporan/catatan/{id}/delete', [LaporanBulananController::class, 'deleteCatatan']);
+        Route::get('administrasi/berkas/laporan/table/verif/{id}', [LaporanBulananController::class, 'verif']);
+        Route::get('administrasi/berkas/laporan/table/verif/{id}/batal', [LaporanBulananController::class, 'batalVerif']);
+        Route::get('administrasi/berkas/laporan/table/verif/{id}/user/{user}', [LaporanBulananController::class, 'verifUser']);
+        Route::get('administrasi/berkas/laporan/formverif/{id}', [LaporanBulananController::class, 'formVerif']);
+        Route::get('administrasi/berkas/laporan/formupload/{id}', [LaporanBulananController::class, 'formUpload']);
+        Route::get('administrasi/berkas/laporan/table/{id}/verif', [LaporanBulananController::class, 'tableVerif']);
+        Route::get('administrasi/berkas/laporan/table/{id}', [LaporanBulananController::class, 'table']);
+        Route::get('administrasi/berkas/laporan/getubah/{id}',[LaporanBulananController::class, 'getUbah']);
+        Route::get('administrasi/berkas/laporan/hapus/{id}',[LaporanBulananController::class, 'hapus']);
+        Route::post('administrasi/berkas/laporan/ubah/{id}',[LaporanBulananController::class, 'ubah']);
 });
 
+// WHATSAPP API WEBHOOK
 Route::get('perbaikanit/tiket/webhook', [HelpdeskController::class, 'verify']);
 Route::post('perbaikanit/tiket/webhook', [HelpdeskController::class, 'handle']);
 

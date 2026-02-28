@@ -11,7 +11,7 @@
                         data-bs-html="true" title="Kembali">
                         <i class="bx bx-chevron-left"></i>
                     </button>
-                    <span class="align-middle">
+                    <span class="align-middle pe-none">
                         Struktur <b class="text-primary">Organisasi</b>
                     </span>
                     {{-- <span class="badge bg-success-transparent align-middle ms-1">TAMBAH</span> --}}
@@ -23,7 +23,7 @@
                     <li class="breadcrumb-item">
                         <a role="button" onclick="window.location.href='{{ route('v4.akun.strukturorganisasi') }}'">Struktur Organisasi</a>
                     </li>
-                    <li class="breadcrumb-item active" aria-current="page">
+                    <li class="breadcrumb-item pe-none active" aria-current="page">
                         Tambah
                     </li>
                 </ol>

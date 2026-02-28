@@ -22,6 +22,7 @@ use \App\Http\Controllers\v4\IT\TiketController;
 use \App\Http\Controllers\v4\Akun\AksesJabatanController;
 use \App\Http\Controllers\v4\Akun\StrukturOrganisasiController;
 use \App\Http\Controllers\v4\Akun\AkunPenggunaController;
+use \App\Http\Controllers\v4\Administrasi\Berkas\LaporanBulananController;
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function () { // SIMRSMU v.4
     Route::get('dashboard', [DashboardController::class, 'index'])->name('v4.dashboard');
@@ -41,6 +42,13 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function 
 
         // AKUN PENGGUNA
         Route::resource('akun/pengguna', AkunPenggunaController::class)->names('v4.akun.akunpengguna');
+
+    // ADMINISTRASI
+        // BERKAS
+        Route::get('administrasi/berkas/laporan', [LaporanBulananController::class, 'index'])->name('v4.administrasi.berkas.laporan');
+        Route::get('administrasi/berkas/laporan/verif', [LaporanBulananController::class, 'showVerif'])->name('v4.administrasi.berkas.laporan.verif');
+        Route::get('administrasi/berkas/laporan/{id}', [LaporanBulananController::class, 'show'])->name('v4.administrasi.berkas.laporan.show');
+        Route::post('administrasi/berkas/laporan/store', [LaporanBulananController::class, 'store'])->name('v4.administrasi.berkas.laporan.store');
 
     // LOGOUT ROUTE
     Route::post('logout', [AuthController::class, 'logout'])->name('v4.logout');
