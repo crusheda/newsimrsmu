@@ -21,11 +21,13 @@ use \App\Http\Controllers\v4\Akun\AksesJabatanController;
 use \App\Http\Controllers\v4\Akun\StrukturOrganisasiController;
 use \App\Http\Controllers\v4\Akun\AkunPenggunaController;
 use \App\Http\Controllers\v4\Administrasi\Berkas\LaporanBulananController;
+use \App\Http\Controllers\v4\Administrasi\Berkas\RapatController;
 
 Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU v.4
 
     // PERBAIKAN TIKET IT
     Route::post('perbaikanit/tiket/kirim', [HelpdeskController::class, 'kirimTiket']);
+
     // WHATSAPP API
     // Route::post('whatsapp/send-message', [HelpdeskController::class, 'store']);
     // Route::get('whatsapp/send-message/{id}', [HelpdeskController::class, 'kirim']);
@@ -55,11 +57,13 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
     Route::get('aksesjabatan/data', [AksesJabatanController::class, 'table']);
     Route::post('aksesjabatan/store', [AksesJabatanController::class, 'storeAksesJabatan']);
     Route::get('aksesjabatan/hapus/{id}', [AksesJabatanController::class, 'hapusAksesJabatan']);
+
         // AKSES
         Route::get('aksesjabatan/{id}/akses', [AksesJabatanController::class, 'getAkses']);
         Route::get('aksesjabatan/akses/data', [AksesJabatanController::class, 'tableAkses']);
         Route::post('aksesjabatan/akses/store', [AksesJabatanController::class, 'storeAkses']);
         Route::get('aksesjabatan/akses/hapus/{id}', [AksesJabatanController::class, 'hapusAkses']);
+
         // JABATAN
         Route::get('aksesjabatan/jabatan/data', [AksesJabatanController::class, 'tableJabatan']);
         Route::post('aksesjabatan/jabatan/store', [AksesJabatanController::class, 'storeJabatan']);
@@ -78,6 +82,7 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
         // Route::get('sdi/pegawai/table', [PegawaiController::class, 'table'])->name('tablePegawai');
         // Route::get('sdi/pegawai/tableall', [PegawaiController::class, 'tableAll'])->name('tablePegawaiAll');
         // Route::get('sdi/pegawai/setaktif/{id}', [PegawaiController::class, 'setAktif'])->name('setaktifPegawai');
+
         // // GRAFIK INTERAKTIF
         // Route::get('sdi/pegawai/grafik/1', [PegawaiController::class, 'grafik1'])->name('apiGrafikSDI1'); // Jenis Pegawai
         // Route::get('sdi/pegawai/grafik/2', [PegawaiController::class, 'grafik2'])->name('apiGrafikSDI2'); // Jenis Kelamin
@@ -88,20 +93,31 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
 
     // ADMINISTRASI
         // BERKAS
-        Route::get('administrasi/berkas/laporan/preview/{id}', [LaporanBulananController::class, 'previewLaporan']);
-        Route::get('administrasi/berkas/laporan/catatan/{id}', [LaporanBulananController::class, 'showCatatan']);
-        Route::post('administrasi/berkas/laporan/catatan/store', [LaporanBulananController::class, 'storeCatatan']);
-        Route::delete('administrasi/berkas/laporan/catatan/{id}/delete', [LaporanBulananController::class, 'deleteCatatan']);
-        Route::get('administrasi/berkas/laporan/table/verif/{id}', [LaporanBulananController::class, 'verif']);
-        Route::get('administrasi/berkas/laporan/table/verif/{id}/batal', [LaporanBulananController::class, 'batalVerif']);
-        Route::get('administrasi/berkas/laporan/table/verif/{id}/user/{user}', [LaporanBulananController::class, 'verifUser']);
-        Route::get('administrasi/berkas/laporan/formverif/{id}', [LaporanBulananController::class, 'formVerif']);
-        Route::get('administrasi/berkas/laporan/formupload/{id}', [LaporanBulananController::class, 'formUpload']);
-        Route::get('administrasi/berkas/laporan/table/{id}/verif', [LaporanBulananController::class, 'tableVerif']);
-        Route::get('administrasi/berkas/laporan/table/{id}', [LaporanBulananController::class, 'table']);
-        Route::get('administrasi/berkas/laporan/getubah/{id}',[LaporanBulananController::class, 'getUbah']);
-        Route::get('administrasi/berkas/laporan/hapus/{id}',[LaporanBulananController::class, 'hapus']);
-        Route::post('administrasi/berkas/laporan/ubah/{id}',[LaporanBulananController::class, 'ubah']);
+            // LAPORAN RUTIN
+            Route::get('administrasi/berkas/laporan/preview/{id}', [LaporanBulananController::class, 'previewLaporan']);
+            Route::get('administrasi/berkas/laporan/catatan/{id}', [LaporanBulananController::class, 'showCatatan']);
+            Route::post('administrasi/berkas/laporan/catatan/store', [LaporanBulananController::class, 'storeCatatan']);
+            Route::delete('administrasi/berkas/laporan/catatan/{id}/delete', [LaporanBulananController::class, 'deleteCatatan']);
+            Route::get('administrasi/berkas/laporan/table/verif/{id}', [LaporanBulananController::class, 'verif']);
+            Route::get('administrasi/berkas/laporan/table/verif/{id}/batal', [LaporanBulananController::class, 'batalVerif']);
+            Route::get('administrasi/berkas/laporan/table/verif/{id}/user/{user}', [LaporanBulananController::class, 'verifUser']);
+            Route::get('administrasi/berkas/laporan/formverif/{id}', [LaporanBulananController::class, 'formVerif']);
+            Route::get('administrasi/berkas/laporan/formupload/{id}', [LaporanBulananController::class, 'formUpload']);
+            Route::get('administrasi/berkas/laporan/table/{id}/verif', [LaporanBulananController::class, 'tableVerif']);
+            Route::get('administrasi/berkas/laporan/table/{id}', [LaporanBulananController::class, 'table']);
+            Route::get('administrasi/berkas/laporan/getubah/{id}',[LaporanBulananController::class, 'getUbah']);
+            Route::get('administrasi/berkas/laporan/hapus/{id}',[LaporanBulananController::class, 'hapus']);
+            Route::post('administrasi/berkas/laporan/ubah/{id}',[LaporanBulananController::class, 'ubah']);
+
+            // RAPAT
+            Route::get('administrasi/berkas/rapat/data', [RapatController::class, 'getRapat']);
+            Route::get('administrasi/berkas/rapat/dataAll', [RapatController::class, 'getRapatAll']);
+            Route::post('administrasi/berkas/rapat/simpan', [RapatController::class, 'simpanRapat']);
+            Route::get('administrasi/berkas/rapat/data/{id}', [RapatController::class, 'detailRapat']);
+            Route::post('administrasi/berkas/rapat/data/{id}/ubah', [RapatController::class, 'ubah']);
+            Route::get('administrasi/berkas/rapat/data/{id}/hapus', [RapatController::class, 'hapusRapat']);
+            Route::get('administrasi/berkas/rapat/data/{id}/download', [RapatController::class, 'getFile']);
+            Route::get('administrasi/berkas/rapat/data/{id}/zip', [RapatController::class, 'showAll']);
 });
 
 // WHATSAPP API WEBHOOK

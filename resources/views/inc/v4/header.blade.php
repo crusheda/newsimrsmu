@@ -26,7 +26,7 @@
             </div>
             <!-- End::header-element -->
 
-            <div class="header-element  header-search header-search-content d-md-block d-none">
+            <div class="header-element  header-search header-search-content d-md-block d-none pe-none">
                 <!-- Start::header-link -->
                 <input type="text" class="header-search-bar form-control bg-white" id="header-search" placeholder="Search" spellcheck=false autocomplete="off" autocapitalize="off">
                 <a href="javascript:void(0);" class="header-search-icon border-0">

@@ -37,7 +37,7 @@
                             data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                             title="Menampilkan Semua Data Laporan Rutin Bawahan">
                             <i class="ri-file-check-line me-1"></i> <span class="align-middle">Verifikasi Laporan Bawahan</span>
-                        </button> 
+                        </button>
                     </div>
                     <div class="card-body">
                         <div class="alert alert-solid-light shadow-sm">
@@ -374,7 +374,7 @@
                         content = `<tr id="data` + item.id + `">`;
                         content += `<td><center>
                               <div class='btn-group'>
-                                <a href='javajavascript:void(0);' class='link-${colorBtn} link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle' id="dropdown-${item.id}" data-bs-toggle='dropdown' aria-expanded='false'>${item.id}</a>
+                                <a href='javascript:void(0);' class='link-${colorBtn} link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle' id="dropdown-${item.id}" data-bs-toggle='dropdown' aria-expanded='false'>${item.id}</a>
                                 <ul class='dropdown-menu dropdown-menu-end'>
                                   <li><a href='javascript:void(0);' class='dropdown-item text-info' onclick="showWordPreview(${item.id})"><i class="fa-fw fas fa-file-archive nav-icon"></i> Preview</a></li>
                                   <li><a href='javascript:void(0);' class='dropdown-item text-success' onclick="window.location.href='{{ url('/v4/administrasi/berkas/laporan/`+item.id+`') }}'"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>`;
@@ -710,7 +710,7 @@
                         message: xhr.responseText,
                         position: 'topRight'
                     });
-                }, 
+                },
                 complete: function() {
                     // Initialize tooltip setelah konten dimuat
                     $('[data-bs-toggle="tooltip"]').tooltip({
