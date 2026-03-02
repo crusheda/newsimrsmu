@@ -22,6 +22,8 @@ use \App\Http\Controllers\v4\Akun\StrukturOrganisasiController;
 use \App\Http\Controllers\v4\Akun\AkunPenggunaController;
 use \App\Http\Controllers\v4\Administrasi\Berkas\LaporanBulananController;
 use \App\Http\Controllers\v4\Administrasi\Berkas\RapatController;
+use \App\Http\Controllers\v4\Administrasi\Berkas\RKAController;
+use \App\Http\Controllers\v4\Administrasi\Berkas\RegulasiController;
 
 Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU v.4
 
@@ -118,6 +120,21 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
             Route::get('administrasi/berkas/rapat/data/{id}/hapus', [RapatController::class, 'hapusRapat']);
             Route::get('administrasi/berkas/rapat/data/{id}/download', [RapatController::class, 'getFile']);
             Route::get('administrasi/berkas/rapat/data/{id}/zip', [RapatController::class, 'showAll']);
+
+            // RKA
+            Route::get('administrasi/berkas/rka/table', [RKAController::class, 'table']);
+            Route::delete('administrasi/berkas/rka/hapus/{id}', [RKAController::class, 'hapus']);
+
+            // REGULASI
+            Route::get('administrasi/berkas/regulasi/baca/{id}', [RegulasiController::class, 'baca']);
+            Route::get('administrasi/berkas/regulasi/cetak/{id}', [RegulasiController::class, 'cetak']);
+            Route::get('administrasi/berkas/regulasi/showtambah', [RegulasiController::class, 'showTambah']);
+            Route::post('administrasi/berkas/regulasi/tambah', [RegulasiController::class, 'tambah']);
+            Route::get('administrasi/berkas/regulasi/showubah/{id}', [RegulasiController::class, 'showUbah']);
+            Route::post('administrasi/berkas/regulasi/ubah', [RegulasiController::class, 'ubah']);
+            Route::delete('administrasi/berkas/regulasi/{id}', [RegulasiController::class, 'hapus']);
+            Route::post('administrasi/berkas/regulasi/filter', [RegulasiController::class, 'cariRegulasi']);
+            Route::get('administrasi/berkas/regulasi/totalregulasi', [RegulasiController::class, 'apiTotalRegulasi']);
 });
 
 // WHATSAPP API WEBHOOK

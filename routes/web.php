@@ -24,6 +24,8 @@ use \App\Http\Controllers\v4\Akun\StrukturOrganisasiController;
 use \App\Http\Controllers\v4\Akun\AkunPenggunaController;
 use \App\Http\Controllers\v4\Administrasi\Berkas\LaporanBulananController;
 use \App\Http\Controllers\v4\Administrasi\Berkas\RapatController;
+use \App\Http\Controllers\v4\Administrasi\Berkas\RKAController;
+use \App\Http\Controllers\v4\Administrasi\Berkas\RegulasiController;
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function () { // SIMRSMU v.4
     Route::get('dashboard', [DashboardController::class, 'index'])->name('v4.dashboard');
@@ -51,11 +53,22 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function 
             Route::get('administrasi/berkas/laporan/verif', [LaporanBulananController::class, 'showVerif'])->name('v4.administrasi.berkas.laporan.verif');
             Route::get('administrasi/berkas/laporan/{id}', [LaporanBulananController::class, 'show'])->name('v4.administrasi.berkas.laporan.show');
             Route::post('administrasi/berkas/laporan/store', [LaporanBulananController::class, 'store'])->name('v4.administrasi.berkas.laporan.store');
+
             // RAPAT
             Route::get('administrasi/berkas/rapat', [RapatController::class, 'index'])->name('v4.administrasi.berkas.rapat');
-            Route::get('administrasi/berkas/rapat/{id}', [RapatController::class, 'show'])->name('v4.administrasi.berkas.rapat.show');
+            // Route::get('administrasi/berkas/rapat/{id}', [RapatController::class, 'show'])->name('v4.administrasi.berkas.rapat.show');
             Route::post('administrasi/berkas/rapat/store', [RapatController::class, 'store'])->name('v4.administrasi.berkas.rapat.store');
-            Route::delete('administrasi/berkas/rapat/{id}/hapus', [RapatController::class, 'destroy'])->name('v4.administrasi.berkas.rapat.destroy');
+            // Route::delete('administrasi/berkas/rapat/{id}/hapus', [RapatController::class, 'destroy'])->name('v4.administrasi.berkas.rapat.destroy');
+
+            // RKA
+            Route::get('administrasi/berkas/rka', [RKAController::class, 'index'])->name('v4.administrasi.berkas.rka');
+            Route::get('administrasi/berkas/rka/{id}', [RKAController::class, 'show'])->name('v4.administrasi.berkas.rka.show');
+            Route::post('administrasi/berkas/rka/store', [RKAController::class, 'store'])->name('v4.administrasi.berkas.rka.store');
+            Route::post('administrasi/berkas/rka/fileupload', [RKAController::class, 'fileupload'])->name('v4.administrasi.berkas.rka.fileupload');
+
+            // REGULASI
+            Route::get('administrasi/berkas/regulasi', [RegulasiController::class, 'index'])->name('v4.administrasi.berkas.regulasi');
+            Route::get('administrasi/berkas/regulasi/{id}/download', [RegulasiController::class, 'download'])->name('v4.administrasi.berkas.regulasi.download');
 
     // LOGOUT ROUTE
     Route::post('logout', [AuthController::class, 'logout'])->name('v4.logout');

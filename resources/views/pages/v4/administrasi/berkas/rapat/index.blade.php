@@ -423,13 +423,13 @@
                         }
                         content += "</div></center></td>";
                         content += "<td>" + item.nama + "</td><td>" +
-                                    (item.nama_kepala_user?item.nama_kepala_user:item.nama_kepala) + "</td><td>" +
+                                    (item.nama_kepala_user?item.nama_kepala_user:item.nama_kepala) + "</td><td class='text-start'>" +
                                     item.tanggal + "</td><td>" +
                                     item.lokasi + "</td><td>";
                         if (item.keterangan != null) {
                             content += item.keterangan;
                         }
-                        content += '</td><td>' +
+                        content += '</td><td class="text-start">' +
                             new Date(item.updated_at).toLocaleString("sv-SE") + '</td><td>' +
                             (item.nama_user?item.nama_user:'') + '</td>';
                         content += "</tr>";
@@ -439,6 +439,17 @@
                         // dom: 'Bfrtip',
                         order: [
                             [6, "desc"]
+                        ],
+                        bAutoWidth: false,
+                        aoColumns : [
+                            { sWidth: '5%' },
+                            { sWidth: '20%' },
+                            { sWidth: '10%' },
+                            { sWidth: '8%' },
+                            { sWidth: '10%' },
+                            { sWidth: '29%' },
+                            { sWidth: '8%' },
+                            { sWidth: '10%' },
                         ],
                         displayLength: 20,
                         lengthChange: true,
@@ -519,13 +530,13 @@
                         }
                         content += "</div></center></td>";
                         content += "<td>" + item.nama + "</td><td>" +
-                                    (item.nama_kepala_user?item.nama_kepala_user:item.nama_kepala) + "</td><td>" +
+                                    (item.nama_kepala_user?item.nama_kepala_user:item.nama_kepala) + "</td><td class='text-start'>" +
                                     item.tanggal + "</td><td>" +
                                     item.lokasi + "</td><td>";
                         if (item.keterangan != null) {
                             content += item.keterangan;
                         }
-                        content += '</td><td>' +
+                        content += '</td><td class="text-start">' +
                             new Date(item.updated_at).toLocaleString("sv-SE") + '</td><td>' +
                             (item.nama_user?item.nama_user:'') + '</td>';
                         content += "</tr>";
@@ -535,6 +546,17 @@
                         // dom: 'Bfrtip',
                         order: [
                             [6, "desc"]
+                        ],
+                        bAutoWidth: false,
+                        aoColumns : [
+                            { sWidth: '5%' },
+                            { sWidth: '20%' },
+                            { sWidth: '10%' },
+                            { sWidth: '8%' },
+                            { sWidth: '10%' },
+                            { sWidth: '29%' },
+                            { sWidth: '8%' },
+                            { sWidth: '10%' },
                         ],
                         displayLength: 20,
                         lengthChange: true,
