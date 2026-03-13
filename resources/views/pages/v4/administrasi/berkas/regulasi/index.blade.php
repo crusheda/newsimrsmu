@@ -313,7 +313,7 @@
                             </small>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group mt-3">
                         <label class="form-label">Berkas Regulasi Terupload</label>
                         <div id="berkas_regulasi"></div>
                     </div>

@@ -240,6 +240,12 @@
             //     placeholder: "",
             //     allowClear: true
             // }).val('').trigger('change');
+            // $('.selectFilterAdd').select2({
+            //     dropdownParent: $('#tambah')
+            // });
+            // $('.selectFilterEdit').select2({
+            //     dropdownParent: $('#modalEdit')
+            // });
 
             $('#open-password1').on('click', function () {
                 const input = $('#password1');
@@ -450,6 +456,7 @@
                     });
 
                     $("#role").html(html).select2({
+                        dropdownParent: $('#tambah'),
                         placeholder: "Pilih Jabatan",
                         allowClear: true
                     });
@@ -568,6 +575,7 @@
                     });
 
                     $("#edit_role").html(html).select2({
+                        dropdownParent: $('#modalEdit'),
                         placeholder: " Pilih Jabatan",
                         allowClear: true
                     });
