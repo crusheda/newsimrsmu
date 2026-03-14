@@ -6,7 +6,7 @@
         <div class="page-header-breadcrumb mb-3">
             <div class="d-flex align-center justify-content-between flex-wrap">
                 <h1 class="page-title fw-medium fs-18 mb-0 pe-none">
-                    Berkas <b class="text-warning link-underline-warning text-decoration-underline">Disposisi</b>
+                    Berkas <b class="text-warning link-underline-warning text-decoration-underline">Disposisi</b> x <b class="text-primary link-underline-primary text-decoration-underline">Surat Masuk</b>
                 </h1>
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item pe-none">
@@ -29,23 +29,21 @@
             <div class="col-sm-12">
                 <div class="card custom-card">
                     <div class="card-header d-flex align-items-center justify-content-between py-3">
-                        <h5 class="mb-0 card-title flex-grow-1">Table <a class="text-warning">Disposisi</a> x <a class="text-primary">Surat Masuk</a></h5>
-                        <div class="flex-shrink-0">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-outline-warning" id="btn-refresh" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                                    title="Tabel Disposisi Surat Masuk akan disegarkan" onclick="refresh()">
-                                    <i class="fa-fw fas fa-sync nav-icon me-1"></i> 30 Data Terbaru</button>
-                                <button type="button" class="btn btn-outline-danger" id="btn-refresh-all" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                                    title="Tampilkan Semua Data" onclick="showAll()">
-                                    <i class="fa-fw fas fa-infinity nav-icon me-1"></i> Semua Data</button>
-                                {{-- <button type="button" class="btn btn-outline-secondary" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                                    title="Informasi Sistem Disposisi" disabled>
-                                    <i class="fa-fw fas fa-info nav-icon me-1"></i><s>Informasi</s></button> --}}
-                            </div>
+                        <button type="button" class="btn btn-warning-transparent" id="btn-refresh" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                            title="Tabel Disposisi Surat Masuk akan disegarkan" onclick="refresh()">
+                            <i class="fa-fw fas fa-sync nav-icon me-1"></i> 30 Data Terbaru
+                        </button>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-danger-transparent" id="btn-refresh-all" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                title="Tampilkan Semua Data" onclick="showAll()">
+                                <i class="fa-fw fas fa-infinity nav-icon me-1"></i> Semua Data</button>
+                            {{-- <button type="button" class="btn btn-outline-secondary" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                title="Informasi Sistem Disposisi" disabled>
+                                <i class="fa-fw fas fa-info nav-icon me-1"></i><s>Informasi</s></button> --}}
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="alert alert-secondary m-2">
+                        <div class="alert alert-solid-light shadow-sm">
                             <small>
                                 <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Data default yang ditampilkan dibatasi 100 data surat <br>
                                 <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Untuk menampilkan semua data, klik tombol <i class="fas fa-infinity text-danger"></i> di atas
@@ -95,9 +93,9 @@
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">
-                        Form Upload Disposisi&nbsp;&nbsp;&nbsp;
-                    </h4>
+                    <h5 class="modal-title">
+                        Form <b class="text-primary">Upload</b> <b class="text-info">Disposisi</b>
+                    </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -137,7 +135,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="alert alert-secondary">
+                                <div class="alert alert-solid-light">
                                     <small>
                                         <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>5 mb</strong><br>
                                         <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berupa Dokumen Scan<br>
@@ -160,9 +158,9 @@
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">
-                        Form Ubah&nbsp;&nbsp;&nbsp;
-                    </h4>
+                    <h5 class="modal-title">
+                        Form <b class="text-warning">Ubah</b>
+                    </h5>
                     <div class="card-title-elements">
                       <select class="form-select form-select-sm" id="user" required></select>
                     </div>
@@ -235,9 +233,9 @@
         <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">
-                        Form Hapus&nbsp;&nbsp;&nbsp;
-                    </h4>
+                    <h5 class="modal-title">
+                        Form <b class="text-danger">Hapus</b>
+                    </h5>
                 </div>
                 <div class="modal-body">
                     <input type="text" id="id_hapus" hidden>
@@ -266,9 +264,9 @@
         <div class="modal-dialog modal-simple modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">
-                        Detail Disposisi&nbsp;&nbsp;&nbsp;
-                    </h4>
+                    <h5 class="modal-title">
+                        Detail <b class="text-info">Disposisi</b>
+                    </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -335,13 +333,13 @@
                         res.show.forEach(item => {
                             // var updet = item.updated_at.substring(0, 10);
                             content = "<tr id='data"+ item.id +"'>";
-                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-light-primary rounded btn-shadow dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>${item.id}</button><ul class='dropdown-menu dropdown-menu-right'><div class="dropdown-header noti-title"><h5 class="font-size-13 text-muted text-truncate mn-0">Menu Disposisi</h5></div>`;
+                            content += `<td><center><div class='btn-group'><a href='javascript:void(0);' class='link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'>${item.id}</a><ul class='dropdown-menu dropdown-menu-right'><div class="dropdown-header noti-title"><a class="pe-none text-muted text-truncate mn-0">Menu Disposisi</a></div>`;
                                     if (item.verif_disposisi == null) {
                                         content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="tambahDisposisi(`+item.id+`)"><i class='fas fa-plus-square me-1'></i> Tambah Disposisi</a></li>`;
-                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-info' onclick="window.open('/berkas/suratmasuk/`+item.id+`/download')"><i class='fa-fw fas fa-download nav-icon me-1'></i> Unduh Surat Masuk</a></li>`;
+                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-info' onclick="window.open('/v4/administrasi/berkas/suratmasuk/`+item.id+`/download')"><i class='fa-fw fas fa-download nav-icon me-1'></i> Unduh Surat Masuk</a></li>`;
                                     } else {
                                         content += `<li><a href='javascript:void(0);' class='dropdown-item text-success' onclick="showDisposisi(`+item.id+`)"><i class='fas fa-envelope-open-text me-1'></i> Lihat Disposisi</a></li>`;
-                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-info' onclick="window.open('/berkas/suratmasuk/`+item.id+`/download')"><i class='fa-fw fas fa-download nav-icon me-1'></i> Unduh Surat Masuk</a></li>`;
+                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-info' onclick="window.open('/v4/administrasi/berkas/suratmasuk/`+item.id+`/download')"><i class='fa-fw fas fa-download nav-icon me-1'></i> Unduh Surat Masuk</a></li>`;
                                         content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)"><i class='fas fa-trash me-1'></i> Hapus Disposisi</a></li>`;
                                     }
                             content += "</ul></center></td><td>" + item.urutan + "&nbsp;&nbsp;";
@@ -406,7 +404,11 @@
                             displayLength: 20,
                             lengthChange: true,
                             lengthMenu: [20, 35, 50, 75, 100, 500, 1000, 3000, 7000, 10000, 20000],
-                            buttons: ['copy', 'excel', 'pdf', 'colvis']
+                            // buttons: ['copy', 'excel', 'pdf', 'colvis'],
+                            language: {
+                                searchPlaceholder: 'Cari Data...',
+                                sSearch: '',
+                            }
                         });
                         $("#btn-refresh").prop('disabled', false);
                         $("#btn-refresh").find("i").removeClass("fa-spin");
@@ -433,71 +435,78 @@
                     success: function(res) {
                         $("#tampil-tbody").empty();
                         $('#dttable').DataTable().clear().destroy();
-                        res.show.forEach(item => {
-                            // var updet = item.updated_at.substring(0, 10);
-                            content = "<tr id='data"+ item.id +"'>";
-                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-light-primary rounded btn-shadow dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>${item.id}</button><ul class='dropdown-menu dropdown-menu-right'><div class="dropdown-header noti-title"><h5 class="font-size-13 text-muted text-truncate mn-0">Menu Disposisi</h5></div>`;
-                                    if (item.verif_disposisi == null) {
-                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="tambahDisposisi(`+item.id+`)"><i class='fas fa-plus-square me-1'></i> Tambah Disposisi</a></li>`;
-                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-info' onclick="window.open('/berkas/suratmasuk/`+item.id+`/download')"><i class='fa-fw fas fa-download nav-icon me-1'></i> Unduh Surat Masuk</a></li>`;
-                                    } else {
-                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-success' onclick="showDisposisi(`+item.id+`)"><i class='fas fa-envelope-open-text me-1'></i> Lihat Disposisi</a></li>`;
-                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-info' onclick="window.open('/berkas/suratmasuk/`+item.id+`/download')"><i class='fa-fw fas fa-download nav-icon me-1'></i> Unduh Surat Masuk</a></li>`;
-                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)"><i class='fas fa-trash me-1'></i> Hapus Disposisi</a></li>`;
+                        if (res.show) {
+                            res.show.forEach(item => {
+                                // var updet = item.updated_at.substring(0, 10);
+                                content = "<tr id='data"+ item.id +"'>";
+                                content += `<td><center><div class='btn-group'><a href='javascript:void(0);' class='link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'>${item.id}</a><ul class='dropdown-menu dropdown-menu-right'><div class="dropdown-header noti-title"><a class="pe-none text-muted text-truncate mn-0">Menu Disposisi</a></div>`;
+                                        if (item.verif_disposisi == null) {
+                                            content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="tambahDisposisi(`+item.id+`)"><i class='fas fa-plus-square me-1'></i> Tambah Disposisi</a></li>`;
+                                            content += `<li><a href='javascript:void(0);' class='dropdown-item text-info' onclick="window.open('/v4/administrasi/berkas/suratmasuk/`+item.id+`/download')"><i class='fa-fw fas fa-download nav-icon me-1'></i> Unduh Surat Masuk</a></li>`;
+                                        } else {
+                                            content += `<li><a href='javascript:void(0);' class='dropdown-item text-success' onclick="showDisposisi(`+item.id+`)"><i class='fas fa-envelope-open-text me-1'></i> Lihat Disposisi</a></li>`;
+                                            content += `<li><a href='javascript:void(0);' class='dropdown-item text-info' onclick="window.open('/v4/administrasi/berkas/suratmasuk/`+item.id+`/download')"><i class='fa-fw fas fa-download nav-icon me-1'></i> Unduh Surat Masuk</a></li>`;
+                                            content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)"><i class='fas fa-trash me-1'></i> Hapus Disposisi</a></li>`;
+                                        }
+                                content += "</ul></center></td><td>" + item.urutan + "&nbsp;&nbsp;";
+                                res.disposisi.forEach(val => {
+                                    if (item.id == val.id_surat) {
+                                        content += '<i class="ti ti-checkbox text-info" data-bs-toggle="tooltip" data-bs-placement="top" title="Sudah Ditindak Lanjuti"></i>';
                                     }
-                            content += "</ul></center></td><td>" + item.urutan + "&nbsp;&nbsp;";
-                            res.disposisi.forEach(val => {
-                                if (item.id == val.id_surat) {
-                                    content += '<i class="ti ti-checkbox text-info" data-bs-toggle="tooltip" data-bs-placement="top" title="Sudah Ditindak Lanjuti"></i>';
-                                }
-                            });
-                            content += "</td><td>";
-                                        if (item.tgl_surat != null) {
-                                            content += item.tgl_surat;
-                                        } else {
-                                            content += '-';
-                                        }
-                            content += "</td><td style='white-space: normal !important;word-wrap: break-word;'>"
-                                        + "<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>" + item.asal + "</h6><small class='text-truncate text-muted'>" + item.nomor + "</small></div></div></td><td style='white-space: normal !important;word-wrap: break-word;'>";
-                                        if (item.deskripsi) {
-                                            content += item.deskripsi;
-                                        } else {
-                                            content += '-';
-                                        }
-                            content += "</td><td style='white-space: normal !important;word-wrap: break-word;'><div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>";
-                                        if (item.tempat != null) {
-                                            content += item.tempat;
-                                        } else {
-                                            content += '-';
-                                        }
-                            content += "</h6><small class='text-truncate text-muted'>";
-                                        if (item.tglTo == null) {
-                                            if (item.tglFrom == null) {
-                                                content += '-';
+                                });
+                                content += "</td><td>";
+                                            if (item.tgl_surat != null) {
+                                                content += item.tgl_surat;
                                             } else {
-                                                content += item.tglFrom.substring(0, 10);
+                                                content += '-';
                                             }
-                                        } else {
-                                            content += item.tglFrom.substring(0, 10) + `&nbsp;<i class="ti ti-arrow-right-circle text-primary"></i>&nbsp;` + item.tglTo.substring(0, 10);
-                                        }
-                            content += "</small></div></div></td><td><div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>"
-                                        + new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 19) + "</h6><small class='text-truncate text-muted'>";
-                                        res.user.forEach(val => {
-                                            if (item.user == val.id) {
-                                                content += val.nama;
+                                content += "</td><td style='white-space: normal !important;word-wrap: break-word;'>"
+                                            + "<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>" + item.asal + "</h6><small class='text-truncate text-muted'>" + item.nomor + "</small></div></div></td><td style='white-space: normal !important;word-wrap: break-word;'>";
+                                            if (item.deskripsi) {
+                                                content += item.deskripsi;
+                                            } else {
+                                                content += '-';
                                             }
-                                        })
-                            content += "</small></div></div></td></td></tr>";
-                            $('#tampil-tbody').append(content);
-                        });
+                                content += "</td><td style='white-space: normal !important;word-wrap: break-word;'><div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>";
+                                            if (item.tempat != null) {
+                                                content += item.tempat;
+                                            } else {
+                                                content += '-';
+                                            }
+                                content += "</h6><small class='text-truncate text-muted'>";
+                                            if (item.tglTo == null) {
+                                                if (item.tglFrom == null) {
+                                                    content += '-';
+                                                } else {
+                                                    content += item.tglFrom.substring(0, 10);
+                                                }
+                                            } else {
+                                                content += item.tglFrom.substring(0, 10) + `&nbsp;<i class="ti ti-arrow-right-circle text-primary"></i>&nbsp;` + item.tglTo.substring(0, 10);
+                                            }
+                                content += "</small></div></div></td><td><div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>"
+                                            + new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 19) + "</h6><small class='text-truncate text-muted'>";
+                                            res.user.forEach(val => {
+                                                if (item.user == val.id) {
+                                                    content += val.nama;
+                                                }
+                                            })
+                                content += "</small></div></div></td></td></tr>";
+                                $('#tampil-tbody').append(content);
+                            });
+                        }
                         var table = $('#dttable').DataTable({
+                            dom: 'Bfrtip',
                             order: [
                                 [6, "desc"]
                             ],
                             displayLength: 20,
                             lengthChange: true,
                             lengthMenu: [20, 35, 50, 75, 100, 500, 1000, 3000, 7000, 10000, 20000],
-                            buttons: ['copy', 'excel', 'pdf', 'colvis']
+                            buttons: ['copy', 'excel', 'pdf', 'colvis'],
+                            language: {
+                                searchPlaceholder: 'Cari Data...',
+                                sSearch: '',
+                            }
                         });
                         $("#btn-refresh-all").prop('disabled', false);
                         $("#btn-refresh-all").find("i").removeClass("fa-spin");
@@ -605,7 +614,7 @@
                         res.show.forEach(item => {
                             if (item.filename != null) {
                                 $('#showBtnDownload').empty();
-                                $('#showBtnDownload').append(`<button class='btn btn-info' onclick="window.open('/berkas/disposisi/`+item.id_surat+`')"><i class='fas fa-download me-1'></i> Unduh <span class="badge bg-light text-dark">`+item.title+`</span></button>`);
+                                $('#showBtnDownload').append(`<button class='btn btn-info' onclick="window.open('/v4/administrasi/berkas/disposisi/`+item.id_surat+`')"><i class='fas fa-download me-1'></i> Unduh <span class="badge bg-light text-dark">`+item.title+`</span></button>`);
                             }
                             // var updet = item.updated_at.substring(0, 10);
                             content = "<tr id='data"+ item.id +"' style='font-size:13px'><td>";

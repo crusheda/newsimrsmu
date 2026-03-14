@@ -42,6 +42,7 @@
 
     <!-- Style Css -->
     <link href="{{ asset('css/styles.css') }}" rel="stylesheet" >
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet" >
 
     <!-- Icons Css -->
     <link href="{{ asset('css/icons.css') }}" rel="stylesheet" >
@@ -190,22 +191,22 @@
                         </div>
                         <div class="slide-left" id="slide-left"><svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24" height="24" viewBox="0 0 24 24"> <path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"></path> </svg></div>
                         <ul class="main-menu flex-fill justify-content-center">
-                            <li class="slide">
-                                <a class="side-menu__item" href="#home">
+                            <li class="slide active">
+                                <a class="side-menu__item active" href="#home">
                                     <span class="side-menu__label">Beranda</span>
                                 </a>
                             </li>
                             <li class="slide">
-                                <a href="#feature" class="side-menu__item">
-                                    <span class="side-menu__label">Profil</span>
+                                <a href="#fitur" class="side-menu__item">
+                                    <span class="side-menu__label">Fitur</span>
                                 </a>
                             </li>
-                            {{-- <li class="slide">
-                                <a href="#service" class="side-menu__item">
-                                    <span class="side-menu__label">Services</span>
+                            <li class="slide">
+                                <a href="#faq" class="side-menu__item">
+                                    <span class="side-menu__label">FAQ's</span>
                                 </a>
                             </li>
-                            <li class="slide has-sub">
+                            {{-- <li class="slide has-sub">
                                 <a href="javascript:void(0);" class="side-menu__item">
                                     <span class="side-menu__label">Pages</span>
                                     <i class="fe fe-chevron-right side-menu__angle"></i>
@@ -249,8 +250,8 @@
                                 </a>
                             </li> --}}
                             <li class="slide">
-                                <a href="#contactus" class="side-menu__item">
-                                    <span class="side-menu__label">Kontak Kami</span>
+                                <a href="#kustom" class="side-menu__item">
+                                    <span class="side-menu__label">Pengajuan</span>
                                 </a>
                             </li>
                         </ul>
@@ -302,7 +303,16 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-xl-6 my-auto">
-                            <div class="d-inline-flex align-items-center gap-2 text-default badge bg-white border fs-13 rounded-pill"><span class="avatar avatar-xs avatar-rounded bg-warning"><i class="ri-pulse-line fs-14"></i></span>Sistem Internal RS</div>
+                            <div class="d-inline-flex align-items-center gap-2 text-default badge bg-white border fs-13 rounded-pill">
+                                <span class="avatar avatar-xs avatar-rounded bg-warning">
+                                    <i class="ri-pulse-line fs-14"></i>
+                                </span>Internal Hospital System
+                            </div>
+                            <div class="d-inline-flex align-items-center gap-2 text-default badge bg-white border fs-13 rounded-pill">
+                                <span class="avatar avatar-xs avatar-rounded bg-info">
+                                    <i class="ri-webhook-line fs-14"></i>
+                                </span>Integrated
+                            </div>
                             <h1 class="fw-semibold mt-3 landing-banner-heading">Sistem Informasi <br> RS <span class="text-primary">PKU Muhammadiyah</span> Sukoharjo</h1>
                             <span class="d-block fs-18">Platform yang mendukung manajemen data yang efektif, komunikasi yang lancar antar bagian manajemen, mempermudah proses administrasi, dan meningkatkan kinerja pegawai dengan dukungan sistem yang terintegrasi dan interkoneksi.</span>
                             <div class="btn-list banner-buttons">
@@ -402,17 +412,17 @@
             <!-- End:: Section-1 -->
 
             <!-- Start:: Section-3 -->
-            <section class="section" id="service">
+            <section class="section" id="fitur">
                 <div class="container">
                     <div class="heading-section">
                         <div class="heading-subtitle">Fitur</div>
                         <div class="heading-title">Fitur Unggulan</div>
                         <div class="heading-description">
-                            Beberapa fitur unggulan yang ditawarkan oleh sistem informasi manajemen rumah sakit untuk meningkatkan efisiensi operasional dan kualitas layanan kesehatan.
+                            Fitur-fitur unggulan dalam Sistem Informasi Manajemen Rumah Sakit yang dirancang untuk meningkatkan efisiensi operasional dan kualitas layanan.
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-xl-7">
+                        <div class="col-xl-8">
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="card custom-card landing-services-card primary">
@@ -424,8 +434,8 @@
                                                     </span>
                                                 </div>
                                                 <div>
-                                                    <h6 class="d-block fw-semibold">Customizable Dashboards</h6>
-                                                    <span class="d-block text-muted">Personalize your dashboard with customizable widgets & modules.</span>
+                                                    <h6 class="d-block fw-semibold">Pengelolaan Administrasi Terintegrasi</h6>
+                                                    <span class="d-block text-muted text-justify">Memudahkan pengelolaan berbagai proses administrasi rumah sakit dalam satu sistem yang terpusat, sehingga data lebih terorganisir dan mudah diakses oleh pihak manajemen.</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -441,8 +451,8 @@
                                                     </span>
                                                 </div>
                                                 <div>
-                                                    <h6 class="d-block fw-semibold">Real-Time Analytics</h6>
-                                                    <span class="d-block text-muted">Access real-time data to drive fast, informed decisions.</span>
+                                                    <h6 class="d-block fw-semibold">Otomatisasi Pengolahan Data dan Laporan</h6>
+                                                    <span class="d-block text-muted text-justify">Membantu menghasilkan laporan secara cepat dan akurat melalui proses pengolahan data yang terintegrasi, sehingga mengurangi pekerjaan manual dan meminimalkan kesalahan.</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -458,8 +468,8 @@
                                                     </span>
                                                 </div>
                                                 <div>
-                                                    <h6 class="d-block fw-semibold">User Management</h6>
-                                                    <span class="d-block text-muted">Efficiently manage roles, permissions, and team access.</span>
+                                                    <h6 class="d-block fw-semibold">Monitoring dan Evaluasi Operasional</h6>
+                                                    <span class="d-block text-muted text-justify">Menyediakan informasi dan data yang diperlukan untuk memantau serta mengevaluasi aktivitas operasional rumah sakit secara lebih efektif.</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -475,8 +485,8 @@
                                                     </span>
                                                 </div>
                                                 <div>
-                                                    <h6 class="d-block fw-semibold">Seamless Integration</h6>
-                                                    <span class="d-block text-muted">Integrate effortlessly with third-party tools and services.</span>
+                                                    <h6 class="d-block fw-semibold">Meningkatkan Efektivitas Kinerja Karyawan</h6>
+                                                    <span class="d-block text-muted text-justify">Dengan sistem yang terstruktur dan terintegrasi, proses kerja menjadi lebih jelas, terorganisir, dan efisien</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -484,7 +494,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xl-5 my-auto">
+                        <div class="col-xl-4 my-auto">
                             <div class="services-image-container text-end d-xl-block d-none">
                                 <img src="{{ asset('images/media/media-67.png') }}" alt="" class="img-fluid">
                             </div>
@@ -508,8 +518,8 @@
                             </span>
                         </div>
                         <div class="btn-list">
-                            <a href="index.html" class="btn btn-danger btn-lg btn-w-md d-inline-flex align-items-center">View Demo<i class="ti ti-arrow-narrow-right ms-2 custom-arrow1"></i></a>
-                            <button class="btn btn-success btn-lg btn-w-md d-inline-flex align-items-center">Buy Now<i class="ti ti-shopping-cart ms-2"></i></button>
+                            <a href="index.html" class="btn btn-danger btn-lg btn-w-md d-inline-flex align-items-center">Hubungi Bagian SDI<i class="ri-phone-line ms-2"></i></a>
+                            <button class="btn btn-success btn-lg btn-w-md d-inline-flex align-items-center">Lupa Password Akun<i class="ri-rotate-lock-line ms-2"></i></button>
                         </div>
                     </div>
                 </div>
@@ -517,7 +527,7 @@
             <!-- End:: Buy Now Section -->
 
             <!-- Start:: Section-5 -->
-            <section class="section">
+            <section class="section" id="faq">
                 <div class="container">
                     <div class="heading-section">
                         <div class="heading-subtitle">FAQ's</div>
@@ -642,10 +652,10 @@
             <!-- End:: Setion-7 -->
 
             <!-- Start:: Section-8 -->
-            <section class="section">
+            <section class="section" id="kustom">
                 <div class="container">
                     <div class="heading-section">
-                        <div class="heading-subtitle">Permintaan Kustom</div>
+                        <div class="heading-subtitle">Efektifitas</div>
                         <div class="heading-title">Pengajuan Fitur Sesuai Kebutuhan</div>
                         <div class="heading-description">
                             Kami memahami bahwa setiap rumah sakit memiliki kebutuhan bermacam-macam. Oleh karena itu, kami menyediakan layanan pengajuan fitur tambahan yang dapat disesuaikan dengan kebutuhan spesifik rumah sakit Anda. Tim pengembangan kami siap bekerja sama untuk mengimplementasikan fitur-fitur baru yang akan meningkatkan efisiensi operasional dan kualitas layanan kesehatan di rumah sakit Anda.
@@ -703,7 +713,7 @@
             <!-- End:: Section-8 -->
 
             <!-- Start:: Section-9 -->
-            <section class="section">
+            {{-- <section class="section">
                 <div class="container">
                     <div class="heading-section">
                         <div class="heading-subtitle">Supporting</div>
@@ -803,7 +813,7 @@
                         </div>
                     </div>
                 </div>
-            </section>
+            </section> --}}
             <!-- End:: Section-9 -->
 
             <!-- Start:: Section-10 -->
@@ -1128,7 +1138,7 @@
     <script src="{{ asset('libs/swiper/swiper-bundle.min.js') }}"></script>
 
     <!-- Defaultmenu JS -->
-    <script src="{{ asset('js/defaultmenu.min.js') }}"></script>
+    {{-- <script src="{{ asset('js/defaultmenu.min.js') }}"></script> --}}
 
     <!-- Internal Landing JS -->
     <script src="{{ asset('js/landing.js') }}"></script>
@@ -1138,6 +1148,13 @@
 
     <!-- Sticky JS -->
     <script src="{{ asset('js/sticky.js') }}"></script>
+
+    {{-- <script>
+        $(document).ready(function() {
+            $('.slide').removeClass('active');
+            $('.side-menu__item').removeClass('active');
+        })
+    </script> --}}
 
 </body>
 </html>

@@ -32,7 +32,7 @@
                             <tr>
                                 <th class="cell-fit">ID DB</th>
                                 <th class="cell-fit">ID USER</th>
-                                <th>NAMA USER</th>
+                                <th>NAMA USER (<b class="text-info">USERNAME</b>)</th>
                                 <th>ROLE USER</th>
                                 <th class="cell-fit">ROLE BAWAHAN</th>
                                 <th class="cell-fit">UPDATE</th>

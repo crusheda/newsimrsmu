@@ -14,6 +14,23 @@
     to   { transform: rotate(360deg); }
 }
 
+/* SET THEME MODE */
+html[data-theme-mode="dark"] .toggle-logo{
+    display:none !important;
+}
+html[data-theme-mode="light"] .toggle-dark{
+    display:none !important;
+}
+html[data-theme-mode="dark"] .desktop-logo{
+    display:none !important;
+}
+html[data-theme-mode="light"] .desktop-dark{
+    display:none !important;
+}
+.text-justify{
+    text-align: justify;
+}
+
 /* AGAR SELECT2 BISA TAMPIL DI DEPAN MODAL */
 /* .select2-container{
     z-index:100000;

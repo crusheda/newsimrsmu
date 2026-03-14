@@ -26,6 +26,26 @@
     <!-- Bootstrap Css -->
     <link id="style" href="{{ asset('libs/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" >
 
+    <!-- Light / Dark Theme -->
+    <script>
+        if(localStorage.vyzordarktheme){
+            document.querySelector("html").setAttribute("data-theme-mode","dark");
+            // document.getElementById("theme-toggle").checked = true;
+        }
+        if(localStorage.vyzorrtl){
+            document.querySelector("html").setAttribute("dir","rtl")
+            document.querySelector("#style")?.setAttribute("href", "{{ asset('libs/bootstrap/css/bootstrap.rtl.min.css') }}");
+        }
+        if(localStorage.vyzorltr){
+            document.querySelector("html").setAttribute("dir","ltr")
+            document.querySelector("#style")?.setAttribute("href", "{{ asset('libs/bootstrap/css/bootstrap.min.css') }}");
+        }
+		let html = document.querySelector("html");
+		if (window.innerWidth < 992) {
+            html.setAttribute("data-toggled", "close");
+		}
+    </script>
+
     <!-- [Font Awesome Icons] https://fontawesome.com/icons -->
     <link rel="stylesheet" href="{{ asset('fonts/fontawesome.css') }}">
 
@@ -37,6 +57,9 @@
 
     <!-- Custom Css -->
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet" >
+
+    <!-- Prism CSS -->
+    <link rel="stylesheet" href="{{ asset('libs/prismjs/themes/prism-coy.min.css') }}">
 
 </head>
 
@@ -53,9 +76,15 @@
                             <div class="mb-4 text-center">
                                 <img
                                     src="{{ asset('images/logo/logo_full_text_light.png') }}" {{-- brand-logos/toggle-logo.png --}}
-                                    alt="Logo"
+                                    alt="logo"
                                     class="mx-auto d-block mb-2 desktop-logo"
-                                    style="height: 40px;"
+                                    style="height: 50px;"
+                                />
+                                <img
+                                    src="{{ asset('images/logo/logo_full_text_dark.png') }}" {{-- brand-logos/toggle-logo.png --}}
+                                    alt="logo"
+                                    class="mx-auto d-block mb-2 desktop-dark"
+                                    style="height: 50px;"
                                 />
                             </div>
 
@@ -65,7 +94,11 @@
 
                                 {{-- Username --}}
                                 <div class="col-xl-12">
-                                    <label class="form-label text-default">Username</label>
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <label class="form-label text-default">Username</label>
+                                        <div id="theme-toggle" class="toggle toggle-sm mb-0" data-bs-toggle="tooltip"
+                                            data-bs-placement="right" title="Ubah Tema Sistem" hidden> <span></span> </div>
+                                    </div>
                                     <input
                                         type="text"
                                         name="name"
@@ -143,7 +176,8 @@
                                         <button
                                             type="button"
                                             class="btn btn-outline-warning"
-                                            onclick="reloadCaptcha()"
+                                            onclick="reloadCaptcha()" data-bs-toggle="tooltip"
+                                            data-bs-placement="right" title="Muat Ulang Nilai Penjumlahan"
                                         >
                                             <i class="fas fa-sync"></i>
                                         </button>
@@ -175,7 +209,7 @@
                                 </div>
 
                                 {{-- Register --}}
-                                <div class="col-12 text-center fw-medium">
+                                <div class="col-12 text-center fw-medium mt-0">
                                     Belum memiliki Akun?
                                     <a role="button" class="text-primary">
                                         Hubungi SDI
@@ -192,8 +226,9 @@
         <div class="col-xxl-3 col-xl-3 col-lg-12 d-xl-block d-none px-0">
             <div class="authentication-cover overflow-hidden">
                 <div class="authentication-cover-logo">
-                    <a href="index.html">
-                    <img src="{{ asset('images/brand-logos/toggle-logo.png') }}" alt="logo" class="desktop-dark">
+                    <a href="{{ route('v4.portal') }}">
+                        <img src="{{ asset('images/brand-logos/toggle-logo.png') }}" alt="logo" style="height: 40px" class="toggle-logo">
+                        <img src="{{ asset('images/brand-logos/toggle-dark.png') }}" alt="logo" style="height: 40px" class="toggle-dark">
                     </a>
                 </div>
                 <div class="authentication-cover-background">
@@ -219,6 +254,9 @@
 
     <!-- Show Password JS -->
     <script src="{{ asset('js/show-password.js') }}"></script>
+
+    <script src="{{ asset('libs/prismjs/prism.js') }}"></script>
+    <script src="{{ asset('js/prism-custom.js') }}"></script>
 
     <script>
         let showPassword = false;
@@ -272,10 +310,30 @@
             }, 50);
         }
 
+        function toggleTheme(){
+            const html = document.documentElement;
+
+            if(html.getAttribute("data-theme-mode") === "dark"){
+                html.setAttribute("data-theme-mode","light");
+                localStorage.removeItem("vyzordarktheme");
+            }else{
+                html.setAttribute("data-theme-mode","dark");
+                localStorage.setItem("vyzordarktheme", "true");
+            }
+        }
+
         /* =========================
             INIT
         ========================== */
         $(document).ready(function() {
+
+            // GET THEME
+            if(localStorage.vyzordarktheme){
+                $('#theme-toggle').addClass('on').prop('hidden',false);
+            } else {
+                $('#theme-toggle').removeClass('on').prop('hidden',false);
+            }
+
             startProgressTimer();
 
             $('#loginForm').on('submit', function () {
@@ -291,6 +349,15 @@
 
                 return true;
             });
+
+            $('#theme-toggle').click(function(){
+                $(this).toggleClass('on');
+                toggleTheme();
+            });
+
+            $('[data-bs-toggle="tooltip"]').tooltip({
+                trigger : 'hover'
+            })
         })
     </script>
 </body>

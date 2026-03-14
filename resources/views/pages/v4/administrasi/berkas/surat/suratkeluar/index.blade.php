@@ -34,12 +34,12 @@
                                 <a class="btn btn-primary text-white" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                                 title="<i class='fa-fw fas fa-upload nav-icon'></i> <span>Upload Surat Masuk Baru</span>" onclick="modalTambah()">
                                     <i class='fa-fw fas fa-upload nav-icon me-1'></i>
-                                    <span class="align-middle">Upload</span>
+                                    <span class="align-middle">Upload Surat Keluar</span>
                                 </a>
-                                <button type="button" class="btn btn-outline-warning" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                <button type="button" class="btn btn-warning-transparent" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                                     title="<i class='fa-fw fas fa-sync nav-icon'></i> <span>Tampilkan 100 Data</span>" onclick="refresh()">
                                     <i class="fa-fw fas fa-sync nav-icon"></i></button>
-                                <button type="button" class="btn btn-outline-danger" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                <button type="button" class="btn btn-danger-transparent" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                                     title="<i class='fa-fw fas fa-infinity nav-icon'></i> <span>Tampilkan Semua Data</span>" onclick="showAll()">
                                     <i class="fa-fw fas fa-infinity nav-icon"></i></button>
                             </div>
@@ -67,7 +67,7 @@
                                     <select class="form-select mb-2 dropdown-item" id="kd_tahun" onchange="getSurat()">
                                         <option value="0" hidden>Pilih Tahun</option>
                                         @php
-                                            for ($i=2023; $i <= $list['year']; $i++) {
+                                            for ($i=date('Y') - 2; $i <= date('Y'); $i++) {
                                                 echo"<option value=$i> $i </option>";
                                             }
 
@@ -84,11 +84,11 @@
                                         @endif
                                     </select>
                                 </li>
-                            </div>
+                            </ul>
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="alert alert-secondary">
+                        <div class="alert alert-solid-light shadow-sm">
                             <small><i class="ti ti-arrow-narrow-right text-primary me-1"></i> Data default yang ditampilkan dibatasi 100 data surat</small> <br>
                             <small><i class="ti ti-arrow-narrow-right text-primary me-1"></i> Untuk menampilkan semua data, klik tombol <i class="fas fa-infinity text-danger"></i> di atas</small>
                         </div>
@@ -147,10 +147,10 @@
             <div class="modal-content">
                 <form class="form-auth-small" name="formTambah" action="{{ route('v4.administrasi.berkas.suratkeluar.store') }}" method="POST" enctype="multipart/form-data">
                 <div class="modal-header">
-                    <h4 class="modal-title">
-                        Form Upload&nbsp;&nbsp;&nbsp;
-                    </h4>
-                    <div class="card-title-elements">
+                    <h5 class="modal-title">
+                        Form <b class="text-primary">Upload</b>
+                    </h5>
+                    <div class="card-title-elements ms-2">
                         <select class="form-select form-select-sm" name="user" autofocus required>
                             <option value="" hidden>Pilih Petugas</option>
                             @if (!empty($list['user']))
@@ -236,12 +236,12 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="form-label">Upload Berkas Surat (Optional)</label>
+                                    <label class="form-label">Upload Berkas Surat (<b class="text-warning">Optional</b>)</label>
                                     <input type="file" class="form-control mb-2" name="file" accept="application/pdf">
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="alert alert-secondary">
+                                <div class="alert alert-solid-light shadow-sm">
                                     <small>
                                         <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>5 mb</strong><br>
                                         <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berupa Dokumen Scan<br>
@@ -267,10 +267,10 @@
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">
-                        Form&nbsp;&nbsp;&nbsp;
-                    </h4>
-                    <div class="card-title-elements">
+                    <h5 class="modal-title">
+                        Form <b class="text-warning">Ubah</b>
+                    </h5>
+                    <div class="card-title-elements ms-2">
                         <select class="form-select form-select-sm" id="user" required></select>
                     </div>
                     <div class="card-title-elements" style="margin-left: 10px">
@@ -345,9 +345,9 @@
         <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">
-                        Form Hapus&nbsp;&nbsp;&nbsp;
-                    </h4>
+                    <h5 class="modal-title">
+                        Form <b class="text-danger">Hapus</b>
+                    </h5>
                 </div>
                 <div class="modal-body">
                     <input type="text" id="id_hapus" hidden>
@@ -476,19 +476,19 @@
                             // var updet = item.updated_at.substring(0, 10);
                             // WARNA BUTTON
                             if (item.sesuai == '0') {
-                                btnColor = 'btn-light-danger';
+                                btnColor = 'danger';
                             } else {
                                 if (item.sesuai == '1') {
-                                    btnColor = 'btn-light-primary';
+                                    btnColor = 'primary';
                                 } else {
-                                    btnColor = 'btn-light-dark';
+                                    btnColor = 'dark';
                                 }
                             }
                             content = "<tr id='data"+ item.id +"'>";
-                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm `+btnColor+` rounded btn-shadow dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>${item.id}</button><ul class='dropdown-menu dropdown-menu-right'>`
+                            content += `<td><center><div class='btn-group'><a href='javascript:void(0);' class='link-${btnColor} link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'>${item.id}</a><ul class='dropdown-menu dropdown-menu-right'>`
                                     + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-edit scaleX-n1-rtl'></i> Ubah</a></li>`;
                                     if (item.filename != null) {
-                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/berkas/suratkeluar/`+item.id+`/download')"><i class='fas fa-download scaleX-n1-rtl'></i> Download</a></li>`
+                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/v4/administrasi/berkas/suratkeluar/`+item.id+`/download')"><i class='fas fa-download scaleX-n1-rtl'></i> Download</a></li>`
                                     }
                                     // if (adminID) {
                                         content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-trash scaleX-n1-rtl'></i> Hapus</a></li>`;
@@ -501,7 +501,7 @@
                                         }
                             content += item.urutan + "</td><td class='text-start'>"
                                         + item.tgl + "</td><td style='white-space: normal !important;word-wrap: break-word;'>"
-                                        + "<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0 text-truncate text-primary'><a href='/berkas/suratkeluar/" + item.id + "/download' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-html='true' title='Unduh Surat'><u>" + item.nomor + "</u></a></h6><small class='text-truncate text-muted'><strong>" + item.kode_jenis + "</strong>&nbsp;-&nbsp;" + item.jenis + "</small><small class='text-truncate text-muted'>Pembuat&nbsp;:&nbsp;" + pembuat + "</small></div></div></td><td style='white-space: normal !important;word-wrap: break-word;'>";
+                                        + "<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0 text-truncate text-primary'><a href='/v4/administrasi/berkas/suratkeluar/" + item.id + "/download' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-html='true' title='Unduh Surat'><u>" + item.nomor + "</u></a></h6><small class='text-truncate text-muted'><strong>" + item.kode_jenis + "</strong>&nbsp;-&nbsp;" + item.jenis + "</small><small class='text-truncate text-muted'>Pembuat&nbsp;:&nbsp;" + pembuat + "</small></div></div></td><td style='white-space: normal !important;word-wrap: break-word;'>";
                                         if (item.isi) {
                                             content += item.isi;
                                         } else {
@@ -550,7 +550,7 @@
                             })
                         });
                         var table = $('#dttable').DataTable({
-                            dom: 'Bfrtip',
+                            // dom: 'Bfrtip',
                             order: [
                                 [8, "desc"]
                             ],
@@ -563,7 +563,11 @@
                             displayLength: 20,
                             lengthChange: true,
                             lengthMenu: [20, 35, 50, 75, 100, 500, 1000, 3000, 7000, 10000, 20000],
-                            buttons: ['copy', 'excel', 'pdf', 'colvis']
+                            // buttons: ['copy', 'excel', 'pdf', 'colvis'],
+                            language: {
+                                searchPlaceholder: 'Cari Data...',
+                                sSearch: '',
+                            }
                         });
                     }
                 }
@@ -595,19 +599,19 @@
                             // var updet = item.updated_at.substring(0, 10);
                             // WARNA BUTTON
                             if (item.sesuai == '0') {
-                                btnColor = 'btn-light-danger';
+                                btnColor = 'danger';
                             } else {
                                 if (item.sesuai == '1') {
-                                    btnColor = 'btn-light-primary';
+                                    btnColor = 'primary';
                                 } else {
-                                    btnColor = 'btn-light-dark';
+                                    btnColor = 'dark';
                                 }
                             }
                             content = "<tr id='data"+ item.id +"'>";
-                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm `+btnColor+` rounded btn-shadow dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>${item.id}</button><ul class='dropdown-menu dropdown-menu-right'>`
+                            content += `<td><center><div class='btn-group'><a href='javascript:void(0);' class='link-${btnColor} link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'>${item.id}</a><ul class='dropdown-menu dropdown-menu-right'>`
                                     + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-edit scaleX-n1-rtl'></i> Ubah</a></li>`;
                                     if (item.filename != null) {
-                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/berkas/suratkeluar/`+item.id+`/download')"><i class='fas fa-download scaleX-n1-rtl'></i> Download</a></li>`
+                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/v4/administrasi/berkas/suratkeluar/`+item.id+`/download')"><i class='fas fa-download scaleX-n1-rtl'></i> Download</a></li>`
                                     }
                                     // if (adminID) {
                                         content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-trash scaleX-n1-rtl'></i> Hapus</a></li>`;
@@ -620,7 +624,7 @@
                                         }
                             content += item.urutan + "</td><td class='text-start'>"
                                         + item.tgl + "</td><td style='white-space: normal !important;word-wrap: break-word;'>"
-                                        + "<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0 text-truncate text-primary'><a href='/berkas/suratkeluar/" + item.id + "/download' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-html='true' title='Unduh Surat'><u>" + item.nomor + "</u></a></h6><small class='text-truncate text-muted'><strong>" + item.kode_jenis + "</strong>&nbsp;-&nbsp;" + item.jenis + "</small><small class='text-truncate text-muted'>Pembuat&nbsp;:&nbsp;" + pembuat + "</small></div></div></td><td style='white-space: normal !important;word-wrap: break-word;'>";
+                                        + "<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0 text-truncate text-primary'><a href='/v4/administrasi/berkas/suratkeluar/" + item.id + "/download' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-html='true' title='Unduh Surat'><u>" + item.nomor + "</u></a></h6><small class='text-truncate text-muted'><strong>" + item.kode_jenis + "</strong>&nbsp;-&nbsp;" + item.jenis + "</small><small class='text-truncate text-muted'>Pembuat&nbsp;:&nbsp;" + pembuat + "</small></div></div></td><td style='white-space: normal !important;word-wrap: break-word;'>";
                                         if (item.isi) {
                                             content += item.isi;
                                         } else {
@@ -678,7 +682,11 @@
                             displayLength: 20,
                             lengthChange: true,
                             lengthMenu: [20, 35, 50, 75, 100, 500, 1000, 3000, 7000, 10000, 20000],
-                            buttons: ['copy', 'excel', 'pdf', 'colvis']
+                            buttons: ['copy', 'excel', 'pdf', 'colvis'],
+                            language: {
+                                searchPlaceholder: 'Cari Data...',
+                                sSearch: '',
+                            }
                         });
 
                         // Showing Tooltip
@@ -710,20 +718,20 @@
                             // VALIDASI TUJUAN FROM JSON
                             var us = JSON.parse(res.users);
                             if (item.sesuai == '0') {
-                                btnColor = 'btn-light-danger';
+                                btnColor = 'danger';
                             } else {
                                 if (item.sesuai == '1') {
-                                    btnColor = 'btn-light-primary';
+                                    btnColor = 'primary';
                                 } else {
-                                    btnColor = 'btn-light-dark';
+                                    btnColor = 'dark';
                                 }
                             }
                             // var updet = item.updated_at.substring(0, 10);
                             content = "<tr id='data"+ item.id +"'>";
-                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm ${btnColor} rounded btn-shadow dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>${item.id}</button><ul class='dropdown-menu dropdown-menu-right'>`
+                            content += `<td><center><div class='btn-group'><a href='javascript:void(0);' class='link-${btnColor} link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'>${item.id}</a><ul class='dropdown-menu dropdown-menu-right'>`
                                     + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-edit scaleX-n1-rtl'></i> Ubah</a></li>`;
                                     if (item.filename != null) {
-                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/berkas/suratkeluar/`+item.id+`/download')"><i class='fas fa-download scaleX-n1-rtl'></i> Download</a></li>`
+                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/v4/administrasi/berkas/suratkeluar/`+item.id+`/download')"><i class='fas fa-download scaleX-n1-rtl'></i> Download</a></li>`
                                     }
                                     // if (adminID) {
                                         content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-trash scaleX-n1-rtl'></i> Hapus</a></li>`;
@@ -731,7 +739,7 @@
                             content += `</ul></center></td><td>`;
                             content += item.urutan + "</td><td class='text-start'>"
                                         + item.tgl + "</td><td>"
-                                        + "<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0 text-truncate text-primary'><a href='/berkas/suratkeluar/" + item.id + "/download' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-html='true' title='Unduh Surat'><u>" + item.nomor + "</u></a></h6><small class='text-truncate text-muted'>" + item.kode_jenis + "&nbsp;-&nbsp;" + item.jenis + "</small></div></div></td><td>";
+                                        + "<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0 text-truncate text-primary'><a href='/v4/administrasi/berkas/suratkeluar/" + item.id + "/download' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-html='true' title='Unduh Surat'><u>" + item.nomor + "</u></a></h6><small class='text-truncate text-muted'>" + item.kode_jenis + "&nbsp;-&nbsp;" + item.jenis + "</small></div></div></td><td>";
                                         if (item.isi) {
                                             content += item.isi;
                                         } else {
@@ -789,7 +797,11 @@
                             displayLength: 20,
                             lengthChange: true,
                             lengthMenu: [20, 35, 50, 75, 100, 500, 1000, 3000, 7000, 10000, 20000],
-                            buttons: ['copy', 'excel', 'pdf', 'colvis']
+                            buttons: ['copy', 'excel', 'pdf', 'colvis'],
+                            language: {
+                                searchPlaceholder: 'Cari Data...',
+                                sSearch: '',
+                            }
                         });
 
                         // Showing Tooltip
@@ -855,8 +867,8 @@
                     if (res.show.filename != null) {
                         document.getElementById('linksurat').innerHTML = `
                         <label class='form-label'>Berkas Surat Anda <a class='text-danger'>*</a></label>&nbsp;&nbsp;
-                        <button class='btn btn-sm btn-link-info' type='button' onclick='ubahFile(`+id+`)'>Ubah File</button>
-                        <h6 class='mb-2'><a href='/berkas/suratkeluar/`+res.show.id+`/download'>`+res.show.title+`</a></h6>
+                        <button class='btn btn-sm btn-info-transparent' type='button' onclick='ubahFile(`+id+`)'>Ubah File</button>
+                        <h6 class='mb-2'><a class='link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline' href='/v4/administrasi/berkas/suratkeluar/`+res.show.id+`/download'>`+res.show.title+`</a></h6>
                         <input type="text" class="form-control" id="verifberkas`+res.show.id+`" hidden>`;
                         $("#verifberkas"+res.show.id).val(0);
                     } else {

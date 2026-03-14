@@ -559,12 +559,12 @@
                                 <li>
                                     <a class="dropdown-item d-flex align-items-center" href="{{ route('v4.profil') }}"><i class="ti ti-user-circle me-2 fs-18"></i>Lihat Profil</a>
                                 </li>
-                                <li>
+                                {{-- <li>
                                     <a class="dropdown-item d-flex align-items-center" href="mail-settings.html"><i class="ti ti-settings-cog me-2 fs-18"></i>Account Settings</a>
-                                </li>
+                                </li> --}}
                             </ul>
                         </li>
-                        <li>
+                        {{-- <li>
                             <ul class="list-unstyled mb-0 sub-list">
                                 <li>
                                     <a class="dropdown-item d-flex align-items-center" href="javascript:void(0);"><i class="ti ti-lifebuoy me-2 fs-18"></i>Support</a>
@@ -576,7 +576,7 @@
                                     <a class="dropdown-item d-flex align-items-center" href="javascript:void(0);"><i class="ti ti-calendar me-2 fs-18"></i>Events</a>
                                 </li>
                             </ul>
-                        </li>
+                        </li> --}}
                         <li>
                             <a class="dropdown-item d-flex align-items-center" href="javascript:void(0);" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">
                                 <i class="ti ti-logout me-2 fs-18"></i>Log Out
