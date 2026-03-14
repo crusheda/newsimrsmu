@@ -24,6 +24,9 @@ use \App\Http\Controllers\v4\Administrasi\Berkas\LaporanBulananController;
 use \App\Http\Controllers\v4\Administrasi\Berkas\RapatController;
 use \App\Http\Controllers\v4\Administrasi\Berkas\RKAController;
 use \App\Http\Controllers\v4\Administrasi\Berkas\RegulasiController;
+use \App\Http\Controllers\v4\Administrasi\Berkas\Surat\DisposisiController;
+use \App\Http\Controllers\v4\Administrasi\Berkas\Surat\SuratMasukController;
+use \App\Http\Controllers\v4\Administrasi\Berkas\Surat\SuratKeluarController;
 
 Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU v.4
 
@@ -135,6 +138,41 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
             Route::delete('administrasi/berkas/regulasi/{id}', [RegulasiController::class, 'hapus']);
             Route::post('administrasi/berkas/regulasi/filter', [RegulasiController::class, 'cariRegulasi']);
             Route::get('administrasi/berkas/regulasi/totalregulasi', [RegulasiController::class, 'apiTotalRegulasi']);
+
+            // SURAT
+                // DISPOSISI
+                Route::get('administrasi/berkas/disposisi/data', [DisposisiController::class, 'apiGet']);
+                Route::get('administrasi/berkas/disposisi/data/all', [DisposisiController::class, 'apiGetAll']);
+                Route::get('administrasi/berkas/disposisi/data/{id}', [SuratMasukController::class, 'apiGetDisposisi']);
+                Route::post('administrasi/berkas/disposisi/simpan', [DisposisiController::class, 'store']);
+                Route::delete('administrasi/berkas/disposisi/{id}', [DisposisiController::class, 'hapus']);
+
+                // SURAT MASUK
+                Route::get('administrasi/berkas/suratmasuk/data', [SuratMasukController::class, 'apiGet']);
+                Route::get('administrasi/berkas/suratmasuk/tambah', [SuratMasukController::class, 'formTambah']);
+                Route::get('administrasi/berkas/suratmasuk/filter/{bulan}/{tahun}', [SuratMasukController::class, 'getFilterSurat']);
+                Route::get('administrasi/berkas/suratmasuk/data/all', [SuratMasukController::class, 'apiGetAll']);
+                Route::get('administrasi/berkas/suratmasuk/data/disposisi/{id}', [SuratMasukController::class, 'apiGetDisposisi']);
+                Route::get('administrasi/berkas/suratmasuk/data/{id}', [SuratMasukController::class, 'showChange']);
+                Route::post('administrasi/berkas/suratmasuk/ubah', [SuratMasukController::class, 'ubah']);
+                // Route::put('administrasi/berkas/suratmasuk/{id}', [SuratMasukController::class, 'update']);
+                Route::delete('administrasi/berkas/suratmasuk/{id}', [SuratMasukController::class, 'hapus']);
+                Route::get('administrasi/berkas/suratmasuk/cariasal', [SuratMasukController::class, 'acAsal']);
+                Route::get('administrasi/berkas/suratmasuk/caritempat', [SuratMasukController::class, 'acTempat']);
+
+                // BRIDGE - SEMENTARA
+                Route::get('administrasi/berkas/suratmasuk/pushdata', [SuratMasukController::class, 'changeModelTypeUser']);
+
+                // SURAT KELUAR
+                Route::get('administrasi/berkas/suratkeluar/getkode/{id}', [SuratKeluarController::class, 'apiKode']);
+                // Route::get('administrasi/berkas/suratkeluar/filter/{id}', [SuratKeluarController::class, 'getFilterSurat']);
+                Route::get('administrasi/berkas/suratkeluar/data', [SuratKeluarController::class, 'apiGet']);
+                Route::get('administrasi/berkas/suratkeluar/filter/{surat}/{bulan}/{tahun}', [SuratKeluarController::class, 'getFilterSurat']);
+                Route::get('administrasi/berkas/suratkeluar/data/all', [SuratKeluarController::class, 'apiGetAll']);
+                Route::get('administrasi/berkas/suratkeluar/data/{id}', [SuratKeluarController::class, 'showChange']);
+                Route::post('administrasi/berkas/suratkeluar/ubah', [SuratKeluarController::class, 'ubah']);
+                Route::delete('administrasi/berkas/suratkeluar/{id}', [SuratKeluarController::class, 'hapus']);
+
 });
 
 // WHATSAPP API WEBHOOK

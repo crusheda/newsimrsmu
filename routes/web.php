@@ -26,6 +26,9 @@ use \App\Http\Controllers\v4\Administrasi\Berkas\LaporanBulananController;
 use \App\Http\Controllers\v4\Administrasi\Berkas\RapatController;
 use \App\Http\Controllers\v4\Administrasi\Berkas\RKAController;
 use \App\Http\Controllers\v4\Administrasi\Berkas\RegulasiController;
+use \App\Http\Controllers\v4\Administrasi\Berkas\Surat\DisposisiController;
+use \App\Http\Controllers\v4\Administrasi\Berkas\Surat\SuratMasukController;
+use \App\Http\Controllers\v4\Administrasi\Berkas\Surat\SuratKeluarController;
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function () { // SIMRSMU v.4
     Route::get('dashboard', [DashboardController::class, 'index'])->name('v4.dashboard');
@@ -69,6 +72,19 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function 
             // REGULASI
             Route::get('administrasi/berkas/regulasi', [RegulasiController::class, 'index'])->name('v4.administrasi.berkas.regulasi');
             Route::get('administrasi/berkas/regulasi/{id}/download', [RegulasiController::class, 'download'])->name('v4.administrasi.berkas.regulasi.download');
+
+            // SURAT
+                // DISPOSISI
+                    Route::get('administrasi/berkas/disposisi', [DisposisiController::class, 'index'])->name('v4.administrasi.berkas.disposisi');
+                    Route::get('administrasi/berkas/disposisi/{id}', [DisposisiController::class, 'show'])->name('v4.administrasi.berkas.disposisi.show');
+                // SURAT MASUK
+                    Route::get('administrasi/berkas/suratmasuk', [SuratMasukController::class, 'index'])->name('v4.administrasi.berkas.suratmasuk');
+                    Route::get('administrasi/berkas/suratmasuk/{id}/download', [SuratMasukController::class, 'download'])->name('v4.administrasi.berkas.suratmasuk.download');
+                    Route::post('administrasi/berkas/suratmasuk', [SuratMasukController::class, 'store'])->name('v4.administrasi.berkas.suratmasuk.store');
+                // SURAT KELUAR
+                    Route::get('administrasi/berkas/suratkeluar', [SuratKeluarController::class, 'index'])->name('v4.administrasi.berkas.suratkeluar');
+                    Route::get('administrasi/berkas/suratkeluar/{id}/download', [SuratKeluarController::class, 'download'])->name('v4.administrasi.berkas.suratkeluar.download');
+                    Route::post('administrasi/berkas/suratkeluar', [SuratKeluarController::class, 'store'])->name('v4.administrasi.berkas.suratkeluar.store');
 
     // LOGOUT ROUTE
     Route::post('logout', [AuthController::class, 'logout'])->name('v4.logout');

@@ -131,13 +131,13 @@
                                 <i class="ri-arrow-right-s-line side-menu__angle"></i></a>
                             <ul class="slide-menu child2">
                                 <li class="slide">
-                                    <a href="javascript:void(0);" class="side-menu__item">Disposisi</a>
+                                    <a href="{{ route('v4.administrasi.berkas.disposisi') }}" class="side-menu__item">Disposisi</a>
                                 </li>
                                 <li class="slide">
-                                    <a href="javascript:void(0);" class="side-menu__item">Surat Masuk</a>
+                                    <a href="{{ route('v4.administrasi.berkas.suratmasuk') }}" class="side-menu__item">Surat Masuk</a>
                                 </li>
                                 <li class="slide">
-                                    <a href="javascript:void(0);" class="side-menu__item">Surat Keluar</a>
+                                    <a href="{{ route('v4.administrasi.berkas.suratkeluar') }}" class="side-menu__item">Surat Keluar</a>
                                 </li>
                             </ul>
                         </li>
