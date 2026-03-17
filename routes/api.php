@@ -27,6 +27,9 @@ use \App\Http\Controllers\v4\Administrasi\Berkas\RegulasiController;
 use \App\Http\Controllers\v4\Administrasi\Berkas\Surat\DisposisiController;
 use \App\Http\Controllers\v4\Administrasi\Berkas\Surat\SuratMasukController;
 use \App\Http\Controllers\v4\Administrasi\Berkas\Surat\SuratKeluarController;
+use \App\Http\Controllers\v4\Administrasi\Pengadaan\PengadaanController;
+use \App\Http\Controllers\v4\Administrasi\Pengadaan\PengadaanBarangController;
+use \App\Http\Controllers\v4\Administrasi\Pengadaan\PengadaanRekapController;
 
 Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU v.4
 
@@ -173,6 +176,29 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
                 Route::post('administrasi/berkas/suratkeluar/ubah', [SuratKeluarController::class, 'ubah']);
                 Route::delete('administrasi/berkas/suratkeluar/{id}', [SuratKeluarController::class, 'hapus']);
 
+        // PENGADAAN
+        Route::get('administrasi/pengadaan/data/{id}', [PengadaanController::class, 'dataPengadaan']);
+        Route::get('administrasi/pengadaan/riwayat/{id}', [PengadaanController::class, 'riwayatPengadaan']);
+        Route::delete('administrasi/pengadaan/riwayat/{id}/hapus', [PengadaanController::class, 'hapusRiwayatPengadaan']);
+        Route::get('administrasi/pengadaan/keranjang/{id}/tampil', [PengadaanController::class, 'tampilTambahKeranjang']);
+        Route::get('administrasi/pengadaan/keranjang/{id}', [PengadaanController::class, 'tampilKeranjang']);
+        Route::post('administrasi/pengadaan/keranjang/tambah', [PengadaanController::class, 'tambahKeranjang']);
+        Route::post('administrasi/pengadaan/keranjang/checkout', [PengadaanController::class, 'checkoutKeranjang']);
+        Route::delete('administrasi/pengadaan/keranjang/{id}/hapus', [PengadaanController::class, 'hapusKeranjang']);
+        Route::get('administrasi/pengadaan/barang', [PengadaanController::class, 'loadMore']);
+        Route::get('administrasi/pengadaan/caribarang', [PengadaanController::class, 'getacbarang']);
+        Route::get('administrasi/pengadaan/grafik-pengadaan', [PengadaanController::class, 'grafikPengadaan']);
+
+            // REKAP
+            Route::get('administrasi/pengadaan/rekap/{bln}/{thn}/{kategori}', [PengadaanRekapController::class, 'table']);
+
+            // BARANG
+            Route::get('administrasi/pengadaan/acbarang', [PengadaanBarangController::class, 'acBarang']);
+            Route::get('administrasi/pengadaan/barang/table', [PengadaanBarangController::class, 'table']);
+            Route::post('administrasi/pengadaan/barang/tambah', [PengadaanBarangController::class, 'tambah']);
+            Route::get('administrasi/pengadaan/barang/ubah/{id}', [PengadaanBarangController::class, 'ubah']);
+            Route::post('administrasi/pengadaan/barang/ubah/proses', [PengadaanBarangController::class, 'prosesUbah']);
+            Route::delete('administrasi/pengadaan/barang/{id}/hapus', [PengadaanBarangController::class, 'hapus']);
 });
 
 // WHATSAPP API WEBHOOK

@@ -29,6 +29,9 @@ use \App\Http\Controllers\v4\Administrasi\Berkas\RegulasiController;
 use \App\Http\Controllers\v4\Administrasi\Berkas\Surat\DisposisiController;
 use \App\Http\Controllers\v4\Administrasi\Berkas\Surat\SuratMasukController;
 use \App\Http\Controllers\v4\Administrasi\Berkas\Surat\SuratKeluarController;
+use \App\Http\Controllers\v4\Administrasi\Pengadaan\PengadaanController;
+use \App\Http\Controllers\v4\Administrasi\Pengadaan\PengadaanBarangController;
+use \App\Http\Controllers\v4\Administrasi\Pengadaan\PengadaanRekapController;
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function () { // SIMRSMU v.4
     Route::get('dashboard', [DashboardController::class, 'index'])->name('v4.dashboard');
@@ -85,6 +88,14 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function 
                     Route::get('administrasi/berkas/suratkeluar', [SuratKeluarController::class, 'index'])->name('v4.administrasi.berkas.suratkeluar');
                     Route::get('administrasi/berkas/suratkeluar/{id}/download', [SuratKeluarController::class, 'download'])->name('v4.administrasi.berkas.suratkeluar.download');
                     Route::post('administrasi/berkas/suratkeluar', [SuratKeluarController::class, 'store'])->name('v4.administrasi.berkas.suratkeluar.store');
+
+        // PENGADAAN
+        Route::get('administrasi/pengadaan', [PengadaanController::class, 'index'])->name('v4.administrasi.pengadaan');
+            // REKAP
+                Route::post('administrasi/pengadaan/rekap', [PengadaanRekapController::class, 'index'])->name('v4.administrasi.pengadaan.rekap');
+            // BARANG
+                Route::get('administrasi/pengadaan/barang', [PengadaanBarangController::class, 'index'])->name('v4.administrasi.pengadaan.barang');
+                Route::get('administrasi/pengadaan/barang/download/{id}', [PengadaanBarangController::class, 'download'])->name('v4.administrasi.pengadaan.barang.download');
 
     // LOGOUT ROUTE
     Route::post('logout', [AuthController::class, 'logout'])->name('v4.logout');

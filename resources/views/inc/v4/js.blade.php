@@ -49,6 +49,9 @@
 <!-- Date & Time Picker JS -->
 <script src="{{ asset('libs/flatpickr/flatpickr.min.js') }}"></script>
 
+<!-- Custom Charts JS -->
+{{-- <script src="{{ asset('js/ecommerce-dashboard.js') }}"></script> --}}
+
 <!-- Custom JS -->
 <script src="{{ asset('js/custom.js') }}"></script>
 
