@@ -38,17 +38,27 @@ class PengadaanController extends Controller
     }
 
     // API
-    public function grafikPengadaan()
+    public function grafikPengadaan($num = 1)
     {
+        // num = 0 = DATA RS
+        // num = 1 = DATA OWN
+
         $tahunIni = Carbon::now()->year;
         $tahunLalu = $tahunIni - 1;
+        $duatahunLalu = $tahunIni - 2;
 
-        $data = Cache::remember('grafik_pengadaan_'.$tahunIni, 60, function() use ($tahunIni, $tahunLalu){
+        $bulanIni = Carbon::now()->month;
+        $bulanLalu = Carbon::now()->subMonth()->month;
 
-            $getData = function($tahun){
+        $data = Cache::remember('grafik_pengadaan_'.$tahunIni.'_'.$num, 60, function() use ($tahunIni, $tahunLalu, $duatahunLalu, $bulanIni, $bulanLalu, $num){
+
+            $getData = function($tahun) use ($num) {
                 return DB::table('pengadaan')
                     ->selectRaw('MONTH(tgl_pengadaan) as bulan, SUM(total) as total')
                     ->whereYear('tgl_pengadaan', $tahun)
+                    ->when($num == 1, function ($query) {
+                        $query->where('id_user', auth()->id());
+                    })
                     ->groupBy(DB::raw('MONTH(tgl_pengadaan)'))
                     ->pluck('total', 'bulan')
                     ->toArray();
@@ -56,6 +66,7 @@ class PengadaanController extends Controller
 
             $dataTahunIni = $getData($tahunIni);
             $dataTahunLalu = $getData($tahunLalu);
+            $dataDuaTahunLalu = $getData($duatahunLalu);
 
             $format = function($data){
                 $result = [];
@@ -65,9 +76,24 @@ class PengadaanController extends Controller
                 return $result;
             };
 
+            // 👉 ambil bulan ini & bulan lalu
+            $totalBulanIni  = $dataTahunIni[$bulanIni] ?? 0;
+            $totalBulanLalu = $dataTahunIni[$bulanLalu] ?? 0;
+
+            // 👉 hitung persen
+            $persen = 0;
+            if($totalBulanLalu > 0){
+                $persen = (($totalBulanIni - $totalBulanLalu) / $totalBulanLalu) * 100;
+            }
+
             return [
                 'tahun_ini' => $format($dataTahunIni),
                 'tahun_lalu' => $format($dataTahunLalu),
+                'dua_tahun_lalu' => $format($dataDuaTahunLalu),
+                // summary
+                'bulan_ini' => $totalBulanIni,
+                'bulan_lalu' => $totalBulanLalu,
+                'persen' => round($persen, 1),
             ];
         });
 

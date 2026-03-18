@@ -25,8 +25,8 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
-                                <h5 class="fw-semibold">$43,038.00</h5>
-                                <span class="d-block fs-12 text-muted">Total Sales</span>
+                                <h5 class="fw-semibold">Rp ...</h5>
+                                <span class="d-block fs-12 text-muted">Total Belanja <span class="ms-1 badge bg-primary-transparent">Tahun Ini</span></span>
                             </div>
                             <div>
                                 <span class="avatar avatar-lg bg-primary-transparent svg-primary">
@@ -42,45 +42,11 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
-                                <h5 class="fw-semibold">$28,346.00</h5>
-                                <span class="d-block fs-12 text-muted">Total Expenses</span>
+                                <h5 class="fw-semibold">Rp ...</h5>
+                                <span class="d-block fs-12 text-muted">Total Belanja <span class="ms-1 badge bg-secondary-transparent">Tahun Lalu</span></span>
                             </div>
                             <div>
                                 <span class="avatar avatar-lg bg-secondary-transparent svg-secondary">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M20 12v6a1 1 0 0 1-2 0V4a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v14c0 1.654 1.346 3 3 3h14c1.654 0 3-1.346 3-3v-6h-2zm-6-1v2H6v-2h8zM6 9V7h8v2H6zm8 6v2h-3v-2h3z"></path></svg>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card custom-card dashboard-main-card warning">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div>
-                                <h5 class="fw-semibold">1,29,368</h5>
-                                <span class="d-block fs-12 text-muted">Total Visitors</span>
-                            </div>
-                            <div>
-                                <span class="avatar avatar-lg bg-warning-transparent svg-warning">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M7.5 6.5C7.5 8.981 9.519 11 12 11s4.5-2.019 4.5-4.5S14.481 2 12 2 7.5 4.019 7.5 6.5zM20 21h1v-1c0-3.859-3.141-7-7-7h-4c-3.86 0-7 3.141-7 7v1h17z"></path></svg>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card custom-card dashboard-main-card success">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div>
-                                <h5 class="fw-semibold">35,367</h5>
-                                <span class="d-block fs-12 text-muted">Total Orders</span>
-                            </div>
-                            <div>
-                                <span class="avatar avatar-lg bg-success-transparent svg-success">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M21.822 7.431A1 1 0 0 0 21 7H7.333L6.179 4.23A1.994 1.994 0 0 0 4.333 3H2v2h2.333l4.744 11.385A1 1 0 0 0 10 17h8c.417 0 .79-.259.937-.648l3-8a1 1 0 0 0-.115-.921z"></path><circle cx="10.5" cy="19.5" r="1.5"></circle><circle cx="17.5" cy="19.5" r="1.5"></circle></svg>
                                 </span>
                             </div>
@@ -91,37 +57,37 @@
 
             <div class="col-md-12">
                 <div class="card custom-card">
-                    <div class="card-header">
+                    <div class="card-header d-flex align-items-center justify-content-between py-3">
                         <div class="card-title">
-                            Sales Statistics
+                            Grafik <b class="text-secondary">Interaktif</b>
+                        </div>
+                        <div class="flex-shrink-0">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Menu Grafik</button>
+                                <ul class="dropdown-menu p-2">
+                                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="grafikPengadaan(1)">Grafik Anda</a></li>
+                                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="grafikPengadaan(0)">Grafik Internal RS</a></li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="row sales-stats mb-3">
-                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
-                                <div>Bulan Lalu</div>
-                                <div class="d-flex align-items-center gap-1">
-                                    <span class="fs-16 fw-semibold">3,542</span>
-                                    <span class="text-success"><i class="ti ti-arrow-narrow-up align-middle"></i>
-                                    <span class="badge bg-success-transparent">0.9%</span></span>
+                        <div class="row sales-stats mb-3 text-center align-items-center justify-content-center">
+                            <div class="col">
+                                <div>Total Pengadaan Bulan Ini</div>
+                                <div class="d-flex justify-content-center gap-2">
+                                    <a id="bulan-ini-total" class="fs-16 fw-semibold">Rp ...</a>
                                 </div>
                             </div>
-                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
-                                <div>Bulan Ini</div>
-                                <div class="d-flex align-items-center gap-1">
-                                    <span class="fs-16 fw-semibold">$52,38,346</span>
-                                    <span class="text-success"><i class="ti ti-arrow-narrow-up align-middle"></i>
-                                    <span class="badge bg-success-transparent">0.39%</span></span>
+                            <div class="col">
+                                <div>Total Pengadaan Bulan Lalu</div>
+                                <div class="d-flex justify-content-center gap-1">
+                                    <a id="bulan-lalu-total" class="fs-16 fw-semibold">Rp ...</a>
                                 </div>
                             </div>
-                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
-                                <div>Persentase</div>
-                                <div class="mb-0">
-                                    <span class="fs-16 fw-semibold text-secondary">33.7%</span>
-                                    <span class="text-success"><i class="ti ti-arrow-narrow-up align-middle"></i>
-                                        <span class="badge bg-success-transparent">0.5%</span>
-                                    </span>
-                                </div>
+                            <div class="col">
+                                <div>Persentase Selisih</div>
+                                <div id="persen-wrapper"><i class="ti ti-rotate-clockwise-2 text-secondary ti-spin-slow fs-20"></i></div>
                             </div>
                         </div>
                         <div id="grafik-pengadaan"></div>
@@ -156,226 +122,314 @@
     </div>
 
     <script>
-        const options2 = {
-            series: [{
-                name: 'Profit',
-                data: [99, 15, 36, 63, 42, 120, 78, 51, 32, 62, 76, 32],
-                type: 'bar',
-            }, {
-                name: 'Sales',
-                data: [136, 150, 158, 115, 102, 156, 135, 151, 125, 68, 164, 163],
-                type: 'area',
-            }, {
-                name: 'Revenue',
-                data: [128, 148, 39, 152, 169, 129, 112, 148, 150, 117, 198, 120],
-                type: 'line',
-            }],
-            chart: {
-                height: 320,
-                type: 'line',
-                toolbar: {
-                    show: false,
-                },
-                background: 'none',
-                fill: "#fff",
-            },
-            plotOptions: {
-                bar: {
-                    borderRadius: 2,
-                    columnWidth: '30%',
-                }
-            },
-            grid: {
-                borderColor: "#f1f1f1",
-                strokeDashArray: 2,
-                xaxis: {
-                    lines: {
-                        show: true
-                    }
-                },
-                yaxis: {
-                    lines: {
-                        show: false
-                    }
-                }
-            },
-            colors: ["var(--primary-color)", "rgb(255, 73, 205)", "var(--primary03)"],
-            background: 'transparent',
-            dataLabels: {
-                enabled: false
-            },
-            stroke: {
-                curve: 'smooth',
-                width: [2, 1.5, 2],
-                dashArray: [0, 0, 6]
-            },
-            legend: {
-                show: true,
-                position: 'top',
-                markers: {
-                    width: 8,
-                    height: 8,
-                }
-            },
-            xaxis: {
-                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                show: false,
-                axisBorder: {
-                    show: false,
-                    color: 'rgba(119, 119, 142, 0.05)',
-                    offsetX: 0,
-                    offsetY: 0,
-                },
-                axisTicks: {
-                    show: false,
-                    borderType: 'solid',
-                    color: 'rgba(119, 119, 142, 0.05)',
-                    width: 6,
-                    offsetX: 0,
-                    offsetY: 0
-                },
-                labels: {
-                    rotate: -90,
-                }
-            },
-            fill: {
-                type: ['solid', 'gradient', 'solid'],
-                gradient: {
-                    shadeIntensity: 1,
-                    opacityFrom: 0.4,
-                    opacityTo: 0.1,
-                    stops: [0, 90, 100],
-                    colorStops: [
-                        [
-                            {
-                                offset: 0,
-                                color: "var(--primary-color)",
-                                opacity: 1
-                            },
-                            {
-                                offset: 75,
-                                color: "var(--primary-color)",
-                                opacity: 1
-                            },
-                            {
-                                offset: 100,
-                                color: 'var(--primary-color)',
-                                opacity: 1
-                            }
-                        ],
-                        [
-                            {
-                                offset: 0,
-                                color: "rgba(255, 73, 205, 0.1)",
-                                opacity: 0.1
-                            },
-                            {
-                                offset: 75,
-                                color: "rgba(255, 73, 205, 0.1)",
-                                opacity: 1
-                            },
-                            {
-                                offset: 100,
-                                color: 'rgba(255, 73, 205, 0.2)',
-                                opacity: 1
-                            }
-                        ],
-                        [
-                            {
-                                offset: 0,
-                                color: 'var(--primary03)',
-                                opacity: 1
-                            },
-                            {
-                                offset: 75,
-                                color: 'var(--primary03)',
-                                opacity: 0.1
-                            },
-                            {
-                                offset: 100,
-                                color: 'var(--primary03)',
-                                opacity: 1
-                            }
-                        ],
-                    ]
-                }
-            },
-            yaxis: {
-                show: false,
-                axisBorder: {
-                    show: false,
-                },
-                axisTicks: {
-                    show: false,
-                }
-            },
-            tooltip: {
-                x: {
-                    format: 'dd/MM/yy HH:mm'
-                },
-            },
-        };
+        // const options2 = {
+        //     series: [{
+        //         name: 'Profit',
+        //         data: [99, 15, 36, 63, 42, 120, 78, 51, 32, 62, 76, 32],
+        //         type: 'bar',
+        //     }, {
+        //         name: 'Sales',
+        //         data: [136, 150, 158, 115, 102, 156, 135, 151, 125, 68, 164, 163],
+        //         type: 'area',
+        //     }, {
+        //         name: 'Revenue',
+        //         data: [128, 148, 39, 152, 169, 129, 112, 148, 150, 117, 198, 120],
+        //         type: 'line',
+        //     }],
+        //     chart: {
+        //         height: 320,
+        //         type: 'line',
+        //         toolbar: {
+        //             show: false,
+        //         },
+        //         background: 'none',
+        //         fill: "#fff",
+        //     },
+        //     plotOptions: {
+        //         bar: {
+        //             borderRadius: 2,
+        //             columnWidth: '30%',
+        //         }
+        //     },
+        //     grid: {
+        //         borderColor: "#f1f1f1",
+        //         strokeDashArray: 2,
+        //         xaxis: {
+        //             lines: {
+        //                 show: true
+        //             }
+        //         },
+        //         yaxis: {
+        //             lines: {
+        //                 show: false
+        //             }
+        //         }
+        //     },
+        //     colors: ["var(--primary-color)", "rgb(255, 73, 205)", "var(--primary03)"],
+        //     background: 'transparent',
+        //     dataLabels: {
+        //         enabled: false
+        //     },
+        //     stroke: {
+        //         curve: 'smooth',
+        //         width: [2, 1.5, 2],
+        //         dashArray: [0, 0, 6]
+        //     },
+        //     legend: {
+        //         show: true,
+        //         position: 'top',
+        //         markers: {
+        //             width: 8,
+        //             height: 8,
+        //         }
+        //     },
+        //     xaxis: {
+        //         categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        //         show: false,
+        //         axisBorder: {
+        //             show: false,
+        //             color: 'rgba(119, 119, 142, 0.05)',
+        //             offsetX: 0,
+        //             offsetY: 0,
+        //         },
+        //         axisTicks: {
+        //             show: false,
+        //             borderType: 'solid',
+        //             color: 'rgba(119, 119, 142, 0.05)',
+        //             width: 6,
+        //             offsetX: 0,
+        //             offsetY: 0
+        //         },
+        //         labels: {
+        //             rotate: -90,
+        //         }
+        //     },
+        //     fill: {
+        //         type: ['solid', 'gradient', 'solid'],
+        //         gradient: {
+        //             shadeIntensity: 1,
+        //             opacityFrom: 0.4,
+        //             opacityTo: 0.1,
+        //             stops: [0, 90, 100],
+        //             colorStops: [
+        //                 [
+        //                     {
+        //                         offset: 0,
+        //                         color: "var(--primary-color)",
+        //                         opacity: 1
+        //                     },
+        //                     {
+        //                         offset: 75,
+        //                         color: "var(--primary-color)",
+        //                         opacity: 1
+        //                     },
+        //                     {
+        //                         offset: 100,
+        //                         color: 'var(--primary-color)',
+        //                         opacity: 1
+        //                     }
+        //                 ],
+        //                 [
+        //                     {
+        //                         offset: 0,
+        //                         color: "rgba(255, 73, 205, 0.1)",
+        //                         opacity: 0.1
+        //                     },
+        //                     {
+        //                         offset: 75,
+        //                         color: "rgba(255, 73, 205, 0.1)",
+        //                         opacity: 1
+        //                     },
+        //                     {
+        //                         offset: 100,
+        //                         color: 'rgba(255, 73, 205, 0.2)',
+        //                         opacity: 1
+        //                     }
+        //                 ],
+        //                 [
+        //                     {
+        //                         offset: 0,
+        //                         color: 'var(--primary03)',
+        //                         opacity: 1
+        //                     },
+        //                     {
+        //                         offset: 75,
+        //                         color: 'var(--primary03)',
+        //                         opacity: 0.1
+        //                     },
+        //                     {
+        //                         offset: 100,
+        //                         color: 'var(--primary03)',
+        //                         opacity: 1
+        //                     }
+        //                 ],
+        //             ]
+        //         }
+        //     },
+        //     yaxis: {
+        //         show: false,
+        //         axisBorder: {
+        //             show: false,
+        //         },
+        //         axisTicks: {
+        //             show: false,
+        //         }
+        //     },
+        //     tooltip: {
+        //         x: {
+        //             format: 'dd/MM/yy HH:mm'
+        //         },
+        //     },
+        // };
+        let chartPengadaan = null;
 
         $(document).ready(function() {
-            grafikPengadaan();
+            grafikPengadaan(1);
         });
 
-        function grafikPengadaan() {
+        function formatRupiah(angka){
+            return "Rp " + Number(angka).toLocaleString('id-ID');
+        }
+
+        function formatRupiahShort(val){
+            if(val >= 1000000000){
+                return 'Rp ' + (val/1000000000).toFixed(1) + ' M';
+            } else if(val >= 1000000){
+                return 'Rp ' + (val/1000000).toFixed(1) + ' Jt';
+            }
+            return formatRupiah(val);
+        }
+
+        function namaBulan(index){
+            const bulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+            return bulan[index-1];
+        }
+
+        function grafikPengadaan(num) { // num 0 = RS ; 1 = OWN
             $.ajax({
-                url: '/api/v4/administrasi/pengadaan/grafik-pengadaan',
+                url: `/api/v4/administrasi/pengadaan/grafik-pengadaan/${num}`,
                 type: 'GET',
                 success: function(res){
+
+                    let now = new Date();
+                    let bulanIni = now.getMonth() + 1;
+                    let bulanLalu = bulanIni - 1 || 12;
+
+                    // 👉 set nilai
+                    $('#bulan-lalu-total').empty().html(formatRupiah(res.bulan_lalu) + ` <span class="ms-1 fs-12 badge bg-secondary-transparent">${namaBulan(bulanLalu)}</span>`);
+                    $('#bulan-ini-total').empty().html(formatRupiah(res.bulan_ini) + ` <span class="ms-1 fs-12 badge bg-primary-transparent">${namaBulan(bulanIni)}</span>`);
+
+                    // 👉 persen
+                    let persen = res.persen;
+                    let isNaik = persen >= 0;
+
+                    let html = `
+                        <span class="${isNaik ? 'text-success' : 'text-danger'}">
+                            <i class="ti ${isNaik ? 'ti-arrow-narrow-up' : 'ti-arrow-narrow-down'} align-middle fs-20"></i>
+                            <span class="fs-12 badge ${isNaik ? 'bg-success' : 'bg-danger'}-transparent">
+                                ${Math.abs(persen)}%
+                            </span>
+                        </span>
+                    `;
+
+                    $('#persen-wrapper').empty().html(html);
+
+                    // =====================
+                    // CHART (punyamu tadi)
+                    // =====================
 
                     const options = {
                         series: [
                             {
-                                name: 'Tahun Ini',
+                                name: `Tahun Ini (${new Date().getFullYear()})`,
                                 data: res.tahun_ini,
-                                type: 'area'
+                                // type: 'area'
                             },
                             {
-                                name: 'Tahun Lalu',
+                                name: `Tahun Lalu (${new Date().getFullYear() - 1})`,
                                 data: res.tahun_lalu,
-                                type: 'line'
+                                // type: 'line'
+                            },
+                            {
+                                name: `Dua Tahun Lalu (${new Date().getFullYear() - 2})`,
+                                data: res.dua_tahun_lalu,
+                                // type: 'line'
                             }
                         ],
+                        colors: ['#985ffd', '#ff49cd', '#fdaf22'],
                         chart: {
                             height: 320,
-                            type: 'line',
-                            toolbar: { show: false }
+                            type: 'area',
+                            // stacked: true,
+                            toolbar: {
+                                show: true,
+                                tools: {
+                                    download: true, // ini tombol export
+                                    selection: false,
+                                    zoom: false,
+                                    zoomin: false,
+                                    zoomout: false,
+                                    pan: false,
+                                    reset: false
+                                }
+                            }
                         },
                         stroke: {
                             curve: 'smooth',
-                            width: [2, 2],
-                            dashArray: [0, 5]
-                        },
-                        colors: ["#00bcd4", "#ff9800"],
-                        xaxis: {
-                            categories: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
-                        },
-                        dataLabels: {
-                            enabled: false
+                            // width: [2, 2, 2],
+                            // dashArray: [0, 5, 8]
                         },
                         fill: {
-                            type: ['gradient', 'solid'],
+                            type: 'gradient',
                             gradient: {
-                                shadeIntensity: 1,
-                                opacityFrom: 0.4,
-                                opacityTo: 0.1,
-                                stops: [0, 90, 100]
+                                opacityFrom: 0.2,
+                                opacityTo: 0.6,
+                            }
+                        },
+                        grid: {
+                            borderColor: '#f2f5f7',
+                        },
+                        legend: {
+                            position: 'bottom',
+                            horizontalAlign: 'center',
+                            offsetX: -10
+                        },
+                        xaxis: {
+                            categories: ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des']
+                        },
+                        // yaxis: {
+                        //     labels: {
+                        //         show: false
+                        //     }
+                        // },
+                        yaxis: {
+                            labels: {
+                                formatter: function(val){
+                                    return formatRupiah(val);
+                                }
                             }
                         },
                         tooltip: {
                             y: {
                                 formatter: function(val){
-                                    return "Rp " + val.toLocaleString('id-ID');
+                                    return formatRupiah(val);
                                 }
+                            }
+                        },
+                        dataLabels: {
+                            enabled: false,
+                            formatter: function(val){
+                                return formatRupiah(val);
                             }
                         }
                     };
 
-                    const chart = new ApexCharts(document.querySelector("#grafik-pengadaan"), options);
-                    chart.render();
+                    if(chartPengadaan){
+                        chartPengadaan.destroy();
+                    }
+
+                    chartPengadaan = new ApexCharts(document.querySelector("#grafik-pengadaan"), options);
+                    chartPengadaan.render();
                 }
             });
         }

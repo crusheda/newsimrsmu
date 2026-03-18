@@ -187,7 +187,7 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
         Route::delete('administrasi/pengadaan/keranjang/{id}/hapus', [PengadaanController::class, 'hapusKeranjang']);
         Route::get('administrasi/pengadaan/barang', [PengadaanController::class, 'loadMore']);
         Route::get('administrasi/pengadaan/caribarang', [PengadaanController::class, 'getacbarang']);
-        Route::get('administrasi/pengadaan/grafik-pengadaan', [PengadaanController::class, 'grafikPengadaan']);
+        Route::get('administrasi/pengadaan/grafik-pengadaan/{num}', [PengadaanController::class, 'grafikPengadaan']);
 
             // REKAP
             Route::get('administrasi/pengadaan/rekap/{bln}/{thn}/{kategori}', [PengadaanRekapController::class, 'table']);
