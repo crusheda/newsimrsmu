@@ -72,3 +72,20 @@ html[data-theme-mode="light"] .desktop-dark{
     display: inline-block;
     animation: spin 2s linear infinite reverse;
 }
+
+.gridjs-table {
+    table-layout: fixed;
+    width: 100%;
+}
+.gridjs-td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.gridjs-table {
+    table-layout: fixed;
+    width: 100%;
+}
+th[data-column-id="actions"] .gridjs-th-content {
+    text-align: center;
+}

@@ -80,6 +80,10 @@ class PengadaanController extends Controller
             $totalBulanIni  = $dataTahunIni[$bulanIni] ?? 0;
             $totalBulanLalu = $dataTahunIni[$bulanLalu] ?? 0;
 
+            // 👉 ambil tahun ini & tahun lalu
+            $totalTahunIni = array_sum($dataTahunIni);
+            $totalTahunLalu = array_sum($dataTahunLalu);
+
             // 👉 hitung persen
             $persen = 0;
             if($totalBulanLalu > 0){
@@ -93,6 +97,8 @@ class PengadaanController extends Controller
                 // summary
                 'bulan_ini' => $totalBulanIni,
                 'bulan_lalu' => $totalBulanLalu,
+                'total_tahun_ini' => $totalTahunIni,
+                'total_tahun_lalu' => $totalTahunLalu,
                 'persen' => round($persen, 1),
             ];
         });
@@ -100,6 +106,78 @@ class PengadaanController extends Controller
         return response()->json($data);
     }
 
+    public function getBarangPengadaan(Request $request)
+    {
+        $limit = $request->get('limit', 10);
+        $page  = $request->get('page', 1);
+        $search = $request->get('search');
+        $jenis = $request->get('jenis');
+        $harga = $request->get('harga');
+
+        $query = DB::table('pengadaan_barang as pb')
+            ->leftJoin('pengadaan_ref as pr', 'pb.ref_barang', '=', 'pr.id')
+            ->leftJoin('users as u', 'pb.id_user', '=', 'u.id')
+            ->select(
+                'pb.id',
+                'pb.nama',
+                'pb.satuan',
+                'pb.harga',
+                'pb.filename',
+                'pb.created_at',
+                'pr.nama as jenis',
+                'u.nama as user'
+            )
+            ->whereNull('pb.deleted_at');
+
+        // 🔍 SEARCH
+        // if($search){
+        //     $query->where('pb.nama', 'like', "%$search%");
+        // }
+        if($search){
+            $keywords = explode(' ', $search);
+
+            $query->where(function($q) use ($keywords){
+                foreach($keywords as $word){
+                    $q->where('pb.nama', 'like', "%{$word}%");
+                }
+            });
+        }
+
+        // 🏷️ FILTER JENIS
+        if($jenis && $jenis != 'all'){
+            $query->where('pr.nama', $jenis);
+        }
+
+        // 💰 FILTER HARGA
+        if($harga){
+            if($harga == 'lt500'){
+                $query->where('pb.harga', '<', 500000);
+            } elseif($harga == '500_1jt'){
+                $query->whereBetween('pb.harga', [500000, 1000000]);
+            } elseif($harga == '1_10jt'){
+                $query->whereBetween('pb.harga', [1000000, 10000000]);
+            } elseif($harga == 'gt10jt'){
+                $query->where('pb.harga', '>', 10000000);
+            }
+        }
+
+        // 🔢 PAGINATION MANUAL
+        $total = $query->count();
+
+        $data = $query
+            ->orderBy('pr.nama', 'asc')   // Jenis
+            ->orderBy('pb.nama', 'asc')   // Nama Barang
+            ->offset(($page - 1) * $limit)
+            ->limit($limit)
+            ->get();
+
+        return response()->json([
+            "data" => $data,
+            "total" => $total
+        ]);
+    }
+
+    /// BATAS OLD NEW ----------------------------------------------------------
     function dataPengadaan($id)
     {
         $pengadaan = pengadaan::where('id_user', $id)->orderBy('tgl_pengadaan','desc')->get();

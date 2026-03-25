@@ -38,6 +38,9 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="stylesheet">
 
 <!-- Node Waves Css -->
+<link rel="stylesheet" href="{{ asset('libs/gridjs/theme/mermaid.min.css') }}">
+
+<!-- Node Waves Css -->
 <link href="{{ asset('libs/node-waves/waves.min.css') }}" rel="stylesheet" >
 
 <!-- Simplebar Css -->

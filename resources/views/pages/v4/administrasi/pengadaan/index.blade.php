@@ -25,7 +25,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
-                                <h5 class="fw-semibold">Rp ...</h5>
+                                <h5 class="fw-semibold" id="totTahunIni">Rp ...</h5>
                                 <span class="d-block fs-12 text-muted">Total Belanja <span class="ms-1 badge bg-primary-transparent">Tahun Ini</span></span>
                             </div>
                             <div>
@@ -42,7 +42,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
-                                <h5 class="fw-semibold">Rp ...</h5>
+                                <h5 class="fw-semibold" id="totTahunLalu">Rp ...</h5>
                                 <span class="d-block fs-12 text-muted">Total Belanja <span class="ms-1 badge bg-secondary-transparent">Tahun Lalu</span></span>
                             </div>
                             <div>
@@ -59,7 +59,7 @@
                 <div class="card custom-card">
                     <div class="card-header d-flex align-items-center justify-content-between py-3">
                         <div class="card-title">
-                            Grafik <b class="text-secondary">Interaktif</b>
+                            Grafik <b class="text-secondary">Interaktif</b> <b class="text-primary" id="statGraph">Anda</b>
                         </div>
                         <div class="flex-shrink-0">
                             <div class="btn-group">
@@ -99,22 +99,55 @@
                 <div class="card custom-card">
                     <div class="card-header d-flex align-items-center justify-content-between py-3">
                         <div class="btn-group">
-                            <button class="btn btn-primary btn-shadow" data-bs-toggle="modal" data-bs-target="#tambah">
-                                <i class="ri-git-repository-commits-line me-1"></i> Upload Berkas
+                            <button class="btn btn-secondary btn-shadow"  data-bs-toggle="tooltip"
+                                data-bs-placement="bottom" data-bs-html="true" title="Lihat Riwayat Pengadaan">
+                                <i class="ri-shopping-bag-line me-1"></i> Riwayat
                             </button>
-                            <button class="btn btn-warning btn-shadow" onclick="refresh()" id="btn-refresh" disabled>
-                                <i class="ri-loop-left-line nav-icon"></i></button>
+                            <button class="btn btn-warning btn-shadow" onclick="applyFilters()" data-bs-toggle="tooltip"
+                                data-bs-placement="bottom" data-bs-html="true" title="Refresh Tabel Pengadaan">
+                                <i class="ri-loop-left-line nav-icon"></i>
+                            </button>
                         </div>
-                        <button class="btn btn-info btn-shadow" id="btn-verif" onclick="verif()" data-bs-toggle="tooltip"
-                            data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                            title="Menampilkan Semua Data Laporan Rutin Bawahan">
-                            <i class="ri-file-check-line me-1"></i> <span class="align-middle">Verifikasi Laporan Bawahan</span>
+                        <button class="btn btn-primary btn-shadow" onclick="keranjang()" data-bs-toggle="tooltip"
+                            data-bs-placement="bottom" data-bs-html="true" title="Buka Keranjang Pengadaan">
+                            <i class="ri-shopping-cart-2-line me-1"></i> Keranjang
                         </button>
                     </div>
+                    <div class="card-header justify-content-between border-bottom-0">
+                        <!-- Search Bar -->
+                        <div class="w-sm-25">
+                            <input class="form-control" type="search" id="search-input"
+                                placeholder="Cari nama barang ..." aria-label="search-product">
+                        </div>
+
+                        <!-- Filters Section -->
+                        <div class="row gy-2 w-sm-50">
+                            <!-- Category Filter -->
+                            <div class="col">
+                                <select id="category-filter" class="form-control">
+                                    <option value="" hidden>Jenis Barang</option>
+                                    <option value="all">Semua</option>
+                                    <option value="ATK">ATK</option>
+                                    <option value="CETAK">CETAK</option>
+                                    <option value="BHP">BHP</option>
+                                </select>
+                            </div>
+
+                            <!-- Status Filter -->
+                            <div class="col">
+                                <select id="harga-filter" class="form-control">
+                                    <option value="" hidden>Rentang Harga</option>
+                                    <option value="all">Semua</option>
+                                    <option value="lt500"> < 500 Ribu</option>
+                                    <option value="500_1jt">500 Ribu - 1 Juta</option>
+                                    <option value="1_10jt">1 Juta - 10 Juta</option>
+                                    <option value="gt10jt"> > 10 Juta</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                     <div class="card-body">
-
-                        {{-- MY CONTENT --}}
-
+                        <div id="product-table" class="grid-card-table"><center><i class="fas fa-sync fa-spin nav-icon me-1"></i> Memuat Tabel Pengadaan</center></div>
                     </div>
                 </div>
             </div>
@@ -282,8 +315,28 @@
         //     },
         // };
         let chartPengadaan = null;
+        let allData = [];
+        let grid = null;
+        let debounceTimer;
+
+        function debounce(func, delay){
+            return function(...args){
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(() => {
+                    func.apply(this, args);
+                }, delay);
+            };
+        }
 
         $(document).ready(function() {
+            initGrid();
+
+            $('#search-input').on('keyup', debounce(function(){
+                applyFilters();
+            }, 500)); // delay 500ms
+            $('#category-filter').on('change', applyFilters);
+            $('#harga-filter').on('change', applyFilters);
+
             grafikPengadaan(1);
         });
 
@@ -318,6 +371,13 @@
                     // 👉 set nilai
                     $('#bulan-lalu-total').empty().html(formatRupiah(res.bulan_lalu) + ` <span class="ms-1 fs-12 badge bg-secondary-transparent">${namaBulan(bulanLalu)}</span>`);
                     $('#bulan-ini-total').empty().html(formatRupiah(res.bulan_ini) + ` <span class="ms-1 fs-12 badge bg-primary-transparent">${namaBulan(bulanIni)}</span>`);
+                    $('#totTahunIni').text(formatRupiah(res.total_tahun_ini));
+                    $('#totTahunLalu').text(formatRupiah(res.total_tahun_lalu));
+                    if (num == 1) {
+                        $('#statGraph').text('Anda');
+                    } else {
+                        $('#statGraph').text('Rumah Sakit');
+                    }
 
                     // 👉 persen
                     let persen = res.persen;
@@ -433,5 +493,220 @@
                 }
             });
         }
+
+        // function loadData(){
+
+        //     $.get('/api/v4/administrasi/pengadaan/barang', function(res){
+
+        //         console.log('DATA API:', res);
+
+        //         // ✅ ambil dari res.data
+        //         allData = res.data.map(item => ([
+        //             item.id,
+        //             item.nama,
+        //             item.jenis,
+        //             item.satuan,
+        //             item.harga,
+        //             formatRupiah(item.harga),
+        //             item.user ?? '-',
+        //             new Date(item.created_at).toLocaleDateString('id-ID')
+        //         ]));
+
+        //         console.log('DATA GRID:', allData);
+
+        //         initGrid(allData);
+        //     });
+        // }
+
+        // function initGridOld(data){
+
+        //     if(grid){
+        //         grid.destroy();
+        //     }
+
+        //     grid = new gridjs.Grid({
+        //         columns: [
+        //             'ID',
+        //             'Nama Barang',
+        //             'Jenis',
+        //             'Satuan',
+        //             {
+        //                 name: 'Harga',
+        //                 formatter: (_, row) => {
+        //                     return gridjs.html(`<b>${row.cells[5] ? row.cells[5].data : '-'}</b>`);
+        //                 }
+        //             },
+        //             'User',
+        //             'Tanggal'
+        //         ],
+        //         data: data,
+        //         pagination: true,
+        //         sort: true,
+        //         search: false
+        //     }).render(document.getElementById("product-table"));
+        // }
+
+        function mapData(item){
+            return [
+                item.id,
+                item,
+                // item.nama,
+                // item.filename ?? '',
+                // item.jenis ?? '-',
+                // item.satuan ?? '-',
+                item.harga ?? 0,
+                moment(item.created_at).format('YYYY-MM-DD HH:mm:ss')
+            ];
+        }
+
+        function initGrid(){
+
+            if(grid){
+                document.getElementById("product-table").innerHTML = "";
+            }
+
+            $('#product-table').empty();
+
+            grid = new gridjs.Grid({
+                columns: [
+                    {
+                        name: 'ID',
+                        width: '80px',
+                        formatter: (_, row) => row.cells[0].data
+                    },
+
+                    {
+                        name: 'Nama Barang',
+                        // width: '300px',
+                        formatter: (_, row) => {
+
+                            let item = row.cells[1].data;
+
+                            let img = item.filename
+                                ? '/' + item.filename.replace('public/', 'storage/')
+                                : '/images/no-image.png';
+
+                            return gridjs.html(`
+                                <div class="d-flex align-items-center gap-3">
+                                    <span class="avatar avatar-lg bg-light">
+                                        <img src="${img}"
+                                            onerror="this.src='/images/no-image.png'"
+                                            style="object-fit:cover;width:100%;height:100%;">
+                                    </span>
+
+                                    <div>
+                                        <div class="fw-semibold">${item.nama}</div>
+                                        <div class="text-muted fs-13">
+                                            ${item.jenis ?? '-'} • ${item.satuan ?? '-'}
+                                        </div>
+                                    </div>
+                                </div>
+                            `);
+                        }
+                    },
+
+                    // {
+                    //     name: 'Jenis',
+                    //     width: '120px',
+                    //     formatter: (_, row) => row.cells[3].data
+                    // },
+
+                    // {
+                    //     name: 'Satuan',
+                    //     width: '100px',
+                    //     formatter: (_, row) => row.cells[4].data
+                    // },
+
+                    {
+                        name: 'Harga',
+                        width: '150px',
+                        formatter: (_, row) => gridjs.html(`<b>${formatRupiah(row.cells[2].data)}</b>`)
+                    },
+
+                    {
+                        name: 'Diperbarui',
+                        width: '120px',
+                        formatter: (_, row) => row.cells[3].data
+                    },
+
+                    {
+                        id: 'actions',
+                        name: 'Aksi',
+                        width: '120px',
+                        className: {
+                            th: 'text-center',
+                            td: 'text-center'
+                        },
+                        // attributes: {
+                        //     th: { class: 'text-center' },
+                        //     td: { class: 'text-center' }
+                        // },
+                        formatter: (_, row) => gridjs.html(`
+                            <div class="d-flex justify-content-center">
+                                <button class="btn btn-sm btn-success"
+                                    onclick="tambahKeranjang(${row.cells[0].data})">
+                                    <i class="ri-add-box-line me-1"></i> Tambah
+                                </button>
+                            </div>
+                        `)
+                    }
+                ],
+
+                server: {
+                    url: '/api/v4/administrasi/pengadaan/barang',
+                    then: data => data.data.map(mapData),
+                    total: data => data.total
+                },
+
+                pagination: {
+                    enabled: true,
+                    limit: 10,
+                    server: {
+                        url: (prev, page, limit) => {
+                            const separator = prev.includes('?') ? '&' : '?';
+                            return `${prev}${separator}page=${page+1}&limit=${limit}`;
+                        }
+                    }
+                },
+
+                sort: false
+            }).render(document.getElementById("product-table"));
+        }
+
+        function applyFilters(){
+
+            const search = $('#search-input').val();
+            const jenis = $('#category-filter').val();
+            const harga = $('#harga-filter').val();
+
+            const params = new URLSearchParams();
+
+            if(search) params.append('search', search);
+            if(jenis) params.append('jenis', jenis);
+            if(harga) params.append('harga', harga);
+
+            let url = '/api/v4/administrasi/pengadaan/barang?' + params.toString();
+
+            grid.updateConfig({
+                server: {
+                    url: url,
+                    then: data => data.data.map(mapData),
+                    total: data => data.total
+                }
+            }).forceRender();
+        }
+
+        function tambahKeranjang(id){
+            console.log('Tambah ke keranjang:', id);
+
+            // contoh ajax
+            // $.post('/api/v4/pengadaan/cart', {
+            //     id_barang: id,
+            //     _token: $('meta[name="csrf-token"]').attr('content')
+            // }, function(res){
+            //     alert('Berhasil ditambahkan ke keranjang');
+            // });
+        }
+
     </script>
 @endsection

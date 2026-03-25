@@ -46,6 +46,9 @@
 <!-- Custom-Switcher JS -->
 <script src="{{ asset('js/custom-switcher.min.js') }}"></script>
 
+<!-- Grid JS -->
+<script src="{{ asset('libs/gridjs/gridjs.umd.js') }}"></script>
+
 <!-- Date & Time Picker JS -->
 <script src="{{ asset('libs/flatpickr/flatpickr.min.js') }}"></script>
 
