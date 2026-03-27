@@ -55,6 +55,9 @@
 <!-- FlatPickr CSS -->
 <link rel="stylesheet" href="{{ asset('libs/flatpickr/flatpickr.min.css') }}">
 
+<!-- PrismCoy CSS -->
+<link rel="stylesheet" href="{{ asset('libs/prismjs/themes/prism-coy.min.css') }}">
+
 <!-- Auto Complete CSS -->
 <link rel="stylesheet" href="{{ asset('libs/@tarekraafat/autocomplete.js/css/autoComplete.css') }}">
 
@@ -63,4 +66,7 @@
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
 
 <!-- DataTable -->
-<link href="https://cdn.datatables.net/v/bs5/jq-3.7.0/jszip-3.10.1/dt-2.3.7/b-3.2.6/b-colvis-3.2.6/b-html5-3.2.6/b-print-3.2.6/cc-1.2.0/fc-5.0.5/r-3.0.8/sb-1.8.4/datatables.min.css" rel="stylesheet" integrity="sha384-xE8CsVVujM0GkvuHxKaVX6wHHB3EF3z0ghhgyAdjySRvPjTrsQL7KyVIRfzZtA9f" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.3.0/css/responsive.bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.bootstrap5.min.css">
+{{-- <link href="https://cdn.datatables.net/v/bs5/jq-3.7.0/jszip-3.10.1/dt-2.3.7/b-3.2.6/b-colvis-3.2.6/b-html5-3.2.6/b-print-3.2.6/cc-1.2.0/fc-5.0.5/r-3.0.8/sb-1.8.4/datatables.min.css" rel="stylesheet" integrity="sha384-xE8CsVVujM0GkvuHxKaVX6wHHB3EF3z0ghhgyAdjySRvPjTrsQL7KyVIRfzZtA9f" crossorigin="anonymous"> --}}

@@ -39,9 +39,19 @@
 <script src="{{ asset('libs/apexcharts/apexcharts.min.js') }}"></script>
 
 <!-- Datatables Cdn -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js" integrity="sha384-VFQrHzqBh5qiJIU0uGU5CIW3+OWpdGGJM9LBnGbuIH2mkICcFZ7lPd/AAtI7SNf7" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.6/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js" integrity="sha384-VFQrHzqBh5qiJIU0uGU5CIW3+OWpdGGJM9LBnGbuIH2mkICcFZ7lPd/AAtI7SNf7" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js" integrity="sha384-/RlQG9uf0M2vcTw3CX7fbqgbj/h8wKxw7C3zu9/GxcBPRKOEcESxaxufwRXqzq6n" crossorigin="anonymous"></script>
-<script src="https://cdn.datatables.net/v/bs5/jq-3.7.0/jszip-3.10.1/dt-2.3.7/b-3.2.6/b-colvis-3.2.6/b-html5-3.2.6/b-print-3.2.6/cc-1.2.1/sb-1.8.4/sp-2.3.5/datatables.min.js" integrity="sha384-SXwI3wNL77XIDCT2k19C4IUcyvREECbZ8rokpH2v4myQ+VqjX4Bxz0n+XzvpOys3" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/v/bs5/jq-3.7.0/jszip-3.10.1/dt-2.3.7/b-3.2.6/b-colvis-3.2.6/b-html5-3.2.6/b-print-3.2.6/cc-1.2.1/sb-1.8.4/sp-2.3.5/datatables.min.js" integrity="sha384-SXwI3wNL77XIDCT2k19C4IUcyvREECbZ8rokpH2v4myQ+VqjX4Bxz0n+XzvpOys3" crossorigin="anonymous"></script> --}}
 
 <!-- Custom-Switcher JS -->
 <script src="{{ asset('js/custom-switcher.min.js') }}"></script>
@@ -51,6 +61,10 @@
 
 <!-- Date & Time Picker JS -->
 <script src="{{ asset('libs/flatpickr/flatpickr.min.js') }}"></script>
+
+<!-- Custom Charts JS -->
+<script src="{{ asset('libs/prismjs/prism.js') }}"></script>
+<script src="{{ asset('js/prism-custom.js') }}"></script>
 
 <!-- Custom Charts JS -->
 {{-- <script src="{{ asset('js/ecommerce-dashboard.js') }}"></script> --}}

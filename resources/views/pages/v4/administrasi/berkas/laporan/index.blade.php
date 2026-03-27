@@ -126,11 +126,11 @@
                                     <select class="select2 form-control" name="bln" id="bln-tambah" style="width: 100%" required>
                                         <option value="">Bulan</option>
                                         <?php
-                                        $bulan = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-                                        $jml_bln = count($bulan);
-                                        for ($c = 1; $c < $jml_bln; $c += 1) {
-                                            echo "<option value=$c> $bulan[$c] </option>";
-                                        }
+                                            $bulan = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                                            $jml_bln = count($bulan);
+                                            for ($c = 1; $c < $jml_bln; $c += 1) {
+                                                echo "<option value=$c> $bulan[$c] </option>";
+                                            }
                                         ?>
                                     </select>
                                 </div>

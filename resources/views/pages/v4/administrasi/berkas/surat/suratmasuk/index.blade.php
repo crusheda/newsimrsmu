@@ -856,80 +856,136 @@
             $('#uploadFileSusulan').empty();
             $('#linksurat').empty();
             $.ajax(
-            {
-                url: "/api/v4/administrasi/berkas/suratmasuk/data/"+id,
-                type: 'GET',
-                dataType: 'json', // added data type
-                success: function(res) {
-                    $('#ubah').modal('show');
-                    // var dt = new Date(res.show.tanggal).toJSON().slice(0,19);
-                    var dt = moment(res.show.tanggal).format('Y-MM-DD HH:mm');
-                    if (res.show.filename != null) {
-                        document.getElementById('linksurat').innerHTML = `
-                        <label class='form-label'>Berkas Surat Anda <a class='text-danger'>*</a></label>&nbsp;&nbsp;
-                        <button class='btn btn-sm btn-info-transparent' type='button' onclick='ubahFile(`+id+`)'>Ubah File</button>
-                        <h6 class='mb-2'><a class='link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline' href='/v4/administrasi/berkas/suratkeluar/`+res.show.id+`/download'>`+res.show.title+`</a></h6>
-                        <input type="text" class="form-control" id="verifberkas`+res.show.id+`" hidden>`;
-                        $("#verifberkas"+res.show.id).val(0);
-                    } else {
-                        document.getElementById('linksurat').innerHTML = `
-                        <label class='form-label'>Berkas Surat Anda <a class='text-danger'>*</a></label>
-                        <input type='file' id="filex`+res.show.id+`" name='filex`+res.show.id+`' class="form-control mb-2" accept="application/pdf">
-                        <input type="text" class="form-control" id="verifberkas`+res.show.id+`" hidden>
-                        <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>5 mb</strong><br>
-                        <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berupa Dokumen Scan<br>
-                        <i class="fa-fw fas fa-caret-right nav-icon"></i> Dijadikan dalam Satu file <strong>PDF</strong>`;
-                        $("#verifberkas"+res.show.id).val(1);
+                {
+                    url: "/api/v4/administrasi/berkas/suratmasuk/data/"+id,
+                    type: 'GET',
+                    dataType: 'json', // added data type
+                    success: function(res) {
+                        $('#ubah').modal('show');
+                        // var dt = new Date(res.show.tanggal).toJSON().slice(0,19);
+                        var dt = moment(res.show.tanggal).format('Y-MM-DD HH:mm');
+                        if (res.show.filename != null) {
+                            document.getElementById('linksurat').innerHTML = `
+                            <label class='form-label'>Berkas Surat Anda <a class='text-danger'>*</a></label>&nbsp;&nbsp;
+                            <button class='btn btn-sm btn-info-transparent' type='button' onclick='ubahFile(`+id+`)'>Ubah File</button>
+                            <h6 class='mb-2'><a class='link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline' href='/v4/administrasi/berkas/suratkeluar/`+res.show.id+`/download'>`+res.show.title+`</a></h6>
+                            <input type="text" class="form-control" id="verifberkas`+res.show.id+`" hidden>`;
+                            $("#verifberkas"+res.show.id).val(0);
+                        } else {
+                            document.getElementById('linksurat').innerHTML = `
+                            <label class='form-label'>Berkas Surat Anda <a class='text-danger'>*</a></label>
+                            <input type='file' id="filex`+res.show.id+`" name='filex`+res.show.id+`' class="form-control mb-2" accept="application/pdf">
+                            <input type="text" class="form-control" id="verifberkas`+res.show.id+`" hidden>
+                            <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>5 mb</strong><br>
+                            <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berupa Dokumen Scan<br>
+                            <i class="fa-fw fas fa-caret-right nav-icon"></i> Dijadikan dalam Satu file <strong>PDF</strong>`;
+                            $("#verifberkas"+res.show.id).val(1);
+                        }
+                        $("#id_edit").val(res.show.id);
+
+                        // INIT DATE
+                        const today = new Date();
+                        var tomorrow = new Date(today);
+                        tomorrow.setDate(tomorrow.getDate() + 2);
+                        var next = new Date(today);
+                        next.setDate(next.getDate() + 999999);
+                            // TGL SURAT EDIT
+                            var a = document.querySelector("#tgl_surat");
+                            var b = new Date(Date.now() - 1728e5);
+                            a.flatpickr({
+                                enableTime: 0,
+                                minuteIncrement: 1,
+                                defaultDate: res.show.tgl_surat,
+                                time_24hr: true,
+                                disable: [{
+                                    from: tomorrow.toISOString().split("T")[0],
+                                    to: next.toISOString().split("T")[0]
+                                }]
+                            })
+                            // TGL DITERIMA EDIT
+                            var a = document.querySelector("#tgl_diterima");
+                            var b = new Date(Date.now() - 1728e5);
+                            a.flatpickr({
+                                enableTime: 0,
+                                minuteIncrement: 1,
+                                defaultDate: res.show.tgl_diterima,
+                                time_24hr: true,
+                                disable: [{
+                                    from: tomorrow.toISOString().split("T")[0],
+                                    to: next.toISOString().split("T")[0]
+                                }]
+                            })
+
+                        $("#asal").val(res.show.asal);
+                        $("#nomor").val(res.show.nomor);
+                        $("#deskripsi").val(res.show.deskripsi);
+                        $("#tempat").val(res.show.tempat);
+                        $("#waktu").val(res.waktu);
+                        $("#user").find('option').remove();
+                        user = ``;
+                        res.user.forEach(item => {
+                            user += `<option value="${item.id}" ${res.show.user == item.id ? "selected":""}>${item.nama}</option>`;
+                        })
+                        $("#user").append(user);
                     }
-                    $("#id_edit").val(res.show.id);
-
-                    // INIT DATE
-                    const today = new Date();
-                    var tomorrow = new Date(today);
-                    tomorrow.setDate(tomorrow.getDate() + 2);
-                    var next = new Date(today);
-                    next.setDate(next.getDate() + 999999);
-                        // TGL SURAT EDIT
-                        var a = document.querySelector("#tgl_surat");
-                        var b = new Date(Date.now() - 1728e5);
-                        a.flatpickr({
-                            enableTime: 0,
-                            minuteIncrement: 1,
-                            defaultDate: res.show.tgl_surat,
-                            time_24hr: true,
-                            disable: [{
-                                from: tomorrow.toISOString().split("T")[0],
-                                to: next.toISOString().split("T")[0]
-                            }]
-                        })
-                        // TGL DITERIMA EDIT
-                        var a = document.querySelector("#tgl_diterima");
-                        var b = new Date(Date.now() - 1728e5);
-                        a.flatpickr({
-                            enableTime: 0,
-                            minuteIncrement: 1,
-                            defaultDate: res.show.tgl_diterima,
-                            time_24hr: true,
-                            disable: [{
-                                from: tomorrow.toISOString().split("T")[0],
-                                to: next.toISOString().split("T")[0]
-                            }]
-                        })
-
-                    $("#asal").val(res.show.asal);
-                    $("#nomor").val(res.show.nomor);
-                    $("#deskripsi").val(res.show.deskripsi);
-                    $("#tempat").val(res.show.tempat);
-                    $("#waktu").val(res.waktu);
-                    $("#user").find('option').remove();
-                    user = ``;
-                    res.user.forEach(item => {
-                        user += `<option value="${item.id}" ${res.show.user == item.id ? "selected":""}>${item.nama}</option>`;
-                    })
-                    $("#user").append(user);
                 }
-            }
             );
+
+            // AUTOCOMPLETE ASAL
+            new autoComplete({
+                selector: "#asal",
+                placeHolder: "Cari asal...",
+                data: {
+                    src: async (query) => {
+
+                        const response = await fetch("/api/v4/administrasi/berkas/suratmasuk/cariasal?cari=" + query);
+                        const data = await response.json();
+
+                        return data;
+
+                    },
+                    cache: false
+                },
+                resultItem: {
+                    highlight: true
+                },
+                events: {
+                    input: {
+                        selection: (event) => {
+                            const selection = event.detail.selection.value;
+                            document.querySelector("#asal").value = selection;
+                        }
+                    }
+                }
+            });
+
+            // AUTOCOMPLETE TEMPAT
+            new autoComplete({
+                selector: "#tempat",
+                placeHolder: "Cari tempat...",
+                data: {
+                    src: async (query) => {
+
+                        const response = await fetch("/api/v4/administrasi/berkas/suratmasuk/caritempat?cari=" + query);
+                        const data = await response.json();
+
+                        return data;
+
+                    },
+                    cache: false
+                },
+                resultItem: {
+                    highlight: true
+                },
+                events: {
+                    input: {
+                        selection: (event) => {
+                            const selection = event.detail.selection.value;
+                            document.querySelector("#tempat").value = selection;
+                        }
+                    }
+                }
+            });
         }
 
         // function ubah() {

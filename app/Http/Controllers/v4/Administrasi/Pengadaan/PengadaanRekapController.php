@@ -17,7 +17,7 @@ class PengadaanRekapController extends Controller
 {
     function index(Request $request)
     {
-        if (Auth::user()->getPermission('admin_pengadaan') == true) {
+        if (Auth::user()->can('admin_pengadaan') == true) {
 
             if ($request->kategori == 1) {
                 $nama_kategori = 'ATK';
@@ -39,7 +39,7 @@ class PengadaanRekapController extends Controller
                 'ref' => $ref
             ];
 
-            return view('pages.pengadaan.rekap')->with('list', $data);
+            return view('pages.v4.administrasi.pengadaan.rekap')->with('list', $data);
         } else {
             return redirect()->back();
         }

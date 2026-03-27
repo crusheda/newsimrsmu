@@ -24,7 +24,7 @@ class PengadaanBarangController extends Controller
      */
     public function index()
     {
-        if (Auth::user()->getPermission('admin_pengadaan') == true) {
+        if (Auth::user()->can('admin_pengadaan') == true) {
             $show = pengadaan_barang::get();
             $ref = pengadaan_ref::get();
 
@@ -33,7 +33,7 @@ class PengadaanBarangController extends Controller
                 'ref' => $ref
             ];
 
-            return view('pages.pengadaan.barang.index')->with('list', $data);
+            return view('pages.v4.administrasi.pengadaan.barang')->with('list', $data);
         } else {
             return redirect()->back()->withErrors(['msg' => 'Mohon maaf, Anda tidak memiliki akses untuk membuka Master Barang!']);
         }

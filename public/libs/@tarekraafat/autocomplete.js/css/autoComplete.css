@@ -8,12 +8,12 @@
   /* height: 3rem; */
   width: 100% !important;
   margin: 0;
-  padding: 0.25rem 0.8rem !important;
+  /* padding: 0.5rem 0.75rem !important; */
   line-height: inherit;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
-  font-size: 0.8rem !important;
+  /* font-size: 0.8rem !important; */
   text-overflow: ellipsis;
   color: rgba(255, 122, 122, 0.3);
   outline: none;

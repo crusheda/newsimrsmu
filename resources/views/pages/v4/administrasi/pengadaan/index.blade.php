@@ -107,6 +107,15 @@
                                 data-bs-placement="bottom" data-bs-html="true" title="Refresh Tabel Pengadaan">
                                 <i class="ri-loop-left-line nav-icon"></i>
                             </button>
+                            @can('admin_pengadaan')
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-danger-transparent dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-spy-line me-1"></i> Menu Admin</button>
+                                    <ul class="dropdown-menu p-2">
+                                        <li><a class="dropdown-item" href="javascript:void(0);" onclick="window.location.href='{{ route('v4.administrasi.pengadaan.barang') }}'">Daftar Barang</a></li>
+                                        <li><a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#rekap">Rekapitulasi</a></li>
+                                    </ul>
+                                </div>
+                            @endcan
                         </div>
                         <button class="btn btn-primary btn-shadow" onclick="keranjang()" data-bs-toggle="tooltip"
                             data-bs-placement="bottom" data-bs-html="true" title="Buka Keranjang Pengadaan">
@@ -127,9 +136,11 @@
                                 <select id="category-filter" class="form-control">
                                     <option value="" hidden>Jenis Barang</option>
                                     <option value="all">Semua</option>
-                                    <option value="ATK">ATK</option>
-                                    <option value="CETAK">CETAK</option>
-                                    <option value="BHP">BHP</option>
+                                    @if ($list['ref'])
+                                        @foreach ($list['ref'] as $item)
+                                            <option value="{{ strtoupper($item->nama) }}">{{ $item->nama }}</option>
+                                        @endforeach
+                                    @endif
                                 </select>
                             </div>
 
@@ -149,6 +160,66 @@
                     <div class="card-body">
                         <div id="product-table" class="grid-card-table"><center><i class="fas fa-sync fa-spin nav-icon me-1"></i> Memuat Tabel Pengadaan</center></div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAMPIL FILTER REKAP PENGADAAN -->
+    <div class="modal fade" tabindex="-1" id="rekap" role="dialog" aria-labelledby="orderdetailsModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="orderdetailsModalLabel">Rekapitulasi <b class="text-danger">Data</b></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('v4.administrasi.pengadaan.rekap') }}" name="formRekap" method="POST">
+                        @csrf
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group" style="width: 100%">
+                                    <label class="form-label">Pilih Bulan <b class="text-danger">*</b></label>
+                                    <select onchange="rekapBtn()" class="form-control" name="bulan" id="bulan_all">
+                                        @foreach(getBulanList() as $key => $val)
+                                            <option value="{{ $key }}" {{ $key == date('m') ? 'selected' : '' }}>{{ $val }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group" style="width: 100%">
+                                    <label class="form-label">Pilih Tahun <b class="text-danger">*</b></label>
+                                    <select onchange="rekapBtn()" class="form-control" name="tahun" id="tahun_all">
+                                        @foreach(getTahunRange(2) as $tahun)
+                                            <option value="{{ $tahun }}" {{ $tahun == date('Y') ? 'selected' : '' }}>{{ $tahun }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group" style="width: 100%">
+                                    <label class="form-label">Pilih Jenis / Kategori <b class="text-danger">*</b></label>
+                                    <select onchange="rekapBtn()" class="form-control" name="kategori" id="kategori">
+                                        <option hidden>Pilih Kategori</option>
+                                        @if ($list['ref'])
+                                            @foreach ($list['ref'] as $item)
+                                                <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" id="submit_filterAll" onclick="pushDataRekap()" disabled><i
+                            class="fa-fw fas fa-filter nav-icon"></i> Submit</button>
+                    </form>
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal"><i
+                            class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
                 </div>
             </div>
         </div>
@@ -494,58 +565,6 @@
             });
         }
 
-        // function loadData(){
-
-        //     $.get('/api/v4/administrasi/pengadaan/barang', function(res){
-
-        //         console.log('DATA API:', res);
-
-        //         // ✅ ambil dari res.data
-        //         allData = res.data.map(item => ([
-        //             item.id,
-        //             item.nama,
-        //             item.jenis,
-        //             item.satuan,
-        //             item.harga,
-        //             formatRupiah(item.harga),
-        //             item.user ?? '-',
-        //             new Date(item.created_at).toLocaleDateString('id-ID')
-        //         ]));
-
-        //         console.log('DATA GRID:', allData);
-
-        //         initGrid(allData);
-        //     });
-        // }
-
-        // function initGridOld(data){
-
-        //     if(grid){
-        //         grid.destroy();
-        //     }
-
-        //     grid = new gridjs.Grid({
-        //         columns: [
-        //             'ID',
-        //             'Nama Barang',
-        //             'Jenis',
-        //             'Satuan',
-        //             {
-        //                 name: 'Harga',
-        //                 formatter: (_, row) => {
-        //                     return gridjs.html(`<b>${row.cells[5] ? row.cells[5].data : '-'}</b>`);
-        //                 }
-        //             },
-        //             'User',
-        //             'Tanggal'
-        //         ],
-        //         data: data,
-        //         pagination: true,
-        //         sort: true,
-        //         search: false
-        //     }).render(document.getElementById("product-table"));
-        // }
-
         function mapData(item){
             return [
                 item.id,
@@ -576,8 +595,7 @@
                     },
 
                     {
-                        name: 'Nama Barang',
-                        // width: '300px',
+                        name: 'Nama Barang  (Jenis • Satuan)',
                         formatter: (_, row) => {
 
                             let item = row.cells[1].data;
@@ -586,18 +604,33 @@
                                 ? '/' + item.filename.replace('public/', 'storage/')
                                 : '/images/no-image.png';
 
+                            let isDummy = img === '/images/no-image.png';
+
                             return gridjs.html(`
                                 <div class="d-flex align-items-center gap-3">
-                                    <span class="avatar avatar-lg bg-light">
-                                        <img src="${img}"
-                                            onerror="this.src='/images/no-image.png'"
-                                            style="object-fit:cover;width:100%;height:100%;">
-                                    </span>
+
+                                    ${
+                                        isDummy
+                                        ? `
+                                            <span class="avatar avatar-lg bg-light">
+                                                <img src="${img}"
+                                                    style="object-fit:cover;width:100%;height:100%;opacity:0.7;cursor:default;">
+                                            </span>
+                                        `
+                                        : `
+                                            <a href="${img}" data-lightbox="barang-${row.cells[0].data}" data-title="${item.nama}">
+                                                <span class="avatar avatar-lg bg-light">
+                                                    <img src="${img}"
+                                                        style="object-fit:cover;width:100%;height:100%;cursor:pointer;">
+                                                </span>
+                                            </a>
+                                        `
+                                    }
 
                                     <div>
                                         <div class="fw-semibold">${item.nama}</div>
                                         <div class="text-muted fs-13">
-                                            ${item.jenis ?? '-'} • ${item.satuan ?? '-'}
+                                            ${item.jenis ?? '-'} • ${item.satuan ? item.satuan.toUpperCase() : '-'}
                                         </div>
                                     </div>
                                 </div>
@@ -618,9 +651,9 @@
                     // },
 
                     {
-                        name: 'Harga',
+                        name: 'Harga Satuan',
                         width: '150px',
-                        formatter: (_, row) => gridjs.html(`<b>${formatRupiah(row.cells[2].data)}</b>`)
+                        formatter: (_, row) => gridjs.html(`<b class="fs-16">${formatRupiah(row.cells[2].data)}${row.cells[1].data.satuan? ' /<b class="text-danger">'+row.cells[1].data.satuan+'</b>' : ''}</b>`)
                     },
 
                     {
@@ -660,7 +693,7 @@
 
                 pagination: {
                     enabled: true,
-                    limit: 10,
+                    limit: 15,
                     server: {
                         url: (prev, page, limit) => {
                             const separator = prev.includes('?') ? '&' : '?';
@@ -671,6 +704,12 @@
 
                 sort: false
             }).render(document.getElementById("product-table"));
+
+            lightbox.option({
+                resizeDuration: 200,
+                wrapAround: true,
+                albumLabel: "Gambar %1 dari %2"
+            });
         }
 
         function applyFilters(){
@@ -708,5 +747,36 @@
             // });
         }
 
+        // FUNCTION REKAP
+        function rekapBtn() {
+            // var unit = $("#unit_cari").val();
+            var bulan = $("#bulan_all").val();
+            var tahun = $("#tahun_all").val();
+            var kategori = $("#kategori").val();
+
+            if (bulan != 'Pilih Bulan' && tahun != 'Pilih Tahun' && kategori != 'Pilih Kategori') {
+                $('#submit_filterAll').prop('disabled', false).removeClass('btn-secondary').addClass('btn-primary');
+            }
+        }
+        function pushDataRekap() {
+            $("#rekap").one('submit', function() {
+                //stop submitting the form to see the disabled button effect
+                let x = document.forms["formRekap"]["bulan"].value;
+                let y = document.forms["formRekap"]["tahun"].value;
+                let z = document.forms["formRekap"]["kategori"].value;
+                if (x == "" || y == "" || z == "") {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: 'Mohon lengkapi semua isian',
+                        position: 'topRight'
+                    });
+                    return false;
+                } else {
+                    $("#submit_filterAll").attr('disabled','disabled');
+                    $("#submit_filterAll").find("i").removeClass("fa-filter").addClass("fa-sync fa-spin");
+                    return true;
+                }
+            });
+        }
     </script>
 @endsection

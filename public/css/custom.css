@@ -14,6 +14,19 @@
     to   { transform: rotate(360deg); }
 }
 
+/* HOVER IMG */
+.avatar img {
+    transition: 0.3s;
+}
+.avatar img:hover {
+    transform: scale(1.05);
+}
+/* gambar dummy */
+.avatar img[style*="cursor:default"] {
+    filter: grayscale(80%);
+    opacity: 0.6;
+}
+
 /* SET THEME MODE */
 html[data-theme-mode="dark"] .toggle-logo{
     display:none !important;
@@ -88,4 +101,10 @@ html[data-theme-mode="light"] .desktop-dark{
 }
 th[data-column-id="actions"] .gridjs-th-content {
     text-align: center;
+}
+
+/* INPUT FILE */
+.form-control[type=file] {
+    padding-top: .2rem !important;
+    padding-bottom: .1rem !important;
 }
