@@ -230,11 +230,11 @@ class PengadaanController extends Controller
         return response()->json($barang, 200);
     }
 
-    function tampilKeranjang($id)
+    function tampilKeranjang()
     {
         $keranjang = pengadaan_keranjang::join('users','users.id','=','pengadaan_keranjang.id_user')
                                         ->join('pengadaan_barang','pengadaan_barang.id','=','pengadaan_keranjang.id_barang')
-                                        ->where('pengadaan_keranjang.id_user', $id)
+                                        ->where('pengadaan_keranjang.id_user', auth()->id())
                                         ->select('pengadaan_keranjang.*','users.nama as nama_user','pengadaan_barang.nama as nama_barang','pengadaan_barang.satuan','pengadaan_barang.harga','pengadaan_barang.filename')
                                         ->orderBy('pengadaan_keranjang.updated_at','desc')
                                         ->get();
@@ -248,92 +248,165 @@ class PengadaanController extends Controller
 
     function tambahKeranjang(Request $request)
     {
-        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+        $barang = pengadaan_barang::findOrFail($request->id_barang);
 
-        $getBarang = pengadaan_barang::where('id',$request->id_barang)->first();
+        // 🔥 CEK: kalau barang sudah ada → update qty (BEST PRACTICE)
+        $cek = pengadaan_keranjang::where('id_user', auth()->id())
+                    ->where('id_barang', $request->id_barang)
+                    ->first();
 
-        $data = new pengadaan_keranjang;
-        $data->id_user = $request->id_user;
-        $data->id_barang = $request->id_barang;
-        $data->jml_permintaan = $request->jml;
-        $data->harga_barang = $getBarang->harga;
-        $data->total_barang = $request->jml * $getBarang->harga;
-        $data->ket = $request->ket;
-        $data->save();
+        if ($cek) {
+            $cek->jml_permintaan += $request->jml;
+            $cek->total_barang = $cek->jml_permintaan * $cek->harga_barang;
+            $cek->save();
+        } else {
+            pengadaan_keranjang::create([
+                'id_user' => auth()->id(),
+                'id_barang' => $request->id_barang,
+                'jml_permintaan' => $request->jml,
+                'harga_barang' => $barang->harga,
+                'total_barang' => $request->jml * $barang->harga,
+                'ket' => $request->ket
+            ]);
+        }
 
-        return response()->json($tgl, 200);
+        return response()->json(['success' => true]);
     }
 
     function checkoutKeranjang(Request $request)
     {
-        if (Carbon::now()->isoFormat('DD') > 20) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Pengadaan telah ditutup per Tanggal 20 '.Carbon::now()->isoFormat('MMM YYYY'),
-            ], 400); // status code 400 Bad Request
-        } else {
+        DB::beginTransaction();
 
-            $getRoles = users::Join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-                                ->Join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-                                ->select('roles.name')
-                                ->where('users.id',$request->id_user)
-                                ->get();
+        try {
 
-            foreach ($getRoles as $key => $value) {
-                $unitArr[] = $value->name;
+            if (now()->day > 20) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Pengadaan ditutup'
+                ], 400);
             }
 
-            $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+            $user = auth()->user();
 
-            $queue = pengadaan::orderBy('id_pengadaan','DESC')->first();
+            // ambil role
+            $unitArr = $user->roles->pluck('name')->toArray();
 
-            if (empty($queue)) {
-                $getQueue = 1;
-            } else {
-                $getQueue = $queue->id_pengadaan + 1;
+            // buat pengadaan
+            $pengadaan = pengadaan::create([
+                'id_user' => $user->id,
+                'unit' => json_encode($unitArr),
+                'total' => $request->total,
+                'tgl_pengadaan' => now()
+            ]);
+
+            // loop items dari AJAX
+            foreach ($request->items as $item) {
+
+                $barang = pengadaan_barang::find($item['id_barang']);
+
+                pengadaan_detail::create([
+                    'id_pengadaan' => $pengadaan->id_pengadaan,
+                    'id_barang' => $item['id_barang'],
+                    'jumlah' => $item['jumlah'],
+                    'harga' => $barang->harga,
+                    'satuan' => $barang->satuan,
+                    'total' => $item['jumlah'] * $barang->harga,
+                    'ket' => $item['ket'] ?? null
+                ]);
             }
 
-            pengadaan_keranjang::where('id_user',$request->id_user)->delete();
+            // hapus terakhir (AMAN)
+            pengadaan_keranjang::where('id_user', $user->id)->delete();
 
-            for ($i=0; $i < $request->urutan; $i++) {
-                $data = new pengadaan_detail;
-                $data->id_pengadaan = $getQueue;
-                $data->id_barang = $request->id_barang[$i];
-                $data->jumlah = $request->id_jumlah[$i];
-                // Get Data Barang
-                $getBarang = pengadaan_barang::where('id',$request->id_barang[$i])->first();
-                $data->harga = $getBarang->harga;
-                $data->satuan = $getBarang->satuan;
-                $data->total = $request->id_jumlah[$i] * $getBarang->harga;
-                $data->ket = $request->id_ket[$i];
-                $data->save();
-            }
-
-            $save = new pengadaan;
-            $save->id_pengadaan = $getQueue;
-            $save->id_user = $request->id_user;
-            $save->unit = json_encode($unitArr);
-            $save->total = $request->total;
-            $save->tgl_pengadaan = Carbon::now();
-            $save->save();
+            DB::commit();
 
             return response()->json([
                 'success' => true,
-                'message' => 'Pengajuan Pengadaan telah berhasil dilakukan pada '.$tgl,
-            ], 200); // status code 400 Bad Request
+                'message' => 'Checkout berhasil'
+            ]);
 
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal checkout',
+                'error' => $e->getMessage()
+            ], 500);
         }
-
     }
 
     function hapusKeranjang($id)
     {
-        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+        $item = pengadaan_keranjang::find($id);
 
-        $data = pengadaan_keranjang::find($id);
-        $data->delete();
+        if (!$item || $item->id_user != auth()->id()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tidak diizinkan'
+            ], 403);
+        }
 
-        return response()->json($tgl, 200);
+        $item->delete();
+
+        return response()->json(['success' => true]);
+    }
+
+    public function updateKeranjang(Request $request, $id)
+    {
+        try {
+
+            // VALIDASI
+            $request->validate([
+                'qty' => 'required|integer|min:1'
+            ]);
+
+            // AMBIL DATA
+            $keranjang = pengadaan_keranjang::find($id);
+
+            if (!$keranjang) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Data keranjang tidak ditemukan'
+                ], 404);
+            }
+
+            // 🔒 OPTIONAL (RECOMMENDED) → pastikan milik user login
+            if ($keranjang->id_user != auth()->id()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Tidak diizinkan'
+                ], 403);
+            }
+
+            // HITUNG TOTAL BARU
+            $qty = $request->qty;
+            $total = $qty * $keranjang->harga_barang;
+
+            // UPDATE
+            $keranjang->update([
+                'jml_permintaan' => $qty,
+                'total_barang'   => $total
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Qty berhasil diupdate',
+                'data' => [
+                    'qty' => $qty,
+                    'total' => $total
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     function dataBarang()

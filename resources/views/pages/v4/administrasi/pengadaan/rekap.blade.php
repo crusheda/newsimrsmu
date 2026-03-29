@@ -86,7 +86,7 @@
                                 <label class="form-label">Pilih Bulan <b class="text-danger">*</b></label>
                                 <select onchange="rekapBtn()" class="form-control" name="bulan" id="bulan">
                                     @foreach(getBulanList() as $key => $val)
-                                        <option value="{{ $key }}" {{ $key == date('m') ? 'selected' : '' }}>{{ $val }}</option>
+                                        <option value="{{ $key }}" {{ $key == $list['bln'] ? 'selected' : '' }}>{{ $val }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -96,7 +96,7 @@
                                 <label class="form-label">Pilih Tahun <b class="text-danger">*</b></label>
                                 <select onchange="rekapBtn()" class="form-control" name="tahun" id="tahun">
                                     @foreach(getTahunRange(2) as $tahun)
-                                        <option value="{{ $tahun }}" {{ $tahun == date('Y') ? 'selected' : '' }}>{{ $tahun }}</option>
+                                        <option value="{{ $tahun }}" {{ $tahun == $list['thn'] ? 'selected' : '' }}>{{ $tahun }}</option>
                                     @endforeach
                                 </select>
                             </div>

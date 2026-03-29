@@ -8,8 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class pengadaan_keranjang extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     protected $table = 'pengadaan_keranjang';
     public $timestamps = true;
-    use SoftDeletes;
+
+    protected $fillable = [
+        'id_user',
+        'id_barang',
+        'jml_permintaan',
+        'harga_barang',
+        'total_barang',
+        'ket'
+    ];
 }

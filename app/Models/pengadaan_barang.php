@@ -8,8 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class pengadaan_barang extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     protected $table = 'pengadaan_barang';
     public $timestamps = true;
-    use SoftDeletes;
 }

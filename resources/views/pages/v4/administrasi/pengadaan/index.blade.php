@@ -117,7 +117,7 @@
                                 </div>
                             @endcan
                         </div>
-                        <button class="btn btn-primary btn-shadow" onclick="keranjang()" data-bs-toggle="tooltip"
+                        <button class="btn btn-primary btn-shadow" onclick="bukaKeranjang()" data-bs-toggle="tooltip"
                             data-bs-placement="bottom" data-bs-html="true" title="Buka Keranjang Pengadaan">
                             <i class="ri-shopping-cart-2-line me-1"></i> Keranjang
                         </button>
@@ -160,6 +160,84 @@
                     <div class="card-body">
                         <div id="product-table" class="grid-card-table"><center><i class="fas fa-sync fa-spin nav-icon me-1"></i> Memuat Tabel Pengadaan</center></div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- TAMBAH KERANJANG --}}
+    <div class="modal fade" tabindex="-1" id="addKeranjang" role="dialog" data-bs-backdrop="static"
+        aria-labelledby="orderdetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="orderdetailsModalLabel">Tambah ke keranjang</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <input type="text" id="get_id_barang" class="form-control" hidden>
+                        <div class="col-md-6" id="showBarangKeranjang"></div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label>Jumlah Permintaan <a class="text-danger">*</a></label>
+                                <input type="text" id="jml_k" value="0" class="input-quantity form-control" width="100%">
+                            </div>
+                            <div class="form-group">
+                                <label>Keterangan</label>
+                                <textarea class="form-control" id="ket_k" rows="3" width="100%" placeholder="Optional"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
+                            class="fa fa-times me-1"></i> Batal</button>
+                    <button class="btn btn-info" onclick="masukKeranjang()"><i
+                            class="ti ti-square-plus me-1"></i> Tambah</button>
+                    <button class="btn btn-primary" onclick="showKeranjang()"><i
+                            class="ti ti-shopping-cart-plus me-1 align-middle"></i> Lihat Keranjang</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- BUKA KERANJANG --}}
+    <div class="modal fade" tabindex="-1" id="keranjang" role="dialog" aria-labelledby="orderdetailsModalLabel" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="orderdetailsModalLabel">Keranjang <b class="text-primary">Belanja</b></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="card custom-card overflow-hidden mb-0">
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table nowrap text-nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Produk/Barang</th>
+                                            <th class="text-center">Status</th>
+                                            <th class="text-center">Harga Satuan</th>
+                                            <th>Jumlah</th>
+                                            <th class="text-end">Sub Total</th>
+                                            <th class="text-end">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tampil-keranjang"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger" onclick="checkoutKeranjang()" id="btn-ajukan"
+                        data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
+                        title="Ajukan Barang Pengadaan"><i class="fas fa-check-double me-1"></i> Ajukan</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
+                            class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
                 </div>
             </div>
         </div>
@@ -226,169 +304,11 @@
     </div>
 
     <script>
-        // const options2 = {
-        //     series: [{
-        //         name: 'Profit',
-        //         data: [99, 15, 36, 63, 42, 120, 78, 51, 32, 62, 76, 32],
-        //         type: 'bar',
-        //     }, {
-        //         name: 'Sales',
-        //         data: [136, 150, 158, 115, 102, 156, 135, 151, 125, 68, 164, 163],
-        //         type: 'area',
-        //     }, {
-        //         name: 'Revenue',
-        //         data: [128, 148, 39, 152, 169, 129, 112, 148, 150, 117, 198, 120],
-        //         type: 'line',
-        //     }],
-        //     chart: {
-        //         height: 320,
-        //         type: 'line',
-        //         toolbar: {
-        //             show: false,
-        //         },
-        //         background: 'none',
-        //         fill: "#fff",
-        //     },
-        //     plotOptions: {
-        //         bar: {
-        //             borderRadius: 2,
-        //             columnWidth: '30%',
-        //         }
-        //     },
-        //     grid: {
-        //         borderColor: "#f1f1f1",
-        //         strokeDashArray: 2,
-        //         xaxis: {
-        //             lines: {
-        //                 show: true
-        //             }
-        //         },
-        //         yaxis: {
-        //             lines: {
-        //                 show: false
-        //             }
-        //         }
-        //     },
-        //     colors: ["var(--primary-color)", "rgb(255, 73, 205)", "var(--primary03)"],
-        //     background: 'transparent',
-        //     dataLabels: {
-        //         enabled: false
-        //     },
-        //     stroke: {
-        //         curve: 'smooth',
-        //         width: [2, 1.5, 2],
-        //         dashArray: [0, 0, 6]
-        //     },
-        //     legend: {
-        //         show: true,
-        //         position: 'top',
-        //         markers: {
-        //             width: 8,
-        //             height: 8,
-        //         }
-        //     },
-        //     xaxis: {
-        //         categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-        //         show: false,
-        //         axisBorder: {
-        //             show: false,
-        //             color: 'rgba(119, 119, 142, 0.05)',
-        //             offsetX: 0,
-        //             offsetY: 0,
-        //         },
-        //         axisTicks: {
-        //             show: false,
-        //             borderType: 'solid',
-        //             color: 'rgba(119, 119, 142, 0.05)',
-        //             width: 6,
-        //             offsetX: 0,
-        //             offsetY: 0
-        //         },
-        //         labels: {
-        //             rotate: -90,
-        //         }
-        //     },
-        //     fill: {
-        //         type: ['solid', 'gradient', 'solid'],
-        //         gradient: {
-        //             shadeIntensity: 1,
-        //             opacityFrom: 0.4,
-        //             opacityTo: 0.1,
-        //             stops: [0, 90, 100],
-        //             colorStops: [
-        //                 [
-        //                     {
-        //                         offset: 0,
-        //                         color: "var(--primary-color)",
-        //                         opacity: 1
-        //                     },
-        //                     {
-        //                         offset: 75,
-        //                         color: "var(--primary-color)",
-        //                         opacity: 1
-        //                     },
-        //                     {
-        //                         offset: 100,
-        //                         color: 'var(--primary-color)',
-        //                         opacity: 1
-        //                     }
-        //                 ],
-        //                 [
-        //                     {
-        //                         offset: 0,
-        //                         color: "rgba(255, 73, 205, 0.1)",
-        //                         opacity: 0.1
-        //                     },
-        //                     {
-        //                         offset: 75,
-        //                         color: "rgba(255, 73, 205, 0.1)",
-        //                         opacity: 1
-        //                     },
-        //                     {
-        //                         offset: 100,
-        //                         color: 'rgba(255, 73, 205, 0.2)',
-        //                         opacity: 1
-        //                     }
-        //                 ],
-        //                 [
-        //                     {
-        //                         offset: 0,
-        //                         color: 'var(--primary03)',
-        //                         opacity: 1
-        //                     },
-        //                     {
-        //                         offset: 75,
-        //                         color: 'var(--primary03)',
-        //                         opacity: 0.1
-        //                     },
-        //                     {
-        //                         offset: 100,
-        //                         color: 'var(--primary03)',
-        //                         opacity: 1
-        //                     }
-        //                 ],
-        //             ]
-        //         }
-        //     },
-        //     yaxis: {
-        //         show: false,
-        //         axisBorder: {
-        //             show: false,
-        //         },
-        //         axisTicks: {
-        //             show: false,
-        //         }
-        //     },
-        //     tooltip: {
-        //         x: {
-        //             format: 'dd/MM/yy HH:mm'
-        //         },
-        //     },
-        // };
         let chartPengadaan = null;
         let allData = [];
         let grid = null;
         let debounceTimer;
+        let timeoutQuantity;
 
         function debounce(func, delay){
             return function(...args){
@@ -409,6 +329,40 @@
             $('#harga-filter').on('change', applyFilters);
 
             grafikPengadaan(1);
+
+            // PLUS
+            $(document).on('click', '.plus', function () {
+                let row = $(this).closest('tr');
+                let input = row.find('.qty');
+
+                input.val(parseInt(input.val()) + 1);
+                hitungRow(row);
+            });
+
+            // MINUS
+            $(document).on('click', '.minus', function () {
+                let row = $(this).closest('tr');
+                let input = row.find('.qty');
+
+                let val = parseInt(input.val());
+                if (val > 1) input.val(val - 1);
+
+                hitungRow(row);
+            });
+
+            // INPUT MANUAL
+            $(document).on('keyup change', '.qty', function () {
+                let row = $(this).closest('tr');
+                hitungRow(row);
+            });
+
+            // HAPUS
+            $(document).on('click', '.hapus', function () {
+                let row = $(this).closest('tr');
+                let id = row.data('id');
+
+                hapusKeranjang(id, row);
+            });
         });
 
         function formatRupiah(angka){
@@ -676,7 +630,7 @@
                         // },
                         formatter: (_, row) => gridjs.html(`
                             <div class="d-flex justify-content-center">
-                                <button class="btn btn-sm btn-success"
+                                <button class="btn btn-sm btn-success btn-add" data-id="${row.cells[0].data}"
                                     onclick="tambahKeranjang(${row.cells[0].data})">
                                     <i class="ri-add-box-line me-1"></i> Tambah
                                 </button>
@@ -735,15 +689,316 @@
             }).forceRender();
         }
 
-        function tambahKeranjang(id){
-            console.log('Tambah ke keranjang:', id);
+        function tambahKeranjang(id_barang) {
 
-            // contoh ajax
-            // $.post('/api/v4/pengadaan/cart', {
-            //     id_barang: id,
-            //     _token: $('meta[name="csrf-token"]').attr('content')
-            // }, function(res){
-            //     alert('Berhasil ditambahkan ke keranjang');
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '/api/v4/administrasi/pengadaan/keranjang/tambah',
+                type: 'POST',
+                data: {
+                    id_barang: id_barang,
+                    jml: 1,
+                    ket: ''
+                },
+
+                beforeSend: function () {
+                    // optional loading
+                },
+
+                success: function (res) {
+
+                    iziToast.success({
+                        title: 'Berhasil',
+                        message: 'Barang ditambahkan ke keranjang',
+                        position: 'topRight'
+                    });
+
+                    // 🔥 OPTIONAL: refresh keranjang kalau modal sedang terbuka
+                    if ($('#keranjang').hasClass('show')) {
+                        loadKeranjang();
+                    }
+                },
+
+                error: function (err) {
+
+                    iziToast.error({
+                        title: 'Gagal',
+                        message: err.responseJSON?.message || 'Terjadi kesalahan',
+                        position: 'topRight'
+                    });
+                }
+            });
+        }
+
+        function loadKeranjang() {
+
+            $.get("/api/v4/administrasi/pengadaan/keranjang", function(res) {
+
+                let html = '';
+                let totalAll = 0;
+                let no = 1;
+
+                if (res.keranjang.length > 0) {
+
+                    res.keranjang.forEach(item => {
+
+                        let subtotal = item.jml_permintaan * item.harga_barang;
+                        totalAll += subtotal;
+
+                        html += `
+                        <tr data-id="${item.id}">
+                            <td>${no++}</td>
+
+                            <td>
+                                <div class="d-flex align-items-center gap-3">
+                                    <span class="avatar avatar-xxl">
+                                        <img src="/images/no-img.png">
+                                    </span>
+                                    <div>
+                                        <h6>${item.nama_barang}</h6>
+                                        <small>${item.ket ?? ''}</small>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td class="text-center">
+                                <span class="badge bg-success-transparent">Ready</span>
+                            </td>
+
+                            <td class="text-center">
+                                Rp ${formatRupiah(item.harga_barang)}
+                            </td>
+
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-sm btn-light minus">-</button>
+                                    <input type="text" class="form-control qty text-center" value="${item.jml_permintaan}" style="width:60px">
+                                    <button class="btn btn-sm btn-light plus">+</button>
+                                </div>
+                            </td>
+
+                            <td class="text-end subtotal">
+                                Rp ${formatRupiah(subtotal)}
+                            </td>
+
+                            <td class="text-end">
+                                <button class="btn btn-danger btn-sm hapus">
+                                    <i class="ti ti-trash"></i>
+                                </button>
+                            </td>
+
+                            <input type="hidden" class="harga" value="${item.harga_barang}">
+                            <input type="hidden" class="id_barang" value="${item.id_barang}">
+                            <input type="hidden" class="ket" value="${item.ket ?? ''}">
+                        </tr>
+                        `;
+                    });
+
+                    html += `
+                    <tr>
+                        <td colspan="5"></td>
+                        <td class="text-end fw-bold">
+                            Total: Rp <span id="grandTotal">${formatRupiah(totalAll)}</span>
+                        </td>
+                        <td></td>
+                    </tr>
+                    `;
+
+                } else {
+                    html = `
+                    <tr>
+                        <td colspan="7" class="text-center">Keranjang kosong</td>
+                    </tr>`;
+                }
+
+                $('#tampil-keranjang').html(html);
+            });
+        }
+
+        function hitungRow(row) {
+            let harga = parseInt(row.find('.harga').val());
+            let qty = parseInt(row.find('.qty').val()) || 0;
+
+            let subtotal = harga * qty;
+
+            row.find('.subtotal').text('Rp ' + formatRupiah(subtotal));
+
+            hitungTotal();
+
+            let id = row.data('id');
+            updateQty(id, qty);
+        }
+
+        function hitungTotal() {
+            let total = 0;
+
+            $('#tampil-keranjang tr').each(function () {
+
+                let harga = $(this).find('.harga').val();
+                let qty = $(this).find('.qty').val();
+
+                if (harga && qty) {
+                    total += harga * qty;
+                }
+            });
+
+            $('#grandTotal').text(formatRupiah(total));
+        }
+
+        function updateQty(id, qty) {
+            clearTimeout(timeoutQuantity);
+            timeoutQuantity = setTimeout(() => {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: `/api/v4/administrasi/pengadaan/keranjang/update/${id}`,
+                    type: 'PUT',
+                    data: { qty: qty }
+                });
+            }, 500);
+        }
+
+        function hapusKeranjang(id, row) {
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: `/api/v4/administrasi/pengadaan/keranjang/${id}/hapus`,
+                type: 'DELETE',
+                success: function () {
+                    row.remove();
+                    hitungTotal();
+                }
+            });
+        }
+
+        function checkoutKeranjang() {
+
+            let items = [];
+
+            $('#tampil-keranjang tr').each(function () {
+
+                let id_barang = $(this).find('.id_barang').val();
+
+                if (id_barang) {
+                    items.push({
+                        id_barang: id_barang,
+                        jumlah: $(this).find('.qty').val(),
+                        ket: $(this).find('.ket').val()
+                    });
+                }
+            });
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '/api/v4/administrasi/pengadaan/checkout',
+                type: 'POST',
+                data: {
+                    items: items,
+                    total: $('#grandTotal').text().replace(/\D/g, '')
+                },
+                success: function (res) {
+                    iziToast.success({ message: res.message });
+                    $('#keranjang').modal('hide');
+                },
+                error: function (err) {
+                    iziToast.error({
+                        message: err.responseJSON?.message
+                    });
+                }
+            });
+        }
+
+        function bukaKeranjang() {
+            $('#keranjang').modal('show');
+
+            loadKeranjang();
+            // $.get("/api/v4/administrasi/pengadaan/keranjang", function(res) {
+
+            //     let html = '';
+            //     let totalAll = 0;
+            //     let no = 1;
+
+            //     if (res.keranjang.length > 0) {
+
+            //         res.keranjang.forEach(item => {
+
+            //             let subtotal = item.jml_permintaan * item.harga_barang;
+            //             totalAll += subtotal;
+
+            //             html += `
+            //             <tr data-id="${item.id}">
+            //                 <td>${no++}</td>
+
+            //                 <td>
+            //                     <div class="d-flex align-items-center gap-3">
+            //                         <span class="avatar avatar-xxl">
+            //                             <img src="/images/no-img.png">
+            //                         </span>
+            //                         <div>
+            //                             <h6 class="fw-semibold">${item.nama_barang}</h6>
+            //                             <small class="text-muted">${item.ket ?? ''}</small>
+            //                         </div>
+            //                     </div>
+            //                 </td>
+
+            //                 <td class="text-center">
+            //                     <span class="badge bg-success-transparent">Ready</span>
+            //                 </td>
+
+            //                 <td class="text-center">
+            //                     Rp ${formatRupiah(item.harga_barang)}
+            //                 </td>
+
+            //                 <td>
+            //                     <div class="d-inline-flex align-items-center gap-2">
+            //                         <button class="btn btn-sm btn-light minus">-</button>
+            //                         <input type="text" class="form-control text-center qty"
+            //                             value="${item.jml_permintaan}" style="width:60px">
+            //                         <button class="btn btn-sm btn-light plus">+</button>
+            //                     </div>
+            //                 </td>
+
+            //                 <td class="text-end subtotal">
+            //                     Rp ${formatRupiah(subtotal)}
+            //                 </td>
+
+            //                 <td class="text-end">
+            //                     <button class="btn btn-sm btn-danger hapus">
+            //                         <i class="ti ti-trash"></i>
+            //                     </button>
+            //                 </td>
+
+            //                 <input type="hidden" class="harga" value="${item.harga_barang}">
+            //                 <input type="hidden" class="id_barang" value="${item.id_barang}">
+            //                 <input type="hidden" class="ket" value="${item.ket ?? ''}">
+            //             </tr>
+            //             `;
+            //         });
+
+            //         // TOTAL
+            //         html += `
+            //         <tr>
+            //             <td colspan="5"></td>
+            //             <td class="text-end fw-bold">
+            //                 Total: Rp <span id="grandTotal">${formatRupiah(totalAll)}</span>
+            //             </td>
+            //             <td></td>
+            //         </tr>
+            //         `;
+
+            //         $('#tampil-keranjang').html(html);
+
+            //     } else {
+            //         iziToast.warning({
+            //             message: 'Keranjang kosong'
+            //         });
+            //     }
             // });
         }
 
