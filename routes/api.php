@@ -178,13 +178,14 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
 
         // PENGADAAN
         // Route::get('administrasi/pengadaan/data/{id}', [PengadaanController::class, 'dataPengadaan']);
-        // Route::get('administrasi/pengadaan/riwayat/{id}', [PengadaanController::class, 'riwayatPengadaan']);
+        Route::get('administrasi/pengadaan/riwayat', [PengadaanController::class, 'riwayatPengadaan']);
         // Route::delete('administrasi/pengadaan/riwayat/{id}/hapus', [PengadaanController::class, 'hapusRiwayatPengadaan']);
         // Route::get('administrasi/pengadaan/keranjang/{id}/tampil', [PengadaanController::class, 'tampilTambahKeranjang']);
         Route::get('administrasi/pengadaan/keranjang', [PengadaanController::class, 'tampilKeranjang']);
         Route::get('administrasi/pengadaan/keranjang/update/{id}', [PengadaanController::class, 'updateKeranjang']);
         Route::post('administrasi/pengadaan/keranjang/tambah', [PengadaanController::class, 'tambahKeranjang']);
         Route::post('administrasi/pengadaan/checkout', [PengadaanController::class, 'checkoutKeranjang']);
+        Route::post('administrasi/pengadaan/copy', [PengadaanController::class, 'copyPengadaan']);
         Route::delete('administrasi/pengadaan/keranjang/{id}/hapus', [PengadaanController::class, 'hapusKeranjang']);
         Route::get('administrasi/pengadaan/barang', [PengadaanController::class, 'getBarangPengadaan']);
         // Route::get('administrasi/pengadaan/barang', [PengadaanController::class, 'loadMore']);

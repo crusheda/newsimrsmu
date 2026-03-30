@@ -319,6 +319,9 @@
         });
 
         function showRiwayat() {
+            if ($.fn.DataTable.isDataTable('#dttable')) {
+                $('#dttable').DataTable().clear().destroy();
+            }
             $("#tampil-tbody").empty().append(`<tr style='font-size:13px'><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
 
             const btn = $('#btn-refresh-tabel');
@@ -333,7 +336,6 @@
                 },
                 success: function(res) {
                     $("#tampil-tbody").empty();
-                    $('#dttable').DataTable().clear().destroy();
                     res.forEach(item => {
                         var updet = new Date(item.updated_at).toLocaleDateString("sv-SE");
                         var date = new Date().toLocaleDateString("sv-SE");
