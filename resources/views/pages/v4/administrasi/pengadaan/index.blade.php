@@ -166,8 +166,7 @@
     </div>
 
     {{-- TAMBAH KERANJANG --}}
-    <div class="modal fade" tabindex="-1" id="addKeranjang" role="dialog" data-bs-backdrop="static"
-        aria-labelledby="orderdetailsModalLabel" aria-hidden="true">
+    <div class="modal fade" tabindex="-1" id="addKeranjang" role="dialog" data-bs-backdrop="static" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -175,28 +174,27 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="row">
-                        <input type="text" id="get_id_barang" class="form-control" hidden>
-                        <div class="col-md-6" id="showBarangKeranjang"></div>
-                        <div class="col-md-6">
-                            <div class="form-group mb-3">
-                                <label>Jumlah Permintaan <a class="text-danger">*</a></label>
-                                <input type="text" id="jml_k" value="0" class="input-quantity form-control" width="100%">
-                            </div>
-                            <div class="form-group">
-                                <label>Keterangan</label>
-                                <textarea class="form-control" id="ket_k" rows="3" width="100%" placeholder="Optional"></textarea>
-                            </div>
-                        </div>
+                    <input type="hidden" id="id_barang_input">
+
+                    <div class="mb-3">
+                        <label>Jumlah</label>
+                        <input type="number" id="jml_input" class="form-control" value="1" min="1">
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Keterangan</label>
+                        <textarea id="ket_input" class="form-control" placeholder="Opsional..."></textarea>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
-                            class="fa fa-times me-1"></i> Batal</button>
-                    <button class="btn btn-info" onclick="masukKeranjang()"><i
-                            class="ti ti-square-plus me-1"></i> Tambah</button>
-                    <button class="btn btn-primary" onclick="showKeranjang()"><i
-                            class="ti ti-shopping-cart-plus me-1 align-middle"></i> Lihat Keranjang</button>
+                <div class="modal-footer d-flex justify-content-between">
+                    <button class="btn btn-primary-transparent" onclick="bukaKeranjang()"><i
+                            class="ri-shopping-cart-2-line me-1 align-middle"></i> Lihat Keranjang</button>
+                    <div>
+                        <button class="btn btn-info" onclick="submitTambahKeranjang()" id="btn-tambah-keranjang"><i
+                            class="ri-add-box-line me-1"></i> Masukkan ke Keranjang</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
+                                class="ri-close-line me-1"></i> Tutup</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -232,12 +230,17 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button class="btn btn-danger" onclick="checkoutKeranjang()" id="btn-ajukan"
+                <div class="modal-footer d-flex justify-content-between">
+                    <button class="btn btn-warning-transparent" onclick="loadKeranjang()" id="btn-refresh-keranjang"
                         data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
-                        title="Ajukan Barang Pengadaan"><i class="fas fa-check-double me-1"></i> Ajukan</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
-                            class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
+                        title="Muat Ulang Keranjang"><i class="ri-loop-left-line me-1"></i> Muat Ulang</button>
+                    <div>
+                        <button class="btn btn-danger" onclick="checkoutKeranjang()" id="btn-ajukan"
+                            data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
+                            title="Ajukan Pengadaan"><i class="ri-luggage-cart-line me-1"></i> Ajukan</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
+                                class="ri-close-line me-1"></i> Tutup</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -690,6 +693,27 @@
         }
 
         function tambahKeranjang(id_barang) {
+            $('#id_barang_input').val(id_barang);
+            $('#jml_input').val(1);
+            $('#ket_input').val('');
+
+            $('#addKeranjang').modal('show');
+        }
+
+        function submitTambahKeranjang() {
+
+            let id_barang = $('#id_barang_input').val();
+            let jml = $('#jml_input').val();
+            let ket = $('#ket_input').val();
+
+            const btn = $('#btn-tambah-keranjang');
+
+            if (jml < 1) {
+                iziToast.warning({
+                    message: 'Jumlah minimal 1'
+                });
+                return;
+            }
 
             $.ajax({
                 headers: {
@@ -699,33 +723,33 @@
                 type: 'POST',
                 data: {
                     id_barang: id_barang,
-                    jml: 1,
-                    ket: ''
+                    jml: jml,
+                    ket: ket
                 },
-
-                beforeSend: function () {
-                    // optional loading
+                beforeSend: function() {
+                    btn.prop('disabled', true);
+                    btn.find("i").addClass("ri-spin-slow ri-loop-left-line").removeClass('ri-add-box-line');
                 },
-
                 success: function (res) {
 
                     iziToast.success({
-                        title: 'Berhasil',
-                        message: 'Barang ditambahkan ke keranjang',
+                        title: 'Pesan System!',
+                        message: 'Barang berhasil ditambahkan ke keranjang',
                         position: 'topRight'
                     });
 
-                    // 🔥 OPTIONAL: refresh keranjang kalau modal sedang terbuka
+                    $('#addKeranjang').modal('hide');
+
                     if ($('#keranjang').hasClass('show')) {
                         loadKeranjang();
                     }
-                },
-
-                error: function (err) {
-
+                }, complete: function() {
+                    btn.prop('disabled', false);
+                    btn.find("i").removeClass("ri-spin-slow ri-loop-left-line").addClass('ri-add-box-line');
+                }, error: function(xhr, status, error) {
                     iziToast.error({
-                        title: 'Gagal',
-                        message: err.responseJSON?.message || 'Terjadi kesalahan',
+                        title: 'Pesan Galat!',
+                        message: xhr.responseJSON.message,
                         position: 'topRight'
                     });
                 }
@@ -733,87 +757,118 @@
         }
 
         function loadKeranjang() {
+            const btn = $('#btn-refresh-keranjang');
+            $('#addKeranjang').modal('hide');
 
-            $.get("/api/v4/administrasi/pengadaan/keranjang", function(res) {
+            $.ajax({
+                url: "/api/v4/administrasi/pengadaan/keranjang",
+                type: 'GET',
+                dataType: 'json', // added data type
+                beforeSend: function() {
+                    btn.prop('disabled', true);
+                    btn.find("i").addClass("ri-spin-slow");
 
-                let html = '';
-                let totalAll = 0;
-                let no = 1;
+                    $('#tampil-keranjang').html(`<tr><td colspan="7" class="text-center"><i class="ri-spin ri-loop-left-line me-1"></i> Memuat Barang di Keranjang</td></tr>`);
+                },
+                success: function(res) {
 
-                if (res.keranjang.length > 0) {
+                    let html = '';
+                    let totalAll = 0;
+                    let no = 1;
 
-                    res.keranjang.forEach(item => {
+                    if (res.keranjang.length > 0) {
 
-                        let subtotal = item.jml_permintaan * item.harga_barang;
-                        totalAll += subtotal;
+                        res.keranjang.forEach(item => {
+
+                            let subtotal = item.jml_permintaan * item.harga_barang;
+                            totalAll += subtotal;
+
+                            let img = item.filename
+                                ? '/' + item.filename.replace('public/', 'storage/')
+                                : '/images/no-image.png';
+
+                            html += `
+                            <tr data-id="${item.id}">
+                                <td>${no++}</td>
+
+                                <td>
+                                    <div class="d-flex align-items-start gap-2">
+                                        <span class="avatar avatar-sm">
+                                            <img src="${img}">
+                                        </span>
+                                        <div class="w-100">
+                                            <h6 class="mb-1 text-wrap">
+                                                ${item.nama_barang}
+                                            </h6>
+                                            <small class="text-muted">
+                                                ${item.jenis ?? '-'} <div class="vr ms-1 me-1"></div> ${item.satuan ? item.satuan.toUpperCase() : '-'}
+                                            </small>
+                                            <small class="text-muted">Keterangan : <b>${item.ket ?? '-'}</b></small>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td class="text-center">
+                                    <span class="badge bg-success-transparent">Ready</span>
+                                </td>
+
+                                <td class="text-center">
+                                    ${formatRupiah(item.harga_barang)}
+                                </td>
+
+                                <td>
+                                    <div class="d-flex gap-2">
+                                        <button class="btn btn-sm btn-light minus">-</button>
+                                        <input type="text" class="form-control qty text-center" value="${item.jml_permintaan}" style="width:60px">
+                                        <button class="btn btn-sm btn-light plus">+</button>
+                                    </div>
+                                </td>
+
+                                <td class="text-end subtotal">
+                                    ${formatRupiah(subtotal)}
+                                </td>
+
+                                <td class="text-end">
+                                    <button class="btn btn-danger btn-sm hapus">
+                                        <i class="ti ti-trash"></i>
+                                    </button>
+                                </td>
+
+                                <input type="hidden" class="harga" value="${item.harga_barang}">
+                                <input type="hidden" class="id_barang" value="${item.id_barang}">
+                                <input type="hidden" class="ket" value="${item.ket ?? ''}">
+                            </tr>
+                            `;
+                        });
 
                         html += `
-                        <tr data-id="${item.id}">
-                            <td>${no++}</td>
-
-                            <td>
-                                <div class="d-flex align-items-center gap-3">
-                                    <span class="avatar avatar-xxl">
-                                        <img src="/images/no-img.png">
-                                    </span>
-                                    <div>
-                                        <h6>${item.nama_barang}</h6>
-                                        <small>${item.ket ?? ''}</small>
-                                    </div>
-                                </div>
+                        <tr>
+                            <td colspan="5"></td>
+                            <td class="text-end fw-bold">
+                                Total: <span id="grandTotal">${formatRupiah(totalAll)}</span>
                             </td>
-
-                            <td class="text-center">
-                                <span class="badge bg-success-transparent">Ready</span>
-                            </td>
-
-                            <td class="text-center">
-                                Rp ${formatRupiah(item.harga_barang)}
-                            </td>
-
-                            <td>
-                                <div class="d-flex gap-2">
-                                    <button class="btn btn-sm btn-light minus">-</button>
-                                    <input type="text" class="form-control qty text-center" value="${item.jml_permintaan}" style="width:60px">
-                                    <button class="btn btn-sm btn-light plus">+</button>
-                                </div>
-                            </td>
-
-                            <td class="text-end subtotal">
-                                Rp ${formatRupiah(subtotal)}
-                            </td>
-
-                            <td class="text-end">
-                                <button class="btn btn-danger btn-sm hapus">
-                                    <i class="ti ti-trash"></i>
-                                </button>
-                            </td>
-
-                            <input type="hidden" class="harga" value="${item.harga_barang}">
-                            <input type="hidden" class="id_barang" value="${item.id_barang}">
-                            <input type="hidden" class="ket" value="${item.ket ?? ''}">
+                            <td></td>
                         </tr>
                         `;
+
+                    } else {
+                        html = `
+                        <tr>
+                            <td colspan="7" class="text-center">Keranjang kosong</td>
+                        </tr>`;
+                    }
+
+                    $('#tampil-keranjang').html(html);
+                }, complete: function() {
+                    btn.prop('disabled', false);
+                    btn.find("i").removeClass("ri-spin-slow");
+                }, error: function(xhr, status, error) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: xhr.responseJSON.message,
+                        position: 'topRight'
                     });
-
-                    html += `
-                    <tr>
-                        <td colspan="5"></td>
-                        <td class="text-end fw-bold">
-                            Total: Rp <span id="grandTotal">${formatRupiah(totalAll)}</span>
-                        </td>
-                        <td></td>
-                    </tr>
-                    `;
-
-                } else {
-                    html = `
-                    <tr>
-                        <td colspan="7" class="text-center">Keranjang kosong</td>
-                    </tr>`;
                 }
-
-                $('#tampil-keranjang').html(html);
             });
         }
 
@@ -823,7 +878,7 @@
 
             let subtotal = harga * qty;
 
-            row.find('.subtotal').text('Rp ' + formatRupiah(subtotal));
+            row.find('.subtotal').text(formatRupiah(subtotal));
 
             hitungTotal();
 

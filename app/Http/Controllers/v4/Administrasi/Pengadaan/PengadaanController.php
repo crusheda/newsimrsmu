@@ -234,8 +234,9 @@ class PengadaanController extends Controller
     {
         $keranjang = pengadaan_keranjang::join('users','users.id','=','pengadaan_keranjang.id_user')
                                         ->join('pengadaan_barang','pengadaan_barang.id','=','pengadaan_keranjang.id_barang')
+                                        ->join('pengadaan_ref','pengadaan_ref.id','=','pengadaan_barang.ref_barang')
                                         ->where('pengadaan_keranjang.id_user', auth()->id())
-                                        ->select('pengadaan_keranjang.*','users.nama as nama_user','pengadaan_barang.nama as nama_barang','pengadaan_barang.satuan','pengadaan_barang.harga','pengadaan_barang.filename')
+                                        ->select('pengadaan_keranjang.*','users.nama as nama_user','pengadaan_barang.nama as nama_barang','pengadaan_ref.nama as jenis','pengadaan_barang.satuan','pengadaan_barang.harga','pengadaan_barang.filename')
                                         ->orderBy('pengadaan_keranjang.updated_at','desc')
                                         ->get();
 
@@ -248,9 +249,13 @@ class PengadaanController extends Controller
 
     function tambahKeranjang(Request $request)
     {
+        $request->validate([
+            'id_barang' => 'required',
+            'jml' => 'required|integer|min:1'
+        ]);
+
         $barang = pengadaan_barang::findOrFail($request->id_barang);
 
-        // 🔥 CEK: kalau barang sudah ada → update qty (BEST PRACTICE)
         $cek = pengadaan_keranjang::where('id_user', auth()->id())
                     ->where('id_barang', $request->id_barang)
                     ->first();
@@ -258,7 +263,14 @@ class PengadaanController extends Controller
         if ($cek) {
             $cek->jml_permintaan += $request->jml;
             $cek->total_barang = $cek->jml_permintaan * $cek->harga_barang;
+
+            // 🔥 update ket (optional overwrite / append)
+            if ($request->ket) {
+                $cek->ket = $request->ket;
+            }
+
             $cek->save();
+
         } else {
             pengadaan_keranjang::create([
                 'id_user' => auth()->id(),

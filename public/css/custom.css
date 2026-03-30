@@ -86,6 +86,23 @@ html[data-theme-mode="light"] .desktop-dark{
     animation: spin 2s linear infinite reverse;
 }
 
+.ri-spin {
+    display: inline-block;
+    animation: spin 1s linear infinite;
+}
+.ri-spin-slow {
+    display: inline-block;
+    animation: spin 2s linear infinite;
+}
+.ri-spin-reverse {
+    display: inline-block;
+    animation: spin 1s linear infinite reverse;
+}
+.ri-spin-reverse-slow {
+    display: inline-block;
+    animation: spin 2s linear infinite reverse;
+}
+
 .gridjs-table {
     table-layout: fixed;
     width: 100%;
