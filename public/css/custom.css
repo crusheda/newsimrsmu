@@ -44,6 +44,51 @@ html[data-theme-mode="light"] .desktop-dark{
     text-align: justify;
 }
 
+/* DATATABLES */
+.dt-buttons .btn {
+    margin-right: 1px;
+}
+
+.dataTables_length select {
+    margin: 0 5px;
+}
+
+.dataTables_filter input {
+    margin-left: 5px;
+}
+
+.dt-button-collection {
+    padding: 10px;
+}
+
+.dt-button-collection .dt-button {
+    display: block;
+    width: 100%;
+    margin-bottom: 8px;
+    text-align: left;
+    border-radius: 6px;
+}
+
+    /* COLVIS */
+    .dt-button-collection .dt-button::before {
+        content: "☐ ";
+    }
+
+    .dt-button-collection .dt-button.active::before {
+        content: "☑ ";
+    }
+        /* AKTIF */
+        .dt-button-collection .dt-button.active {
+            background-color: #985ffd;
+            color: #fff;
+        }
+
+        /* NON AKTIF */
+        .dt-button-collection .dt-button:not(.active) {
+            background-color: #f8f9fa;
+            color: #985ffd;
+        }
+
 /* AGAR SELECT2 BISA TAMPIL DI DEPAN MODAL */
 /* .select2-container{
     z-index:100000;

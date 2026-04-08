@@ -32,6 +32,7 @@ use \App\Http\Controllers\v4\Administrasi\Berkas\Surat\SuratKeluarController;
 use \App\Http\Controllers\v4\Administrasi\Pengadaan\PengadaanController;
 use \App\Http\Controllers\v4\Administrasi\Pengadaan\PengadaanBarangController;
 use \App\Http\Controllers\v4\Administrasi\Pengadaan\PengadaanRekapController;
+use \App\Http\Controllers\v4\Pelayanan\Kebidanan\SKLController;
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function () { // SIMRSMU v.4
     Route::get('dashboard', [DashboardController::class, 'index'])->name('v4.dashboard');
@@ -97,6 +98,15 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function 
                 Route::get('administrasi/pengadaan/barang', [PengadaanBarangController::class, 'index'])->name('v4.administrasi.pengadaan.barang');
                 Route::get('administrasi/pengadaan/barang/download/{id}', [PengadaanBarangController::class, 'download'])->name('v4.administrasi.pengadaan.barang.download');
 
+    // PELAYANAN
+         // SKL
+            Route::get('kebidanan/skl', [SKLController::class, 'index'])->name('v4.pelayanan.skl');
+            // Route::post('kebidanan/skl', [SKLController::class, 'store'])->name('v4.pelayanan.skl.simpan');
+            // Route::put('kebidanan/skl', [SKLController::class, 'update'])->name('v4.pelayanan.skl');
+            // Route::delete('kebidanan/skl', [SKLController::class, 'destroy'])->name('v4.pelayanan.skl');
+            Route::get('kebidanan/skl/{id}/cetak', [SKLController::class, 'cetak'])->name('v4.pelayanan.skl.cetak');
+            Route::get('kebidanan/skl/{id}/print', [SKLController::class, 'print'])->name('v4.pelayanan.skl.print');
+            // Route::resource('kebidanan/skl', '\App\Http\Controllers\Pelayanan\Kebidanan\sklController');
     // LOGOUT ROUTE
     Route::post('logout', [AuthController::class, 'logout'])->name('v4.logout');
 });
