@@ -15,113 +15,203 @@
 }
 
 /* HOVER IMG */
-.avatar img {
-    transition: 0.3s;
-}
-.avatar img:hover {
-    transform: scale(1.05);
-}
-/* gambar dummy */
-.avatar img[style*="cursor:default"] {
-    filter: grayscale(80%);
-    opacity: 0.6;
-}
+    .avatar img {
+        transition: 0.3s;
+    }
+    .avatar img:hover {
+        transform: scale(1.05);
+    }
+    /* gambar dummy */
+    .avatar img[style*="cursor:default"] {
+        filter: grayscale(80%);
+        opacity: 0.6;
+    }
 
 /* SET THEME MODE */
-html[data-theme-mode="dark"] .toggle-logo{
-    display:none !important;
-}
-html[data-theme-mode="light"] .toggle-dark{
-    display:none !important;
-}
-html[data-theme-mode="dark"] .desktop-logo{
-    display:none !important;
-}
-html[data-theme-mode="light"] .desktop-dark{
-    display:none !important;
-}
-.text-justify{
-    text-align: justify;
-}
+    html[data-theme-mode="dark"] .toggle-logo{
+        display:none !important;
+    }
+    html[data-theme-mode="light"] .toggle-dark{
+        display:none !important;
+    }
+    html[data-theme-mode="dark"] .desktop-logo{
+        display:none !important;
+    }
+    html[data-theme-mode="light"] .desktop-dark{
+        display:none !important;
+    }
+    /* paksa header tetap tampil */
+    /* [data-vertical-style=overlay][data-toggled=icon-overlay-close]:not([data-icon-overlay=open])
+    .app-sidebar .main-sidebar-header {
+        display: flex !important;
+    } */
+    .text-justify{
+        text-align: justify;
+    }
 
 /* AGAR SELECT2 BISA TAMPIL DI DEPAN MODAL */
-/* .select2-container{
-    z-index:100000;
-} */
-/* .select2-container--open {
-    z-index: 9999999;
-}
-.select2-dropdown {
-    z-index: 9999999;
-} */
-/* .select2-selection { overflow: hidden; }
-.select2-selection__rendered { white-space: normal; word-break: break-all; }
-.btn-group-sm>.btn,.btn-sm {
-    --bs-btn-padding-y: 0.05rem;
-    --bs-btn-padding-x: 0.5rem;
-    --bs-btn-font-size: 0.7109375rem;
-    --bs-btn-border-radius: var(--bs-border-radius-sm)
-} */
+    /* .select2-container{
+        z-index:100000;
+    } */
+    /* .select2-container--open {
+        z-index: 9999999;
+    }
+    .select2-dropdown {
+        z-index: 9999999;
+    } */
+    /* .select2-selection { overflow: hidden; }
+    .select2-selection__rendered { white-space: normal; word-break: break-all; }
+    .btn-group-sm>.btn,.btn-sm {
+        --bs-btn-padding-y: 0.05rem;
+        --bs-btn-padding-x: 0.5rem;
+        --bs-btn-font-size: 0.7109375rem;
+        --bs-btn-border-radius: var(--bs-border-radius-sm)
+    } */
 
 /* SPINNING ICONS */
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
 
-.ti-spin {
-    display: inline-block;
-    animation: spin 1s linear infinite;
-}
-.ti-spin-slow {
-    display: inline-block;
-    animation: spin 2s linear infinite;
-}
-.ti-spin-reverse {
-    display: inline-block;
-    animation: spin 1s linear infinite reverse;
-}
-.ti-spin-reverse-slow {
-    display: inline-block;
-    animation: spin 2s linear infinite reverse;
-}
+    .ti-spin {
+        display: inline-block;
+        animation: spin 1s linear infinite;
+    }
+    .ti-spin-slow {
+        display: inline-block;
+        animation: spin 2s linear infinite;
+    }
+    .ti-spin-reverse {
+        display: inline-block;
+        animation: spin 1s linear infinite reverse;
+    }
+    .ti-spin-reverse-slow {
+        display: inline-block;
+        animation: spin 2s linear infinite reverse;
+    }
 
-.ri-spin {
-    display: inline-block;
-    animation: spin 1s linear infinite;
-}
-.ri-spin-slow {
-    display: inline-block;
-    animation: spin 2s linear infinite;
-}
-.ri-spin-reverse {
-    display: inline-block;
-    animation: spin 1s linear infinite reverse;
-}
-.ri-spin-reverse-slow {
-    display: inline-block;
-    animation: spin 2s linear infinite reverse;
-}
+    .ri-spin {
+        display: inline-block;
+        animation: spin 1s linear infinite;
+    }
+    .ri-spin-slow {
+        display: inline-block;
+        animation: spin 2s linear infinite;
+    }
+    .ri-spin-reverse {
+        display: inline-block;
+        animation: spin 1s linear infinite reverse;
+    }
+    .ri-spin-reverse-slow {
+        display: inline-block;
+        animation: spin 2s linear infinite reverse;
+    }
 
-.gridjs-table {
-    table-layout: fixed;
-    width: 100%;
-}
-.gridjs-td {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-.gridjs-table {
-    table-layout: fixed;
-    width: 100%;
-}
-th[data-column-id="actions"] .gridjs-th-content {
-    text-align: center;
-}
+/* GRID-JS */
+    .gridjs-table {
+        table-layout: fixed;
+        width: 100%;
+    }
+    .gridjs-td {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .gridjs-table {
+        table-layout: fixed;
+        width: 100%;
+    }
+    th[data-column-id="actions"] .gridjs-th-content {
+        text-align: center;
+    }
 
 /* INPUT FILE */
-.form-control[type=file] {
-    padding-top: .2rem !important;
-    padding-bottom: .1rem !important;
-}
+    .form-control[type=file] {
+        padding-top: .2rem !important;
+        padding-bottom: .1rem !important;
+    }
+
+/* DataTable Bug FIXED */
+    .dt-button-collection {
+        display: block !important;
+        min-width: 200px;
+    }
+    .dt-button-collection div[role="menu"] {
+        display: flex;
+        flex-direction: column; /* ini yang bikin colvis turun ke bawah */
+    }
+    .dt-button-collection .dt-button {
+        color: black;
+        display: block;
+        width: 100%;
+        text-align: left;
+        margin-bottom: 5px;
+    }
+    .dt-button-collection {
+        padding: 8px;
+        border-radius: 8px;
+        /* background: #fff; */
+        box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    }
+    .dt-button-collection .dt-button {
+        border: none;
+        background: transparent;
+        padding: 6px 10px;
+    }
+    .dt-button-collection .dt-button:hover {
+        background: #f5efff;
+        color: black;
+    }
+    .dt-button.buttons-columnVisibility:hover {
+        background-color: #ede7ff;
+    }
+    .dt-button.buttons-columnVisibility.active {
+        background-color: #f5efff !important;
+    }
+    /* container atas (Peletakan Buttons,Length, dan Search) */
+        /* ============================= */
+        /* DEFAULT (tanpa button) */
+        /* ============================= */
+
+        .dataTables_wrapper:not(:has(.dt-buttons)) .dataTables_length {
+            float: right;
+        }
+
+        .dataTables_wrapper:not(:has(.dt-buttons)) .dataTables_filter {
+            float: left;
+        }
+
+        /* ============================= */
+        /* JIKA ADA BUTTON (Blfrtip) */
+        /* ============================= */
+
+        .dataTables_wrapper:has(.dt-buttons) .dt-buttons {
+            float: left;
+        }
+
+        .dataTables_wrapper:has(.dt-buttons) .dataTables_length {
+            float: right;
+        }
+
+        .dataTables_wrapper:has(.dt-buttons) .dataTables_filter {
+            float: right;
+            margin-right: 10px;
+        }
+
+    /* Pagination sejajar dengan menampilkan data x dari x */
+        /* container bawah */
+        .dataTables_wrapper .dataTables_info,
+        .dataTables_wrapper .dataTables_paginate {
+            display: inline-flex;
+            align-items: center;
+        }
+
+        /* bungkus jadi flex */
+        .dataTables_wrapper .dataTables_info {
+            float: left;
+        }
+
+        .dataTables_wrapper .dataTables_paginate {
+            float: right;
+        }

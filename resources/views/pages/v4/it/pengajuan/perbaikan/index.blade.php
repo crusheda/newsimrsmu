@@ -521,10 +521,6 @@
                         order: [4,"desc"],
                         displayLength: 7,
                         lengthMenu: [7,15,25,50,100,300,500],
-                        language: {
-                            searchPlaceholder: 'Cari Data...',
-                            sSearch: '',
-                        },
                         bAutoWidth: false,
                         aoColumns : [
                             { sWidth: '10%' },

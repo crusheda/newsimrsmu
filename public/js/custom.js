@@ -661,3 +661,17 @@ productPlusBtn.forEach((button) => {
   };
 });
 // Cart quantity settings
+$(document).on('click', '.sidemenu-toggle', function () {
+    // hanya simpan kalau desktop
+    if (window.innerWidth >= 992) {
+        setTimeout(() => {
+            let toggled = $('html').attr('data-toggled');
+
+            if (toggled) {
+                localStorage.setItem('sidebar', toggled);
+            } else {
+                localStorage.removeItem('sidebar');
+            }
+        }, 100);
+    }
+});

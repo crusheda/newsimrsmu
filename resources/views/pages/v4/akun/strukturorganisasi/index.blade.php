@@ -103,17 +103,50 @@
     <script>
         $(document).ready(function() {
             var table = $('#dttable').DataTable({
+                dom: 'Blfrtip',
                 order: [
                     [5, "desc"]
                 ],
-                displayLength: 7,
+                displayLength: 20,
                 lengthChange: true,
-                lengthMenu: [7, 10, 25, 50, 75, 100],
-                buttons: ['copy', 'excel', 'pdf', 'colvis']
+                lengthMenu: [20, 35, 50, 75, 100, 500, 1000, 3000, 7000, 10000, 20000],
+                buttons: [
+                    {
+                        extend: 'copy',
+                        exportOptions: {
+                            columns: ':visible',
+                            format: {
+                                body: function (data, row, column, node) {
+                                    return $(node).text().trim(); // buang HTML
+                                }
+                            }
+                        }
+                    },
+                    {
+                        extend: 'excel',
+                        exportOptions: {
+                            columns: ':visible',
+                            format: {
+                                body: function (data, row, column, node) {
+                                    return $(node).text().trim();
+                                }
+                            }
+                        }
+                    },
+                    {
+                        extend: 'pdf',
+                        exportOptions: {
+                            columns: ':visible',
+                            format: {
+                                body: function (data, row, column, node) {
+                                    return $(node).text().trim();
+                                }
+                            }
+                        }
+                    },
+                    'colvis'
+                ]
             });
-
-            table.buttons().container()
-                .appendTo('#dttable_wrapper .col-md-6:eq(0)');
         })
 
         function hapus(id) {

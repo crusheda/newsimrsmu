@@ -377,7 +377,7 @@
                                         } else {
                                             content += item.tglFrom.substring(0, 10) + `&nbsp;<i class="ti ti-arrow-right-circle text-primary"></i>&nbsp;` + item.tglTo.substring(0, 10);
                                         }
-                            content += "</small></div></div></td><td><div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>"
+                            content += "</small></div></div></td><td><div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='fs-14 mb-0'>"
                                         + new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 19) + "</h6><small class='text-truncate text-muted'>";
                                         res.user.forEach(val => {
                                             if (item.user == val.id) {
@@ -483,7 +483,7 @@
                                             } else {
                                                 content += item.tglFrom.substring(0, 10) + `&nbsp;<i class="ti ti-arrow-right-circle text-primary"></i>&nbsp;` + item.tglTo.substring(0, 10);
                                             }
-                                content += "</small></div></div></td><td><div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>"
+                                content += "</small></div></div></td><td><div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='fs-14 mb-0'>"
                                             + new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 19) + "</h6><small class='text-truncate text-muted'>";
                                             res.user.forEach(val => {
                                                 if (item.user == val.id) {
@@ -495,7 +495,7 @@
                             });
                         }
                         var table = $('#dttable').DataTable({
-                            dom: 'Bfrtip',
+                            dom: 'Blfrtip',
                             order: [
                                 [6, "desc"]
                             ],
@@ -503,10 +503,6 @@
                             lengthChange: true,
                             lengthMenu: [20, 35, 50, 75, 100, 500, 1000, 3000, 7000, 10000, 20000],
                             buttons: ['copy', 'excel', 'pdf', 'colvis'],
-                            language: {
-                                searchPlaceholder: 'Cari Data...',
-                                sSearch: '',
-                            }
                         });
                         $("#btn-refresh-all").prop('disabled', false);
                         $("#btn-refresh-all").find("i").removeClass("fa-spin");

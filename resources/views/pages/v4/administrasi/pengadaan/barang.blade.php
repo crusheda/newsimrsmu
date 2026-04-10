@@ -30,9 +30,9 @@
                         <div class="d-flex align-items-center">
                             <h5 class="mb-0 card-title flex-grow-1">
                                 <div class="btn-group">
-                                    <a class="btn btn-sm btn-outline-light" href="{{ route('v4.administrasi.pengadaan') }}" data-bs-toggle="tooltip"
+                                    <a class="btn btn-sm btn-secondary-transparent" href="{{ route('v4.administrasi.pengadaan') }}" data-bs-toggle="tooltip"
                                     data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                                    title="Kembali"><i class="fas fa-angle-left me-1"></i> Kembali</a>
+                                    title="Kembali ke Halaman Pengadaan"><i class="fas fa-angle-left me-1"></i> Kembali</a>
                                 </div>
                             </h5>
                             <div class="flex-shrink-0">
@@ -93,8 +93,8 @@
                     </div>
                     <div class="card-footer p-2">
                         <div class="d-flex align-items-center justify-content-between">
-                            <button class="btn btn-sm btn-warning-transparent" id="clear_text" onclick="clearInput()">Kosongkan</button>
-                            <button class="btn btn-sm btn-primary" id="btn-simpan" onclick="simpan()"><i class="fas fa-save me-1"></i> Simpan</button>
+                            <button class="btn btn-warning-transparent" id="clear_text" onclick="clearInput()">Kosongkan</button>
+                            <button class="btn btn-primary" id="btn-simpan" onclick="simpan()"><i class="fas fa-save me-1"></i> Simpan Barang</button>
                         </div>
                     </div>
                 </div>
@@ -378,7 +378,7 @@
                         })
                     });
                     var table = $('#dttable').DataTable({
-                        dom: 'Bfrtip',
+                        dom: 'Blfrtip',
                         order: [
                             [4, "desc"]
                         ],
@@ -404,7 +404,7 @@
                 }, error: function(xhr, status, error) {
                     iziToast.error({
                         title: 'Pesan Galat!',
-                        message: xhr.responseJSON.message,
+                        message: xhr.responseJSON.message ?? 'Terjadi kegagalan saat memproses data',
                         position: 'topRight'
                     });
                 }
@@ -412,8 +412,6 @@
         }
 
         function simpan() {
-            $("#btn-simpan").prop('disabled', true);
-            $("#btn-simpan").find("i").toggleClass("fa-save fa-sync fa-spin");
 
             // Definisi
             var save = new FormData();
@@ -447,32 +445,38 @@
                     contentType: false,
                     processData: false,
                     dataType: 'json',
+                    beforeSend: function() {
+                        $("#btn-simpan").prop('disabled', true);
+                        $("#btn-simpan").find("i").toggleClass("fa-save fa-sync fa-spin");
+                    },
                     success: function(res) {
                         if (res.code == 200) {
-                            notifier.show(
-                                "Pesan Sukses!", "Submit Barang berhasil dilakukan pada "+res.message,
-                                "success", "{{ asset('images/notification/ok-48.png') }}", 4e3
-                            );
+                            iziToast.success({
+                                title: 'Pesan Sukses!',
+                                message: "Submit Barang berhasil dilakukan pada "+res.message,
+                                position: 'topRight'
+                            });
                             showRiwayat();
                             clearInput();
                         } else {
-                            notifier.show(
-                                "Pesan Galat!", res.message,
-                                "warning", "{{ asset('images/notification/medium_priority-48.png') }}", 4e3
-                            );
+                            iziToast.warning({
+                                title: 'Pesan Ambigu!',
+                                message: res.message,
+                                position: 'topRight'
+                            });
                         }
-                    },
-                    error: function (res) {
-                        notifier.show(
-                            res.statusText + " (Code " + res.status + ")", res.responseText,
-                            "danger", "{{ asset('images/notification/high_priority-48.png') }}", 4e3
-                        );
+                    }, error: function(xhr, status, error) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: xhr.responseJSON.message ?? 'Terjadi kegagalan saat memproses data',
+                            position: 'topRight'
+                        });
+                    }, complete: function() {
+                        $("#btn-simpan").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
+                        $("#btn-simpan").prop('disabled', false);
                     }
                 });
             }
-
-            $("#btn-simpan").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
-            $("#btn-simpan").prop('disabled', false);
         }
 
         function ubah(id) {
@@ -500,6 +504,12 @@
                     });
 
                     $('#modalUbah').modal('show');
+                }, error: function(xhr, status, error) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: xhr.responseJSON.message ?? 'Terjadi kegagalan saat memproses data',
+                        position: 'topRight'
+                    });
                 }
             })
 
@@ -577,22 +587,22 @@
                     processData: false,
                     dataType: 'json',
                     success: function(res){
-                        notifier.show(
-                            "Pesan Sukses!", "Perubahan berhasil disimpan pada "+res.message,
-                            "success", "{{ asset('images/notification/ok-48.png') }}", 4e3
-                        );
                         if (res) {
+                            iziToast.success({
+                                title: 'Pesan Sukses!',
+                                message: "Perubahan berhasil disimpan pada "+res.message,
+                                position: 'topRight'
+                            });
                             $('#modalUbah').modal('hide');
                             showRiwayat();
                             clearInput();
                         }
-                    },
-                    error: function(res){
-                        console.log("error : " + JSON.stringify(res) );
-                        notifier.show(
-                            res.statusText + " (Code " + res.status + ")", res.responseText,
-                            "danger", "{{ asset('images/notification/high_priority-48.png') }}", 4e3
-                        );
+                    }, error: function(xhr, status, error) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: xhr.responseJSON.message ?? 'Terjadi kegagalan saat memproses data',
+                            position: 'topRight'
+                        });
                     }
                 });
             }
@@ -612,8 +622,8 @@
             // SWITCH BTN HAPUS
             var checkboxHapus = $('#setujuhapus').is(":checked");
             if (checkboxHapus == false) {
-                iziToast.error({
-                    title: 'Pesan Galat!',
+                iziToast.warning({
+                    title: 'Pesan Ambigu!',
                     message: 'Mohon menyetujui untuk dilakukan penghapusan berkas tersebut',
                     position: 'topRight'
                 });
@@ -632,11 +642,10 @@
                         $('#modalHapus').modal('hide');
                         showRiwayat();
                         clearInput();
-                    },
-                    error: function(res) {
+                    }, error: function(xhr, status, error) {
                         iziToast.error({
                             title: 'Pesan Galat!',
-                            message: 'Penghapusan Barang gagal dilakukan',
+                            message: xhr.responseJSON.message ?? 'Terjadi kegagalan saat memproses data',
                             position: 'topRight'
                         });
                     }

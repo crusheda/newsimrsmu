@@ -83,7 +83,7 @@
                                                 <a class="dropdown-item" href="javascript:void(0);" onclick="tambah()">Tambah Regulasi</a>
                                                 <div class="dropdown-divider"></div>
                                             @endif
-                                            <a class="dropdown-item disabled" href="javascript:void(0);" {{--  onclick="tataCara()" --}} ><s>Tata Cara</s></a>
+                                            {{-- <a class="dropdown-item disabled" href="javascript:void(0);"><s>Tata Cara</s></a> --}}
                                             <a class="dropdown-item" href="javascript:void(0);" onclick="showTotal()">Total Regulasi</a>
                                         </div>
                                     </div>
@@ -173,9 +173,9 @@
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                <h4 class="modal-title">
-                    Tambah Regulasi
-                </h4>
+                <h6 class="modal-title">
+                    Tambah <b class="text-primary">Regulasi</b>
+                </h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                 </div>
                 <div class="modal-body">
@@ -254,9 +254,9 @@
         <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">
-                        Ubah Regulasi
-                    </h4>
+                    <h6 class="modal-title">
+                        Ubah <b class="text-primary">Regulasi</b>
+                    </h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                 </div>
                 <div class="modal-body">
@@ -330,9 +330,9 @@
         <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
             <div class="modal-content p-3 p-md-5">
                 <div class="row">
-                    <h4 class="modal-title text-center mb-3">
-                        Hapus Regulasi ID : <a id="show_id_hapus"></a>
-                    </h4>
+                    <h6 class="modal-title text-center mb-3">
+                        Hapus <b class="text-primary">Regulasi</b> ID : <a id="show_id_hapus"></a>
+                    </h6>
                     <div class="col-12 mb-3">
                         <input type="text" id="id_hapus" hidden>
                         <p style="text-align: justify;">Anda akan menghapus berkas Regulasi tersebut. Penghapusan Regulasi akan menyebabkan hilangnya data/dokumen yang terhapus tersebut pada Storage Sistem.
@@ -358,9 +358,9 @@
         <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                <h4 class="modal-title">
-                    Tata Cara Regulasi
-                </h4>
+                <h6 class="modal-title">
+                    Tata Cara <b class="text-primary">Regulasi</b>
+                </h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                 </div>
                 <div class="modal-body">
@@ -448,9 +448,9 @@
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                <h4 class="modal-title">
-                    Total Regulasi
-                </h4>
+                <h6 class="modal-title">
+                    Total <b class="text-primary">Regulasi</b>
+                </h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                 </div>
                 <div class="modal-body">
@@ -533,7 +533,7 @@
         <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalCenterTitle">Regulasi <kbd>ID : <a href="javascript:void(0);" class="text-light" id="show_id_regulasi"></a></kbd></h5>
+                    <h6 class="modal-title" id="exampleModalCenterTitle">Regulasi <kbd>ID : <a href="javascript:void(0);" class="text-light" id="show_id_regulasi"></a></kbd></h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="pushregulasi"></div>
@@ -548,7 +548,7 @@
         <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="dokumentasiLabel">Cetak Regulasi <kbd><a href="txIDCetak"></a></kbd></h5>
+                    <h6 class="modal-title" id="dokumentasiLabel">Cetak <b class="text-primary">Regulasi</b> <kbd><a href="txIDCetak"></a></kbd></h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-3">

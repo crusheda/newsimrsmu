@@ -361,11 +361,7 @@
                     $('#dttable').DataTable({
                         order: [[6,"desc"]],
                         displayLength: 15,
-                        lengthMenu: [15,25,50,100,300,500],
-                        language: {
-                            searchPlaceholder: 'Cari Data...',
-                            sSearch: '',
-                        }
+                        lengthMenu: [15,25,50,100,300,500]
                     });
                 },
                 error: function (xhr) {

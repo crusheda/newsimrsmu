@@ -31,14 +31,10 @@
                     <div class="card-header d-flex align-items-center justify-content-between py-3">
                         <button class="btn btn-secondary-light btn-sm" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom"
                             data-bs-html="true" title="Kembali ke halaman sebelumnya" onclick="window.location='{{ route('v4.administrasi.berkas.laporan') }}'">
-                            <i class="fas fa-chevron-left me-2"></i> Kembali ke Laporan Rutin
+                            <i class="fas fa-chevron-left me-2"></i> Kembali
                         </button>
                         <h6 class="mb-0">Tabel <b class="text-danger">Verifikasi</b> Laporan</h6>
-                        <div class="btn-group">
-                            <button class="btn btn-warning btn-sm" id="refreshBtn" onclick="refresh()"><i class="fas fa-sync me-1"></i> Segarkan</button>
-                            {{-- <button class="btn btn-outline-secondary" onclick="tutorial()" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom"
-                            data-bs-html="true" title="Lihat tutorial verifikasi dokumen" disabled><i class="far fa-question-circle"></i> Tutorial</button> --}}
-                        </div>
+                        <button class="btn btn-warning btn-sm" id="refreshBtn" onclick="refresh()"><i class="fas fa-sync me-1"></i> Segarkan</button>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -297,8 +293,8 @@
                         <td style="white-space: normal; word-wrap: break-word; word-break: break-word;">` + item.nama + `</td>
                         <td style="white-space: normal; word-wrap: break-word; word-break: break-word;">` + un + `</td>
                         <td style="white-space: normal; word-wrap: break-word; word-break: break-word;">
-                            <a class="text-uppercase link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline" href="javascript:void(0);" 
-                            data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" 
+                            <a class="text-uppercase link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline" href="javascript:void(0);"
+                            data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
                             title="Preview Laporan ID # ${item.id}" onclick="showWordPreview(${item.id})">${item.judul}</a>
                         </td>
                         <td>${formatBulanTahun(item.bln, item.thn)}</td><td style="white-space: normal; word-wrap: break-word; word-break: break-word;">`;

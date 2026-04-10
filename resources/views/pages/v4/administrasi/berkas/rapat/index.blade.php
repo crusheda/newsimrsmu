@@ -436,7 +436,6 @@
                         $('#tampil-tbody').append(content);
                     });
                     var table = $('#dttable').DataTable({
-                        // dom: 'Bfrtip',
                         order: [
                             [6, "desc"]
                         ],
@@ -454,7 +453,6 @@
                         displayLength: 20,
                         lengthChange: true,
                         lengthMenu: [20, 35, 50, 75, 100, 500, 1000, 3000, 7000, 10000, 20000],
-                        // buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
                     $("#refreshBtn").prop('disabled', false);
                     $("#refreshBtn").find("i").removeClass("fa-spinner fa-spin").addClass("fa-sync");

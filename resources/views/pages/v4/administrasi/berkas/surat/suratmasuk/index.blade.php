@@ -685,7 +685,7 @@
                             });
                         }
                         var table = $('#dttable').DataTable({
-                            dom: 'Bfrtip',
+                            dom: 'Blfrtip',
                             order: [
                                 [7, "desc"]
                             ],
@@ -693,10 +693,6 @@
                             lengthChange: true,
                             lengthMenu: [20, 35, 50, 75, 100, 500, 1000, 3000, 7000, 10000, 20000],
                             buttons: ['copy', 'excel', 'pdf', 'colvis'],
-                            language: {
-                                searchPlaceholder: 'Cari Data...',
-                                sSearch: '',
-                            }
                         });
 
                         // Showing Tooltip
@@ -783,7 +779,7 @@
                             $('#tampil-tbody').append(content);
                         });
                         var table = $('#dttable').DataTable({
-                            dom: 'Bfrtip',
+                            dom: 'Blfrtip',
                             order: [
                                 [7, "desc"]
                             ],
@@ -791,10 +787,6 @@
                             lengthChange: true,
                             lengthMenu: [20, 35, 50, 75, 100, 500, 1000, 3000, 7000, 10000, 20000],
                             buttons: ['copy', 'excel', 'pdf', 'colvis'],
-                            language: {
-                                searchPlaceholder: 'Cari Data...',
-                                sSearch: '',
-                            }
                         });
 
                         // Showing Tooltip

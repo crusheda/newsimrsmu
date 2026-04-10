@@ -133,7 +133,8 @@
                         <div class="row gy-2 w-sm-50">
                             <!-- Category Filter -->
                             <div class="col">
-                                <select id="category-filter" class="form-control">
+                                <select id="category-filter" class="form-control" data-bs-toggle="tooltip"
+                                    data-bs-placement="bottom" data-bs-html="true" title="Filter Jenis Barang">
                                     <option value="" hidden>Jenis Barang</option>
                                     <option value="all">Semua</option>
                                     @if ($list['ref'])
@@ -146,7 +147,8 @@
 
                             <!-- Status Filter -->
                             <div class="col">
-                                <select id="harga-filter" class="form-control">
+                                <select id="harga-filter" class="form-control" data-bs-toggle="tooltip"
+                                    data-bs-placement="bottom" data-bs-html="true" title="Filter Rentang Harga Barang">
                                     <option value="" hidden>Rentang Harga</option>
                                     <option value="all">Semua</option>
                                     <option value="lt500"> < 500 Ribu</option>
@@ -170,7 +172,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="orderdetailsModalLabel">Tambah ke keranjang</h5>
+                    <h5 class="modal-title" id="orderdetailsModalLabel">Tambah ke <b class="text-primary">keranjang</b></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -262,10 +264,10 @@
                                     <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th class="text-center">Pegawai/Unit</th>
+                                            <th>Pegawai/Unit</th>
                                             <th>Tgl Pengadaan</th>
-                                            <th class="">Total</th>
-                                            <th>Aksi</th>
+                                            <th><b class="d-block text-end">Total</b></th>
+                                            <th><center>Aksi</center></th>
                                         </tr>
                                     </thead>
                                     <tbody id="tampil-riwayat-pengadaan"></tbody>
@@ -827,7 +829,7 @@
                                     <small class="text-muted">${unit}</small>
                                 </td>
                                 <td>${tgl}</td>
-                                <td class="text-start">${formatRupiah(item.total, 'Rp. ')}</td>
+                                <td class="text-end"><b>${formatRupiah(item.total)}</b></td>
                                 <td class="text-center">
                                     <div class="btn-group">
                                         <button class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown">
@@ -894,10 +896,28 @@
 
                     // header
                     $('#detail-header').html(`
-                        <b>ID Pengadaan:</b> ${data.id} <br>
-                        <b>Pegawai:</b> ${data.nama_user} <br>
-                        <b>Unit:</b> ${unit} <br>
-                        <b>Tanggal:</b> ${formatTanggalIndo(data.tgl_pengadaan)}
+                        <table class="table table-sm table-borderless mb-0">
+                            <tr>
+                                <td width="150"><b>ID Pengadaan</b></td>
+                                <td width="10">:</td>
+                                <td>${data.id}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Pegawai</b></td>
+                                <td>:</td>
+                                <td>${data.nama_user}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Unit/Jabatan</b></td>
+                                <td>:</td>
+                                <td>${unit}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Tanggal</b></td>
+                                <td>:</td>
+                                <td>${formatTanggalIndo(data.tgl_pengadaan)}</td>
+                            </tr>
+                        </table>
                     `);
 
                     // detail

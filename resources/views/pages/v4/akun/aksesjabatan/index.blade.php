@@ -570,10 +570,6 @@
                         order: [[5,"desc"]],
                         displayLength: 15,
                         lengthMenu: [15,25,50,100,300,500],
-                        language: {
-                            searchPlaceholder: 'Cari Data...',
-                            sSearch: '',
-                        }
                     });
                 }, error: function(xhr, status, error) {
                     iziToast.error({
@@ -615,8 +611,7 @@
                         ],
                         displayLength: 15,
                         lengthChange: true,
-                        lengthMenu: [15, 25, 50, 75, 100, 300, 700, 1000],
-                        buttons: ['copy', 'excel', 'pdf', 'colvis']
+                        lengthMenu: [15, 25, 50, 75, 100, 300, 700, 1000]
                     });
 
                     // Showing Tooltip
@@ -661,8 +656,7 @@
                         order: [[3, "desc"]],
                         displayLength: 15,
                         lengthChange: true,
-                        lengthMenu: [15, 25, 50, 75, 100, 300, 700, 1000],
-                        buttons: ['copy', 'excel', 'pdf', 'colvis']
+                        lengthMenu: [15, 25, 50, 75, 100, 300, 700, 1000]
                     });
 
                     // Showing Tooltip

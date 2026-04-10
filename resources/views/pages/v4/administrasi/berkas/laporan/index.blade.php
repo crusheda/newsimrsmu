@@ -438,6 +438,7 @@
                         })
                     });
                     var table = $('#dttable').DataTable({
+                        dom: 'lfrtip',
                         order: [
                             [6, "desc"]
                         ],
@@ -454,7 +455,6 @@
                         displayLength: 10,
                         lengthChange: true,
                         lengthMenu: [10, 25, 50, 75, 100, 500],
-                        buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
                 },
                 error: function(xhr, status, error) {
