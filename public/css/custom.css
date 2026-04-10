@@ -85,7 +85,7 @@
         /* AKTIF */
         .dt-button-collection .dt-button.active {
             background-color: #985ffd;
-            color: #fff;
+            color: #000000;
         }
 
         /* NON AKTIF */

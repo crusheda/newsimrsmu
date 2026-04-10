@@ -181,7 +181,7 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <div class="form-group">
-                                    <label class="form-label">Nama Anak (Optional)</label>
+                                    <label class="form-label">Nama Anak (<b class="text-warning">Optional</b>)</label>
                                     <input type="text" class="form-control" name="anak" id="basic-url3"
                                         aria-describedby="basic-addon34" placeholder="Nama Lengkap Anak (Bila Ada)" />
                                 </div>
@@ -320,7 +320,7 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
-                                <label class="form-label">Nama Anak (Optional)</label>
+                                <label class="form-label">Nama Anak (<b class="text-warning">Optional</b>)</label>
                                 <div class="input-group input-group-merge">
                                     {{-- <span class="input-group-text" id="basic-addon34">BY.</span> --}}
                                     <input type="text" class="form-control" id="anak_edit"
