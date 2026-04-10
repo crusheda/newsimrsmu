@@ -47,9 +47,6 @@
 <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.colVis.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
 
-<!-- INI YANG WAJIB DITAMBAHKAN -->
-<script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.colVis.min.js"></script>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.6/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -141,6 +138,8 @@
     //     lengthMenu: [5, 10, 15, 20, 30, 35, 50, 75, 100, 500, 1000, 3000, 5000, 7000, 10000],
     //     displayLength: 20
     // });
+
+    //------->  GANTI DITARUH DI custom-saya.js
 
     function closeModal() {
         $('.modal').modal('hide');
