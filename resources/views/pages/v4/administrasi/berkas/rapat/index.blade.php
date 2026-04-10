@@ -26,8 +26,8 @@
             <div class="col-sm-12">
                 <div class="card custom-card">
                     <div class="card-header d-flex align-items-center justify-content-between py-3">
-                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tambah"><i
-                                class="fa-fw fas fa-upload nav-icon"></i>&nbsp;&nbsp;Upload Berkas</button>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tambah">
+                            <i class="fa-fw fas fa-upload nav-icon me-1"></i> Upload Berkas</button>
                         <div class="btn-group">
                             <button class="btn btn-warning" id="refreshBtn" onclick="refresh()"><i class="fas fa-sync me-1"></i> 30 Data Terakhir</button>
                             <button class="btn btn-danger" id="refreshBtnAll" onclick="refreshAll()"><i class="fas fa-sync me-1"></i> Semua Data</button>

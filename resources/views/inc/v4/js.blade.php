@@ -43,9 +43,8 @@
 <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
 
 <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
-{{-- <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.bootstrap5.min.js"></script> --}}
-
 <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.colVis.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
 
 <!-- INI YANG WAJIB DITAMBAHKAN -->
@@ -53,6 +52,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.6/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js" integrity="sha384-VFQrHzqBh5qiJIU0uGU5CIW3+OWpdGGJM9LBnGbuIH2mkICcFZ7lPd/AAtI7SNf7" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js" integrity="sha384-/RlQG9uf0M2vcTw3CX7fbqgbj/h8wKxw7C3zu9/GxcBPRKOEcESxaxufwRXqzq6n" crossorigin="anonymous"></script>
@@ -92,15 +92,54 @@
 
 <!-- Supported JS -->
 <script>
-    $(document).ready(function () {
-        let state = localStorage.getItem('sidebar');
-
-        // hanya berlaku untuk desktop
-        if (state && window.innerWidth >= 992) {
-            $('html')
-                .attr('data-toggled', state)
-                .removeAttr('data-icon-overlay');
-        }
+    // GLOBAL SETTING DATATABLE
+    $.extend(true, $.fn.dataTable.defaults, {
+        dom: `
+            <"d-flex justify-content-between align-items-center mb-2"
+                <"dt-buttons"B>
+                <"d-flex align-items-center gap-2"
+                    <"dt-length"l>
+                    <"dt-search"f>
+                >
+            >
+            rt
+            <"d-flex justify-content-between mt-2"ip>
+        `,
+        buttons: [
+            {
+                extend: 'excel',
+                text: 'Excel',
+                className: 'btn btn-success-transparent'
+            },
+            {
+                extend: 'pdf',
+                text: 'PDF',
+                className: 'btn btn-danger-transparent'
+            },
+            {
+                extend: 'colvis',
+                text: 'Kolom ',
+                className: 'btn btn-info-transparent'
+            }
+        ],
+        language: {
+            searchPlaceholder: 'Tuliskan Kata Kunci...',
+            sSearch: 'Cari Data ',
+            lengthMenu: "Tampilkan _MENU_",
+            info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+            infoEmpty: "Tidak ada data",
+            infoFiltered: "(difilter dari _MAX_ total data)",
+            zeroRecords: "Data tidak ditemukan",
+            paginate: {
+                first: "Awal",
+                last: "Akhir",
+                next: "›",
+                previous: "‹"
+            }
+        },
+        lengthChange: true,
+        lengthMenu: [5, 10, 15, 20, 30, 35, 50, 75, 100, 500, 1000, 3000, 5000, 7000, 10000],
+        displayLength: 20
     });
 
     function closeModal() {

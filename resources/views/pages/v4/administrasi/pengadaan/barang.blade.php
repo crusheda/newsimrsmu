@@ -378,7 +378,7 @@
                         })
                     });
                     var table = $('#dttable').DataTable({
-                        dom: 'Blfrtip',
+                        dom: 'lBfrtip',
                         order: [
                             [4, "desc"]
                         ],
@@ -396,7 +396,11 @@
                         displayLength: 15,
                         lengthChange: true,
                         lengthMenu: [15, 25, 50, 75, 100, 300, 500, 700, 1000, 5000, 10000],
-                        buttons: ['excel', 'pdf', 'colvis']
+                        buttons: ['excel', 'pdf', 'colvis'],
+                        language: {
+                            searchPlaceholder: 'Cari Data...',
+                            sSearch: '',
+                        }
                     });
                 }, complete: function() {
                     btn.prop('disabled', false);

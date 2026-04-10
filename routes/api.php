@@ -30,6 +30,7 @@ use \App\Http\Controllers\v4\Administrasi\Berkas\Surat\SuratKeluarController;
 use \App\Http\Controllers\v4\Administrasi\Pengadaan\PengadaanController;
 use \App\Http\Controllers\v4\Administrasi\Pengadaan\PengadaanBarangController;
 use \App\Http\Controllers\v4\Administrasi\Pengadaan\PengadaanRekapController;
+use \App\Http\Controllers\v4\Pelayanan\Kebidanan\SKLController;
 
 Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU v.4
 
@@ -202,6 +203,27 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
             Route::get('administrasi/pengadaan/barang/ubah/{id}', [PengadaanBarangController::class, 'ubah']);
             Route::post('administrasi/pengadaan/barang/ubah/proses', [PengadaanBarangController::class, 'prosesUbah']);
             Route::delete('administrasi/pengadaan/barang/{id}/hapus', [PengadaanBarangController::class, 'hapus']);
+
+    // PELAYANAN
+        // SKL
+        Route::get('pelayanan/skl/get',[SKLController::class, 'apiGet']);
+        Route::get('pelayanan/skl/getqueue',[SKLController::class, 'apiGetQueue']);
+        Route::post('pelayanan/skl/simpan',[SKLController::class, 'apiSimpan']);
+        Route::get('pelayanan/skl/cari/{id}',[SKLController::class, 'filterIbu']);
+        Route::get('pelayanan/skl/all',[SKLController::class, 'apiAll']);
+        Route::get('pelayanan/skl/getubah/{id}', [SKLController::class, 'getubah']);
+        Route::get('pelayanan/skl/hapus/{id}', [SKLController::class, 'hapus']);
+        Route::post('pelayanan/skl/ubah/{id}', [SKLController::class, 'ubah']);
+
+        // ANTIGEN
+        // Route::get('antigen/all','\App\Http\Controllers\Pelayanan\Lab\antigenController@apiShowAll')->name('antigen.apiall');
+        // Route::get('antigen/get','\App\Http\Controllers\Pelayanan\Lab\antigenController@apiGet')->name('antigen.apiget');
+        // Route::post('antigen/filter', '\App\Http\Controllers\Pelayanan\Lab\antigenController@apiFilter')->name('antigen.apifilter');
+        // Route::post('antigen/ubah/{id}', '\App\Http\Controllers\Pelayanan\Lab\antigenController@ubah')->name('antigen.ubah');
+        // Route::get('antigen/getubah/{id}', '\App\Http\Controllers\Pelayanan\Lab\antigenController@getubah')->name('antigen.getubah');
+        // Route::get('antigen/hapus/{id}', '\App\Http\Controllers\Pelayanan\Lab\antigenController@hapus')->name('antigen.hapus');
+        // Route::get('antigen/getpasien/{id}', '\App\Http\Controllers\Pelayanan\Lab\antigenController@getPasien');
+
 });
 
 // WHATSAPP API WEBHOOK
