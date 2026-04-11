@@ -30,6 +30,7 @@ use \App\Http\Controllers\v4\Administrasi\Berkas\Surat\SuratKeluarController;
 use \App\Http\Controllers\v4\Administrasi\Pengadaan\PengadaanController;
 use \App\Http\Controllers\v4\Administrasi\Pengadaan\PengadaanBarangController;
 use \App\Http\Controllers\v4\Administrasi\Pengadaan\PengadaanRekapController;
+use \App\Http\Controllers\v4\Administrasi\ERuang\ERuangController;
 use \App\Http\Controllers\v4\Pelayanan\Kebidanan\SKLController;
 
 Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU v.4
@@ -203,6 +204,24 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
             Route::get('administrasi/pengadaan/barang/ubah/{id}', [PengadaanBarangController::class, 'ubah']);
             Route::post('administrasi/pengadaan/barang/ubah/proses', [PengadaanBarangController::class, 'prosesUbah']);
             Route::delete('administrasi/pengadaan/barang/{id}/hapus', [PengadaanBarangController::class, 'hapus']);
+
+        // E-RUANG
+        Route::get('administrasi/eruang', [ERuangController::class, 'table']);
+        Route::post('administrasi/eruang/store', [ERuangController::class, 'store']);
+        Route::post('administrasi/eruang/ubah/{id}/proses', [ERuangController::class, 'ubah']);
+        Route::post('administrasi/eruang/tolak/{id}', [ERuangController::class, 'tolak']);
+        Route::get('administrasi/eruang/ubah/{id}', [ERuangController::class, 'getUbah']);
+        Route::get('administrasi/eruang/gizi/verif/{id}', [ERuangController::class, 'verifGizi']);
+        Route::get('administrasi/eruang/gizi/verif/edithapus/{id}', [ERuangController::class, 'verifEditHapus']);
+        Route::delete('administrasi/eruang/hapus/{id}', [ERuangController::class, 'hapus']);
+        Route::get('administrasi/eruang/display', [ERuangController::class, 'display']);
+
+            // DAFTAR RUANGAN
+            Route::get('administrasi/eruang/ruangan', [ERuangController::class, 'getRuangan']);
+            Route::post('administrasi/eruang/ruangan/store', [ERuangController::class, 'storeRuangan']);
+            Route::delete('administrasi/eruang/ruangan/hapus/{id}', [ERuangController::class, 'destroyRuangan']);
+            Route::get('administrasi/eruang/ruangan/ubah/{id}', [ERuangController::class, 'getUbahRuangan']);
+            Route::post('administrasi/eruang/ruangan/ubah/proses', [ERuangController::class, 'updateRuangan']);
 
     // PELAYANAN
         // SKL

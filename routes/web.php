@@ -32,6 +32,7 @@ use \App\Http\Controllers\v4\Administrasi\Berkas\Surat\SuratKeluarController;
 use \App\Http\Controllers\v4\Administrasi\Pengadaan\PengadaanController;
 use \App\Http\Controllers\v4\Administrasi\Pengadaan\PengadaanBarangController;
 use \App\Http\Controllers\v4\Administrasi\Pengadaan\PengadaanRekapController;
+use \App\Http\Controllers\v4\Administrasi\ERuang\ERuangController;
 use \App\Http\Controllers\v4\Pelayanan\Kebidanan\SKLController;
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function () { // SIMRSMU v.4
@@ -97,6 +98,10 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function 
             // BARANG
                 Route::get('administrasi/pengadaan/barang', [PengadaanBarangController::class, 'index'])->name('v4.administrasi.pengadaan.barang');
                 Route::get('administrasi/pengadaan/barang/download/{id}', [PengadaanBarangController::class, 'download'])->name('v4.administrasi.pengadaan.barang.download');
+
+        // E-RUANG
+            Route::get('administrasi/eruang', [ERuangController::class, 'index'])->name('v4.administrasi.eruang');
+            Route::get('administrasi/eruang/ruangan', [ERuangController::class, 'indexRuangan'])->name('v4.administrasi.eruang.ruangan');
 
     // PELAYANAN
          // SKL

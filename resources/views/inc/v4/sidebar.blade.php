@@ -152,6 +152,13 @@
                     </a>
                 </li>
 
+                <li class="slide">
+                    <a href="{{ route('v4.administrasi.eruang') }}" class="side-menu__item">
+                        <i class="side-menu__icon ri-key-line"></i>
+                        <span class="side-menu__label">E-Ruang</span>
+                    </a>
+                </li>
+
                 <!-- Start::slide__category -->
                 <li class="slide__category"><span class="category-name">Pelayanan</span></li>
                 <!-- End::slide__category -->
