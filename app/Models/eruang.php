@@ -17,4 +17,20 @@ class eruang extends Model
     {
         return $this->belongsTo(eruang_ref::class, 'id_ruangan', 'id');
     }
+
+    protected $fillable = [
+        'id_user',
+        'id_ruangan',
+        'agenda',
+        'tgl',
+        'tgl_mulai',
+        'tgl_selesai',
+        'jam_mulai',
+        'jam_selesai',
+        'ket',
+        'gizi',
+        'gizi_verif',
+        'status_penolakan',
+        'alasan_penolakan',
+    ];
 }

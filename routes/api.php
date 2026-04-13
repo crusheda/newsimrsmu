@@ -207,6 +207,7 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
 
         // E-RUANG
         Route::get('administrasi/eruang', [ERuangController::class, 'table']);
+        Route::post('administrasi/eruang/cek', [ERuangController::class, 'cekKetersediaan']);
         Route::post('administrasi/eruang/store', [ERuangController::class, 'store']);
         Route::post('administrasi/eruang/ubah/{id}/proses', [ERuangController::class, 'ubah']);
         Route::post('administrasi/eruang/tolak/{id}', [ERuangController::class, 'tolak']);
