@@ -21,7 +21,7 @@
             <thead>
                 <tr>
                     <th scope="col"><center>Aksi</center></th>
-                    <th scope="col">Nama Ruangan</th>
+                    <th scope="col">Nama Ruang/Agenda</th>
                     <th scope="col">Peminjam</th>
                     <th scope="col">Tanggal Acara</th>
                     <th scope="col">Waktu Acara</th>

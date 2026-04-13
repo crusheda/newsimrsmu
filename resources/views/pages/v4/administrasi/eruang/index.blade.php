@@ -36,7 +36,7 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" id="link_riwayat" data-bs-toggle="tab" href="#riwayat" role="tab">
-                                    Daftar Riwayat
+                                    Riwayat
                                 </a>
                             </li>
                             @if (Auth::user()->can('admin_eruang_gizi'))
@@ -215,6 +215,9 @@
                 dateFormat: "H:i",
                 time_24hr: true
             });
+            $(".time-input").on("click", function () {
+                $(this).find("input")[0]._flatpickr.open();
+            });
 
             // INITIALIZE PAGE
             loadRuangan();
@@ -224,15 +227,30 @@
                 let mulai = $("#jam_mulai").val();
                 let selesai = $("#jam_selesai").val();
 
-                if (mulai && selesai) {
-                    if (mulai >= selesai) {
-                        iziToast.warning({
-                            title: 'Validasi',
-                            message: 'Jam selesai harus lebih besar dari jam mulai',
-                            position: 'topRight'
-                        });
+                if (mulai && !selesai) {
+                    let [h, m] = mulai.split(":");
 
-                        $("#jam_selesai").val('');
+                    let date = new Date();
+                    date.setHours(parseInt(h));
+                    date.setMinutes(parseInt(m));
+
+                    date.setHours(date.getHours() + 1);
+
+                    let newTime = date.toTimeString().slice(0,5);
+
+                    // pakai flatpickr API biar sinkron
+                    fpJamSelesai.setDate(newTime, true);
+                } else {
+                    if (mulai && selesai) {
+                        if (mulai >= selesai) {
+                            iziToast.warning({
+                                title: 'Validasi',
+                                message: 'Jam selesai harus lebih besar dari jam mulai',
+                                position: 'topRight'
+                            });
+
+                            $("#jam_selesai").val('');
+                        }
                     }
                 }
             });

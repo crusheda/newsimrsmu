@@ -32,22 +32,35 @@
         <div class="col-md-6 mb-3">
             <label class="form-label">Pilih Tanggal Acara <a class="text-danger">*</a></label>
             <div class="input-daterange input-group">
-                <input type="text" id="tgl" class="form-control flatpickrunl" placeholder="yyyy-mm-dd" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tanggal acara"/>
+                <input type="text" id="tgl" class="form-control" placeholder="yyyy-mm-dd" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tanggal acara"/>
             </div>
         </div>
 
         <div class="col-md-6 mb-3">
-            <label class="form-label">Pilih Waktu Acara (<b class="text-danger">Format 24h</b>) <a class="text-danger">*</a></label>
-            <div class="input-daterange input-group clock-value">
-                <span class="input-group-text">Jam Mulai</span>
-                <input id="jam_mulai" type="text" class="form-control timepicker" placeholder="HH:mm">
-                <span class="input-group-text">Jam Selesai</span>
-                <input id="jam_selesai" type="text" class="form-control timepicker" placeholder="HH:mm">
+            <label class="form-label">
+                Pilih Waktu Acara (<b class="text-warning">Format 24h</b>)
+            </label>
+
+            <div class="time-group">
+                <div class="time-box">
+                    <small>Jam Mulai <a class="text-danger">*</a></small>
+                    <div class="time-input">
+                        <input id="jam_mulai" class="form-control" type="text" placeholder="HH:mm">
+                    </div>
+                </div>
+
+                <div class="time-box">
+                    <small>Jam Selesai <a class="text-danger">*</a></small>
+                    <div class="time-input">
+                        <input id="jam_selesai" class="form-control" type="text" placeholder="HH:mm (Auto +1 Jam)">
+                    </div>
+                </div>
             </div>
         </div>
 
         <div class="col-md-6 mb-3">
-            <label class="form-label">Pesan Tambahan Untuk Bagian Gizi (<b class="text-warning">isi nilai 0 apabila tidak diperlukan</b>)</label>
+            <label class="form-label mb-0">Pesan Tambahan Untuk Bagian Gizi </label><br>
+            <label class="form-label">(<b class="text-warning">isi nilai 0 apabila tidak diperlukan</b>)</label>
             <div class="input-daterange input-group" id="show_gizi1">
                 <span class="input-group-text">Snack</span>
                 <input type="number" class="form-control" disabled>
@@ -182,7 +195,7 @@
                         </div>`
                     );
                 });
-                resetFormPengajuan();
+                // resetFormPengajuan();
                 $('#btn-simpan').prop('disabled', false);
             }, complete: function() {
                 btn.prop('disabled', false).empty().append('Pengajuan');
@@ -205,10 +218,12 @@
         $("#link_pengajuan").removeClass("active");
         $("#link_display").removeClass("active");
         $("#link_riwayat").removeClass("active").addClass("active");
+        $("#link_ruangan").removeClass("active");
         // change nav page
         $("#pengajuan").removeClass("active");
         $("#display").removeClass("active");
         $("#riwayat").removeClass("active").addClass("active");
+        $("#ruangan").removeClass("active");
     }
 
     function cekKetersediaanRealtime() {
@@ -434,6 +449,7 @@
                     $("#btn-simpan").prop("disabled", true);
 
                     refreshWithOpenRiwayat();
+                    resetFormPengajuan();
                 }
             },
 
@@ -455,6 +471,8 @@
 
         // 🔹 Reset semua input form
         $("form")[0].reset();
+        $('#agenda').val('');
+        $('#ket').val('');
 
         // 🔹 Uncheck semua radio ruangan
         $('input[name="ruangan"]').prop('checked', false);

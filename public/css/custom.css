@@ -260,3 +260,40 @@
         .dataTables_wrapper .dataTables_paginate {
             float: right;
         }
+
+/* TIMEPICKER = Pengajuan E-Ruang */
+    .time-group {
+        display: flex;
+        gap: 12px;
+    }
+
+    .time-box {
+        flex: 1;
+    }
+
+    .time-input {
+        /* display: flex; */
+        align-items: center;
+        transition: all 0.2s ease;
+        cursor: pointer;
+    }
+
+    /* Custom width timepicker flatpickr */
+    .flatpickr-calendar.hasTime.noCalendar {
+        width: 150px !important;
+        max-width: 200px !important;
+        padding: 10px;
+        border-radius: 12px;
+    }
+
+    /* center semua */
+    .flatpickr-time {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* spacing antar jam & menit */
+    .flatpickr-time .numInputWrapper {
+        margin: 0 4px;
+    }
