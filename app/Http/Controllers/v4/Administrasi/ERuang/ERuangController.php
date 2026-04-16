@@ -292,19 +292,45 @@ class ERuangController extends Controller
 
     function ubah(Request $request)
     {
-        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
-
         $data = eruang::find($request->id);
+
         $data->id_user = $request->user;
         $data->id_ruangan = $request->ruangan;
         $data->agenda = $request->agenda;
-        $data->tgl = $request->tgl;
+
+        $data->tgl = $request->tgl_mulai; // fallback
+        $data->tgl_mulai = $request->tgl_mulai;
+        $data->tgl_selesai = $request->tgl_selesai;
+
+        $data->jam_mulai = $request->jam_mulai;
+        $data->jam_selesai = $request->jam_selesai;
+
         $data->ket = $request->ket;
         $data->gizi = $request->gizi;
 
+        // 🔥 VALIDASI BENTROK (WAJIB!)
+        $cek = eruang::where('id_ruangan', $request->ruangan)
+            ->where('id', '!=', $request->id)
+            ->where(function($q) use ($request) {
+                $q->whereBetween('tgl_mulai', [$request->tgl_mulai, $request->tgl_selesai])
+                ->orWhereBetween('tgl_selesai', [$request->tgl_mulai, $request->tgl_selesai]);
+            })
+            ->where(function($q) use ($request) {
+                $q->where('jam_mulai', '<', $request->jam_selesai)
+                ->where('jam_selesai', '>', $request->jam_mulai);
+            })
+            ->exists();
+
+        if ($cek) {
+            return response()->json([
+                'code' => 400,
+                'message' => 'Jadwal bentrok dengan jadwal lain'
+            ], 200);
+        }
+
         $data->save();
 
-        return response()->json($tgl, 200);
+        return response()->json(now()->format('Y-m-d H:i:s'), 200);
     }
 
     function hapus($id)

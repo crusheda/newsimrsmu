@@ -86,7 +86,7 @@
     </div>
 
     <script>
-        let fpTanggal, fpJamMulai, fpJamSelesai;
+        let fpTanggal, fpTanggalEdit, fpJamMulai, fpJamSelesai;
 
         $(document).ready(function() {
             // SELECT2

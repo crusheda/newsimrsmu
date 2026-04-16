@@ -21,10 +21,10 @@
             <thead>
                 <tr>
                     <th scope="col"><center>Aksi</center></th>
-                    <th scope="col">Nama Ruang/Agenda</th>
-                    <th scope="col">Peminjam</th>
-                    <th scope="col">Tanggal Acara</th>
-                    <th scope="col">Waktu Acara</th>
+                    <th scope="col">Nama Ruang / Agenda</th>
+                    <th scope="col">Peminjam / No.HP</th>
+                    <th scope="col"><center>Tanggal Acara</center></th>
+                    <th scope="col"><center>Waktu Acara</center></th>
                     <th scope="col">Keterangan</th>
                     <th scope="col">Pesanan Gizi</th>
                     <th scope="col">Alasan Penolakan</th>
@@ -296,20 +296,20 @@
                                         </div>
                                     </div>
                                 </td>`;
-                    content += `<td><center>`+item.tgl+`</center></td>`;
-                    content += `<td>`+item.jam_mulai.substring(0, 5)+` - `+item.jam_selesai.substring(0, 5)+` WIB</td>`;
+                    if (item.tgl_mulai || item.tgl_selesai) {
+                        if (item.tgl_mulai == item.tgl_selesai) {
+                            tgl_push = item.tgl_mulai;
+                        } else {
+                            tgl_push = item.tgl_mulai+'<i class="ri-arrow-right-s-fill text-pink ms-1 me-1"></i>'+item.tgl_selesai;
+                        }
+                    } else {
+                        tgl_push = item.tgl;
+                    }
+                    content += `<td><center>${tgl_push}</center></td>`;
+                    content += `<td><center>${item.jam_mulai.substring(0, 5)+` - `+item.jam_selesai.substring(0, 5)} WIB</center></td>`;
                     content += `<td>${item.ket?item.ket:''}</td>`;
                     content += `<td style="white-space: pre-line">${item.gizi?item.gizi:''}</td>`;
                     content += `<td>${item.alasan_penolakan?item.alasan_penolakan:''}</td>`;
-                    // unit.forEach(val => {
-                    //     res.role.forEach(pus => {
-                    //         if (val == pus.id) {
-                    //             content += `<span class="badge bg-dark">` + pus.name +
-                    //                 `</span>&nbsp;`;
-                    //         }
-                    //     })
-                    // })
-                    // content += `<td>`+item.updated_at.substring(0, 19).replace('T',' ')+`</td></tr>`;
                     content += `<td>`+new Date(item.updated_at).toLocaleString("sv-SE")+`</td></tr>`;
                     $('#tampil-tbody').append(content);
                 })
@@ -347,63 +347,73 @@
 
     function ubah(id) {
         $("#id_edit").val("");
-        $("#ruangan_edit").val("");
-        $("#show_ruangan_edit").val("");
         $("#agenda_edit").val("");
         $("#tgl_edit").val("");
-        $("#show_tgl_edit").val("");
         $("#ket_edit").val("");
-        $("#gizi_edit").val("");
 
-        $.ajax(
-        {
-            url: "/api/v4/administrasi/eruang/ubah/"+id,
+        $.ajax({
+            url: "/api/v4/administrasi/eruang/ubah/" + id,
             type: 'GET',
-            dataType: 'json', // added data type
+            dataType: 'json',
             success: function(res) {
-                $("#show_tgl_edit").val(res.show.tgl);
-                var a = document.querySelector("#tgl_edit");
-                a.flatpickr({
-                    enableTime: 0,
-                    minuteIncrement: 1,
-                    time_24hr: true,
-                    defaultDate: res.show.tgl,
-                })
-                $("#id_show_edit").text(res.show.id);
+
+                let tglMulai = res.show.tgl_mulai ?? res.show.tgl;
+                let tglSelesai = res.show.tgl_selesai ?? res.show.tgl;
+
+                let range = tglMulai + " to " + tglSelesai;
+
+                // DESTROY dulu kalau ada
+                if (fpTanggalEdit) {
+                    fpTanggalEdit.destroy();
+                }
+
+                // INIT ulang (SAMA seperti create)
+                fpTanggalEdit = flatpickr("#tgl_edit", {
+                    mode: "range",
+                    minDate: "today",
+                    dateFormat: "Y-m-d",
+                    defaultDate: [tglMulai, tglSelesai],
+                    onChange: function() {
+                        triggerCek(); // pakai function yang sama
+                    }
+                });
+
                 $("#id_edit").val(res.show.id);
                 $("#agenda_edit").val(res.show.agenda);
-                // $("#tgl_edit").val(res.show.tgl);
                 $("#ket_edit").val(res.show.ket);
-                $("#gizi_edit").val(res.show.gizi);
-                $("#show_ruangan_edit").find('option').remove();
+
+                // SET VALUE MANUAL (biar tampil)
+                $("#tgl_edit").val(range);
+
+                // RUANGAN
                 res.ruangan.forEach(item => {
-                    // if ('{{ Auth::user()->id == 82 || Auth::user()->id == 294 || Auth::user()->id == 2 }}') {
-                    //     if (item.id == res.show.id_ruangan_ref) {
-                    //         $("#show_ruangan_edit").val(item.nama+' ('+item.kapasitas+' Peserta)');
-                    //         $("#ruangan_edit").val(item.id);
-                    //     }
-                    // } else {
-                    // }
                     if (item.id == res.show.id_ruangan_ref) {
-                        $("#show_ruangan_edit").val(item.nama+' ('+item.kapasitas+' Peserta)');
+                        $("#show_ruangan_edit").val(item.nama + ' (' + item.kapasitas + ' Peserta)');
                         $("#ruangan_edit").val(item.id);
                     }
                 });
-                // BACKUP RUANGAN ASLI ------------------------
-                // $("#ruangan_edit").find('option').remove();
-                // res.ruangan.forEach(item => {
-                //     $("#ruangan_edit").append(`
-                //         <option value="${item.id}" ${item.id == res.show.id_ruangan_ref? "selected":""}>${item.nama} (${item.kapasitas} Peserta)</option>
-                //     `);
-                // });
+
                 $('#modalUbah').modal('show');
+            },
+            complete: function() {
+                // $("#btn-simpan").prop("disabled", false);
+            },
+            error: function(xhr, status, error) {
+                iziToast.error({
+                    title: 'Pesan Galat!',
+                    message: xhr.responseJSON.message ?? 'Terjadi kegagalan saat memeriksa data untuk diubah',
+                    position: 'topRight'
+                });
             }
         });
     }
 
     function prosesUbah() {
-        $("#btn-ubah").prop('disabled', true);
-        $("#btn-ubah").find("i").toggleClass("fa-save fa-sync fa-spin");
+
+        let tgl = $("#tgl_edit").val();
+        let tglArr = tgl.split(" to ");
+        let tgl_mulai = tglArr[0];
+        let tgl_selesai = tglArr[1] ?? tglArr[0];
 
         var save = new FormData();
         save.append('id',$("#id_edit").val());
@@ -412,7 +422,10 @@
         save.append('tgl',$("#tgl_edit").val());
         save.append('ket',$("#ket_edit").val());
         save.append('gizi',$("#gizi_edit").val());
-        save.append('user','{{ Auth::user()->id }}');
+        save.append('tgl_mulai', tgl_mulai);
+        save.append('tgl_selesai', tgl_selesai);
+        save.append('jam_mulai', $("#jam_mulai_edit").val());
+        save.append('jam_selesai', $("#jam_selesai_edit").val());
 
         if (
             save.get('ruangan') == "" ||
@@ -436,25 +449,42 @@
                 contentType: false,
                 processData: false,
                 dataType: 'json',
+                beforeSend: function() {
+                    $("#btn-ubah").prop('disabled', true);
+                    $("#btn-ubah").find("i").toggleClass("fa-save fa-sync fa-spin");
+                },
                 success: function(res){
+                    if (res.code === 400) {
+                        iziToast.error({
+                            title: 'Bentrok!',
+                            message: res.message,
+                            position: 'topRight'
+                        });
+                        return;
+                    }
+
                     iziToast.success({
-                        title: 'Pesan Sukses! ID : '+save.get('id'),
-                        message: 'Pengajuan Peminjaman Ruangan berhasil diperbarui pada '+res,
+                        title: 'Sukses',
+                        message: 'Data berhasil diperbarui',
                         position: 'topRight'
                     });
-                    if (res) {
-                        $('#modalUbah').modal('hide');
-                        refreshWithOpenRiwayat();
-                    }
+
+                    $('#modalUbah').modal('hide');
+                    refreshWithOpenRiwayat();
                 },
-                error: function(res){
-                    console.log("error : " + JSON.stringify(res) );
+                complete: function() {
+                    $("#btn-ubah").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
+                    $("#btn-ubah").prop('disabled', false);
+                },
+                error: function(xhr, status, error) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: xhr.responseJSON.message ?? 'Terjadi kegagalan saat memeriksa data untuk diubah',
+                        position: 'topRight'
+                    });
                 }
             });
         }
-
-        $("#btn-ubah").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
-        $("#btn-ubah").prop('disabled', false);
     }
 
     function hapus(id) {
