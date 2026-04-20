@@ -47,7 +47,7 @@
             <div class="modal-body">
                 <input type="text" id="id_edit" hidden>
                 <div class="row">
-                    <div class="col-md-5 mb-3">
+                    <div class="col-md-4 mb-3">
                         <div class="form-group">
                             <label class="form-label">Ruangan <a class="text-danger">*</a></label>
                             <input type="text" class="form-control" id="show_ruangan_edit" disabled>
@@ -55,17 +55,37 @@
                             <input type="text" class="form-control" id="ruangan_edit" hidden>
                         </div>
                     </div>
-                    <div class="col-md-5 mb-3">
+                    <div class="col-md-8 mb-3">
                         <div class="form-group">
                             <label class="form-label">Agenda Acara <a class="text-danger">*</a></label>
                             <input type="text" id="agenda_edit" class="form-control" placeholder="e.g. Rapat Rutin Bagian **">
                         </div>
                     </div>
-                    <div class="col-md-2 mb-3">
+                    <div class="col-md-6 mb-3">
                         <div class="form-group">
                             <label class="form-label">Tanggal Acara <a class="text-danger">*</a></label>
-                            <input type="text" id="show_tgl_edit" class="form-control" placeholder="YYYY-MM-DD" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tanggal acara" disabled/>
-                            <input type="text" id="tgl_edit" class="form-control" placeholder="YYYY-MM-DD" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tanggal acara" hidden/>
+                            <input type="text" id="tgl_edit" class="form-control" placeholder="YYYY-MM-DD" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tanggal acara"/>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">
+                            Pilih Waktu Acara (<b class="text-warning">Format 24h</b>)
+                        </label>
+
+                        <div class="time-group">
+                            <div class="time-box">
+                                <small>Jam Mulai <a class="text-danger">*</a></small>
+                                <div class="time-input">
+                                    <input id="jam_mulai_edit" class="form-control" type="text" placeholder="HH:mm">
+                                </div>
+                            </div>
+
+                            <div class="time-box">
+                                <small>Jam Selesai <a class="text-danger">*</a></small>
+                                <div class="time-input">
+                                    <input id="jam_selesai_edit" class="form-control" type="text" placeholder="HH:mm">
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="col-sm-6 mb-3">
@@ -161,6 +181,39 @@
 </div>
 
 <script>
+    let delayTimerEdit;
+
+    // $(document).on(
+    //     'change',
+    //     '#tgl_edit, #jam_mulai_edit, #jam_selesai_edit',
+    //     cekKetersediaanRealtimeEdit
+    // );
+
+    function triggerCekEdit() {
+        clearTimeout(delayTimerEdit);
+
+        delayTimer = setTimeout(() => {
+
+            let tgl = $("#tgl_edit").val(); // 🔥 pakai edit
+
+            if (!tgl) return;
+
+            // 🔥 HANDLE SINGLE / RANGE
+            let tglArr = tgl.includes(" to ") ? tgl.split(" to ") : [tgl];
+
+            let tgl_mulai = tglArr[0];
+            let tgl_selesai = tglArr[1] ?? tglArr[0];
+
+            // 🔥 OPTIONAL DEBUG
+            // console.log({ tgl_mulai, tgl_selesai });
+
+            // 🔥 PANGGIL VALIDASI YANG SUDAH ADA
+            // verifSnackGiziTgl(tgl);
+            cekKetersediaanRealtimeEdit();
+
+        }, 300); // delay biar gak spam AJAX
+    }
+
     function riwayat() {
         $('#btn-refresh-table').find('i').addClass('fa-spin');
         $("#tampil-tbody").empty().append(
@@ -357,33 +410,66 @@
             dataType: 'json',
             success: function(res) {
 
+                const today = new Date();
+                let isRange = (
+                    res.show.tgl_mulai &&
+                    res.show.tgl_selesai &&
+                    res.show.tgl_mulai !== res.show.tgl_selesai
+                );
+
                 let tglMulai = res.show.tgl_mulai ?? res.show.tgl;
                 let tglSelesai = res.show.tgl_selesai ?? res.show.tgl;
 
-                let range = tglMulai + " to " + tglSelesai;
+                // if (isRange) {
+                //     $("#tgl_edit").val(tglMulai + " to " + tglSelesai);
+                // } else {
+                //     $("#tgl_edit").val(tglMulai);
+                // }
 
                 // DESTROY dulu kalau ada
                 if (fpTanggalEdit) {
                     fpTanggalEdit.destroy();
                 }
 
-                // INIT ulang (SAMA seperti create)
+                // INIT TANGGAL
                 fpTanggalEdit = flatpickr("#tgl_edit", {
-                    mode: "range",
-                    minDate: "today",
+                    mode: isRange ? "range" : "single",
+                    minDate: tglMulai < today ? null : "today",
                     dateFormat: "Y-m-d",
-                    defaultDate: [tglMulai, tglSelesai],
-                    onChange: function() {
-                        triggerCek(); // pakai function yang sama
-                    }
+                    onChange: triggerCekEdit
+                });
+
+                // SET DATE (ini kunci)
+                fpTanggalEdit.setDate(
+                    isRange ? [tglMulai, tglSelesai] : tglMulai,
+                    true
+                );
+
+                // DESTROY dulu kalau ada
+                if (fpJamMulaiEdit) fpJamMulaiEdit.destroy();
+                if (fpJamSelesaiEdit) fpJamSelesaiEdit.destroy();
+
+                // INIT JAM MULAI
+                fpJamMulaiEdit = flatpickr("#jam_mulai_edit", {
+                    enableTime: true,
+                    noCalendar: true,
+                    dateFormat: "H:i",
+                    time_24hr: true,
+                    defaultDate: res.show.jam_mulai
+                });
+
+                // INIT JAM SELESAI
+                fpJamSelesaiEdit = flatpickr("#jam_selesai_edit", {
+                    enableTime: true,
+                    noCalendar: true,
+                    dateFormat: "H:i",
+                    time_24hr: true,
+                    defaultDate: res.show.jam_selesai
                 });
 
                 $("#id_edit").val(res.show.id);
                 $("#agenda_edit").val(res.show.agenda);
                 $("#ket_edit").val(res.show.ket);
-
-                // SET VALUE MANUAL (biar tampil)
-                $("#tgl_edit").val(range);
 
                 // RUANGAN
                 res.ruangan.forEach(item => {
@@ -393,6 +479,37 @@
                     }
                 });
 
+                $("#jam_mulai_edit, #jam_selesai_edit").off("change").on("change", function () {
+                    let mulai = $("#jam_mulai_edit").val();
+                    let selesai = $("#jam_selesai_edit").val();
+
+                    if (mulai && !selesai) {
+                        let [h, m] = mulai.split(":");
+
+                        let date = new Date();
+                        date.setHours(parseInt(h));
+                        date.setMinutes(parseInt(m));
+
+                        date.setHours(date.getHours() + 1);
+
+                        let newTime = date.toTimeString().slice(0,5);
+
+                        fpJamSelesaiEdit.setDate(newTime, true);
+                    } else {
+                        if (mulai && selesai) {
+                            if (mulai >= selesai) {
+                                iziToast.warning({
+                                    title: 'Validasi',
+                                    message: 'Jam selesai harus lebih besar dari jam mulai',
+                                    position: 'topRight'
+                                });
+
+                                $("#jam_selesai_edit").val('');
+                            }
+                        }
+                    }
+                });
+                console.log(tglMulai, tglSelesai, isRange);
                 $('#modalUbah').modal('show');
             },
             complete: function() {
@@ -411,7 +528,7 @@
     function prosesUbah() {
 
         let tgl = $("#tgl_edit").val();
-        let tglArr = tgl.split(" to ");
+        let tglArr = tgl.includes(" to ") ? tgl.split(" to ") : [tgl];
         let tgl_mulai = tglArr[0];
         let tgl_selesai = tglArr[1] ?? tglArr[0];
 
@@ -591,6 +708,105 @@
                     });
                 }
             });
+    }
+
+    function cekKetersediaanRealtimeEdit() {
+
+        let ruangan = $("#ruangan_edit").val();
+        let mulai = $("#jam_mulai_edit").val();
+        let selesai = $("#jam_selesai_edit").val();
+        let id = $("#id_edit").val(); // 🔥 penting
+
+        if (!ruangan || !tgl || !mulai || !selesai) return;
+
+        let tgl = $("#tgl_edit").val();
+
+        let tglArr = tgl.includes(" to ") ? tgl.split(" to ") : [tgl];
+
+        let tgl_mulai = tglArr[0];
+        let tgl_selesai = tglArr[1] ?? tglArr[0];
+
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: '/api/v4/administrasi/eruang/cek',
+            method: 'POST',
+            data: {
+                id: id, // 🔥 supaya tidak bentrok dengan dirinya sendiri
+                ruangan: ruangan,
+                tgl_mulai: tgl_mulai,
+                tgl_selesai: tgl_selesai,
+                jam_mulai: mulai,
+                jam_selesai: selesai,
+            },
+            beforeSend: function() {
+                $("#info_ketersediaan").html(
+                    `<div class="alert alert-info py-2">Memeriksa ketersediaan ruangan...</div>`
+                );
+                $("#btn-ubah").prop("disabled", true);
+            },
+            success: function(res) {
+
+                // 🔥 DISABLE TANGGAL (pakai fpTanggalEdit, bukan fpTanggal)
+                if (res.disabled_dates && fpTanggalEdit) {
+                    fpTanggalEdit.set('disable', res.disabled_dates);
+                }
+
+                // 🔥 DISABLE JAM
+                disabledTimes = res.disabled_ranges || [];
+
+                // 🔥 STATUS
+                if (res.status) {
+                    $("#info_ketersediaan").html(
+                        `<div class="alert alert-success py-2">${res.message}</div>`
+                    );
+                    $("#btn-ubah").prop("disabled", false);
+                } else {
+                    $("#info_ketersediaan").html(
+                        `<div class="alert alert-danger py-2">${res.message}</div>`
+                    );
+                    $("#btn-ubah").prop("disabled", true);
+                }
+
+                validateTimeSlotEdit();
+            },
+            error: function(xhr) {
+                $("#info_ketersediaan").html(
+                    `<div class="alert alert-danger py-2">${xhr.responseJSON?.message ?? 'Error cek ketersediaan'}</div>`
+                );
+                $("#btn-ubah").prop("disabled", true);
+
+                iziToast.error({
+                    title: 'Pesan Galat!',
+                    message: xhr.responseJSON?.message ?? 'Terjadi kegagalan saat memeriksa ketersediaan ruangan',
+                    position: 'topRight'
+                });
+            }
+        });
+    }
+
+    function validateTimeSlotEdit() {
+        let mulai = $("#jam_mulai_edit").val();
+        let selesai = $("#jam_selesai_edit").val();
+
+        if (!mulai || !selesai) return;
+
+        for (let r of disabledTimes) {
+            if (isTimeOverlap(mulai, selesai, r.start, r.end)) {
+
+                iziToast.error({
+                    title: 'Bentrok Jadwal',
+                    message: `Jam ${mulai} - ${selesai} bentrok dengan ${r.start} - ${r.end}`,
+                    position: 'topRight'
+                });
+
+                $("#jam_mulai_edit, #jam_selesai_edit").addClass("is-invalid");
+                return;
+            }
+        }
+
+        $("#jam_mulai_edit, #jam_selesai_edit").removeClass("is-invalid");
     }
 
     // VERIFIKASI GIZI
