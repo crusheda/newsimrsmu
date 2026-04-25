@@ -21,17 +21,19 @@ class ERuangController extends Controller
 {
     function index()
     {
-        $role = roles::where('name', '<>','administrator')->orderBy('updated_at','desc')->get();
-        $show = eruang::get();
+        // $role = roles::where('name', '<>','administrator')->orderBy('updated_at','desc')->get();
+        // $show = eruang::get();
         $ruangan = eruang_ref::orderBy('nama','ASC')->get();
 
         $data = [
-            'role' => $role,
-            'show' => $show,
+            // 'role' => $role,
+            // 'show' => $show,
             'ruangan' => $ruangan,
         ];
 
-        return view('pages.v4.administrasi.eruang.index')->with('list',$data);
+        return view('pages.v4.administrasi.eruang.index', [
+            'list' => $data
+        ]);
     }
 
     function cekKetersediaan(Request $request)
@@ -49,18 +51,21 @@ class ERuangController extends Controller
 
             $data = eruang::select('eruang.*','users.nama as nama_user')
                 ->join('users','users.id','=','eruang.id_user')
-                ->where('id_ruangan', $request->ruangan)
-                ->whereNull('status_penolakan')
+                ->where('eruang.id_ruangan', $request->ruangan)
+                ->whereNull('eruang.status_penolakan')
                 ->where(function ($q) use ($start, $end) {
                     // 🔥 overlap tanggal
-                    $q->whereBetween('tgl_mulai', [$start, $end])
-                    ->orWhereBetween('tgl_selesai', [$start, $end])
+                    $q->whereBetween('eruang.tgl_mulai', [$start, $end])
+                    ->orWhereBetween('eruang.tgl_selesai', [$start, $end])
                     ->orWhere(function ($q2) use ($start, $end) {
-                        $q2->where('tgl_mulai', '<=', $start)
-                            ->where('tgl_selesai', '>=', $end);
+                        $q2->where('eruang.tgl_mulai', '<=', $start)
+                            ->where('eruang.tgl_selesai', '>=', $end);
                     });
-                })
-                ->get();
+                });
+            if ($request->id) {
+                $data->where('eruang.id', '!=', $request->id);
+            }
+            $data = $data->get();
 
             $disabledRanges = [];
 
@@ -252,23 +257,80 @@ class ERuangController extends Controller
         }
     }
 
-    function table()
+    function table(Request $request)
     {
-        $role = roles::where('name', '<>','administrator')->orderBy('updated_at','desc')->get();
-        $show = eruang::select('eruang.*','users.nama as nama_user','users.no_hp','eruang_ref.nama as nama_ruangan','eruang_ref.kapasitas')
-                    ->join('users','users.id','=','eruang.id_user')
-                    ->join('eruang_ref','eruang_ref.id','=','eruang.id_ruangan')
-                    ->orderBy('eruang.updated_at','DESC')
-                    ->get();
-        // $ruangan = eruang_ref::orderBy('nama','ASC')->get();
+        $query = eruang::select(
+                    'eruang.*',
+                    'users.nama as nama_user',
+                    'users.no_hp',
+                    'eruang_ref.nama as nama_ruangan',
+                    'eruang_ref.kapasitas'
+                )
+                ->join('users','users.id','=','eruang.id_user')
+                ->join('eruang_ref','eruang_ref.id','=','eruang.id_ruangan');
 
-        $data = [
-            'role' => $role,
-            'show' => $show,
-            // 'ruangan' => $ruangan,
-        ];
+        // FILTER TANGGAL
+        if ($request->filter_tgl) {
+            $tgl = explode(' to ', $request->filter_tgl);
 
-        return response()->json($data);
+            if (count($tgl) == 2) {
+                $start = $tgl[0];
+                $end   = $tgl[1];
+
+                $query->where(function($q) use ($start, $end) {
+
+                    // RANGE EVENT (tgl_mulai - tgl_selesai)
+                    $q->where(function($q1) use ($start, $end) {
+                        $q1->whereNotNull('eruang.tgl_mulai')
+                        ->whereNotNull('eruang.tgl_selesai')
+                        ->where(function($q2) use ($start, $end) {
+                            $q2->whereBetween('eruang.tgl_mulai', [$start, $end])
+                                ->orWhereBetween('eruang.tgl_selesai', [$start, $end])
+                                ->orWhere(function($q3) use ($start, $end) {
+                                    $q3->where('eruang.tgl_mulai', '<=', $start)
+                                        ->where('eruang.tgl_selesai', '>=', $end);
+                                });
+                        });
+                    })
+
+                    // SINGLE EVENT (pakai tgl)
+                    ->orWhere(function($q4) use ($start, $end) {
+                        $q4->where(function($q5) {
+                            $q5->whereNull('eruang.tgl_mulai')
+                            ->orWhereNull('eruang.tgl_selesai');
+                        })
+                        ->whereBetween('eruang.tgl', [$start, $end]);
+                    });
+
+                });
+
+            } else {
+                $date = $tgl[0];
+
+                $query->where(function($q) use ($date) {
+
+                    // RANGE EVENT
+                    $q->where(function($q1) use ($date) {
+                        $q1->whereNotNull('eruang.tgl_mulai')
+                        ->whereNotNull('eruang.tgl_selesai')
+                        ->where(function($q2) use ($date) {
+                            $q2->whereDate('eruang.tgl_mulai', '<=', $date)
+                                ->whereDate('eruang.tgl_selesai', '>=', $date);
+                        });
+                    })
+
+                    // SINGLE EVENT
+                    ->orWhereDate('eruang.tgl', $date);
+
+                });
+            }
+        }
+
+        $show = $query->orderBy('eruang.updated_at','DESC')->get();
+
+        return response()->json([
+            'show' => $show
+        ]);
     }
 
     function getUbah($id)
@@ -277,7 +339,6 @@ class ERuangController extends Controller
                     ->join('users','users.id','=','eruang.id_user')
                     ->join('eruang_ref','eruang_ref.id','=','eruang.id_ruangan')
                     ->where('eruang.id',$id)
-                    ->orderBy('eruang.updated_at','DESC')
                     ->first();
 
         $ruangan = eruang_ref::orderBy('nama','ASC')->get();
@@ -294,7 +355,7 @@ class ERuangController extends Controller
     {
         $data = eruang::find($request->id);
 
-        $data->id_user = $request->user;
+        $data->id_user = Auth::user()->id;
         $data->id_ruangan = $request->ruangan;
         $data->agenda = $request->agenda;
 
@@ -452,25 +513,6 @@ class ERuangController extends Controller
     }
 
     ///////////////////////////////////////////////////////// DAFTAR RUANGAN
-    function indexRuangan()
-    {
-        if (Auth::user()->can('admin_eruang')) {
-            $role = roles::where('name', '<>','administrator')->orderBy('updated_at','desc')->get();
-            // $show = eruang::get();
-            $ruangan = eruang_ref::orderBy('nama','ASC')->get();
-
-            $data = [
-                'role' => $role,
-                // 'show' => $show,
-                'ruangan' => $ruangan,
-            ];
-
-            return view('pages.v4.administrasi.eruang.ruangan')->with('list',$data);
-        } else {
-            return redirect()->back()->withErrors('Maaf, Anda tidak memiliki akses daftar ruangan');
-        }
-    }
-
     function getRuangan()
     {
         $user = Auth::user();
@@ -503,8 +545,11 @@ class ERuangController extends Controller
             ], 404);
         }
 
+        $role = roles::select('id','name')->get();
+
         return response()->json([
             'show' => $show,
+            'role' => $role,
         ], 200);
     }
 

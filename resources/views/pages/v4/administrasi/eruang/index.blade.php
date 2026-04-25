@@ -23,9 +23,6 @@
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-body" style="overflow: visible;">
-                        <div class="float-end" id="btn_link_display" hidden>
-                            <h5 href="#" id="detik"></h5>
-                        </div>
 
                         {{-- MY CONTENT --}}
                         <ul class="nav nav-tabs border-0 tab-style-7" role="tablist">
@@ -87,6 +84,7 @@
 
     <script>
         let fpTanggal, fpTanggalEdit, fpJamMulai, fpJamSelesai, fpJamMulaiEdit, fpJamSelesaiEdit;
+        let isAdmin = @json(Auth::user()->can('admin_eruang'));
 
         $(document).ready(function() {
             // SELECT2
@@ -98,102 +96,28 @@
                     dropdownParent: es.parent()
                 })
             });
-
-            // DATEPICKER
-            // $('#tgl').datepicker({
-            //     autoclose: true,format:'yyyy-mm-dd',
-            // }).datepicker("setDate",'now');
-
-            // DATE
-            const today = new Date();
-            var tomorrow = new Date(today);
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            var next = new Date(today);
-            next.setDate(next.getDate() + 999999);
-            const l = $('.flatpickr');
-            const ln = $('.flatpickrnow');
-            const lun = $('.flatpickrunl');
-            const ltom = $('.flatpickrtom');
-            const rang = $('.flatpickrrange');
-            const time = $('.flatpickrtime');
-            const timenext = $('.flatpickrtimenext');
-            // const dates = new Date(Date.now());
-            // const tomorow = dates.getTime();
-            // const m = new Date(Date.now());
-            // const c = new Date(Date.now() + 1728e5); // 3 hari kedepan
-            var now = moment().locale('id').format('Y-MM-DD HH:mm');
-            l.flatpickr({
-                enableTime: 0,
-                minuteIncrement: 1,
-                // monthSelectorType: "static",
-                // inline: true,
-                // defaultHour: 12,
-                // defaultMinute: "today",
-                time_24hr: true,
-                // dateFormat: "Y-m-d H:m",
-                disable: [{
-                    from: tomorrow.toISOString().split("T")[0],
-                    to: next.toISOString().split("T")[0]
-                }]
-            })
-            ln.flatpickr({
-                enableTime: 0,
-                defaultDate: now,
-                minuteIncrement: 1,
-                time_24hr: true,
-                defaultMinute: "today",
-                disable: [{
-                    from: tomorrow.toISOString().split("T")[0],
-                    to: next.toISOString().split("T")[0]
-                }]
-            })
-            // lun.flatpickr({
-            //     mode: "range",
-            //     dateFormat: "Y-m-d"
-            // })
-            ltom.flatpickr({
-                enableTime: 0,
-                minuteIncrement: 1,
-                time_24hr: true,
-                // defaultMinute: "today",
-                minDate: "today",
-                maxDate: "01.01.3000"
-                // disable: [{
-                //     from: tomorrow.toISOString().split("T")[0],
-                //     to: today
-                // }]
-            })
-            rang.flatpickr({
-                mode: "range",
-                minDate: "today",
-                dateFormat: "",
-                disable: [
-                    // function(date) {
-                        // disable every multiple of 8
-                    //     return !(date.getDate() % 8);
-                    // }
-                ],
-                enableTime: true,
-                dateFormat: "d M y, H:i",
-                // dateFormat: "Y-MM-DD HH:mm",
-                time_24hr: true
-            })
-            time.flatpickr({
-                defaultDate: "08:00", // now
-                enableTime: true,
-                noCalendar: true,
-                time_24hr: true,
-                dateFormat: "H:i",
-            })
-            timenext.flatpickr({
-                // defaultDate: now,
-                enableTime: true,
-                noCalendar: true,
-                time_24hr: true,
-                dateFormat: "H:i",
-            })
+            var te = $(".select2unit");
+            te.length && te.each(function() {
+                var es = $(this);
+                es.wrap('<div class="position-relative"></div>').select2({
+                    placeholder: "Pilih Unit",
+                    dropdownParent: es.parent()
+                })
+            });
 
             // INIT DATE&TIMEPICKER FORM PENGAJUAN ---------------
+            $("#filter_tgl").flatpickr({ // FILTER TANGGAL RIWAYAT
+                mode: "single",
+                // minDate: "today",
+                dateFormat: "Y-m-d",
+
+            });
+            $("#tampil_gizi_tgl").flatpickr({ // FILTER TANGGAL RIWAYAT
+                mode: "single",
+                defaultDate: "today",
+                dateFormat: "Y-m-d",
+
+            });
             fpTanggal = $("#tgl").flatpickr({
                 mode: "range",
                 minDate: "today",
@@ -222,6 +146,9 @@
             // INITIALIZE PAGE
             loadRuangan();
             riwayat();
+            if (isAdmin) {
+                refreshTableRuangan();
+            }
 
             $("#jam_mulai, #jam_selesai").on("change", function () {
                 let mulai = $("#jam_mulai").val();

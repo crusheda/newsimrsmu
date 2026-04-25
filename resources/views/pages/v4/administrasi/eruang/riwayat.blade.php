@@ -4,13 +4,13 @@
         <div class="d-flex justify-content-between pb-3">
             <div>
                 <div class="input-daterange input-group bg-light rounded">
-                    <input type="text" name="filter_tgl" class="form-control bg-transparent border-0 flatpickrunl form-control-sm" placeholder="Filter Tanggal Acara" aria-label="" aria-describedby="button-addon2" disabled>
+                    <input type="text" id="filter_tgl" name="filter_tgl" class="form-control bg-transparent border-0 flatpickrunl form-control-sm" placeholder="Filter Tanggal Acara" aria-label="" aria-describedby="button-addon2">
                     <button class="btn btn-primary btn-sm" type="button" id="button-addon2" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                        title="Cari data berdasarkan tanggal acara" disabled><i class="fas fa-search align-middle"></i></button>
+                        title="Cari data berdasarkan tanggal acara" onclick="riwayat()"><i class="fas fa-search align-middle"></i></button>
                 </div>
             </div>
             <div>
-                <button type="button" class="btn btn-warning btn-sm" onclick="riwayat()" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                <button type="button" class="btn btn-warning btn-sm" onclick="riwayat($('#filter_tgl').val(''))" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                     title="Refresh Tabel Pemesanan Ruangan" id="btn-refresh-table"><i class="fas fa-sync fa-fw nav-icon me-1"></i>Segarkan
                 </button>
             </div>
@@ -47,6 +47,7 @@
             <div class="modal-body">
                 <input type="text" id="id_edit" hidden>
                 <div class="row">
+                    <div class="col-md-12 mb-3" id="info_ketersediaan_edit" hidden></div>
                     <div class="col-md-4 mb-3">
                         <div class="form-group">
                             <label class="form-label">Ruangan <a class="text-danger">*</a></label>
@@ -62,6 +63,9 @@
                         </div>
                     </div>
                     <div class="col-md-6 mb-3">
+                        <label class="form-label">
+                            Pilih Rentang (<b class="text-warning">Dari <i class="ti ti-arrow-narrow-right text-primary me-1 ms-1"></i> Sampai</b>)
+                        </label>
                         <div class="form-group">
                             <label class="form-label">Tanggal Acara <a class="text-danger">*</a></label>
                             <input type="text" id="tgl_edit" class="form-control" placeholder="YYYY-MM-DD" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tanggal acara"/>
@@ -219,10 +223,14 @@
         $("#tampil-tbody").empty().append(
             `<tr style='font-size:13px'><td colspan="20"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
         );
+        let filterTgl = $('input[name="filter_tgl"]').val();
         $.ajax({
             url: "/api/v4/administrasi/eruang",
             type: 'GET',
             dataType: 'json',
+            data: {
+                filter_tgl: filterTgl
+            },
             success: function(res) {
                 $("#tampil-tbody").empty();
                 $('#dttable').DataTable().clear().destroy();
@@ -409,8 +417,9 @@
             type: 'GET',
             dataType: 'json',
             success: function(res) {
-
                 const today = new Date();
+                today.setHours(0,0,0,0);
+
                 let isRange = (
                     res.show.tgl_mulai &&
                     res.show.tgl_selesai &&
@@ -419,6 +428,9 @@
 
                 let tglMulai = res.show.tgl_mulai ?? res.show.tgl;
                 let tglSelesai = res.show.tgl_selesai ?? res.show.tgl;
+
+                const tglMulaiDate = new Date(tglMulai);
+                tglMulaiDate.setHours(0,0,0,0);
 
                 // if (isRange) {
                 //     $("#tgl_edit").val(tglMulai + " to " + tglSelesai);
@@ -433,15 +445,18 @@
 
                 // INIT TANGGAL
                 fpTanggalEdit = flatpickr("#tgl_edit", {
-                    mode: isRange ? "range" : "single",
-                    minDate: tglMulai < today ? null : "today",
+                    // mode: isRange ? "range" : "single",
+                    // minDate: tglMulaiDate < today ? null : "today",
+                    mode: "range",
+                    minDate: tglMulai,
                     dateFormat: "Y-m-d",
                     onChange: triggerCekEdit
                 });
 
                 // SET DATE (ini kunci)
                 fpTanggalEdit.setDate(
-                    isRange ? [tglMulai, tglSelesai] : tglMulai,
+                    // isRange ? [tglMulai, tglSelesai] : tglMulai,
+                    [tglMulai, tglSelesai],
                     true
                 );
 
@@ -455,7 +470,8 @@
                     noCalendar: true,
                     dateFormat: "H:i",
                     time_24hr: true,
-                    defaultDate: res.show.jam_mulai
+                    defaultDate: res.show.jam_mulai,
+                    onChange: triggerCekEdit
                 });
 
                 // INIT JAM SELESAI
@@ -464,7 +480,8 @@
                     noCalendar: true,
                     dateFormat: "H:i",
                     time_24hr: true,
-                    defaultDate: res.show.jam_selesai
+                    defaultDate: res.show.jam_selesai,
+                    onChange: triggerCekEdit
                 });
 
                 $("#id_edit").val(res.show.id);
@@ -509,11 +526,14 @@
                         }
                     }
                 });
-                console.log(tglMulai, tglSelesai, isRange);
+                // console.log(tglMulai, tglSelesai, isRange);
+
+                $('#id_show_edit').text(res.show.id);
                 $('#modalUbah').modal('show');
             },
             complete: function() {
                 // $("#btn-simpan").prop("disabled", false);
+                $('#info_ketersediaan_edit').prop('hidden', false);
             },
             error: function(xhr, status, error) {
                 iziToast.error({
@@ -712,14 +732,13 @@
 
     function cekKetersediaanRealtimeEdit() {
 
+        let tgl = $("#tgl_edit").val();
         let ruangan = $("#ruangan_edit").val();
         let mulai = $("#jam_mulai_edit").val();
         let selesai = $("#jam_selesai_edit").val();
         let id = $("#id_edit").val(); // 🔥 penting
 
         if (!ruangan || !tgl || !mulai || !selesai) return;
-
-        let tgl = $("#tgl_edit").val();
 
         let tglArr = tgl.includes(" to ") ? tgl.split(" to ") : [tgl];
 
@@ -741,7 +760,7 @@
                 jam_selesai: selesai,
             },
             beforeSend: function() {
-                $("#info_ketersediaan").html(
+                $("#info_ketersediaan_edit").html(
                     `<div class="alert alert-info py-2">Memeriksa ketersediaan ruangan...</div>`
                 );
                 $("#btn-ubah").prop("disabled", true);
@@ -758,12 +777,12 @@
 
                 // 🔥 STATUS
                 if (res.status) {
-                    $("#info_ketersediaan").html(
+                    $("#info_ketersediaan_edit").html(
                         `<div class="alert alert-success py-2">${res.message}</div>`
                     );
                     $("#btn-ubah").prop("disabled", false);
                 } else {
-                    $("#info_ketersediaan").html(
+                    $("#info_ketersediaan_edit").html(
                         `<div class="alert alert-danger py-2">${res.message}</div>`
                     );
                     $("#btn-ubah").prop("disabled", true);
@@ -772,7 +791,7 @@
                 validateTimeSlotEdit();
             },
             error: function(xhr) {
-                $("#info_ketersediaan").html(
+                $("#info_ketersediaan_edit").html(
                     `<div class="alert alert-danger py-2">${xhr.responseJSON?.message ?? 'Error cek ketersediaan'}</div>`
                 );
                 $("#btn-ubah").prop("disabled", true);

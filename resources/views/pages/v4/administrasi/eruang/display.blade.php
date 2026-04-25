@@ -1,5 +1,4 @@
-
-<div class="row">
+<div class="row mb-3">
     <div class="col-xxl-12 mb-3">
         <div class="alert alert-light shadow-sm" role="alert">
             <small><i class="ti ti-arrow-narrow-right me-1"></i> Pengajuan Peminjaman Ruangan dapat diverifikasi oleh Bagian Gizi Mulai dari <span class="badge bg-primary-transparent">H-1 Acara setelah Pukul 12:00 WIB</span> sampai <span class="badge bg-danger-transparent">Hari H Acara Pukul 23:59 WIB</span></small><br>
@@ -43,7 +42,7 @@
     </div>
     <div class="col-xxl-2" id="stop-display" hidden>
         <div class="position-relative h-100 hstack gap-3">
-            <button type="submit" class="btn btn-danger h-100 w-100" id="btn-tampil-gizi" onclick="stopDisplay()"><i class="fas fa-times align-middle me-1"></i> Berhenti</button>
+            <button type="submit" class="btn btn-danger h-100 w-100" id="btn-tampil-gizi" onclick="stopDisplay()"><i class="fas fa-times align-middle me-1"></i> Berhenti <span class="badge bg-light text-dark ms-1" id="detik"></span></button>
         </div>
     </div>
 </div>
@@ -99,7 +98,7 @@
                 </div>
             </div>
         `);
-        $("#detik").empty();
+        $("#detik").html('');
         $("#tampil_gizi_ruangan").prop('disabled', false);
         $("#tampil_gizi_tgl").prop('disabled', false);
         $("#tampil_gizi_status").prop('disabled', false);
@@ -146,7 +145,7 @@
             success: function(res) {
                 $("#show_tampil_display").empty();
                 if (res.show == '') {
-                    $('#show_tampil_display').append(`<br><center><h5>Data Peminjaman Ruangan Tidak Ada Pada Tanggal <mark>`+getInputTgl+`</mark></h5></center>`);
+                    $('#show_tampil_display').append(`<center><h6 class='mt-3'>Data Peminjaman Ruangan Tidak Ada Pada Tanggal <b class='text-danger'>`+getInputTgl+`</b></h6></center>`);
                 } else {
                     res.show.forEach(item => {
                         var val = item.tgl;
@@ -193,9 +192,9 @@
                                                     <div class="flex-shrink-0 me-4">
                                                         <img src="${item.foto_profil?'/storage/'+item.foto_profil.substr(7,1000):'/images/pku/user.png'}" class="user-avtar wid-60 rounded-circle" alt="Avatar" style="width: 60px;height:60px">
                                                     </div>
-                                                    <div class="flex-grow-1 overflow-hidden">
-                                                        <h4 class="text-truncate font-size-20"><a href="javascript: void(0);" class="text-dark"><mark>${item.status_penolakan?'<s>'+item.nama_ruangan+'</s>':item.nama_ruangan}</mark></a></h4>
-                                                        <p class="text-muted mb-0 mt-1">
+                                                    <div class="flex-grow-1 overflow-hidden text-dark">
+                                                        <h4 class="text-truncate font-size-20"><a href="javascript: void(0);">${item.status_penolakan?'<s>'+item.nama_ruangan+'</s>':item.nama_ruangan}</a></h4>
+                                                        <p class="mb-0 mt-1">
                                                             <i class="ti ti-arrow-narrow-right text-primary me-1"></i> <b>Agenda :</b> ${item.agenda}<br>
                                                             <i class="ti ti-arrow-narrow-right text-primary me-1"></i> <b>User :</b> ${item.nama_user?item.nama_user:'Tidak Ada Nama'} (${item.no_hp?item.no_hp:'-'})<br>
                                                             <i class="ti ti-arrow-narrow-right text-primary me-1"></i> <b>Pesanan Gizi :</b>
@@ -205,18 +204,18 @@
                                                 </div>
                                             </div>
                                             <div class="px-3 py-2 border-top">
-                                                <ul class="list-inline mb-0">
+                                                <ul class="list-inline mb-0 text-dark">
                                                     <li class="list-inline-item me-3 mt-1">
-                                                        <i class= "ti ti-calendar-plus me-1"></i> ${item.tgl}
+                                                        <i class="ti ti-calendar-plus me-1"></i> ${item.tgl}
                                                     </li>
                                                     <li class="list-inline-item me-3 mt-1">
-                                                        <i class= "ti ti-clock me-1"></i> ${item.jam_mulai.substring(0,5)} - ${item.jam_selesai.substring(0,5)} WIB
+                                                        <i class="ti ti-clock me-1"></i> ${item.jam_mulai.substring(0,5)} - ${item.jam_selesai.substring(0,5)} WIB
                                                     </li>
                                                     <div class="float-end">`;
                                                     if (item.status_penolakan == null) {
                                                         if (item.gizi_verif == null) {
                                                             if (harih < hariini) {
-                                                                content += `<button class="btn btn-secondary avtar-s mb-0 btn-icon" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Gagal Verifikasi"><i class="ti ti-check"></i></button>`;
+                                                                content += `<button class="btn btn-secondary avtar-s mb-0 btn-icon" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Gagal Verifikasi" disabled><i class="ti ti-check"></i></button>`;
                                                             } else {
                                                                 if (valid == 1) {
                                                                     content += `<button class="btn btn-primary avtar-s mb-0 btn-sm" onclick="verifGizi(${item.id})" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Verifikasi Sekarang"><i class="ti ti-check me-1"></i> Verifikasi</button>`;
@@ -246,7 +245,7 @@
                 })
 
                 // UPDATED
-                $("#detik").html('Pukul <mark>'+res.now+'</mark> (Per 5 Menit)');
+                $("#detik").html('Pukul '+res.now+' (Per 5 Menit)');
             }
         })
     }
