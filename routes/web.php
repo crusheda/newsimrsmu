@@ -33,6 +33,7 @@ use \App\Http\Controllers\v4\Administrasi\Pengadaan\PengadaanController;
 use \App\Http\Controllers\v4\Administrasi\Pengadaan\PengadaanBarangController;
 use \App\Http\Controllers\v4\Administrasi\Pengadaan\PengadaanRekapController;
 use \App\Http\Controllers\v4\Administrasi\ERuang\ERuangController;
+use \App\Http\Controllers\v4\SDI\JadwalDinasController;
 use \App\Http\Controllers\v4\Pelayanan\Kebidanan\SKLController;
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function () { // SIMRSMU v.4
@@ -102,6 +103,25 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function 
         // E-RUANG
             Route::get('administrasi/eruang', [ERuangController::class, 'index'])->name('v4.administrasi.eruang');
             Route::get('administrasi/eruang/ruangan', [ERuangController::class, 'indexRuangan'])->name('v4.administrasi.eruang.ruangan');
+
+    // SUMBER DAYA INSANI (SDI)
+        // PROFIL PEGAWAI
+
+        // JADWAL DINAS
+        Route::get('jadwaldinas', [JadwalDinasController::class, 'index'])->name('v4.sdi.jadwaldinas.index');
+        Route::get('jadwaldinas/{id}/cetak',[JadwalDinasController::class, 'cetak'])->name('v4.sdi.jadwaldinas.cetak');
+        Route::get('jadwaldinas/tambah/{id}', [JadwalDinasController::class, 'formTambah'])->name('v4.sdi.jadwaldinas.formTambah');
+        Route::get('jadwaldinas/ubah/{id}', [JadwalDinasController::class, 'formUbah'])->name('v4.sdi.jadwaldinas.formUbah');
+        Route::post('jadwaldinas/tambah/proses', [JadwalDinasController::class, 'prosesTambah'])->name('v4.sdi.jadwaldinas.prosesTambah');
+        Route::post('jadwaldinas/ubah/proses', [JadwalDinasController::class, 'prosesUbah'])->name('v4.sdi.jadwaldinas.prosesUbah');
+            // VERIFIKASI JADWAL BAWAHAN
+                Route::get('jadwaldinas/bawahan', [JadwalDinasController::class, 'indexBawahan'])->name('v4.sdi.jadwaldinas.indexBawahan');
+            // REF SHIFT
+                Route::get('jadwaldinas/shift', [JadwalDinasController::class, 'indexShift'])->name('v4.sdi.jadwaldinas.indexShift');
+            // REF STAFF
+                Route::get('jadwaldinas/staf', [JadwalDinasController::class, 'indexStaf'])->name('v4.sdi.jadwaldinas.indexStaf');
+            // REF HARI LIBUR NASIONAL
+                Route::get('jadwaldinas/ln', [JadwalDinasController::class, 'indexLN'])->name('v4.sdi.jadwaldinas.indexLN');
 
     // PELAYANAN
          // SKL

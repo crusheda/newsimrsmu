@@ -450,7 +450,7 @@
         $('#modalHapusRuangan').modal('show');
     }
 
-    function prosesHapus() {
+    function prosesHapusRuangan() {
         // SWITCH BTN HAPUS
         var checkboxHapus = $('#setujuhapusruangan').is(":checked");
         if (checkboxHapus == false) {
@@ -463,6 +463,9 @@
             // PROSES HAPUS
             var id = $("#id-hapus-ruangan").val();
             $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
                 url: "/api/v4/administrasi/eruang/ruangan/hapus/"+id,
                 type: 'DELETE',
                 success: function(res) {

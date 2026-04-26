@@ -32,7 +32,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" id="link_riwayat" data-bs-toggle="tab" href="#riwayat" role="tab">
+                                <a class="nav-link text-dark" id="link_riwayat" data-bs-toggle="tab" href="#riwayat" role="tab" onclick="riwayat()">
                                     Riwayat
                                 </a>
                             </li>

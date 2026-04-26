@@ -31,6 +31,7 @@ use \App\Http\Controllers\v4\Administrasi\Pengadaan\PengadaanController;
 use \App\Http\Controllers\v4\Administrasi\Pengadaan\PengadaanBarangController;
 use \App\Http\Controllers\v4\Administrasi\Pengadaan\PengadaanRekapController;
 use \App\Http\Controllers\v4\Administrasi\ERuang\ERuangController;
+use \App\Http\Controllers\v4\SDI\JadwalDinasController;
 use \App\Http\Controllers\v4\Pelayanan\Kebidanan\SKLController;
 
 Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU v.4
@@ -223,6 +224,62 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
             Route::delete('administrasi/eruang/ruangan/hapus/{id}', [ERuangController::class, 'destroyRuangan']);
             Route::get('administrasi/eruang/ruangan/ubah/{id}', [ERuangController::class, 'getUbahRuangan']);
             Route::post('administrasi/eruang/ruangan/ubah/proses', [ERuangController::class, 'updateRuangan']);
+
+    // SUMBER DAYA INSANI (SDI)
+        // PROFIL PEGAWAI
+
+        // JADWAL DINAS
+            // ADMIN
+                Route::get('kepegawaian/jadwaldinas/table', [JadwalDinasController::class, 'tableAll'])->name('kepegawaian.jadwaldinas.tableAll');
+                Route::get('kepegawaian/jadwaldinas/table/admin/{month}', [JadwalDinasController::class, 'tableAllMonth'])->name('kepegawaian.jadwaldinas.tableAllMonth');
+                Route::get('kepegawaian/jadwaldinas/{id}/verif/{user}', [JadwalDinasController::class, 'verif'])->name('kepegawaian.jadwaldinas.verif');
+                // Route::get('kepegawaian/jadwaldinas/{id}/tolak/{user}', [JadwalDinasController::class, 'tolak'])->name('kepegawaian.jadwaldinas.tolak');
+                Route::get('kepegawaian/jadwaldinas/{id}/batalverif/{user}', [JadwalDinasController::class, 'batalVerif'])->name('kepegawaian.jadwaldinas.batalVerif');
+                // Route::get('kepegawaian/jadwaldinas/{id}/bataltolak/{user}', [JadwalDinasController::class, 'batalTolak'])->name('kepegawaian.jadwaldinas.batalTolak');
+            // VERIFIKASI BAWAHAN
+                Route::get('kepegawaian/jadwaldinas/bawahan/count/{user}', [JadwalDinasController::class, 'countBawahan'])->name('kepegawaian.jadwaldinas.countBawahan');
+                Route::get('kepegawaian/jadwaldinas/bawahan/table/{user}', [JadwalDinasController::class, 'tableAllBawahan'])->name('kepegawaian.jadwaldinas.tableAllBawahan');
+                Route::get('kepegawaian/jadwaldinas/bawahan/table/{user}/{month}', [JadwalDinasController::class, 'tableAllBawahanFilter'])->name('kepegawaian.jadwaldinas.tableAllBawahanFilter');
+                Route::get('kepegawaian/jadwaldinas/bawahan/{id}/verif/{user}', [JadwalDinasController::class, 'verifBawahan'])->name('kepegawaian.jadwaldinas.verifBawahan');
+                Route::get('kepegawaian/jadwaldinas/bawahan/{id}/tolak/{user}', [JadwalDinasController::class, 'tolakBawahan'])->name('kepegawaian.jadwaldinas.tolakBawahan');
+                Route::get('kepegawaian/jadwaldinas/bawahan/{id}/batalverif/{user}', [JadwalDinasController::class, 'batalVerifBawahan'])->name('kepegawaian.jadwaldinas.batalVerifBawahan');
+                Route::get('kepegawaian/jadwaldinas/bawahan/{id}/bataltolak/{user}', [JadwalDinasController::class, 'batalTolakBawahan'])->name('kepegawaian.jadwaldinas.batalTolakBawahan');
+            // DASHBOARD / GRAPH
+                Route::get('kepegawaian/jadwaldinas/totalabsensi/{user}/{range}', [JadwalDinasController::class, 'totalAbsensi'])->name('kepegawaian.jadwaldinas.totalAbsensi');
+                Route::get('kepegawaian/jadwaldinas/totalcuti/{id}', [JadwalDinasController::class, 'totalCuti'])->name('kepegawaian.jadwaldinas.totalCuti');
+                Route::get('kepegawaian/jadwaldinas/totalcutiunit/all', [JadwalDinasController::class, 'totalCutiUnitAll'])->name('kepegawaian.jadwaldinas.totalCutiUnitAll');
+                Route::get('kepegawaian/jadwaldinas/totalcutiunit/{id}', [JadwalDinasController::class, 'totalCutiUnit'])->name('kepegawaian.jadwaldinas.totalCutiUnit');
+            // USER
+                Route::post('kepegawaian/jadwaldinas/tambah', [JadwalDinasController::class, 'storePengajuan'])->name('kepegawaian.jadwaldinas.storePengajuan');
+                Route::post('kepegawaian/jadwaldinas/ubah', [JadwalDinasController::class, 'updatePengajuan'])->name('kepegawaian.jadwaldinas.updatePengajuan');
+                // Route::get('kepegawaian/jadwaldinas/shift/{id}/user/{user}', [JadwalDinasController::class, 'cekShift'])->name('kepegawaian.jadwaldinas.cekShift');
+                Route::get('kepegawaian/jadwaldinas/{id}/shift/user/{user}', [JadwalDinasController::class, 'getShift'])->name('kepegawaian.jadwaldinas.getShift');
+                Route::get('kepegawaian/jadwaldinas/table/{id}', [JadwalDinasController::class, 'table'])->name('kepegawaian.jadwaldinas.table');
+                Route::get('kepegawaian/jadwaldinas/jadwal/{id}', [JadwalDinasController::class, 'jadwal'])->name('kepegawaian.jadwaldinas.jadwal');
+                Route::delete('kepegawaian/jadwaldinas/{id}/hapus', [JadwalDinasController::class, 'hapus'])->name('kepegawaian.jadwaldinas.hapus');
+                Route::get('kepegawaian/dokumentasi/eabsensi', [JadwalDinasController::class, 'dokumentasiAbsensi'])->name('kepegawaian.dokumentasi.absensi');
+                Route::get('kepegawaian/dokumentasi/eabsensi/download', [JadwalDinasController::class, 'downloadDokumentasiAbsensi'])->name('kepegawaian.dokumentasi.absensi.download');
+                // REFERENSI SHIFT
+                    Route::get('kepegawaian/jadwaldinas/shift/table/{id}', [JadwalDinasController::class, 'tableShift'])->name('kepegawaian.jadwaldinas.shift.table');
+                    Route::get('kepegawaian/jadwaldinas/shift/{id}', [JadwalDinasController::class, 'showUbahShift'])->name('kepegawaian.jadwaldinas.shift.show');
+                    Route::post('kepegawaian/jadwaldinas/shift/{id}/ubah', [JadwalDinasController::class, 'ubahShift'])->name('kepegawaian.jadwaldinas.shift.update');
+                    Route::post('kepegawaian/jadwaldinas/shift/tambah', [JadwalDinasController::class, 'tambahShift'])->name('kepegawaian.jadwaldinas.shift.tambah');
+                    Route::delete('kepegawaian/jadwaldinas/shift/{id}/hapus', [JadwalDinasController::class, 'hapusShift'])->name('kepegawaian.jadwaldinas.shift.hapus');
+                // REFERENSI STAFF
+                    Route::get('kepegawaian/jadwaldinas/staf/table/{id}', [JadwalDinasController::class, 'tableStaf'])->name('kepegawaian.jadwaldinas.staf.table');
+                    Route::get('kepegawaian/jadwaldinas/staf/{id}', [JadwalDinasController::class, 'showUbahStaf'])->name('kepegawaian.jadwaldinas.staf.show');
+                    Route::post('kepegawaian/jadwaldinas/staf/{id}/ubah', [JadwalDinasController::class, 'ubahStaf'])->name('kepegawaian.jadwaldinas.staf.update');
+                    Route::post('kepegawaian/jadwaldinas/staf/tambah', [JadwalDinasController::class, 'tambahStaf'])->name('kepegawaian.jadwaldinas.staf.tambah');
+                    Route::delete('kepegawaian/jadwaldinas/staf/{id}/hapus', [JadwalDinasController::class, 'hapusStaf'])->name('kepegawaian.jadwaldinas.staf.hapus');
+                    Route::get('kepegawaian/jadwaldinas/staf/{id}/ambilalih/{user}', [JadwalDinasController::class, 'ambilAlihStaf'])->name('kepegawaian.jadwaldinas.staf.ambilalih');
+                    // ATUR STAF
+                        Route::get('kepegawaian/jadwaldinas/staf/atur/{id}', [JadwalDinasController::class, 'showAturStaf'])->name('kepegawaian.jadwaldinas.staf.atur.show');
+                        Route::post('kepegawaian/jadwaldinas/staf/atur/{id}/ubah', [JadwalDinasController::class, 'aturStaf'])->name('kepegawaian.jadwaldinas.staf.atur.update');
+                // REFERENSI LIBUR NASIONAL
+                    Route::get('kepegawaian/jadwaldinas/ln/table', [JadwalDinasController::class, 'tableLN'])->name('kepegawaian.jadwaldinas.ln.table');
+                    Route::post('kepegawaian/jadwaldinas/ln/tambah', [JadwalDinasController::class, 'tambahLN'])->name('kepegawaian.jadwaldinas.ln.tambah');
+                    Route::delete('kepegawaian/jadwaldinas/ln/{id}/hapus', [JadwalDinasController::class, 'hapusLN'])->name('kepegawaian.jadwaldinas.ln.hapus');
+
 
     // PELAYANAN
         // SKL

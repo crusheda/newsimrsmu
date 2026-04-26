@@ -517,16 +517,25 @@ class ERuangController extends Controller
     {
         $user = Auth::user();
 
-        $roleIds = $user->roles->pluck('id')
-            ->map(fn($id) => (string) $id)
-            ->toArray();
+        // ✅ JIKA ADMIN → TAMPILKAN SEMUA
+        if ($user->can('admin_eruang')) {
+            $show = eruang_ref::orderBy('nama','ASC')->get();
+        } else {
 
-        $show = eruang_ref::where(function($q) use ($roleIds) {
+            $roleIds = $user->roles->pluck('id')
+                ->map(fn($id) => (string) $id)
+                ->toArray();
 
-                // ✅ akses NULL (semua boleh lihat)
-                $q->whereNull('akses');
+            $show = eruang_ref::where(function($q) use ($roleIds) {
 
-                // ✅ akses tidak null & cocok dengan role user
+                // akses kosong = semua boleh
+                $q->where(function($q0) {
+                    $q0->whereNull('akses')
+                    ->orWhere('akses', '')
+                    ->orWhere('akses', '[]');
+                });
+
+                // akses sesuai role
                 if (!empty($roleIds)) {
                     $q->orWhere(function($q2) use ($roleIds) {
                         foreach ($roleIds as $roleId) {
@@ -538,11 +547,6 @@ class ERuangController extends Controller
             })
             ->orderBy('nama','ASC')
             ->get();
-
-        if (!$show->isNotEmpty()) {
-            return response()->json([
-                'message' => 'Maaf, tidak ada ruangan yang dapat ditampilkan untuk Anda.',
-            ], 404);
         }
 
         $role = roles::select('id','name')->get();
