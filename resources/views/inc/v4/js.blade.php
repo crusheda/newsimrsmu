@@ -32,6 +32,9 @@
 <!-- Auto Complete JS -->
 <script src="{{ asset('libs/@tarekraafat/autocomplete.js/autoComplete.min.js') }}"></script>
 
+<!-- Notifier JS -->
+<script src="{{ asset('libs/notifier/notifier.js') }}"></script>
+
 <!-- Color Picker JS -->
 <script src="{{ asset('libs/@simonwep/pickr/pickr.es5.min.js') }}"></script>
 

@@ -160,7 +160,7 @@
                 </li>
 
                 <!-- Start::slide__category -->
-                <li class="slide__category"><span class="category-name">Sumber Daya Insani</span></li>
+                <li class="slide__category"><span class="category-name">Sumber Daya Insani (<b class="text-info">SDI</b>)</span></li>
                 <!-- End::slide__category -->
 
                 <li class="slide">
@@ -171,7 +171,7 @@
                 </li>
 
                 <li class="slide">
-                    <a href="{{ route('v4.administrasi.pengadaan') }}" class="side-menu__item">
+                    <a href="{{ route('v4.sdi.jadwaldinas') }}" class="side-menu__item">
                         <i class="side-menu__icon ri-calendar-schedule-line"></i>
                         <span class="side-menu__label">Jadwal Dinas</span>
                     </a>

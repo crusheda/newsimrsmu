@@ -24,15 +24,15 @@ class JadwalDinasController extends Controller
 {
     function index()
     {
-        if (Auth::user()->getPermission('admin_kepegawaian') == true) {
-            return view('pages.kepegawaian.jadwal.index-admin');
+        if (Auth::user()->can('admin_kepegawaian') == true) {
+            return view('pages.v4.sdi.jadwaldinas.index-admin');
         } else {
             $users  = users::where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
             $data = [
                 // 'show' => $show,
                 'users' => $users,
             ];
-            return view('pages.kepegawaian.jadwal.index-user')->with('list', $data);
+            return view('pages.v4.sdi.jadwaldinas.index-user')->with('list', $data);
         }
     }
 
@@ -42,7 +42,7 @@ class JadwalDinasController extends Controller
             // 'show' => $show,
             'id' => $id,
         ];
-        return view('pages.kepegawaian.jadwal.cetak')->with('list', $data);
+        return view('pages.v4.sdi.jadwaldinas.cetak')->with('list', $data);
     }
 
     function indexBawahan()
@@ -54,7 +54,7 @@ class JadwalDinasController extends Controller
                 // 'show' => $show,
                 'users' => $users,
             ];
-            return view('pages.kepegawaian.jadwal.index-bawahan')->with('list', $data);
+            return view('pages.v4.sdi.jadwaldinas.index-bawahan')->with('list', $data);
         } else {
             return redirect()->back()->withErrors("Pengguna tidak memiliki akses verifikasi / tidak mempunyai bawahan");
         }
@@ -73,7 +73,7 @@ class JadwalDinasController extends Controller
         $data = [
             'show' => $show,
         ];
-        return view('pages.kepegawaian.jadwal.ref.shift')->with('list', $data);
+        return view('pages.v4.sdi.jadwaldinas.ref.shift')->with('list', $data);
     }
 
     function indexStaf()
@@ -97,13 +97,13 @@ class JadwalDinasController extends Controller
             'show' => $show,
             'users' => $users,
         ];
-        return view('pages.kepegawaian.jadwal.ref.staf')->with('list', $data);
+        return view('pages.v4.sdi.jadwaldinas.ref.staf')->with('list', $data);
     }
 
     function indexLN()
     {
-        if (Auth::user()->getPermission('admin_kepegawaian') == true) {
-            return view('pages.kepegawaian.jadwal.ref.ln');
+        if (Auth::user()->can('admin_kepegawaian') == true) {
+            return view('pages.v4.sdi.jadwaldinas.ref.ln');
         } else {
             return redirect()->back()->withErrors("Pengguna tidak memiliki akses menuju halaman Referensi Libur Nasional");
         }
@@ -115,7 +115,7 @@ class JadwalDinasController extends Controller
         //     'users' => $users,
         // ];
 
-        // return view('pages.kepegawaian.jadwal.ref.staf')->with('list', $data);
+        // return view('pages.v4.sdi.jadwaldinas.ref.staf')->with('list', $data);
     }
 
     function formTambah($id)
@@ -181,7 +181,7 @@ class JadwalDinasController extends Controller
                     'jml_tgl' => $jml_tgl,
                 ];
 
-                return view('pages.kepegawaian.jadwal.user.tambah')->with('list', $data);
+                return view('pages.v4.sdi.jadwaldinas.tambah')->with('list', $data);
             }
         } else {
             return redirect()->back()->withErrors('Akses Jadwal tidak disetujui!');
@@ -299,7 +299,7 @@ class JadwalDinasController extends Controller
 
                 // print_r($detail);
                 // die();
-                return view('pages.kepegawaian.jadwal.user.ubah')->with('list', $data);
+                return view('pages.v4.sdi.jadwaldinas.ubah')->with('list', $data);
             }
         } else {
             return redirect()->back()->withErrors('Akses Jadwal tidak disetujui!');
@@ -363,7 +363,7 @@ class JadwalDinasController extends Controller
 
         datalogs::record($getJadwal->pegawai_id, 'Baru saja melakukan penambahan Jadwal Dinas Pegawai Bulan '.$getJadwal->bulan.' Tahun '.$getJadwal->tahun, $getJadwal->staf, null, $getJadwal, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
 
-        return redirect()->route('kepegawaian.jadwaldinas.index')->with('message','Jadwal Dinas Karyawan berhasil disimpan/diajukan pada '.$tgl);
+        return redirect()->route('v4.sdi.jadwaldinas')->with('message','Jadwal Dinas Karyawan berhasil disimpan/diajukan pada '.$tgl);
     }
 
     function prosesUbah(Request $request)
@@ -389,7 +389,7 @@ class JadwalDinasController extends Controller
 
         datalogs::record($getJadwal->pegawai_id, 'Baru saja melakukan perubahan Jadwal Dinas Pegawai Bulan '.$getJadwal->bulan.' Tahun '.$getJadwal->tahun, $getJadwal->staf, null, $getJadwal, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
 
-        return redirect()->route('kepegawaian.jadwaldinas.index')->with('message','Perubahan Jadwal Dinas Karyawan berhasil dilakukan pada '.$tgl);
+        return redirect()->route('v4.sdi.jadwaldinas')->with('message','Perubahan Jadwal Dinas Karyawan berhasil dilakukan pada '.$tgl);
     }
 
     // AJAX JSON ---------------------------------------------------------------------------------------------
@@ -534,8 +534,9 @@ class JadwalDinasController extends Controller
     //     }
     // }
 
-    function getShift($id,$user)
+    function getShift($id)
     {
+        $user = Auth::user()->id;
         $ref_users = DB::table('referensi_jadwal_users')
                             ->whereJsonContains('staf', (string) $user)
                             ->whereNull('deleted_at')
@@ -688,9 +689,10 @@ class JadwalDinasController extends Controller
         return response()->json($data, 200);
     }
 
-    public function totalAbsensi($pegawaiId, $range)
+    public function totalAbsensi($range)
     {
         $now = Carbon::now();
+        $pegawaiId = Auth::id();
 
         $currentStart = $now->day >= 21
             ? $now->copy()->day(21)
@@ -792,7 +794,7 @@ class JadwalDinasController extends Controller
         ], 200);
     }
 
-    function totalCuti($id)
+    function totalCuti()
     {
         // $ref_users = DB::table('referensi_jadwal_users')
         //     ->whereJsonContains('staf', (string) $pegawai)
@@ -816,7 +818,7 @@ class JadwalDinasController extends Controller
                     ->whereNull('kj.deleted_at');
             })
             ->select('kjd.*', 'kj.id as id_jadwal', 'kj.bulan')
-            ->where('kjd.pegawai_id', $id)
+            ->where('kjd.pegawai_id', Auth::id())
             ->whereNull('kjd.deleted_at')
             ->get();
 

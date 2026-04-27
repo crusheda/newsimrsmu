@@ -108,20 +108,20 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function 
         // PROFIL PEGAWAI
 
         // JADWAL DINAS
-        Route::get('jadwaldinas', [JadwalDinasController::class, 'index'])->name('v4.sdi.jadwaldinas.index');
-        Route::get('jadwaldinas/{id}/cetak',[JadwalDinasController::class, 'cetak'])->name('v4.sdi.jadwaldinas.cetak');
-        Route::get('jadwaldinas/tambah/{id}', [JadwalDinasController::class, 'formTambah'])->name('v4.sdi.jadwaldinas.formTambah');
-        Route::get('jadwaldinas/ubah/{id}', [JadwalDinasController::class, 'formUbah'])->name('v4.sdi.jadwaldinas.formUbah');
-        Route::post('jadwaldinas/tambah/proses', [JadwalDinasController::class, 'prosesTambah'])->name('v4.sdi.jadwaldinas.prosesTambah');
-        Route::post('jadwaldinas/ubah/proses', [JadwalDinasController::class, 'prosesUbah'])->name('v4.sdi.jadwaldinas.prosesUbah');
+        Route::get('sdi/jadwaldinas', [JadwalDinasController::class, 'index'])->name('v4.sdi.jadwaldinas');
+        Route::get('sdi/jadwaldinas/{id}/cetak',[JadwalDinasController::class, 'cetak'])->name('v4.sdi.jadwaldinas.cetak');
+        Route::get('sdi/jadwaldinas/tambah/{id}', [JadwalDinasController::class, 'formTambah'])->name('v4.sdi.jadwaldinas.formTambah');
+        Route::get('sdi/jadwaldinas/ubah/{id}', [JadwalDinasController::class, 'formUbah'])->name('v4.sdi.jadwaldinas.formUbah');
+        Route::post('sdi/jadwaldinas/tambah/proses', [JadwalDinasController::class, 'prosesTambah'])->name('v4.sdi.jadwaldinas.prosesTambah');
+        Route::post('sdi/jadwaldinas/ubah/proses', [JadwalDinasController::class, 'prosesUbah'])->name('v4.sdi.jadwaldinas.prosesUbah');
             // VERIFIKASI JADWAL BAWAHAN
-                Route::get('jadwaldinas/bawahan', [JadwalDinasController::class, 'indexBawahan'])->name('v4.sdi.jadwaldinas.indexBawahan');
+                Route::get('sdi/jadwaldinas/bawahan', [JadwalDinasController::class, 'indexBawahan'])->name('v4.sdi.jadwaldinas.bawahan');
             // REF SHIFT
-                Route::get('jadwaldinas/shift', [JadwalDinasController::class, 'indexShift'])->name('v4.sdi.jadwaldinas.indexShift');
+                Route::get('sdi/jadwaldinas/shift', [JadwalDinasController::class, 'indexShift'])->name('v4.sdi.jadwaldinas.ref.shift');
             // REF STAFF
-                Route::get('jadwaldinas/staf', [JadwalDinasController::class, 'indexStaf'])->name('v4.sdi.jadwaldinas.indexStaf');
+                Route::get('sdi/jadwaldinas/staf', [JadwalDinasController::class, 'indexStaf'])->name('v4.sdi.jadwaldinas.ref.staf');
             // REF HARI LIBUR NASIONAL
-                Route::get('jadwaldinas/ln', [JadwalDinasController::class, 'indexLN'])->name('v4.sdi.jadwaldinas.indexLN');
+                Route::get('sdi/jadwaldinas/ln', [JadwalDinasController::class, 'indexLN'])->name('v4.sdi.jadwaldinas.ref.ln');
 
     // PELAYANAN
          // SKL
