@@ -3,7 +3,7 @@
 <head>
 
     <!-- Meta Data -->
-    <title>{{ config('app.name') }} v{{ config('app.version') }} {{ Auth::check() ? '- '.Auth::user()->name : '' }}</title>
+    <title id="titlexhead">{{ config('app.name') }} v{{ config('app.version') }} {{ Auth::check() ? '- '.Auth::user()->name : '' }}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimal-ui">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -22,6 +22,9 @@
 
     <!-- Main Theme Js -->
     {{-- <script src="{{ asset('js/authentication-main.js') }}"></script> --}}
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="{{ asset('fonts/fontawesome.css') }}">
 
     <!-- Bootstrap Css -->
     <link id="style" href="{{ asset('libs/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" >
@@ -60,6 +63,9 @@
 
     <!-- Prism CSS -->
     <link rel="stylesheet" href="{{ asset('libs/prismjs/themes/prism-coy.min.css') }}">
+
+    <!-- CLOUDFLARE TURNSTILE CAPTCHA -->
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
 </head>
 

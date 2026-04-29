@@ -838,198 +838,201 @@ class JadwalDinasController extends Controller
         return response()->json($total, 200);
     }
 
-    function totalCutiUnit($id)
+    function totalCutiUnit()
     {
-        $ref_users = DB::table('referensi_jadwal_users')
-            ->whereJsonContains('staf', (string) $id)
-            ->whereNull('deleted_at')
-            ->first();
+        if (Auth::user()->can('admin_kepegawaian') == true) {
+            $now   = Carbon::now();
+            $tahun = $now->format('Y');          // TAHUN SEKARANG (tetap)
+            $tahun_prev = $tahun - 1;            // TAHUN SEBELUMNYA (tambahan)
+            $maxCuti = 12;
 
-        if (!$ref_users) {
-            return response()->json([], 200);
-        }
+            // ====== FUNGSI PROSES CUTI PER TAHUN (TIDAK MENGGANTI VARIABEL UTAMA) ======
+            $prosesCuti = function($tahun, $maxCuti) {
 
-        $staffArray = json_decode($ref_users->staf, true);
+                $data = DB::table('kepegawaian_jadwal_detail as kjd')
+                    ->join('kepegawaian_jadwal as kj', function ($join) use ($tahun) {
+                        $join->on('kj.id', '=', 'kjd.id_jadwal')
+                            ->where('kj.tahun', $tahun)
+                            ->whereIn('kj.progress', [1, 2, 3])
+                            ->whereNull('kj.deleted_at');
+                    })
+                    ->join('users as us', function ($join) {
+                        $join->on('us.id', '=', 'kjd.pegawai_id')
+                            ->whereNull('us.deleted_at')
+                            ->whereNull('us.status');
+                    })
+                    ->leftJoin('referensi_jadwal_users as rju', function ($join) {
+                        $join->whereRaw("
+                            JSON_CONTAINS(
+                                rju.staf,
+                                JSON_QUOTE(CAST(kjd.pegawai_id AS CHAR))
+                            )
+                        ")
+                        ->whereNull('rju.deleted_at');
+                    })
+                    ->select('kjd.*', 'us.nama as nama_pegawai', 'kj.id as id_jadwal', 'kj.bulan','rju.unit')
+                    ->whereNull('kjd.deleted_at')
+                    ->orderBy('rju.unit')
+                    ->get();
 
-        $now   = Carbon::now();
-        $tahun = $now->format('Y');          // TAHUN SEKARANG (tetap)
-        $tahun_prev = $tahun - 1;            // TAHUN SEBELUMNYA (tambahan)
-        $maxCuti = 12;
+                $rekap = [];
 
-        // ====== FUNGSI PROSES CUTI PER TAHUN (TIDAK MENGGANTI VARIABEL UTAMA) ======
-        $prosesCuti = function($staffArray, $tahun, $maxCuti) {
+                foreach ($data as $row) {
 
-            $data = DB::table('kepegawaian_jadwal_detail as kjd')
-                ->join('kepegawaian_jadwal as kj', function ($join) use ($tahun) {
-                    $join->on('kj.id', '=', 'kjd.id_jadwal')
-                        ->where('kj.tahun', $tahun)
-                        ->whereIn('kj.progress', [1, 2, 3])
-                        ->whereNull('kj.deleted_at');
-                })
-                ->join('users as us', function ($join) {
-                    $join->on('us.id', '=', 'kjd.pegawai_id')
-                        ->whereNull('us.deleted_at')
-                        ->whereNull('us.status');
-                })
-                ->select('kjd.*', 'us.nama as nama_pegawai', 'kj.id as id_jadwal', 'kj.bulan')
-                ->whereIn('kjd.pegawai_id', $staffArray)
-                ->whereNull('kjd.deleted_at')
-                ->get();
+                    if (!isset($rekap[$row->pegawai_id])) {
+                        $rekap[$row->pegawai_id] = [
+                            'nama'        => $row->nama_pegawai,
+                            'unit'        => $row->unit ?? '-',
+                            'total_cuti'  => 0,
+                            'sisa_cuti'   => $maxCuti,
+                        ];
+                    }
 
-            $rekap = [];
-
-            foreach ($data as $row) {
-
-                if (!isset($rekap[$row->pegawai_id])) {
-                    $rekap[$row->pegawai_id] = [
-                        'nama'        => $row->nama_pegawai,
-                        'total_cuti'  => 0,
-                        'sisa_cuti'   => $maxCuti,
-                    ];
-                }
-
-                for ($i = 1; $i <= 31; $i++) {
-                    $kolom = "tgl{$i}";
-                    if (($row->$kolom ?? null) === 'C') {
-                        $rekap[$row->pegawai_id]['total_cuti']++;
+                    for ($i = 1; $i <= 31; $i++) {
+                        $kolom = "tgl{$i}";
+                        if (($row->$kolom ?? null) === 'C') {
+                            $rekap[$row->pegawai_id]['total_cuti']++;
+                        }
                     }
                 }
-            }
 
-            foreach ($rekap as &$r) {
-                $r['sisa_cuti'] = max($maxCuti - $r['total_cuti'], 0);
-            }
-
-            return $rekap;
-        };
-
-        // ====== PROSES TAHUN SEKARANG (TETAP) ======
-        $rekap = $prosesCuti($staffArray, $tahun, $maxCuti);
-
-        // ====== PROSES TAHUN SEBELUMNYA (BARU) ======
-        $rekap_prev = $prosesCuti($staffArray, $tahun_prev, $maxCuti);
-
-        // ====== GABUNGKAN DALAM $hasil (VARIABEL LAMA TETAP DIPAKAI) ======
-        $hasil = [];
-
-        foreach ($rekap as $pid => $row) {
-
-            $hasil[] = [
-                'nama' => $row['nama'],
-
-                // tahun sekarang
-                'total_cuti_' . $tahun => $row['total_cuti'],
-                'sisa_cuti_'  . $tahun => $row['sisa_cuti'],
-
-                // tahun sebelumnya (jika tidak ada → default 0 / 12)
-                'total_cuti_' . $tahun_prev => $rekap_prev[$pid]['total_cuti'] ?? 0,
-                'sisa_cuti_'  . $tahun_prev => $rekap_prev[$pid]['sisa_cuti'] ?? $maxCuti,
-            ];
-        }
-
-        return response()->json($hasil, 200);
-    }
-
-    function totalCutiUnitAll()
-    {
-        $now   = Carbon::now();
-        $tahun = $now->format('Y');          // TAHUN SEKARANG (tetap)
-        $tahun_prev = $tahun - 1;            // TAHUN SEBELUMNYA (tambahan)
-        $maxCuti = 12;
-
-        // ====== FUNGSI PROSES CUTI PER TAHUN (TIDAK MENGGANTI VARIABEL UTAMA) ======
-        $prosesCuti = function($tahun, $maxCuti) {
-
-            $data = DB::table('kepegawaian_jadwal_detail as kjd')
-                ->join('kepegawaian_jadwal as kj', function ($join) use ($tahun) {
-                    $join->on('kj.id', '=', 'kjd.id_jadwal')
-                        ->where('kj.tahun', $tahun)
-                        ->whereIn('kj.progress', [1, 2, 3])
-                        ->whereNull('kj.deleted_at');
-                })
-                ->join('users as us', function ($join) {
-                    $join->on('us.id', '=', 'kjd.pegawai_id')
-                        ->whereNull('us.deleted_at')
-                        ->whereNull('us.status');
-                })
-                ->leftJoin('referensi_jadwal_users as rju', function ($join) {
-                    $join->whereRaw("
-                        JSON_CONTAINS(
-                            rju.staf,
-                            JSON_QUOTE(CAST(kjd.pegawai_id AS CHAR))
-                        )
-                    ")
-                    ->whereNull('rju.deleted_at');
-                })
-                ->select('kjd.*', 'us.nama as nama_pegawai', 'kj.id as id_jadwal', 'kj.bulan','rju.unit')
-                ->whereNull('kjd.deleted_at')
-                ->orderBy('rju.unit')
-                ->get();
-
-            $rekap = [];
-
-            foreach ($data as $row) {
-
-                if (!isset($rekap[$row->pegawai_id])) {
-                    $rekap[$row->pegawai_id] = [
-                        'nama'        => $row->nama_pegawai,
-                        'unit'        => $row->unit ?? '-',
-                        'total_cuti'  => 0,
-                        'sisa_cuti'   => $maxCuti,
-                    ];
+                foreach ($rekap as &$r) {
+                    $r['sisa_cuti'] = max($maxCuti - $r['total_cuti'], 0);
                 }
 
-                for ($i = 1; $i <= 31; $i++) {
-                    $kolom = "tgl{$i}";
-                    if (($row->$kolom ?? null) === 'C') {
-                        $rekap[$row->pegawai_id]['total_cuti']++;
+                return $rekap;
+            };
+
+            // ====== PROSES TAHUN SEKARANG (TETAP) ======
+            $rekap = $prosesCuti($tahun, $maxCuti);
+
+            // ====== PROSES TAHUN SEBELUMNYA (BARU) ======
+            $rekap_prev = $prosesCuti($tahun_prev, $maxCuti);
+
+            // ====== GABUNGKAN DALAM $hasil (VARIABEL LAMA TETAP DIPAKAI) ======
+            $hasil = [];
+
+            foreach ($rekap as $pid => $row) {
+
+                $hasil[] = [
+                    'nama' => $row['nama'],
+                    'unit' => $row['unit'],
+
+                    // tahun sekarang
+                    'total_cuti_' . $tahun => $row['total_cuti'],
+                    'sisa_cuti_'  . $tahun => $row['sisa_cuti'],
+
+                    // tahun sebelumnya (jika tidak ada → default 0 / 12)
+                    'total_cuti_' . $tahun_prev => $rekap_prev[$pid]['total_cuti'] ?? 0,
+                    'sisa_cuti_'  . $tahun_prev => $rekap_prev[$pid]['sisa_cuti'] ?? $maxCuti,
+                ];
+            }
+
+            return response()->json($hasil, 200);
+
+        } else {
+
+            $user = Auth::user()->id;
+            $ref_users = DB::table('referensi_jadwal_users')
+                ->whereJsonContains('staf', (string) $user)
+                ->whereNull('deleted_at')
+                ->first();
+
+            if (!$ref_users) {
+                return response()->json([], 200);
+            }
+
+            $staffArray = json_decode($ref_users->staf, true);
+
+            $now   = Carbon::now();
+            $tahun = $now->format('Y');          // TAHUN SEKARANG (tetap)
+            $tahun_prev = $tahun - 1;            // TAHUN SEBELUMNYA (tambahan)
+            $maxCuti = 12;
+
+            // ====== FUNGSI PROSES CUTI PER TAHUN (TIDAK MENGGANTI VARIABEL UTAMA) ======
+            $prosesCuti = function($staffArray, $tahun, $maxCuti) {
+
+                $data = DB::table('kepegawaian_jadwal_detail as kjd')
+                    ->join('kepegawaian_jadwal as kj', function ($join) use ($tahun) {
+                        $join->on('kj.id', '=', 'kjd.id_jadwal')
+                            ->where('kj.tahun', $tahun)
+                            ->whereIn('kj.progress', [1, 2, 3])
+                            ->whereNull('kj.deleted_at');
+                    })
+                    ->join('users as us', function ($join) {
+                        $join->on('us.id', '=', 'kjd.pegawai_id')
+                            ->whereNull('us.deleted_at')
+                            ->whereNull('us.status');
+                    })
+                    ->select('kjd.*', 'us.nama as nama_pegawai', 'kj.id as id_jadwal', 'kj.bulan')
+                    ->whereIn('kjd.pegawai_id', $staffArray)
+                    ->whereNull('kjd.deleted_at')
+                    ->get();
+
+                $rekap = [];
+
+                foreach ($data as $row) {
+
+                    if (!isset($rekap[$row->pegawai_id])) {
+                        $rekap[$row->pegawai_id] = [
+                            'nama'        => $row->nama_pegawai,
+                            'total_cuti'  => 0,
+                            'sisa_cuti'   => $maxCuti,
+                        ];
+                    }
+
+                    for ($i = 1; $i <= 31; $i++) {
+                        $kolom = "tgl{$i}";
+                        if (($row->$kolom ?? null) === 'C') {
+                            $rekap[$row->pegawai_id]['total_cuti']++;
+                        }
                     }
                 }
+
+                foreach ($rekap as &$r) {
+                    $r['sisa_cuti'] = max($maxCuti - $r['total_cuti'], 0);
+                }
+
+                return $rekap;
+            };
+
+            // ====== PROSES TAHUN SEKARANG (TETAP) ======
+            $rekap = $prosesCuti($staffArray, $tahun, $maxCuti);
+
+            // ====== PROSES TAHUN SEBELUMNYA (BARU) ======
+            $rekap_prev = $prosesCuti($staffArray, $tahun_prev, $maxCuti);
+
+            // ====== GABUNGKAN DALAM $hasil (VARIABEL LAMA TETAP DIPAKAI) ======
+            $hasil = [];
+
+            foreach ($rekap as $pid => $row) {
+
+                $hasil[] = [
+                    'nama' => $row['nama'],
+
+                    // tahun sekarang
+                    'total_cuti_' . $tahun => $row['total_cuti'],
+                    'sisa_cuti_'  . $tahun => $row['sisa_cuti'],
+
+                    // tahun sebelumnya (jika tidak ada → default 0 / 12)
+                    'total_cuti_' . $tahun_prev => $rekap_prev[$pid]['total_cuti'] ?? 0,
+                    'sisa_cuti_'  . $tahun_prev => $rekap_prev[$pid]['sisa_cuti'] ?? $maxCuti,
+                ];
             }
 
-            foreach ($rekap as &$r) {
-                $r['sisa_cuti'] = max($maxCuti - $r['total_cuti'], 0);
-            }
-
-            return $rekap;
-        };
-
-        // ====== PROSES TAHUN SEKARANG (TETAP) ======
-        $rekap = $prosesCuti($tahun, $maxCuti);
-
-        // ====== PROSES TAHUN SEBELUMNYA (BARU) ======
-        $rekap_prev = $prosesCuti($tahun_prev, $maxCuti);
-
-        // ====== GABUNGKAN DALAM $hasil (VARIABEL LAMA TETAP DIPAKAI) ======
-        $hasil = [];
-
-        foreach ($rekap as $pid => $row) {
-
-            $hasil[] = [
-                'nama' => $row['nama'],
-                'unit' => $row['unit'],
-
-                // tahun sekarang
-                'total_cuti_' . $tahun => $row['total_cuti'],
-                'sisa_cuti_'  . $tahun => $row['sisa_cuti'],
-
-                // tahun sebelumnya (jika tidak ada → default 0 / 12)
-                'total_cuti_' . $tahun_prev => $rekap_prev[$pid]['total_cuti'] ?? 0,
-                'sisa_cuti_'  . $tahun_prev => $rekap_prev[$pid]['sisa_cuti'] ?? $maxCuti,
-            ];
+            return response()->json($hasil, 200);
         }
-
-        return response()->json($hasil, 200);
     }
 
     // TABEL RIWAYAT JADWAL
-    function table($id)
+    function table()
     {
+        $user_id = Auth::user()->id;
         $users  = users::select('id','nama')->where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
 
         // Ambil daftar staf yang menjadi tanggung jawab user
         $stafList = DB::table('referensi_jadwal_users')
-            ->whereJsonContains('staf', (string) $id)
+            ->whereJsonContains('staf', (string) $user_id)
             ->whereNull('deleted_at')
             ->pluck('staf')
             ->first();
@@ -1051,7 +1054,7 @@ class JadwalDinasController extends Controller
                 'vr.nama as nama_verif',
                 'vl.nama as nama_valid'
             )
-            ->whereJsonContains('staf', (string) $id)
+            ->whereJsonContains('staf', (string) $user_id)
             // ->whereIn('kepegawaian_jadwal.pegawai_id', $pegawaiIds)
             ->whereIn('kepegawaian_jadwal.progress', [1, 2, 3])
             ->whereNull('kepegawaian_jadwal.deleted_at')
@@ -1299,8 +1302,9 @@ class JadwalDinasController extends Controller
         return response()->json($data, 200);
     }
 
-    function countBawahan($user)
+    function countBawahan()
     {
+        $user = Auth::user()->id;
         $jabatan = struktur_organisasi::where('id_user', $user)
                     ->orderBy('updated_at','desc')
                     ->first();

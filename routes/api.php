@@ -237,7 +237,7 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
                 Route::get('sdi/jadwaldinas/{id}/batalverif/{user}', [JadwalDinasController::class, 'batalVerif'])->name('sdi.jadwaldinas.batalVerif');
                 // Route::get('sdi/jadwaldinas/{id}/bataltolak/{user}', [JadwalDinasController::class, 'batalTolak'])->name('sdi.jadwaldinas.batalTolak');
             // VERIFIKASI BAWAHAN
-                Route::get('sdi/jadwaldinas/bawahan/count/{user}', [JadwalDinasController::class, 'countBawahan'])->name('sdi.jadwaldinas.countBawahan');
+                Route::get('sdi/jadwaldinas/bawahan/count', [JadwalDinasController::class, 'countBawahan'])->name('sdi.jadwaldinas.countBawahan');
                 Route::get('sdi/jadwaldinas/bawahan/table/{user}', [JadwalDinasController::class, 'tableAllBawahan'])->name('sdi.jadwaldinas.tableAllBawahan');
                 Route::get('sdi/jadwaldinas/bawahan/table/{user}/{month}', [JadwalDinasController::class, 'tableAllBawahanFilter'])->name('sdi.jadwaldinas.tableAllBawahanFilter');
                 Route::get('sdi/jadwaldinas/bawahan/{id}/verif/{user}', [JadwalDinasController::class, 'verifBawahan'])->name('sdi.jadwaldinas.verifBawahan');
@@ -247,14 +247,13 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
             // DASHBOARD / GRAPH
                 Route::get('sdi/jadwaldinas/totalabsensi/{range}', [JadwalDinasController::class, 'totalAbsensi'])->name('sdi.jadwaldinas.totalAbsensi');
                 Route::get('sdi/jadwaldinas/totalcuti', [JadwalDinasController::class, 'totalCuti'])->name('sdi.jadwaldinas.totalCuti');
-                Route::get('sdi/jadwaldinas/totalcutiunit/all', [JadwalDinasController::class, 'totalCutiUnitAll'])->name('sdi.jadwaldinas.totalCutiUnitAll');
-                Route::get('sdi/jadwaldinas/totalcutiunit/{id}', [JadwalDinasController::class, 'totalCutiUnit'])->name('sdi.jadwaldinas.totalCutiUnit');
+                Route::get('sdi/jadwaldinas/totalcutiunit', [JadwalDinasController::class, 'totalCutiUnit'])->name('sdi.jadwaldinas.totalCutiUnit');
             // USER
                 Route::post('sdi/jadwaldinas/tambah', [JadwalDinasController::class, 'storePengajuan']);
                 Route::post('sdi/jadwaldinas/ubah', [JadwalDinasController::class, 'updatePengajuan'])->name('sdi.jadwaldinas.updatePengajuan');
                 // Route::get('sdi/jadwaldinas/shift/{id}/user/{user}', [JadwalDinasController::class, 'cekShift'])->name('sdi.jadwaldinas.cekShift');
                 Route::get('sdi/jadwaldinas/{id}/shift', [JadwalDinasController::class, 'getShift'])->name('sdi.jadwaldinas.getShift');
-                Route::get('sdi/jadwaldinas/table/{id}', [JadwalDinasController::class, 'table'])->name('sdi.jadwaldinas.table');
+                Route::get('sdi/jadwaldinas/table', [JadwalDinasController::class, 'table'])->name('sdi.jadwaldinas.table');
                 Route::get('sdi/jadwaldinas/jadwal/{id}', [JadwalDinasController::class, 'jadwal'])->name('sdi.jadwaldinas.jadwal');
                 Route::delete('sdi/jadwaldinas/{id}/hapus', [JadwalDinasController::class, 'hapus'])->name('sdi.jadwaldinas.hapus');
                 Route::get('sdi/dokumentasi/eabsensi', [JadwalDinasController::class, 'dokumentasiAbsensi'])->name('sdi.dokumentasi.absensi');

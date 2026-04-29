@@ -29,6 +29,14 @@
                             <form id="loginForm" method="POST" action="{{ route('v4.login.process') }}" class="row gy-3">
                                 @csrf
 
+                                @if ($errors->has('throttle'))
+                                    <div class="col-xl-12 mb-2" id="throttleAlert">
+                                        <div class="alert alert-danger shadow-sm">
+                                            {{ $errors->first('throttle') }}. Coba lagi dalam <b id="countdown">{{ session('lockout') }}</b> detik.
+                                        </div>
+                                    </div>
+                                @endif
+
                                 {{-- Username --}}
                                 <div class="col-xl-12">
                                     <div class="d-flex align-items-center justify-content-between">
@@ -95,7 +103,7 @@
                                 </div>
 
                                 {{-- Captcha --}}
-                                <div class="col-xl-12 mb-2">
+                                {{-- <div class="col-xl-12 mb-2">
                                     <label class="form-label text-default">Selesaikan Captcha</label>
                                     <div class="input-group align-items-center mt-2">
                                         <img
@@ -122,31 +130,44 @@
                                     @error('captcha')
                                         <div class="invalid-feedback d-block">{{ $message }}</div>
                                     @enderror
+                                </div> --}}
+
+                                {{-- CLOUDFLARE TURNSTILE CAPTCHA --}}
+                                <div class="col-xl-12 text-center">
+                                    {{-- <label class="form-label text-default">Verifikasi</label> --}}
+
+                                    <div class="cf-turnstile"
+                                        data-sitekey="{{ config('services.turnstile.site_key') }}">
+                                    </div>
+
+                                    @error('cf-turnstile-response')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
 
                                 {{-- Progress --}}
-                                <div class="progress mt-1" style="height: 4px;">
+                                {{-- <div class="progress mt-1" style="height: 4px;">
                                     <div
                                         class="progress-bar bg-warning"
                                         id="captchaProgress"
                                         style="width: 0%;">
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 {{-- Submit --}}
-                                <div class="col-12 d-grid mt-3">
+                                <div class="col-xl-12 d-grid">
                                     <button type="submit" id="btnLogin" class="btn btn-primary">
                                         <i class="ri-login-box-line fs-16 me-1"></i> Sign In
                                     </button>
                                 </div>
 
                                 {{-- OR --}}
-                                <div class="col-12 text-center my-3 authentication-barrier">
+                                <div class="col-xl-12 text-center my-3 authentication-barrier">
                                     <span class="op-4 fs-13">OR</span>
                                 </div>
 
                                 {{-- Register --}}
-                                <div class="col-12 text-center fw-medium mt-0">
+                                <div class="col-xl-12 text-center fw-medium mt-0">
                                     Belum memiliki Akun?
                                     <a role="button" class="text-primary">
                                         Hubungi SDI
@@ -188,15 +209,15 @@
 
     <script>
         let showPassword = false;
-        let progress = 0;
-        let interval = null;
-        let startTime = Date.now();
-        const TOTAL_TIME = 30 * 1000; // 30 detik
+        // let progress = 0;
+        // let interval = null;
+        // let startTime = Date.now();
+        // const TOTAL_TIME = 30 * 1000; // 30 detik
 
         const passwordInput = document.getElementById('password');
         const eyeIcon = document.getElementById('eyeIcon');
-        const captchaImg = document.getElementById('captchaImage');
-        const progressBar = document.getElementById('captchaProgress');
+        // const captchaImg = document.getElementById('captchaImage');
+        // const progressBar = document.getElementById('captchaProgress');
 
         /* =========================
             SHOW / HIDE PASSWORD
@@ -212,31 +233,31 @@
         /* =========================
             RELOAD CAPTCHA
         ========================== */
-        function reloadCaptcha() {
-            captchaImg.src = `/captcha/math?${Date.now()}`;
-            resetProgress();
-        }
+        // function reloadCaptcha() {
+        //     captchaImg.src = `/captcha/math?${Date.now()}`;
+        //     resetProgress();
+        // }
 
         /* =========================
             PROGRESS BAR TIMER
         ========================== */
-        function resetProgress() {
-            startTime = Date.now();
-            progressBar.style.width = '0%';
-        }
+        // function resetProgress() {
+        //     startTime = Date.now();
+        //     progressBar.style.width = '0%';
+        // }
 
-        function startProgressTimer() {
-            interval = setInterval(() => {
-                const elapsed = Date.now() - startTime;
-                progress = Math.min((elapsed / TOTAL_TIME) * 100, 100);
-                progressBar.style.width = progress + '%';
+        // function startProgressTimer() {
+        //     interval = setInterval(() => {
+        //         const elapsed = Date.now() - startTime;
+        //         progress = Math.min((elapsed / TOTAL_TIME) * 100, 100);
+        //         progressBar.style.width = progress + '%';
 
-                if (elapsed >= TOTAL_TIME) {
-                    reloadCaptcha();
-                    startTime = Date.now();
-                }
-            }, 50);
-        }
+        //         if (elapsed >= TOTAL_TIME) {
+        //             reloadCaptcha();
+        //             startTime = Date.now();
+        //         }
+        //     }, 50);
+        // }
 
         /* =========================
             INIT
@@ -250,7 +271,7 @@
                 $('#theme-toggle').removeClass('on').prop('hidden',false);
             }
 
-            startProgressTimer();
+            // startProgressTimer();
 
             $('#loginForm').on('submit', function () {
 
@@ -274,6 +295,36 @@
             $('[data-bs-toggle="tooltip"]').tooltip({
                 trigger : 'hover'
             })
+
+            // LOCKOUT COUNTDOWN (AFTER 5x FAILED ATTEMPTS)
+            let seconds = {{ session('lockout') ?? 0 }};
+            const btn = document.getElementById('btnLogin');
+            const countdownEl = document.getElementById('countdown');
+            const alertBox = document.getElementById('throttleAlert');
+
+            if (seconds > 0) {
+                btn.disabled = true;
+
+                const interval = setInterval(() => {
+                    seconds--;
+
+                    if (countdownEl) {
+                        countdownEl.innerText = seconds;
+                    }
+
+                    if (seconds <= 0) {
+                        clearInterval(interval);
+                        btn.disabled = false;
+                        if (alertBox) {
+                            alertBox.style.transition = "opacity 0.5s";
+                            alertBox.style.opacity = "0";
+                            setTimeout(() => alertBox.style.display = "none", 500);
+                            // alertBox.style.display = 'none';
+                        }
+                        if (countdownEl) countdownEl.innerText = '0';
+                    }
+                }, 1000);
+            }
         })
     </script>
 

@@ -24,6 +24,7 @@
 
 <!-- Icons Css +_+ -->
 <link href="{{ asset('css/icons.css') }}" rel="stylesheet" >
+<!-- [Inter Font] https://rsms.me/inter/ -->
 <link rel="stylesheet" href="{{ asset('fonts/inter/inter.css') }}" id="main-font-link">
 <!-- [phosphor Icons] https://phosphoricons.com/ -->
 <link rel="stylesheet" href="{{ asset('fonts/phosphor/duotone/style.css') }}">
