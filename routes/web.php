@@ -35,6 +35,7 @@ use \App\Http\Controllers\v4\Administrasi\Pengadaan\PengadaanRekapController;
 use \App\Http\Controllers\v4\Administrasi\ERuang\ERuangController;
 use \App\Http\Controllers\v4\SDI\JadwalDinasController;
 use \App\Http\Controllers\v4\Pelayanan\Kebidanan\SKLController;
+use App\Http\Controllers\v4\AI\KlaimBpjsController;
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function () { // SIMRSMU v.4
     Route::get('dashboard', [DashboardController::class, 'index'])->name('v4.dashboard');
@@ -132,6 +133,11 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function 
             Route::get('kebidanan/skl/{id}/cetak', [SKLController::class, 'cetak'])->name('v4.pelayanan.skl.cetak');
             Route::get('kebidanan/skl/{id}/print', [SKLController::class, 'print'])->name('v4.pelayanan.skl.print');
             // Route::resource('kebidanan/skl', '\App\Http\Controllers\Pelayanan\Kebidanan\sklController');
+
+    // AI
+        // KLAIM BPJS
+        Route::get('ai/bpjs/klaim/coder', [KlaimBpjsController::class, 'index'])->name('v4.ai.bpjs.klaim.coder');
+
     // LOGOUT ROUTE
     Route::post('logout', [AuthController::class, 'logout'])->name('v4.logout');
 });
