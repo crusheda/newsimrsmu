@@ -24,7 +24,7 @@
             @include('pages.v4.sdi.jadwaldinas.inc.graph')
 
             <div class="col-xl-12">
-                <div class="card custom-card mb-0">
+                <div class="card custom-card mb-3">
                     <div class="card-header d-flex align-items-center justify-content-between py-3">
                         <h6 class="mb-0">Tabel <b class="text-danger">Riwayat</b></h6>
                         <div class="btn-group">
@@ -87,19 +87,19 @@
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">
+                    <h5 class="modal-title">
                         Form Tambah
-                    </h4>
+                    </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="alert alert-secondary mb-3">
+                    <div class="alert alert-light shadow-sm mb-3">
                         <small>
                             {{-- <i class="ti ti-arrow-narrow-right me-1"></i> <br> --}}
                             <i class="ti ti-arrow-narrow-right me-1"></i> Isian bertanda (<a class="text-danger">*</a>) berarti wajib diisi<br>
                             <i class="ti ti-arrow-narrow-right me-1"></i> Jadwal Dinas akan berstatus <span class="badge rounded-pill text-bg-warning">Pending</span> setelah pengajuan ini, maka dari itu segera lengkapi data jadwal dinas <br>
-                            <i class="ti ti-arrow-narrow-right me-1"></i> Apabila pengajuan masih dalam status <b class="text-success">Verifikasi</b> masih dapat diubah namun Anda sudah tidak dapat menghapusnya (Konfirmasi atasan apabila diperlukan)<br>
-                            <i class="ti ti-arrow-narrow-right me-1"></i> Pengajuan Jadwal Dinas yang telah di <b class="text-primary">Validasi</b> sudah tidak dapat diubah / hapus di kemudian waktu (Konfirmasi Kepegawaian apabila diperlukan)
+                            <i class="ti ti-arrow-narrow-right me-1"></i> Apabila pengajuan masih dalam status <span class="badge rounded-pill text-bg-success">Verifikasi</span> masih dapat diubah namun Anda sudah tidak dapat menghapusnya (Konfirmasi atasan apabila diperlukan)<br>
+                            <i class="ti ti-arrow-narrow-right me-1"></i> Pengajuan Jadwal Dinas yang telah di <span class="badge rounded-pill text-bg-primary">Validasi</span> sudah tidak dapat diubah / hapus di kemudian waktu (Konfirmasi Kepegawaian apabila diperlukan)
                         </small>
                     </div>
                     <div class="position-relative mb-3">
@@ -112,7 +112,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-link-secondary" data-bs-dismiss="modal">Batalkan</button>
+                    <button type="button" class="btn btn-link text-dark" data-bs-dismiss="modal">Batalkan</button>
                     <button class="btn btn-primary" id="btn-tambah" onclick="prosesTambah()">Lanjutkan &nbsp;<i class="fa-fw fas fa-chevron-right nav-icon"></i></button>
                 </div>
             </div>
@@ -133,7 +133,7 @@
                 <div class="modal-footer">
                     <button type="button" id="btn-cetak" class="btn btn-link-primary me-sm-3 me-1"><i class="fa fa-print me-1" style="font-size:13px"></i> Cetak</button>
                     <button type="submit" id="btn-refresh-lihat" class="btn btn-link-warning me-sm-2"><i class="fa fa-sync me-1" style="font-size:13px"></i> Segarkan</button>
-                    <button type="button" class="btn btn-link-secondary" data-bs-dismiss="modal">Tutup &nbsp;<i class="fa-fw fas fa-chevron-right nav-icon" style="font-size:13px"></i></button>
+                    <button type="button" class="btn btn-link text-dark" data-bs-dismiss="modal">Tutup &nbsp;<i class="fa-fw fas fa-chevron-right nav-icon" style="font-size:13px"></i></button>
                 </div>
             </div>
         </div>
@@ -142,9 +142,9 @@
         <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">
+                    <h5 class="modal-title">
                         Form Hapus
-                    </h4>
+                    </h5>
                 </div>
                 <div class="modal-body">
                     <input type="text" id="id_hapus" hidden>
@@ -160,7 +160,7 @@
                 </div>
                 <div class="col-12 text-center mb-4">
                     <button type="submit" id="btn-hapus" class="btn btn-danger me-sm-3 me-1" onclick="prosesHapus()"><i class="fa fa-trash me-1" style="font-size:13px"></i> Hapus</button>
-                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
+                    <button type="reset" class="btn btn-link text-dark" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
                 </div>
             </div>
         </div>
@@ -176,7 +176,7 @@
                     <div id="file-dokumentasi"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    <button type="button" class="btn btn-link text-dark" data-bs-dismiss="modal">Tutup</button>
                     <button type="button" class="btn btn-success"
                         onclick="window.location.href='{{ url('/api/v4/sdi/dokumentasi/eabsensi/download') }}'">
                         Download
@@ -268,7 +268,7 @@
                     } else {
                         $('#tombolMenu').empty().html(`Pilihan Menu <span>Jadwal Dinas</span>`);
                         $('#count-bawahan').text('0 Data').prop('hidden',true);
-                        $('#tombol-verif-bawahan').attr('href', 'javascript:void(0);').html('<s>Verifikasi Bawahan</s>'); // .removeAttr('href')
+                        $('#tombol-verif-bawahan').attr('href', 'javascript:void(0);').html('Verifikasi Bawahan').addClass('disabled'); // .removeAttr('href')
                     }
                 }
             })
@@ -304,7 +304,6 @@
             var save = new FormData();
             save.append('tgl',$('#tgl').val());
             save.append('keterangan',$('#ket').val());
-            save.append('pegawai','{{ Auth::user()->id }}');
 
             if (!tgl || !regexBulan.test(tgl)) {
                 iziToast.warning({
@@ -395,27 +394,27 @@
                                         if (item.pegawai_id == userID) {
                                             if (item.progress == 1) {
                                                 // content += `<li><a href="javascript:void(0);" class="dropdown-item text-info" onclick="lihat(${item.id})"><i class="fa-fw fas fa-list-ol me-2"></i> Lihat</a></li>`;
-                                                content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa fa-print me-2" style="font-size:13px"></i> Cetak</a></li>`;
+                                                content += `<li><a href="javascript:void(0);" class="dropdown-item disabled"><i class="fa fa-print me-2" style="font-size:13px"></i> Cetak</a></li>`;
                                                 content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="ubah(${item.id})"><i class="fa-fw fas fa-calendar-alt me-2"></i> Ubah</a></li>`;
-                                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(${item.id})"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(${item.id})"><i class="fa-fw fas fa-trash nav-icon me-2"></i> Hapus</a></li>`;
                                             } else {
                                                 if (item.progress == 2) {
                                                     // content += `<li><a href="javascript:void(0);" class="dropdown-item text-info" onclick="lihat(${item.id})"><i class="fa-fw fas fa-list-ol me-2"></i> Lihat</a></li>`;
-                                                    content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa fa-print me-2" style="font-size:13px"></i> Cetak</a></li>`;
+                                                    content += `<li><a href="javascript:void(0);" class="dropdown-item disabled"><i class="fa fa-print me-2" style="font-size:13px"></i> Cetak</a></li>`;
                                                     content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="ubah(${item.id})"><i class="fa-fw fas fa-calendar-alt me-2"></i> Ubah</a></li>`;
-                                                    content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                                    content += `<li><a href='javascript:void(0);' class='dropdown-item disabled'><i class="fa-fw fas fa-trash nav-icon me-2"></i> Hapus</a></li>`;
                                                 } else {
                                                     // content += `<li><a href="javascript:void(0);" class="dropdown-item text-info" onclick="lihat(${item.id})"><i class="fa-fw fas fa-list-ol me-2"></i> Lihat</a></li>`;
-                                                    content += `<li><a href="javascript:void(0);" class="dropdown-item text-primary" onclick="printJadwal(${item.id})"><i class="fa fa-print me-2" style="font-size:13px"></i> Cetak</a></li>`;
-                                                    content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-calendar-alt me-2"></i> Ubah</a></li>`;
-                                                    content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                                    content += `<li><a href="javascript:void(0);" class="dropdown-item text-primary" onclick="printJadwal(${item.id})"><i class="fa fa-print me-2"></i> Cetak</a></li>`;
+                                                    content += `<li><a href="javascript:void(0);" class="dropdown-item disabled"><i class="fa-fw fas fa-calendar-alt me-2"></i> Ubah</a></li>`;
+                                                    content += `<li><a href='javascript:void(0);' class='dropdown-item disabled'><i class="fa-fw fas fa-trash nav-icon me-2"></i> Hapus</a></li>`;
                                                 }
                                             }
                                         } else {
                                             // content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-list-ol me-2"></i> Lihat</a></li>`;
-                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-primary" onclick="printJadwal(${item.id})"><i class="fa fa-print me-2" style="font-size:13px"></i> Cetak</a></li>`;
-                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-calendar-alt me-2"></i> Ubah</a></li>`;
-                                            content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-primary" onclick="printJadwal(${item.id})"><i class="fa fa-print me-2"></i> Cetak</a></li>`;
+                                            content += `<li><a href="javascript:void(0);" class="dropdown-item disabled"><i class="fa-fw fas fa-calendar-alt me-2"></i> Ubah</a></li>`;
+                                            content += `<li><a href='javascript:void(0);' class='dropdown-item disabled'><i class="fa-fw fas fa-trash nav-icon me-2"></i> Hapus</a></li>`;
                                         }
                         content += "</ul></div></center></td>";
                         for (let i = 1; i <= bulan.length; i++) {

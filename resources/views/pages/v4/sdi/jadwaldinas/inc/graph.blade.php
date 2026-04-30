@@ -112,11 +112,12 @@
                     colorBackGrafik = "#fce9e9"; // merah muda
                 }
 
-                let totalAbsensi = parseInt(res.total_absensi ?? 0);
-                let totalHariKerja = parseInt(res.total_hari_kerja ?? 1);
+                let totalAbsensi = Number(res.total_absensi) || 0;
+                let totalHariKerja = Number(res.total_hari_kerja) || 0;
 
-                // hitung persentase (untuk grafik radial)
-                let persen = Math.round((totalAbsensi / totalHariKerja) * 100);
+                let persen = totalHariKerja > 0
+                    ? Math.round((totalAbsensi / totalHariKerja) * 100)
+                    : 0;
 
                 let options = {
                     series: [persen],

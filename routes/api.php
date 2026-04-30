@@ -230,7 +230,8 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
 
         // JADWAL DINAS
             // ADMIN
-                Route::get('sdi/jadwaldinas/table', [JadwalDinasController::class, 'tableAll'])->name('sdi.jadwaldinas.tableAll');
+                Route::get('sdi/jadwaldinas/table/admin', [JadwalDinasController::class, 'tableAll'])->name('sdi.jadwaldinas.tableAll');
+                Route::get('sdi/jadwaldinas/tambah/admin', [JadwalDinasController::class, 'jokiAdmin'])->name('sdi.jadwaldinas.jokiAdmin');
                 Route::get('sdi/jadwaldinas/table/admin/{month}', [JadwalDinasController::class, 'tableAllMonth'])->name('sdi.jadwaldinas.tableAllMonth');
                 Route::get('sdi/jadwaldinas/{id}/verif/{user}', [JadwalDinasController::class, 'verif'])->name('sdi.jadwaldinas.verif');
                 // Route::get('sdi/jadwaldinas/{id}/tolak/{user}', [JadwalDinasController::class, 'tolak'])->name('sdi.jadwaldinas.tolak');

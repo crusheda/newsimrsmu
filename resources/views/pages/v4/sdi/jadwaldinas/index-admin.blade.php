@@ -24,14 +24,14 @@
             @include('pages.v4.sdi.jadwaldinas.inc.graph')
 
             <div class="col-xl-12">
-                <div class="card custom-card mb-0">
+                <div class="card custom-card mb-3">
                     <div class="card-header d-flex align-items-center justify-content-between py-3">
                         <h6 class="mb-0">Tabel <b class="text-danger">Riwayat</b></h6>
                         <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
                             <div class="input-group">
-                                <input type="month" class="form-control" value="" placeholder="Pilih Bulan & Tahun" id="filterBulan" data-bs-toggle="tooltip"
+                                <input type="month" class="form-control" value="" placeholder="Pilih Bulan & Tahun Jadwal" id="filterBulan" data-bs-toggle="tooltip"
                                     data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                                    title="Pilih Bulan & Tahun"/>
+                                    title="Pilih Bulan & Tahun Jadwal"/>
                                 <button class="btn btn-outline-primary" onclick="showRiwayat($('#filterBulan').val())" id="btn-cari" data-bs-toggle="tooltip"
                                     data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                                     title="Filter Jadwal Dinas Berdasarkan Bulan & Tahun" disabled><i class="fas fa-search"></i></button>
@@ -104,9 +104,9 @@
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">
+                    <h5 class="modal-title">
                         Form Tambah
-                    </h4>
+                    </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -118,6 +118,10 @@
                             <i class="ti ti-arrow-narrow-right me-1"></i> Apabila pengajuan masih dalam status <b class="text-success">Verifikasi</b> masih dapat diubah namun Anda sudah tidak dapat menghapusnya (Konfirmasi atasan apabila diperlukan)<br>
                             <i class="ti ti-arrow-narrow-right me-1"></i> Pengajuan Jadwal Dinas yang telah di <b class="text-primary">Validasi</b> sudah tidak dapat diubah / hapus di kemudian waktu (Konfirmasi Kepegawaian apabila diperlukan)
                         </small>
+                    </div>
+                    <div class="position-relative mb-3">
+                        <label class="form-label">Pilih Atasan (Unit) <a class="text-danger">*</a></label>
+                        <select class="select2 form-control" id="pegawai" style="width: 100%" required></select>
                     </div>
                     <div class="position-relative mb-3">
                         <label class="form-label">Pilih Bulan dan Tahun <a class="text-danger">*</a></label>
@@ -179,9 +183,9 @@
         <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">
+                    <h5 class="modal-title">
                         Form Verif
-                    </h4>
+                    </h5>
                 </div>
                 <div class="modal-body">
                     <input type="text" id="id_verif" hidden>
@@ -206,9 +210,9 @@
         <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">
+                    <h5 class="modal-title">
                         Form Batal Verif
-                    </h4>
+                    </h5>
                 </div>
                 <div class="modal-body">
                     <input type="text" id="id_batal_verif" hidden>
@@ -234,9 +238,9 @@
         <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">
+                    <h5 class="modal-title">
                         Form Validasi
-                    </h4>
+                    </h5>
                 </div>
                 <div class="modal-body">
                     <input type="text" id="id_validasi" hidden>
@@ -261,9 +265,9 @@
         <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">
+                    <h5 class="modal-title">
                         Form Batal Validasi
-                    </h4>
+                    </h5>
                 </div>
                 <div class="modal-body">
                     <input type="text" id="id_batal_validasi" hidden>
@@ -289,9 +293,9 @@
         <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">
+                    <h5 class="modal-title">
                         Form Hapus
-                    </h4>
+                    </h5>
                 </div>
                 <div class="modal-body">
                     <input type="text" id="id_hapus" hidden>
@@ -407,14 +411,32 @@
                     } else {
                         $('#tombolMenu').empty().html(`Pilihan Menu`);
                         $('#count-bawahan').text('0 Data').prop('hidden',true);
-                        $('#tombol-verif-bawahan').attr('href', 'javascript:void(0);').html('<s>Verifikasi Bawahan</s>'); // .removeAttr('href')
+                        $('#tombol-verif-bawahan').attr('href', 'javascript:void(0);').html('Verifikasi Bawahan').addClass('disabled'); // .removeAttr('href')
                     }
                 }
             })
         }
 
         function tambah() {
-            $('#modalTambah').modal('show');
+            $.ajax({
+                url: "/api/v4/sdi/jadwaldinas/tambah/admin",
+                type: 'GET',
+                dataType: 'json',
+                success: function(res) {
+                    $('#pegawai').empty();
+                    let idPeg = @json(Auth::user()->id);
+                    $.each(res.users, function(key, value) {
+                        $('#pegawai').append(`<option value="${value.pegawai_id}" ${value.pegawai_id == idPeg ? 'selected' : ''}>${value.nama_user??value.name_user} (${value.unit})</option>`);
+                    });
+                    $('#pegawai').trigger('change');
+                    $('#modalTambah').modal('show');
+                }, error: function(xhr, status, error) {
+                    notifier.show(
+                        xhr.statusText + " (Code " + xhr.status + ")", xhr.responseJSON.message,
+                        "danger", "{{ asset('images/notification/high_priority-48.png') }}", 4e3
+                    );
+                }
+            })
         }
 
         function ubah(id) {
@@ -429,6 +451,11 @@
                     } else {
                         window.location.href = '/v4/sdi/jadwaldinas/ubah/'+id;
                     }
+                }, error: function(xhr, status, error) {
+                    notifier.show(
+                        xhr.statusText + " (Code " + xhr.status + ")", xhr.responseJSON.message,
+                        "danger", "{{ asset('images/notification/high_priority-48.png') }}", 4e3
+                    );
                 }
             })
 
@@ -444,7 +471,7 @@
             var save = new FormData();
             save.append('tgl',$('#tgl').val());
             save.append('keterangan',$('#ket').val());
-            save.append('pegawai','{{ Auth::user()->id }}');
+            save.append('pegawai',$('#pegawai').val());
 
             if (!tgl || !regexBulan.test(tgl)) {
                 iziToast.warning({
@@ -495,7 +522,7 @@
             $("#tampil-tbody").empty().append(`<tr style='font-size:13px'><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
             var regexBulan = /^\d{4}-(0[1-9]|1[0-2])$/;
             if (!regexBulan.test(month)) {
-                url = "/api/v4/sdi/jadwaldinas/table";
+                url = "/api/v4/sdi/jadwaldinas/table/admin";
                 $('#filterBulan').val('');
             } else {
                 url = "/api/v4/sdi/jadwaldinas/table/admin/"+month;
@@ -539,29 +566,29 @@
                                         <button type='button' class='btn btn-sm ${colButton} dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false' id='btnoptshow${item.id}'>`+item.id+`</button>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
                                             content += `<li><a href="javascript:void(0);" class="dropdown-item text-info" onclick="lihat(${item.id})"><i class="fa-fw fas fa-list-ol me-2"></i> Lihat</a></li>`;
-                                            if (item.progress == 3) { // BELUM DIVERIFIKASI ATASAN
+                                            if (item.progress == 2 || item.progress == 3) { // SUDAH DIVERIFIKASI / SUDAH DIVALIDASI
                                                 content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary" onclick="printJadwal(${item.id})"><i class="fa fa-print me-2"></i> Cetak</a></li>`;
                                             } else {
                                                 content += `<li><a href="javascript:void(0);" class="dropdown-item disabled"><i class="fa fa-print me-2"></i> Cetak</a></li>`;
                                             }
                                             if (item.progress == 1) { // BELUM DIVERIFIKASI ATASAN
                                                 content += `<li><a href="javascript:void(0);" class="dropdown-item text-success" onclick="verif(${item.id})"><i class="fa-fw fas fa-calendar-week me-2"></i> Verif</a></li>`;
+                                                content += `<li><a href="javascript:void(0);" class="dropdown-item disabled"><i class="fa-fw fas fa-calendar-check me-2"></i> Validasi</a></li>`;
                                             } else {
-                                                content += `<li><a href="javascript:void(0);" class="dropdown-item text-teal" onclick="batalVerif(${item.id})"><i class="fa-fw fas fa-calendar-minus me-2"></i> Batal Verif</a></li>`;
-                                            }
-                                            if (item.progress == 2) { // SEBELUM VALIDASI / SUDAH DIVERIFIKASI ATASAN
-                                                content += `<li><a href="javascript:void(0);" class="dropdown-item text-primary" onclick="validasi(${item.id})"><i class="fa-fw fas fa-calendar-check me-2"></i> Validasi</a></li>`;
-                                                // content += `<li><a href="javascript:void(0);" class="dropdown-item text-danger" onclick="tolak(${item.id})"><i class="fa-fw fas fa-calendar-times me-2"></i> Tolak</a></li>`;
-                                            } else { // SETELAH DIVALIDASI
-                                                if (item.progress == 3) {
-                                                    content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="batalValidasi(${item.id})"><i class="fa-fw fas fa-calendar-times me-2"></i> Batal Validasi</a></li>`;
-                                                    // content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-calendar-times me-2"></i> Tolak</a></li>`;
-                                                } else { // BELUM DIVERIFIKASI OLEH ATASAN LANGSUNG
-                                                    content += `<li><a href="javascript:void(0);" class="dropdown-item disabled"><i class="fa-fw fas fa-calendar-check me-2"></i> Validasi</a></li>`;
-                                                    // content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="batalTolak(${item.id})"><i class="fa-fw fas fa-calendar-times me-2"></i> Batal Tolak</a></li>`;
+                                                if (item.progress == 2) { // SEBELUM VALIDASI / SUDAH DIVERIFIKASI ATASAN
+                                                    content += `<li><a href="javascript:void(0);" class="dropdown-item text-teal" onclick="batalVerif(${item.id})"><i class="fa-fw fas fa-calendar-minus me-2"></i> Batal Verif</a></li>`;
+                                                    content += `<li><a href="javascript:void(0);" class="dropdown-item text-primary" onclick="validasi(${item.id})"><i class="fa-fw fas fa-calendar-check me-2"></i> Validasi</a></li>`;
+                                                } else { // SETELAH DIVALIDASI
+                                                    if (item.progress == 3) {
+                                                        content += `<li><a href="javascript:void(0);" class="dropdown-item disabled"><i class="fa-fw fas fa-calendar-minus me-2"></i> Batal Verif</a></li>`;
+                                                        content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="batalValidasi(${item.id})"><i class="fa-fw fas fa-calendar-times me-2"></i> Batal Validasi</a></li>`;
+                                                    }
                                                 }
                                             }
-                                            if ("{{ Auth::user()->id }}" == item.pegawai_id) {
+                                            if (item.progress == 3) {
+                                                content += `<li><a href="javascript:void(0);" class="dropdown-item disabled"><i class="fa-fw fas fa-calendar-alt me-2"></i> Ubah</a></li>`;
+                                                content += `<li><a href='javascript:void(0);' class='dropdown-item disabled'><i class="fa-fw fas fa-trash nav-icon me-2"></i> Hapus</a></li>`;
+                                            } else {
                                                 content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="ubah(${item.id})"><i class="fa-fw fas fa-calendar-alt me-2"></i> Ubah</a></li>`;
                                                 content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(${item.id})"><i class="fa-fw fas fa-trash nav-icon me-2"></i> Hapus</a></li>`;
                                             }
@@ -1193,6 +1220,9 @@
                 // PROSES HAPUS
                 var id = $("#id_hapus").val();
                 $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
                     url: "/api/v4/sdi/jadwaldinas/"+id+"/hapus",
                     type: 'DELETE',
                     success: function(res) {

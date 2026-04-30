@@ -30,11 +30,11 @@ class ContentSecurityPolicy
             "font-src 'self' https://fonts.gstatic.com data:;",
 
             // TURNSTILE
-            "frame-src https://challenges.cloudflare.com;",
+            "frame-src 'self' blob: https://challenges.cloudflare.com;",
             "connect-src 'self' https://challenges.cloudflare.com;",
 
             // IMAGE
-            "img-src 'self' data:;",
+            "img-src 'self' data: blob: https://*.simrsmu.com;",
         ]);
 
         $response->headers->set('Content-Security-Policy', $csp);
