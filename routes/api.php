@@ -33,6 +33,7 @@ use \App\Http\Controllers\v4\Administrasi\Pengadaan\PengadaanRekapController;
 use \App\Http\Controllers\v4\Administrasi\ERuang\ERuangController;
 use \App\Http\Controllers\v4\SDI\JadwalDinasController;
 use \App\Http\Controllers\v4\Pelayanan\Kebidanan\SKLController;
+use App\Http\Controllers\v4\AI\KlaimBpjsController;
 
 Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU v.4
 
@@ -301,6 +302,9 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
         // Route::get('antigen/hapus/{id}', '\App\Http\Controllers\Pelayanan\Lab\antigenController@hapus')->name('antigen.hapus');
         // Route::get('antigen/getpasien/{id}', '\App\Http\Controllers\Pelayanan\Lab\antigenController@getPasien');
 
+    // AI
+        // KLAIM BPJS
+        Route::post('ai/bpjs/klaim/coder/kirim', [KlaimBpjsController::class, 'analyze']);
 });
 
 // WHATSAPP API WEBHOOK
