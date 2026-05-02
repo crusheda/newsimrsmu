@@ -260,18 +260,18 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
                 Route::get('sdi/dokumentasi/eabsensi', [JadwalDinasController::class, 'dokumentasiAbsensi'])->name('sdi.dokumentasi.absensi');
                 Route::get('sdi/dokumentasi/eabsensi/download', [JadwalDinasController::class, 'downloadDokumentasiAbsensi'])->name('sdi.dokumentasi.absensi.download');
                 // REFERENSI SHIFT
-                    Route::get('sdi/jadwaldinas/shift/table/{id}', [JadwalDinasController::class, 'tableShift'])->name('sdi.jadwaldinas.shift.table');
+                    Route::get('sdi/jadwaldinas/shift/table', [JadwalDinasController::class, 'tableShift'])->name('sdi.jadwaldinas.shift.table');
                     Route::get('sdi/jadwaldinas/shift/{id}', [JadwalDinasController::class, 'showUbahShift'])->name('sdi.jadwaldinas.shift.show');
                     Route::post('sdi/jadwaldinas/shift/{id}/ubah', [JadwalDinasController::class, 'ubahShift'])->name('sdi.jadwaldinas.shift.update');
                     Route::post('sdi/jadwaldinas/shift/tambah', [JadwalDinasController::class, 'tambahShift'])->name('sdi.jadwaldinas.shift.tambah');
                     Route::delete('sdi/jadwaldinas/shift/{id}/hapus', [JadwalDinasController::class, 'hapusShift'])->name('sdi.jadwaldinas.shift.hapus');
                 // REFERENSI STAFF
-                    Route::get('sdi/jadwaldinas/staf/table/{id}', [JadwalDinasController::class, 'tableStaf'])->name('sdi.jadwaldinas.staf.table');
+                    Route::get('sdi/jadwaldinas/staf/table', [JadwalDinasController::class, 'tableStaf'])->name('sdi.jadwaldinas.staf.table');
                     Route::get('sdi/jadwaldinas/staf/{id}', [JadwalDinasController::class, 'showUbahStaf'])->name('sdi.jadwaldinas.staf.show');
                     Route::post('sdi/jadwaldinas/staf/{id}/ubah', [JadwalDinasController::class, 'ubahStaf'])->name('sdi.jadwaldinas.staf.update');
                     Route::post('sdi/jadwaldinas/staf/tambah', [JadwalDinasController::class, 'tambahStaf'])->name('sdi.jadwaldinas.staf.tambah');
                     Route::delete('sdi/jadwaldinas/staf/{id}/hapus', [JadwalDinasController::class, 'hapusStaf'])->name('sdi.jadwaldinas.staf.hapus');
-                    Route::get('sdi/jadwaldinas/staf/{id}/ambilalih/{user}', [JadwalDinasController::class, 'ambilAlihStaf'])->name('sdi.jadwaldinas.staf.ambilalih');
+                    Route::get('sdi/jadwaldinas/staf/{id}/ambilalih', [JadwalDinasController::class, 'ambilAlihStaf'])->name('sdi.jadwaldinas.staf.ambilalih');
                     // ATUR STAF
                         Route::get('sdi/jadwaldinas/staf/atur/{id}', [JadwalDinasController::class, 'showAturStaf'])->name('sdi.jadwaldinas.staf.atur.show');
                         Route::post('sdi/jadwaldinas/staf/atur/{id}/ubah', [JadwalDinasController::class, 'aturStaf'])->name('sdi.jadwaldinas.staf.atur.update');
