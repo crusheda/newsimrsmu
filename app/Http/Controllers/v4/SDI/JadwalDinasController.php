@@ -1134,8 +1134,9 @@ class JadwalDinasController extends Controller
     }
 
     // SHOW TABLE ATASAN LANGSUNG
-    function tableAllBawahan($user)
+    function tableAllBawahan()
     {
+        $user = Auth::user()->id;
         $users  = users::select('id','nama')->where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
         // Ambil data struktur organisasi user tersebut
         $jabatan = struktur_organisasi::where('id_user', $user)
@@ -1207,8 +1208,9 @@ class JadwalDinasController extends Controller
         return response()->json($data, 200);
     }
 
-    function tableAllBawahanFilter($user, $month)
+    function tableAllBawahanFilter($month)
     {
+        $user = Auth::user()->id;
         list($year, $month) = explode('-', $month); // misal $input = "2025-08"
         $month = sprintf("%02d", $month); // "08"
         $year = sprintf("%04d", $year);   // "2025" (opsional)
@@ -1354,10 +1356,9 @@ class JadwalDinasController extends Controller
     }
 
     // ADMIN == PROSES VERIFIKASI DAN PENOLAKAN
-    function verif($id,$user)
+    function verif($id)
     {
-        // print_r($id);
-        // die();
+        $user = Auth::user()->id;
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
         // Inisialisasi
@@ -1371,8 +1372,9 @@ class JadwalDinasController extends Controller
 
         return response()->json($tgl, 200);
     }
-    function batalVerif($id,$user)
+    function batalVerif($id)
     {
+        $user = Auth::user()->id;
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
         // Inisialisasi
@@ -1418,8 +1420,9 @@ class JadwalDinasController extends Controller
     // }
 
     // ATASAN LANGSUNG == PROSES VERIFIKASI DAN PENOLAKAN
-    function verifBawahan($id,$user)
+    function verifBawahan($id)
     {
+        $user = Auth::user()->id;
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
         // Inisialisasi
@@ -1454,8 +1457,9 @@ class JadwalDinasController extends Controller
 
         return response()->json($tgl, 200);
     }
-    function batalVerifBawahan($id,$user)
+    function batalVerifBawahan($id)
     {
+        $user = Auth::user()->id;
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
         // Inisialisasi
@@ -1469,8 +1473,9 @@ class JadwalDinasController extends Controller
 
         return response()->json($tgl, 200);
     }
-    function tolakBawahan($id,$user)
+    function tolakBawahan($id)
     {
+        $user = Auth::user()->id;
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
         // Inisialisasi
@@ -1484,8 +1489,9 @@ class JadwalDinasController extends Controller
 
         return response()->json($tgl, 200);
     }
-    function batalTolakBawahan($id,$user)
+    function batalTolakBawahan($id)
     {
+        $user = Auth::user()->id;
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
         // Inisialisasi
@@ -1530,8 +1536,9 @@ class JadwalDinasController extends Controller
 
     function tambahShift(Request $request)
     {
+        $pegawai = Auth::user()->id;
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
-        $getDuplicate = ref_jadwal_shift::where('pegawai_id', $request->pegawai)->where('singkat',$request->singkat)->whereNull('deleted_at')->first();
+        $getDuplicate = ref_jadwal_shift::where('pegawai_id', $pegawai)->where('singkat',$request->singkat)->whereNull('deleted_at')->first();
 
         // HITUNG SELISIH
         $berangkat = Carbon::parse($request->berangkat);
@@ -1581,7 +1588,7 @@ class JadwalDinasController extends Controller
 
         // LOLOS SAVE DATA
         $data = new ref_jadwal_shift;
-        $data->pegawai_id = $request->pegawai;
+        $data->pegawai_id = $pegawai;
         $data->singkat = $request->singkat;
         $data->shift = $request->shift;
         $data->berangkat = Carbon::parse($request->berangkat)->isoFormat('HH:mm');

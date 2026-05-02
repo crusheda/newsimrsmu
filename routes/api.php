@@ -240,12 +240,12 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
                 // Route::get('sdi/jadwaldinas/{id}/bataltolak/{user}', [JadwalDinasController::class, 'batalTolak'])->name('sdi.jadwaldinas.batalTolak');
             // VERIFIKASI BAWAHAN
                 Route::get('sdi/jadwaldinas/bawahan/count', [JadwalDinasController::class, 'countBawahan'])->name('sdi.jadwaldinas.countBawahan');
-                Route::get('sdi/jadwaldinas/bawahan/table/{user}', [JadwalDinasController::class, 'tableAllBawahan'])->name('sdi.jadwaldinas.tableAllBawahan');
-                Route::get('sdi/jadwaldinas/bawahan/table/{user}/{month}', [JadwalDinasController::class, 'tableAllBawahanFilter'])->name('sdi.jadwaldinas.tableAllBawahanFilter');
-                Route::get('sdi/jadwaldinas/bawahan/{id}/verif/{user}', [JadwalDinasController::class, 'verifBawahan'])->name('sdi.jadwaldinas.verifBawahan');
-                Route::get('sdi/jadwaldinas/bawahan/{id}/tolak/{user}', [JadwalDinasController::class, 'tolakBawahan'])->name('sdi.jadwaldinas.tolakBawahan');
-                Route::get('sdi/jadwaldinas/bawahan/{id}/batalverif/{user}', [JadwalDinasController::class, 'batalVerifBawahan'])->name('sdi.jadwaldinas.batalVerifBawahan');
-                Route::get('sdi/jadwaldinas/bawahan/{id}/bataltolak/{user}', [JadwalDinasController::class, 'batalTolakBawahan'])->name('sdi.jadwaldinas.batalTolakBawahan');
+                Route::get('sdi/jadwaldinas/bawahan/table', [JadwalDinasController::class, 'tableAllBawahan'])->name('sdi.jadwaldinas.tableAllBawahan');
+                Route::get('sdi/jadwaldinas/bawahan/table/{month}', [JadwalDinasController::class, 'tableAllBawahanFilter'])->name('sdi.jadwaldinas.tableAllBawahanFilter');
+                Route::get('sdi/jadwaldinas/bawahan/{id}/verif', [JadwalDinasController::class, 'verifBawahan'])->name('sdi.jadwaldinas.verifBawahan');
+                Route::get('sdi/jadwaldinas/bawahan/{id}/tolak', [JadwalDinasController::class, 'tolakBawahan'])->name('sdi.jadwaldinas.tolakBawahan');
+                Route::get('sdi/jadwaldinas/bawahan/{id}/batalverif', [JadwalDinasController::class, 'batalVerifBawahan'])->name('sdi.jadwaldinas.batalVerifBawahan');
+                Route::get('sdi/jadwaldinas/bawahan/{id}/bataltolak', [JadwalDinasController::class, 'batalTolakBawahan'])->name('sdi.jadwaldinas.batalTolakBawahan');
             // DASHBOARD / GRAPH
                 Route::get('sdi/jadwaldinas/totalabsensi/{range}', [JadwalDinasController::class, 'totalAbsensi'])->name('sdi.jadwaldinas.totalAbsensi');
                 Route::get('sdi/jadwaldinas/totalcuti', [JadwalDinasController::class, 'totalCuti'])->name('sdi.jadwaldinas.totalCuti');

@@ -131,8 +131,8 @@
                     <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="btn-cetak" class="btn btn-link-primary me-sm-3 me-1"><i class="fa fa-print me-1" style="font-size:13px"></i> Cetak</button>
-                    <button type="submit" id="btn-refresh-lihat" class="btn btn-link-warning me-sm-2"><i class="fa fa-sync me-1" style="font-size:13px"></i> Segarkan</button>
+                    <button type="button" id="btn-cetak" class="btn btn-teal me-sm-3 me-1"><i class="fa fa-print me-1" style="font-size:13px"></i> Cetak</button>
+                    <button type="submit" id="btn-refresh-lihat" class="btn btn-warning me-sm-2"><i class="fa fa-sync me-1" style="font-size:13px"></i> Segarkan</button>
                     <button type="button" class="btn btn-link text-dark" data-bs-dismiss="modal">Tutup &nbsp;<i class="fa-fw fas fa-chevron-right nav-icon" style="font-size:13px"></i></button>
                 </div>
             </div>
@@ -169,7 +169,7 @@
         <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="dokumentasiLabel">Dokumentasi E-Absensi <span class="badge text-bg-info">Versi 3.1.0</span> | Diperbarui pada 26 Agustus 2025</h5>
+                    <h6 class="modal-title" id="dokumentasiLabel">Dokumentasi E-Absensi <span class="badge text-bg-info">Versi 3.1.0</span> | Diperbarui pada 26 Agustus 2025</h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-3">
@@ -681,7 +681,7 @@
                     content += `</tfoot></table></div></div>`;
 
                     // Keterangan shift
-                    content += `<div class="col-md-6"><div class="p-10"><h5>Shift Jaga Terbaru :</h5><div class="list-group"><label class="list-group-item border-0 p-2"><ul>`;
+                    content += `<div class="col-md-6 mt-3"><div class="p-10"><h6>Shift Jaga Terbaru :</h6><div class="list-group"><label class="list-group-item border-0 p-2"><ul>`;
                     res.shift.forEach(item=>{
                         content += `<li><b class="me-1">${item.singkat}</b>(<u>${item.shift}</u>) : ${item.berangkat.substring(0,5)} - ${item.pulang.substring(0,5)} WIB</li>`;
                     });
@@ -694,7 +694,7 @@
                     content += `</ul></label></div></div></div>`;
 
                     // Keterangan warna
-                    content += `<div class="col-md-6"><div class="p-10"><h5>Keterangan :</h5><div class="list-group">`;
+                    content += `<div class="col-md-6 mt-3"><div class="p-10"><h6>Keterangan :</h6><div class="list-group">`;
                     content += `<label class="list-group-item border-0 p-1">
                                     <a class="btn btn-light me-2" style="background-color: #fed8b9" href="javascript:void(0);"></a>Hari Minggu
                                 </label>`;
@@ -816,7 +816,7 @@
             }
         }
 
-        
+
 
         function formatTanggalIndo(dateStr) {
             const bulanIndo = [

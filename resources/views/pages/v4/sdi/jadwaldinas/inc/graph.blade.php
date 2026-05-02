@@ -3,8 +3,12 @@
     <div class="card shadow-none border mb-0">
         <div class="card-body p-3">
             <div class="d-flex align-items-center justify-content-between">
-                <h6 class="">Total Cuti Tahunan Anda di <b class="text-info">Tahun {{ \Carbon\Carbon::now()->format('Y') }}</b></h6>
-                <button class="btn btn-success-transparent btn-sm" onclick="totalCutiAllUnit()"><i class="fas fa-suitcase-rolling me-1"></i> Lihat Cuti Tahunan <span class="badge bg-danger ms-1">Semua Unit</span></button>
+                <h6 class="">Total <b class="text-teal">Cuti Tahunan</b> Anda di <b class="text-info">Tahun {{ \Carbon\Carbon::now()->format('Y') }}</b></h6>
+                @can('admin_kepegawaian')
+                    <button class="btn btn-success-transparent btn-sm" onclick="totalCutiAllUnit()"><i class="fas fa-suitcase-rolling me-1"></i> Lihat Cuti Tahunan <span class="badge bg-danger ms-1">Semua Unit</span></button>
+                @else
+                    <button class="btn btn-teal-transparent btn-sm" onclick="totalCutiUnit()"><i class="fas fa-suitcase-rolling me-1"></i> Lihat Cuti Tahunan Unit</button>
+                @endcan
             </div>
             <div class="progress progress-sm progress-custom progress-animate cuti-progress mt-5 mb-2 ms-2"
                 role="progressbar"
@@ -73,7 +77,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h6 class="modal-title">
-                    Daftar Cuti Tahunan <b class="text-info">Unit Kerja</b>
+                    Daftar <b class="text-teal">Cuti Tahunan</b> <b class="text-info">Unit Kerja</b>
                 </h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -261,6 +265,77 @@
         });
     }
 
+    // FOR USER
+    function totalCutiUnit() {
+        $.ajax({
+            url: "/api/v4/sdi/jadwaldinas/totalcutiunit",
+            type: 'GET',
+            dataType: 'json',
+            beforeSend: function() {
+                $('#modalCutiUnit').modal('show');
+                $('#tampil-cuti-unit').empty().html(`<center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>`);
+            },
+            success: function(res) {
+                const tahunSekarang = {{ \Carbon\Carbon::now()->format('Y') }};
+                const tahunSebelumnya = tahunSekarang - 1;
+                let i = 0;
+
+                let tampil = `<div class="table-responsive">
+                    <table class="table table-hover table-bordered dt-responsive align-middle">
+                        <thead>
+                            <tr>
+                                <th rowspan="2"><center>NO</center></th>
+                                <th rowspan="2"><center>NAMA PEGAWAI</center></th>
+                                <th colspan="2"><center>TAHUN ${tahunSebelumnya}</center></th>
+                                <th colspan="2"><center>TAHUN ${tahunSekarang} <span class="badge rounded-pill text-bg-primary">SAAT INI</span></center></th>
+                            </tr>
+                            <tr>
+                                <th><center>TOTAL CUTI <b class="text-primary">TERPAKAI</b></center></th>
+                                <th><center>SISA CUTI <b class="text-danger">HANGUS</b></center></th>
+                                <th><center>TOTAL CUTI <b class="text-primary">TERPAKAI</b></center></th>
+                                <th><center>SISA CUTI <b class="text-danger">TERSEDIA</b></center></th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+
+                res.forEach(item => {
+
+                    // property dinamis sesuai format API
+                    const keyTotalNow = `total_cuti_${tahunSekarang}`;
+                    const keySisaNow  = `sisa_cuti_${tahunSekarang}`;
+                    const keyTotalPrev = `total_cuti_${tahunSebelumnya}`;
+                    const keySisaPrev  = `sisa_cuti_${tahunSebelumnya}`;
+
+                    tampil += `<tr>
+                        <td><center>${++i}</center></td>
+                        <td>${item.nama}</td>
+
+                        <td><center><b class="text-primary">${item[keyTotalPrev]}x</b></center></td>
+                        <td><center><b class="text-danger">${item[keySisaPrev]}x</b></center></td>
+
+                        <td><center><b class="text-primary">${item[keyTotalNow]}x</b></center></td>
+                        <td><center><b class="text-danger">${item[keySisaNow]}x</b></center></td>
+                    </tr>`;
+                });
+
+                tampil += `</tbody></table></div>`;
+                $('#tampil-cuti-unit').empty().html(tampil);
+            }, error: function(err) {
+                $('#modalCutiUnit').modal('hide');
+                Swal.fire({
+                    title: err.statusText + " (Code " + err.status + ")",
+                    html: err.responseText,
+                    icon: "error",
+                    showConfirmButton: true,
+                    backdrop: `rgba(26,27,41,0.8)`,
+                });
+            }, complete: function() {
+
+            }
+        });
+    }
+
+    // FOR ADMIN
     function totalCutiAllUnit() {
         $.ajax({
             url: "/api/v4/sdi/jadwaldinas/totalcutiunit",

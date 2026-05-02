@@ -6,7 +6,7 @@
         <div class="page-header-breadcrumb mb-3">
             <div class="d-flex align-center justify-content-between flex-wrap">
                 <h1 class="page-title fw-medium fs-18 mb-0 pe-none">
-                    Referensi <b class="text-teal link-underline-teal text-decoration-underline">Staf</b>
+                    Referensi <b class="text-teal link-underline-teal text-decoration-underline">Shift</b>
                 </h1>
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item pe-none">
@@ -29,7 +29,7 @@
                         <div class="btn-group">
                             <a class="btn btn-outline-secondary" href="{{ route('v4.sdi.jadwaldinas') }}" data-bs-toggle="tooltip"
                             data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                            title="Kembali"><i class="fas fa-angle-left me-1"></i> Kembali</a>
+                            title="Kembali ke Halaman Jadwal Dinas"><i class="fas fa-angle-left me-1"></i> Kembali</a>
                             @if ($list['show'])
                                 @if ($list['show']->pegawai_id == Auth::user()->id)
                                     <button class="btn btn-primary" onclick="tambah()" data-bs-toggle="tooltip"
@@ -46,18 +46,18 @@
                         <div class="alert alert-light shadow-sm mb-3 mt-2">
                             <h5>Hal-hal yang perlu <b class="text-danger">diperhatikan</b> saat pengisian</h5>
                             <small>
-                                <i class="ti ti-arrow-narrow-right me-1"></i> Pastikan Data Shift ditambahkan oleh Admin Jadwal (<mark>Setiap Unit/Bagian hanya 1 orang perwakilan</mark>), berkaitan dengan kelengkapan data saat pembuatan Jadwal Dinas <br>
-                                <i class="ti ti-arrow-narrow-right me-1"></i> Akses <b>Tambah</b> hanya bisa dilakukan apabila Data Shift Karyawan yang bersangkutan belum didaftarkan/tergabung pada <mark>UNIT</mark> manapun (Belum pernah ditambahkan oleh siapapun) <br>
+                                <i class="ti ti-arrow-narrow-right me-1"></i> Pastikan Data Shift ditambahkan oleh Admin Jadwal (<b class="text-teal">Setiap Unit/Bagian hanya 1 orang perwakilan</b>), berkaitan dengan kelengkapan data saat pembuatan Jadwal Dinas <br>
+                                <i class="ti ti-arrow-narrow-right me-1"></i> Akses <b>Tambah</b> hanya bisa dilakukan apabila Data Shift Karyawan yang bersangkutan belum didaftarkan/tergabung pada <b>UNIT</b> manapun (Belum pernah ditambahkan oleh siapapun) <br>
                                 <i class="ti ti-arrow-narrow-right me-1"></i> Akses <b>Ubah</b> maupun <b>Hapus</b> Data Referensi Shift hanya dapat dilakukan oleh Admin Jadwal (User Admin Ref.Shift) <br>
                                 <i class="ti ti-arrow-narrow-right me-1"></i> Penambahan Data Shift hanya dilakukan sekali saja dan dapat digunakan untuk seterusnya, terkecuali apabila terdapat perubahan Data Shift <br>
-                                <i class="ti ti-arrow-narrow-right me-1"></i> Rentang Jam & Menit pada pengisian shift berangkat sampai pulang adalah lebih dari <b class="text-danger">(>) 4 Jam</b> dan kurang dari <b class="text-danger">(<) 18 Jam</b> <br>
+                                <i class="ti ti-arrow-narrow-right me-1"></i> Rentang Jam & Menit pada pengisian shift berangkat sampai pulang adalah lebih dari <b class="text-teal">(>) 4 Jam</b> dan kurang dari <b class="text-teal">(<) 18 Jam</b> <br>
                                 <i class="ti ti-arrow-narrow-right me-1"></i> Perlu diperhatikan bahwa penghapusan Data Shift tidak akan menghapus Data Jadwal Dinas yang sudah/pernah diajukan sebelumnya (Min. 3 Bulan setelah shift ditambahkan) <br>
-                                <i class="ti ti-arrow-narrow-right me-1"></i> Hapus SHIFT sesuai kebutuhan saja dan <b class="text-danger">lakukan secara hati-hati</b>. Idealnya penghapusan SHIFT adalah setelah lebih dari 3 / 4 bulan <br>
-                                <i class="ti ti-arrow-narrow-right me-1"></i> Ketika masih dalam kurun waktu 1 - 2 bulan jadwal shift berjalan <b class="text-danger">TIDAK DIPERBOLEHKAN</b> untuk melakukan penghapusan shift
+                                <i class="ti ti-arrow-narrow-right me-1"></i> Hapus SHIFT sesuai kebutuhan saja dan <b class="text-teal">lakukan secara hati-hati</b>. Idealnya penghapusan SHIFT adalah setelah lebih dari 3 / 4 bulan <br>
+                                <i class="ti ti-arrow-narrow-right me-1"></i> Ketika masih dalam kurun waktu 1 - 2 bulan jadwal shift berjalan <b class="text-teal">TIDAK DIPERBOLEHKAN</b> untuk melakukan penghapusan shift
                             </small>
                         </div>
-                        <div class="alert alert-danger mb-3 mt-1 text-center text-light">
-                            <h6>PERHATIAN !!! SHIFT SELAIN YANG <mark>DITAMBAHKAN OTOMATIS OLEH SISTEM</mark> MAKA AKAN DIANGGAP SHIFT MASUK JAGA ( <u class="text-danger"><mark>TIDAK LIBUR</mark></u> ) !!</h6>
+                        <div class="alert alert-danger mb-3 mt-1 text-center shadow-sm">
+                            <h6>PERHATIAN !!! SHIFT SELAIN YANG <b class="text-danger">DITAMBAHKAN OTOMATIS OLEH SISTEM</b> MAKA AKAN DIANGGAP SHIFT MASUK JAGA ( <u class="text-danger"><b>TIDAK LIBUR</b></u> ) !!</h6>
                             <h6 class="mb-0"><small>MOHON HATI-HATI DALAM MENENTUKAN SHIFT PADA UNIT ANDA, HAL INI BERKAITAN DENGAN PENGHITUNGAN ABSENSI. DATA SHIFT SEPENUHNYA DIPANTAU LANGSUNG OLEH BAGIAN SDI.</small></h6>
                         </div>
                         <div class="table-responsive text-nowrap" style="border: 0px">
@@ -133,26 +133,26 @@
                         </div>
                         <div class="col-md-3 mb-3">
                             <div class="form-group">
-                                <label class="form-label">Nama <mark>Singkat</mark> Shift <a class="text-danger">*</a></label>
+                                <label class="form-label">Nama <b class="text-teal">Singkat</b> Shift <a class="text-danger">*</a></label>
                                 <input type="text" id="singkat_add" class="form-control inputTgl" onkeyup="checkShift($(this))" placeholder="e.g. P / PS / P6 / etc">
                             </div>
                         </div>
                         <div class="col-md-9 mb-3">
                             <div class="form-group">
-                                <label class="form-label">Nama <mark>Lengkap</mark> Shift <a class="text-danger">*</a></label>
+                                <label class="form-label">Nama <b class="text-teal">Lengkap</b> Shift <a class="text-danger">*</a></label>
                                 <input type="text" id="shift_add" class="form-control" placeholder="e.g. PAGI / PAGI SIANG / PAGI JAM 6 / etc">
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Jam Berangkat / <b>Masuk</b> <a class="text-danger">*</a></label>
-                                <input type="text" id="berangkat_add" class="form-control pilihJam" data-provide="timepicker" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Waktu/Jam Masuk Kerja" placeholder="Format Waktu H:i">
+                                <input type="text" id="berangkat_add" class="form-control" data-provide="timepicker" placeholder="Format Waktu H:i">
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Jam Pulang / <b>Keluar</b> <a class="text-danger">*</a></label>
-                                <input type="text" id="pulang_add" class="form-control pilihJam" data-provide="timepicker" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Waktu/Jam Pulang Kerja" placeholder="Format Waktu H:i">
+                                <input type="text" id="pulang_add" class="form-control" data-provide="timepicker" placeholder="Format Waktu H:i">
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -165,9 +165,9 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
+                    <button type="button" class="btn btn-link text-dark" data-bs-dismiss="modal"><i
                             class="fa fa-times me-1"></i> Batal</button>
-                    <button class="btn btn-info" onclick="simpan()" data-bs-toggle="tooltip"
+                    <button class="btn btn-primary" onclick="simpan()" data-bs-toggle="tooltip"
                         data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
                         title="Simpan Data"><i
                             class="fas fa-save me-1"></i> Simpan</button>
@@ -210,26 +210,26 @@
                         </div>
                         <div class="col-md-3 mb-3">
                             <div class="form-group">
-                                <label class="form-label">Nama <mark>Singkat</mark> Shift <a class="text-danger">*</a></label>
+                                <label class="form-label">Nama <b class="text-teal">Singkat</b> Shift <a class="text-danger">*</a></label>
                                 <input type="text" id="singkat_edit" class="form-control inputTgl" onkeyup="checkShift($(this))" placeholder="e.g. P / PS / P6 / etc">
                             </div>
                         </div>
                         <div class="col-md-9 mb-3">
                             <div class="form-group">
-                                <label class="form-label">Nama <mark>Lengkap</mark> Shift <a class="text-danger">*</a></label>
+                                <label class="form-label">Nama <b class="text-teal">Lengkap</b> Shift <a class="text-danger">*</a></label>
                                 <input type="text" id="shift_edit" class="form-control" placeholder="e.g. PAGI / PAGI SIANG / PAGI JAM 6 / etc">
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Jam Berangkat / <b>Masuk</b> <a class="text-danger">*</a></label>
-                                <input type="text" id="berangkat_edit" class="form-control pilihJam" data-provide="timepicker" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Waktu/Jam Masuk Kerja" placeholder="Format Waktu H:i">
+                                <input type="text" id="berangkat_edit" class="form-control" data-provide="timepicker" placeholder="Format Waktu H:i">
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Jam Pulang / <b>Keluar</b> <a class="text-danger">*</a></label>
-                                <input type="text" id="pulang_edit" class="form-control pilihJam" data-provide="timepicker" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Waktu/Jam Pulang Kerja" placeholder="Format Waktu H:i">
+                                <input type="text" id="pulang_edit" class="form-control" data-provide="timepicker" placeholder="Format Waktu H:i">
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -242,8 +242,8 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary" id="btn-ubah" onclick="prosesUbah()"><i class="fa-fw fas fa-edit nav-icon me-1"></i> Ubah</button>
-                    <button type="button" class="btn btn-light text-dark" data-bs-dismiss="modal"><i class="fa-fw fas fa-times nav-icon me-1"></i> Tutup</button>
+                    <button class="btn btn-warning" id="btn-ubah" onclick="prosesUbah()"><i class="fa-fw fas fa-edit nav-icon me-1"></i> Ubah</button>
+                    <button type="button" class="btn btn-link text-dark" data-bs-dismiss="modal"><i class="fa-fw fas fa-times nav-icon me-1"></i> Tutup</button>
                 </div>
             </div>
         </div>
@@ -254,9 +254,9 @@
         <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">
+                    <h5 class="modal-title">
                         Form <b class="text-danger">Hapus Shift</b>
-                    </h4>
+                    </h5>
                 </div>
                 <div class="modal-body">
                     <input type="text" id="id_hapus" hidden>
@@ -272,13 +272,14 @@
                 </div>
                 <div class="col-12 text-center mb-4">
                     <button type="submit" id="btn-hapus" class="btn btn-danger me-sm-3 me-1" onclick="prosesHapus()"><i class="fa fa-trash me-1"></i> Hapus</button>
-                    <button type="reset" class="btn btn-light text-dark" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1"></i> Batal</button>
+                    <button type="reset" class="btn btn-link text-dark" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1"></i> Batal</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+        let fpBerangkatAdd, fpPulangAdd, fpBerangkatEdit, fpPulangEdit;
         $(document).ready(function() {
             $('.inputTgl').keypress(function() {
                 let input = $(this).val();
@@ -286,7 +287,46 @@
                 $(this).val(cleanedInput);
             });
             refresh();
-            $('.pilihJam').timepicker({ showInputs: false, showMeridian: false, timeFormat: 'HH:mm', use24hours: true });
+
+            fpBerangkatAdd = flatpickr("#berangkat_add", {
+                enableTime: true,
+                noCalendar: true,
+                dateFormat: "H:i",
+                time_24hr: true,
+                allowInput: true
+                });
+
+            fpPulangAdd = flatpickr("#pulang_add", {
+                enableTime: true,
+                noCalendar: true,
+                dateFormat: "H:i",
+                time_24hr: true,
+                allowInput: true
+                });
+
+            fpBerangkatEdit = flatpickr("#berangkat_edit", {
+                enableTime: true,
+                noCalendar: true,
+                dateFormat: "H:i",
+                time_24hr: true,
+                allowInput: true
+                });
+
+            fpPulangEdit = flatpickr("#pulang_edit", {
+                enableTime: true,
+                noCalendar: true,
+                dateFormat: "H:i",
+                time_24hr: true,
+                allowInput: true
+                });
+
+            // flatpickr(".pilihJam", {
+            //     enableTime: true,
+            //     noCalendar: true,
+            //     dateFormat: "H:i",
+            //     time_24hr: true,
+            //     allowInput: true
+            // });
         })
 
         // IMPORTANT FUNCTION
@@ -342,7 +382,7 @@
                         const menitStr = menit.toString().padStart(2, '0');
                         content = `<tr><td><div class="d-flex align-items-center">
                                             <div class="dropdown">
-                                                <a href="javascript:;" class="btn btn-light-info btn-sm dropdown-toggle hide-arrow rounded" data-bs-toggle="dropdown">` + item.id + `</a>
+                                                <a href="javascript:void(0);" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle" data-bs-toggle="dropdown">` + item.id + `</a>
                                                 <div class="dropdown-menu dropdown-menu-right">`;
                                                     if (item.pegawai_id == @json(Auth::user()->id)) {
                                                         content += `<a href="javascript:;" onclick="ubah(` + item.id + `)" class="dropdown-item text-warning"><i class='fas fa-edit me-1'></i> Ubah</a>`;
@@ -369,60 +409,12 @@
                                     </td></tr>`;
                         $('#tampil-tbody').append(content);
                     })
-                    $('#tampil-tbody').append(`<tr><td><div class="d-flex align-items-center">
-                                            <div class="dropdown">
-                                                <a href="javascript:;" class="btn btn-link-secondary dropdown-toggle hide-arrow text-body p-0 btn-icon" data-bs-toggle="dropdown"></a>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    <a href="javascript:;" class="dropdown-item text-secondary"><i class='fas fa-edit me-1'></i> Ubah</a>
-                                                    <a href="javascript:;" class="dropdown-item text-secondary"><i class='fas fa-trash-alt me-1'></i> Hapus</a>
-                                                </div>
-                                            </div>
-                                        </div></td><td><kbd class="bg-danger text-white me-1">L</kbd> <u><b class='text-dark'>LIBUR</b></u></td><td>-</td><td>-</td><td>-</td><td>-</td><td>Ditambahkan otomatis oleh sistem</td>`);
-                    $('#tampil-tbody').append(`<tr><td><div class="d-flex align-items-center">
-                                            <div class="dropdown">
-                                                <a href="javascript:;" class="btn btn-link-secondary dropdown-toggle hide-arrow text-body p-0 btn-icon" data-bs-toggle="dropdown"></a>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    <a href="javascript:;" class="dropdown-item text-secondary"><i class='fas fa-edit me-1'></i> Ubah</a>
-                                                    <a href="javascript:;" class="dropdown-item text-secondary"><i class='fas fa-trash-alt me-1'></i> Hapus</a>
-                                                </div>
-                                            </div>
-                                        </div></td><td><kbd class="bg-danger text-white me-1">C</kbd> <u><b class='text-dark'>CUTI TAHUNAN</b></u></td><td>-</td><td>-</td><td>-</td><td>-</td><td>Ditambahkan otomatis oleh sistem</td>`);
-                    $('#tampil-tbody').append(`<tr><td><div class="d-flex align-items-center">
-                                            <div class="dropdown">
-                                                <a href="javascript:;" class="btn btn-link-secondary dropdown-toggle hide-arrow text-body p-0 btn-icon" data-bs-toggle="dropdown"></a>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    <a href="javascript:;" class="dropdown-item text-secondary"><i class='fas fa-edit me-1'></i> Ubah</a>
-                                                    <a href="javascript:;" class="dropdown-item text-secondary"><i class='fas fa-trash-alt me-1'></i> Hapus</a>
-                                                </div>
-                                            </div>
-                                        </div></td><td><kbd class="bg-danger text-white me-1">CM</kbd> <u><b class='text-dark'>CUTI MELAHIRKAN</b></u></td><td>-</td><td>-</td><td>-</td><td>-</td><td>Ditambahkan otomatis oleh sistem</td>`);
-                    $('#tampil-tbody').append(`<tr><td><div class="d-flex align-items-center">
-                                            <div class="dropdown">
-                                                <a href="javascript:;" class="btn btn-link-secondary dropdown-toggle hide-arrow text-body p-0 btn-icon" data-bs-toggle="dropdown"></a>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    <a href="javascript:;" class="dropdown-item text-secondary"><i class='fas fa-edit me-1'></i> Ubah</a>
-                                                    <a href="javascript:;" class="dropdown-item text-secondary"><i class='fas fa-trash-alt me-1'></i> Hapus</a>
-                                                </div>
-                                            </div>
-                                        </div></td><td><kbd class="bg-danger text-white me-1">CU</kbd> <u><b class='text-dark'>CUTI UMROH</b></u></td><td>-</td><td>-</td><td>-</td><td>-</td><td>Ditambahkan otomatis oleh sistem</td>`);
-                    $('#tampil-tbody').append(`<tr><td><div class="d-flex align-items-center">
-                                            <div class="dropdown">
-                                                <a href="javascript:;" class="btn btn-link-secondary dropdown-toggle hide-arrow text-body p-0 btn-icon" data-bs-toggle="dropdown"></a>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    <a href="javascript:;" class="dropdown-item text-secondary"><i class='fas fa-edit me-1'></i> Ubah</a>
-                                                    <a href="javascript:;" class="dropdown-item text-secondary"><i class='fas fa-trash-alt me-1'></i> Hapus</a>
-                                                </div>
-                                            </div>
-                                        </div></td><td><kbd class="bg-danger text-white me-1">CH</kbd> <u><b class='text-dark'>CUTI HAJI</b></u></td><td>-</td><td>-</td><td>-</td><td>-</td><td>Ditambahkan otomatis oleh sistem</td>`);
-                    $('#tampil-tbody').append(`<tr><td><div class="d-flex align-items-center">
-                                            <div class="dropdown">
-                                                <a href="javascript:;" class="btn btn-link-secondary dropdown-toggle hide-arrow text-body p-0 btn-icon" data-bs-toggle="dropdown"></a>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    <a href="javascript:;" class="dropdown-item text-secondary"><i class='fas fa-edit me-1'></i> Ubah</a>
-                                                    <a href="javascript:;" class="dropdown-item text-secondary"><i class='fas fa-trash-alt me-1'></i> Hapus</a>
-                                                </div>
-                                            </div>
-                                        </div></td><td><kbd class="bg-danger text-white me-1">CD</kbd> <u><b class='text-dark'>CUTI DILUAR TANGGUNGAN</b></u></td><td>-</td><td>-</td><td>-</td><td>-</td><td>Ditambahkan otomatis oleh sistem</td>`);
+                    $('#tampil-tbody').append(`<tr><td><div class="d-flex align-items-center"><i class="ri-prohibited-line text-danger"></i></div></td><td><kbd class="bg-danger text-white me-1">L</kbd> <u><b class='text-dark'>LIBUR</b></u></td><td>-</td><td>-</td><td>-</td><td>-</td><td>Ditambahkan otomatis oleh sistem</td>`);
+                    $('#tampil-tbody').append(`<tr><td><div class="d-flex align-items-center"><i class="ri-prohibited-line text-danger"></i></div></td><td><kbd class="bg-danger text-white me-1">C</kbd> <u><b class='text-dark'>CUTI TAHUNAN</b></u></td><td>-</td><td>-</td><td>-</td><td>-</td><td>Ditambahkan otomatis oleh sistem</td>`);
+                    $('#tampil-tbody').append(`<tr><td><div class="d-flex align-items-center"><i class="ri-prohibited-line text-danger"></i></div></td><td><kbd class="bg-danger text-white me-1">CM</kbd> <u><b class='text-dark'>CUTI MELAHIRKAN</b></u></td><td>-</td><td>-</td><td>-</td><td>-</td><td>Ditambahkan otomatis oleh sistem</td>`);
+                    $('#tampil-tbody').append(`<tr><td><div class="d-flex align-items-center"><i class="ri-prohibited-line text-danger"></i></div></td><td><kbd class="bg-danger text-white me-1">CU</kbd> <u><b class='text-dark'>CUTI UMROH</b></u></td><td>-</td><td>-</td><td>-</td><td>-</td><td>Ditambahkan otomatis oleh sistem</td>`);
+                    $('#tampil-tbody').append(`<tr><td><div class="d-flex align-items-center"><i class="ri-prohibited-line text-danger"></i></div></td><td><kbd class="bg-danger text-white me-1">CH</kbd> <u><b class='text-dark'>CUTI HAJI</b></u></td><td>-</td><td>-</td><td>-</td><td>-</td><td>Ditambahkan otomatis oleh sistem</td>`);
+                    $('#tampil-tbody').append(`<tr><td><div class="d-flex align-items-center"><i class="ri-prohibited-line text-danger"></i></div></td><td><kbd class="bg-danger text-white me-1">CD</kbd> <u><b class='text-dark'>CUTI DILUAR TANGGUNGAN</b></u></td><td>-</td><td>-</td><td>-</td><td>-</td><td>Ditambahkan otomatis oleh sistem</td>`);
                     var table = $('#dttable').DataTable({
                         order: [
                             [6, "asc"]
@@ -472,7 +464,6 @@
             var berangkat = $("#berangkat_add").val();
             var pulang = $("#pulang_add").val();
             var ket = $("#ket_add").val();
-            var pegawai = "{{ Auth::user()->id }}";
 
             if (singkat == "" || shift == "" || berangkat == "" || pulang == "") {
                 iziToast.warning({
@@ -510,7 +501,6 @@
                         berangkat: berangkat,
                         pulang: pulang,
                         ket: ket,
-                        pegawai: pegawai,
                     },
                     success: function(res) {
                         if (res) {
@@ -558,8 +548,10 @@
                     $("#id_edit").val(res.show.id);
                     $("#singkat_edit").val(res.show.singkat);
                     $("#shift_edit").val(res.show.shift);
-                    $("#berangkat_edit").val(res.show.berangkat.substring(0,5)).change();
-                    $("#pulang_edit").val(res.show.pulang.substring(0,5)).change();
+                    // $("#berangkat_edit").val(res.show.berangkat.substring(0,5)).change();
+                    // $("#pulang_edit").val(res.show.pulang.substring(0,5)).change();
+                    fpBerangkatEdit.setDate(res.show.berangkat.substring(0,5), true);
+                    fpPulangEdit.setDate(res.show.pulang.substring(0,5), true);
                     $("#ket_edit").val(res.show.ket);
                     $('#modalUbah').modal('show');
                 }
@@ -664,6 +656,9 @@
                 // PROSES HAPUS
                 var id = $("#id_hapus").val();
                 $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
                     url: "/api/v4/sdi/jadwaldinas/shift/"+id+"/hapus",
                     type: 'DELETE',
                     success: function(res) {
