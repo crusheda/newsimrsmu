@@ -1473,6 +1473,7 @@ class JadwalDinasController extends Controller
 
         return response()->json($tgl, 200);
     }
+    
     function tolakBawahan($id)
     {
         $user = Auth::user()->id;
@@ -1489,6 +1490,7 @@ class JadwalDinasController extends Controller
 
         return response()->json($tgl, 200);
     }
+
     function batalTolakBawahan($id)
     {
         $user = Auth::user()->id;

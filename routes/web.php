@@ -33,6 +33,17 @@ use \App\Http\Controllers\v4\Administrasi\Pengadaan\PengadaanController;
 use \App\Http\Controllers\v4\Administrasi\Pengadaan\PengadaanBarangController;
 use \App\Http\Controllers\v4\Administrasi\Pengadaan\PengadaanRekapController;
 use \App\Http\Controllers\v4\Administrasi\ERuang\ERuangController;
+use \App\Http\Controllers\v4\SDI\ProfilPegawaiController;
+use \App\Http\Controllers\v4\SDI\DetailProfilPegawaiController;
+use \App\Http\Controllers\v4\SDI\Absensi\AbsensiController;
+use \App\Http\Controllers\v4\SDI\Absensi\AbsensiDashboardController;
+use \App\Http\Controllers\v4\SDI\Absensi\AbsensiDeviceController;
+use \App\Http\Controllers\v4\SDI\Rekrutmen\PengumumanController as RekrutmenPengumumanController;
+use \App\Http\Controllers\v4\SDI\Rekrutmen\RegistrasiController as RekrutmenRegistrasiController;
+use \App\Http\Controllers\v4\SDI\Pengajuan\SurketController;
+use \App\Http\Controllers\v4\SDI\Pengajuan\IDCardController;
+use \App\Http\Controllers\v4\SDI\PDController;
+use \App\Http\Controllers\v4\SDI\SurtugController;
 use \App\Http\Controllers\v4\SDI\JadwalDinasController;
 use \App\Http\Controllers\v4\Pelayanan\Kebidanan\SKLController;
 use App\Http\Controllers\v4\AI\KlaimBpjsController;
@@ -107,6 +118,13 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function 
 
     // SUMBER DAYA INSANI (SDI)
         // PROFIL PEGAWAI
+        Route::get('profilkaryawan', [ProfilPegawaiController::class, 'index'])->name('v4.sdi.profilpegawai');
+        Route::get('profilkaryawan/{id}', [ProfilPegawaiController::class, 'show'])->name('v4.sdi.profilpegawai.show');
+        Route::get('profilkaryawan/detail/{id}', [ProfilController::class, 'indexKepegawaian'])->name('v4.sdi.profilpegawai.kepegawaian');
+        Route::delete('profilkaryawan/{id}/nonaktif', [ProfilPegawaiController::class, 'destroy'])->name('v4.sdi.profilpegawai.hapus');
+        Route::get('profilkaryawan/dokumen/download/{id}', [DetailProfilPegawaiController::class,'downloadDokumen'])->name('v4.sdi.profilpegawai.detail.downloadDokumen');
+        Route::get('profilkaryawan/spkrkk/download/{id}', [DetailProfilPegawaiController::class,'downloadSpkRkk'])->name('v4.sdi.profilpegawai.detail.downloadSpkRkk');
+        Route::resource('profilkaryawan', '\App\Http\Controllers\Kepegawaian\ProfilKaryawanController');
 
         // JADWAL DINAS
         Route::get('sdi/jadwaldinas', [JadwalDinasController::class, 'index'])->name('v4.sdi.jadwaldinas');
@@ -123,6 +141,35 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function 
                 Route::get('sdi/jadwaldinas/staf', [JadwalDinasController::class, 'indexStaf'])->name('v4.sdi.jadwaldinas.ref.staf');
             // REF HARI LIBUR NASIONAL
                 Route::get('sdi/jadwaldinas/ln', [JadwalDinasController::class, 'indexLN'])->name('v4.sdi.jadwaldinas.ref.ln');
+
+        // ABSENSI
+        Route::get('absensi', [AbsensiController::class, 'index'])->name('v4.sdi.absensi.rekapitulasi');
+        Route::get('absensi/dashboard', [AbsensiDashboardController::class, 'index'])->name('v4.sdi.absensi.dashboard');
+        Route::get('absensi/device', [AbsensiDeviceController::class, 'index'])->name('v4.sdi.absensi.device');
+
+        // REKRUTMEN
+            // PENGUMUMAN
+            Route::get('rekrutmen/pengumuman', [RekrutmenPengumumanController::class, 'index'])->name('v4.sdi.rekrutmen.pengumuman');
+            // REGISTRASI PESERTA
+            Route::get('rekrutmen/registrasi', [RekrutmenRegistrasiController::class, 'index'])->name('v4.sdi.rekrutmen.registrasi');
+
+
+        // PENGAJUAN
+            // SURAT KETERANGAN (SURKET)
+            Route::get('pengajuan/surket', [SurketController::class, 'index'])->name('v4.sdi.pengajuan.surket');
+            Route::get('pengajuan/surket/{id}/download', [SurketController::class, 'download'])->name('v4.sdi.pengajuan.surket.download');
+            Route::get('pengajuan/surket/{id}/generate', [SurketController::class, 'generateFile'])->name('v4.sdi.pengajuan.surket.generate');
+
+            // IDCARD
+            Route::get('pengajuan/idcard', [IDCardController::class, 'index'])->name('v4.sdi.pengajuan.idcard');
+
+        // PERJALANAN DINAS
+        Route::get('pd', [PDController::class, 'index'])->name('v4.sdi.pd');
+        Route::get('pd/{id}/download', [PDController::class, 'download'])->name('v4.sdi.pd.download');
+
+        // SURAT TUGAS
+        Route::get('surtug', [SurtugController::class, 'index'])->name('v4.sdi.surtug');
+        Route::get('surtug/{id}/download', [SurtugController::class, 'download'])->name('v4.sdi.surtug.download');
 
     // PELAYANAN
          // SKL
