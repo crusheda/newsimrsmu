@@ -332,7 +332,7 @@
                             <div class="d-flex align-items-start cart-dropdown-item gap-3">
                                 <div class="lh-1">
                                     <span class="avatar avatar-xl bg-gray-300">
-                                        <img src="{{ asset('images/ecommerce/png/11.png') }}" alt="img">
+                                        <img src="{{ asset('/images/ecommerce/png/11.png') }}" alt="img">
                                     </span>
                                 </div>
                                 <div class="flex-fill w-75">

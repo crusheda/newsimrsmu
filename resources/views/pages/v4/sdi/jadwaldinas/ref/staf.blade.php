@@ -29,11 +29,16 @@
                         <h5 class="mb-0 card-title flex-grow-1">
                             <div class="btn-group">
                                 <a class="btn btn-secondary-transparent" href="{{ route('v4.sdi.jadwaldinas') }}" data-bs-toggle="tooltip"
-                                data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                                title="Kembali"><i class="fas fa-angle-left me-1"></i> Kembali</a>
+                                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                    title="Kembali"><i class="fas fa-angle-left me-1"></i> Kembali</a>
                                 <button class="btn btn-info-transparent" onclick="refresh()" data-bs-toggle="tooltip"
-                                data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" id="btn-refresh-table"
-                                title="Segarkan Tabel"><i class="fas fa-sync me-1"></i> Segarkan</button>
+                                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" id="btn-refresh-table"
+                                    title="Refresh - Tabel Staf Anda"><i class="fas fa-sync me-1"></i> Segarkan</button>
+                                @can('admin_kepegawaian')
+                                    <button class="btn btn-teal-transparent" onclick="refreshAll()" data-bs-toggle="tooltip"
+                                        data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" id="btn-refreshAll-table"
+                                        title="Lihat Semua Staf Unit"><i class="fas fa-infinity me-1"></i> Lihat Semua Staf</button>
+                                @endcan
                             </div>
                         </h5>
                         <div class="flex-shrink-0" id="btn-link">
@@ -101,6 +106,7 @@
                                         <th>Urutan</th>
                                         <th>Pegawai</th>
                                         <th>Jabatan</th>
+                                        <th>Unit</th>
                                         <th>Warna Baris</th>
                                         <th class="cell-fit">Diperbarui</th>
                                     </tr>
@@ -112,6 +118,17 @@
                                         </td>
                                     </tr>
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>USERID</th>
+                                        <th>Urutan</th>
+                                        <th>Pegawai</th>
+                                        <th>Jabatan</th>
+                                        <th>Unit</th>
+                                        <th>Warna Baris</th>
+                                        <th class="cell-fit">Diperbarui</th>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </div>
@@ -353,8 +370,9 @@
                 },
                 success: function(res) {
                     $("#tampil-tbody").empty();
-                    $('#dttable').DataTable().clear().destroy();
-                    // console.log(JSON.parse(res.show.staf));
+                    if ($.fn.DataTable.isDataTable('#dttable')) {
+                        $('#dttable').DataTable().clear().destroy();
+                    }
                     if (res.show) {
                         JSON.parse(res.show.staf).forEach(val => {
                             // INITIATE
@@ -394,12 +412,12 @@
                                             <td>
                                                 <div class="d-flex align-items-center">
                                                     <div class="dropdown">
-                                                        <a href="javascript:void(0);" class="link-${urutan!='-'?'primary':'danger'} link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle" data-bs-toggle="dropdown">${val}</a>
+                                                        <a href="javascript:void(0);" class="${res.show.pegawai_id == @json(Auth::user()->id)?"link-primary text-decoration-underline dropdown-toggle":"link disabled"} link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" data-bs-toggle="dropdown">${val}</a>
                                                         <div class="dropdown-menu dropdown-menu-right">`;
                                                             if (res.show.pegawai_id == @json(Auth::user()->id)) {
                                                                 content += `<a href="javascript:void(0);" onclick="atur(${val})" class="dropdown-item text-primary"><i class='fas fa-sort-amount-down me-1'></i> Atur Karyawan</a>`;
                                                             } else {
-                                                                content += `<a href="javascript:void(0);" class="dropdown-item text-secondary"><i class='fas fa-sort-amount-down me-1'></i> Atur Karyawan</a>`;
+                                                                content += `<a href="javascript:void(0);" class="dropdown-item disabled"><i class='fas fa-sort-amount-down me-1'></i> Atur Karyawan</a>`;
                                                             }
                             content += `                </div>
                                                     </div>
@@ -416,9 +434,10 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td>${jabatan?jabatan:'-'}</td>`;
+                                            <td>${jabatan?jabatan:'-'}</td>
+                                            <td>${res.show.unit?res.show.unit:'-'}</td>`;
                             if (color != "-") {
-                                content += `<td><span class="badge border text-dark" style="background-color: ${color}">TEXT HERE</span></td>`;
+                                content += `<td><span class="badge border" style="background-color: ${color};color:#000000">TEXT HERE</span></td>`;
                             } else {
                                 content += `<td>-</td>`;
                             }
@@ -484,17 +503,19 @@
                             </div>
                         `);
                     }
-                    
+
                     var table = $('#dttable').DataTable({
                         order: [
+                            [4, "asc"],
                             [1, "asc"]
                         ],
                         bAutoWidth: false,
                         aoColumns : [
                             { sWidth: '5%' },
                             { sWidth: '5%' },
-                            { sWidth: '45%' },
-                            { sWidth: '20%' },
+                            { sWidth: '35%' },
+                            { sWidth: '15%' },
+                            { sWidth: '15%' },
                             { sWidth: '10%' },
                             { sWidth: '15%' },
                         ],
@@ -511,13 +532,128 @@
                         message: xhr.responseJSON.message ?? 'Tidak ada data Staf ditemukan.',
                         position: 'topRight'
                     });
-                    
+
                     $("#tampil-tbody").empty().append(
                         `<tr style='font-size:13px'><td colspan="9"><center>Tidak ada Data Staf</center></td></tr>`
                     );
                 },
                 complete: function() {
                     btn.removeClass('fa-spin');
+                }
+            })
+        }
+
+        function getUnitClass(unit) {
+            const colors = [
+                'text-primary',
+                'text-success',
+                'text-warning',
+                'text-info',
+                'text-danger',
+                'text-secondary'
+            ];
+
+            // if (unitColorMap[unit]) {
+            //     return unitColorMap[unit];
+            // }
+
+            // auto assign berdasarkan hash sederhana
+            let index = unit ? unit.length % colors.length : 0;
+            return colors[index];
+        }
+
+        function refreshAll() {
+            $('.modal').modal('hide');
+            $("#tampil-tbody").empty().append(
+                `<tr style='font-size:13px'><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
+            );
+            const btn = $('#btn-refreshAll-table').find('i');
+            $.ajax({
+                url: "/api/v4/sdi/jadwaldinas/staf/table/all",
+                type: 'GET',
+                dataType: 'json', // added data type
+                beforeSend: function() {
+                    btn.removeClass('fa-infinity').addClass('fa-sync fa-spin');
+                },
+                success: function(res) {
+                    $("#tampil-tbody").empty();
+                    if ($.fn.DataTable.isDataTable('#dttable')) {
+                        $('#dttable').DataTable().clear().destroy();
+                    }
+                    content = ``;
+                    res.forEach(item => {
+                        let unitClass = getUnitClass(item.unit);
+                        content += `<tr>
+                                        <td><a href="javascript:void(0);" class="pe-none"><b>${item.id}</b></a></td>
+                                        <td>${item.urutan}</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-grow-1">
+                                                    <h6 class="mb-0">${item.nama_user} <span class="badge bg-primary-transparent">ID#${item.staf_id}</span></h6>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>${item.jabatan?item.jabatan:'-'}</td>
+                                        <td>
+                                            <b class="${unitClass}">
+                                                ${item.unit ? item.unit : '-'}
+                                            </b>
+                                        </td>`;
+                        if (item.color != "-") {
+                            content += `<td><span class="badge border" style="background-color: ${item.color};color:#000000">TEXT HERE</span></td>`;
+                        } else {
+                            content += `<td>-</td>`;
+                        }
+                        content += `<td style='white-space: normal !important;word-wrap: break-word;'>
+                                        <div class='d-flex justify-content-start align-items-center'>
+                                            <div class='d-flex flex-column'>
+                                                <a class='mb-0'>` + new Date(item.updated_at).toLocaleString("sv-SE") + `</a>
+                                                <small class='text-truncate text-muted'>Diperbarui Oleh ` + item.updated_by + `</small>
+                                            </div>
+                                        </div>
+                                    </td></tr>`;
+                    });
+                    $('#tampil-tbody').append(content);
+
+                    $('#btn-link').empty();
+
+                    var table = $('#dttable').DataTable({
+                        order: [
+                            [4, "asc"],
+                            [1, "asc"]
+                        ],
+                        bAutoWidth: false,
+                        aoColumns : [
+                            { sWidth: '5%' },
+                            { sWidth: '5%' },
+                            { sWidth: '35%' },
+                            { sWidth: '15%' },
+                            { sWidth: '15%' },
+                            { sWidth: '10%' },
+                            { sWidth: '15%' },
+                        ],
+                        displayLength: 30,
+                    });
+
+                    // Showing Tooltip
+                    $('[data-bs-toggle="tooltip"]').tooltip({
+                        trigger: 'hover'
+                    })
+                }, error: function(xhr, status, error) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: xhr.responseJSON.message ?? 'Tidak ada data Staf ditemukan.',
+                        position: 'topRight'
+                    });
+
+                    $('#btn-link').empty();
+
+                    $("#tampil-tbody").empty().append(
+                        `<tr style='font-size:13px'><td colspan="9"><center>Tidak ada Data Staf</center></td></tr>`
+                    );
+                },
+                complete: function() {
+                    btn.removeClass('fa-sync fa-spin').addClass('fa-infinity');
                 }
             })
         }

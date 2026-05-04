@@ -231,55 +231,57 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
 
         // JADWAL DINAS
             // ADMIN
-                Route::get('sdi/jadwaldinas/table/admin', [JadwalDinasController::class, 'tableAll'])->name('sdi.jadwaldinas.tableAll');
-                Route::get('sdi/jadwaldinas/tambah/admin', [JadwalDinasController::class, 'jokiAdmin'])->name('sdi.jadwaldinas.jokiAdmin');
-                Route::get('sdi/jadwaldinas/table/admin/{month}', [JadwalDinasController::class, 'tableAllMonth'])->name('sdi.jadwaldinas.tableAllMonth');
-                Route::get('sdi/jadwaldinas/{id}/verif/{user}', [JadwalDinasController::class, 'verif'])->name('sdi.jadwaldinas.verif');
-                // Route::get('sdi/jadwaldinas/{id}/tolak/{user}', [JadwalDinasController::class, 'tolak'])->name('sdi.jadwaldinas.tolak');
-                Route::get('sdi/jadwaldinas/{id}/batalverif/{user}', [JadwalDinasController::class, 'batalVerif'])->name('sdi.jadwaldinas.batalVerif');
-                // Route::get('sdi/jadwaldinas/{id}/bataltolak/{user}', [JadwalDinasController::class, 'batalTolak'])->name('sdi.jadwaldinas.batalTolak');
+                Route::get('sdi/jadwaldinas/table/admin', [JadwalDinasController::class, 'tableAll']);
+                Route::get('sdi/jadwaldinas/tambah/admin', [JadwalDinasController::class, 'jokiAdmin']);
+                Route::get('sdi/jadwaldinas/table/admin/{month}', [JadwalDinasController::class, 'tableAllMonth']);
+                Route::get('sdi/jadwaldinas/{id}/verif/{user}', [JadwalDinasController::class, 'verif']);
+                // Route::get('sdi/jadwaldinas/{id}/tolak/{user}', [JadwalDinasController::class, 'tolak']);
+                Route::get('sdi/jadwaldinas/{id}/batalverif/{user}', [JadwalDinasController::class, 'batalVerif']);
+                // Route::get('sdi/jadwaldinas/{id}/bataltolak/{user}', [JadwalDinasController::class, 'batalTolak']);
             // VERIFIKASI BAWAHAN
-                Route::get('sdi/jadwaldinas/bawahan/count', [JadwalDinasController::class, 'countBawahan'])->name('sdi.jadwaldinas.countBawahan');
-                Route::get('sdi/jadwaldinas/bawahan/table', [JadwalDinasController::class, 'tableAllBawahan'])->name('sdi.jadwaldinas.tableAllBawahan');
-                Route::get('sdi/jadwaldinas/bawahan/table/{month}', [JadwalDinasController::class, 'tableAllBawahanFilter'])->name('sdi.jadwaldinas.tableAllBawahanFilter');
-                Route::get('sdi/jadwaldinas/bawahan/{id}/verif', [JadwalDinasController::class, 'verifBawahan'])->name('sdi.jadwaldinas.verifBawahan');
-                Route::get('sdi/jadwaldinas/bawahan/{id}/tolak', [JadwalDinasController::class, 'tolakBawahan'])->name('sdi.jadwaldinas.tolakBawahan');
-                Route::get('sdi/jadwaldinas/bawahan/{id}/batalverif', [JadwalDinasController::class, 'batalVerifBawahan'])->name('sdi.jadwaldinas.batalVerifBawahan');
-                Route::get('sdi/jadwaldinas/bawahan/{id}/bataltolak', [JadwalDinasController::class, 'batalTolakBawahan'])->name('sdi.jadwaldinas.batalTolakBawahan');
+                Route::get('sdi/jadwaldinas/bawahan/count', [JadwalDinasController::class, 'countBawahan']);
+                Route::get('sdi/jadwaldinas/bawahan/table', [JadwalDinasController::class, 'tableAllBawahan']);
+                Route::get('sdi/jadwaldinas/bawahan/table/{month}', [JadwalDinasController::class, 'tableAllBawahanFilter']);
+                Route::get('sdi/jadwaldinas/bawahan/{id}/verif', [JadwalDinasController::class, 'verifBawahan']);
+                Route::get('sdi/jadwaldinas/bawahan/{id}/tolak', [JadwalDinasController::class, 'tolakBawahan']);
+                Route::get('sdi/jadwaldinas/bawahan/{id}/batalverif', [JadwalDinasController::class, 'batalVerifBawahan']);
+                Route::get('sdi/jadwaldinas/bawahan/{id}/bataltolak', [JadwalDinasController::class, 'batalTolakBawahan']);
             // DASHBOARD / GRAPH
-                Route::get('sdi/jadwaldinas/totalabsensi/{range}', [JadwalDinasController::class, 'totalAbsensi'])->name('sdi.jadwaldinas.totalAbsensi');
-                Route::get('sdi/jadwaldinas/totalcuti', [JadwalDinasController::class, 'totalCuti'])->name('sdi.jadwaldinas.totalCuti');
-                Route::get('sdi/jadwaldinas/totalcutiunit', [JadwalDinasController::class, 'totalCutiUnit'])->name('sdi.jadwaldinas.totalCutiUnit');
+                Route::get('sdi/jadwaldinas/totalabsensi/{range}', [JadwalDinasController::class, 'totalAbsensi']);
+                Route::get('sdi/jadwaldinas/totalcuti', [JadwalDinasController::class, 'totalCuti']);
+                Route::get('sdi/jadwaldinas/totalcutiunit', [JadwalDinasController::class, 'totalCutiUnit']);
             // USER
                 Route::post('sdi/jadwaldinas/tambah', [JadwalDinasController::class, 'storePengajuan']);
-                Route::post('sdi/jadwaldinas/ubah', [JadwalDinasController::class, 'updatePengajuan'])->name('sdi.jadwaldinas.updatePengajuan');
-                // Route::get('sdi/jadwaldinas/shift/{id}/user/{user}', [JadwalDinasController::class, 'cekShift'])->name('sdi.jadwaldinas.cekShift');
-                Route::get('sdi/jadwaldinas/{id}/shift', [JadwalDinasController::class, 'getShift'])->name('sdi.jadwaldinas.getShift');
-                Route::get('sdi/jadwaldinas/table', [JadwalDinasController::class, 'table'])->name('sdi.jadwaldinas.table');
-                Route::get('sdi/jadwaldinas/jadwal/{id}', [JadwalDinasController::class, 'jadwal'])->name('sdi.jadwaldinas.jadwal');
-                Route::delete('sdi/jadwaldinas/{id}/hapus', [JadwalDinasController::class, 'hapus'])->name('sdi.jadwaldinas.hapus');
-                Route::get('sdi/dokumentasi/eabsensi', [JadwalDinasController::class, 'dokumentasiAbsensi'])->name('sdi.dokumentasi.absensi');
-                Route::get('sdi/dokumentasi/eabsensi/download', [JadwalDinasController::class, 'downloadDokumentasiAbsensi'])->name('sdi.dokumentasi.absensi.download');
+                Route::post('sdi/jadwaldinas/ubah', [JadwalDinasController::class, 'updatePengajuan']);
+                // Route::get('sdi/jadwaldinas/shift/{id}/user/{user}', [JadwalDinasController::class, 'cekShift']);
+                Route::get('sdi/jadwaldinas/{id}/shift', [JadwalDinasController::class, 'getShift']);
+                Route::get('sdi/jadwaldinas/table', [JadwalDinasController::class, 'table']);
+                Route::get('sdi/jadwaldinas/jadwal/{id}', [JadwalDinasController::class, 'jadwal']);
+                Route::delete('sdi/jadwaldinas/{id}/hapus', [JadwalDinasController::class, 'hapus']);
+                Route::get('sdi/dokumentasi/eabsensi', [JadwalDinasController::class, 'dokumentasiAbsensi']);
+                Route::get('sdi/dokumentasi/eabsensi/download', [JadwalDinasController::class, 'downloadDokumentasiAbsensi']);
                 // REFERENSI SHIFT
-                    Route::get('sdi/jadwaldinas/shift/table', [JadwalDinasController::class, 'tableShift'])->name('sdi.jadwaldinas.shift.table');
-                    Route::get('sdi/jadwaldinas/shift/{id}', [JadwalDinasController::class, 'showUbahShift'])->name('sdi.jadwaldinas.shift.show');
-                    Route::post('sdi/jadwaldinas/shift/{id}/ubah', [JadwalDinasController::class, 'ubahShift'])->name('sdi.jadwaldinas.shift.update');
-                    Route::post('sdi/jadwaldinas/shift/tambah', [JadwalDinasController::class, 'tambahShift'])->name('sdi.jadwaldinas.shift.tambah');
-                    Route::delete('sdi/jadwaldinas/shift/{id}/hapus', [JadwalDinasController::class, 'hapusShift'])->name('sdi.jadwaldinas.shift.hapus');
+                    Route::get('sdi/jadwaldinas/shift/table', [JadwalDinasController::class, 'tableShift']);
+                    Route::get('sdi/jadwaldinas/shift/table/all', [JadwalDinasController::class, 'tableShiftAll']);
+                    Route::get('sdi/jadwaldinas/shift/{id}', [JadwalDinasController::class, 'showUbahShift']);
+                    Route::post('sdi/jadwaldinas/shift/{id}/ubah', [JadwalDinasController::class, 'ubahShift']);
+                    Route::post('sdi/jadwaldinas/shift/tambah', [JadwalDinasController::class, 'tambahShift']);
+                    Route::delete('sdi/jadwaldinas/shift/{id}/hapus', [JadwalDinasController::class, 'hapusShift']);
                 // REFERENSI STAFF
-                    Route::get('sdi/jadwaldinas/staf/table', [JadwalDinasController::class, 'tableStaf'])->name('sdi.jadwaldinas.staf.table');
-                    Route::get('sdi/jadwaldinas/staf/{id}', [JadwalDinasController::class, 'showUbahStaf'])->name('sdi.jadwaldinas.staf.show');
-                    Route::post('sdi/jadwaldinas/staf/{id}/ubah', [JadwalDinasController::class, 'ubahStaf'])->name('sdi.jadwaldinas.staf.update');
-                    Route::post('sdi/jadwaldinas/staf/tambah', [JadwalDinasController::class, 'tambahStaf'])->name('sdi.jadwaldinas.staf.tambah');
-                    Route::delete('sdi/jadwaldinas/staf/{id}/hapus', [JadwalDinasController::class, 'hapusStaf'])->name('sdi.jadwaldinas.staf.hapus');
-                    Route::get('sdi/jadwaldinas/staf/{id}/ambilalih', [JadwalDinasController::class, 'ambilAlihStaf'])->name('sdi.jadwaldinas.staf.ambilalih');
+                    Route::get('sdi/jadwaldinas/staf/table', [JadwalDinasController::class, 'tableStaf']);
+                    Route::get('sdi/jadwaldinas/staf/table/all', [JadwalDinasController::class, 'tableStafAll']);
+                    Route::get('sdi/jadwaldinas/staf/{id}', [JadwalDinasController::class, 'showUbahStaf']);
+                    Route::post('sdi/jadwaldinas/staf/{id}/ubah', [JadwalDinasController::class, 'ubahStaf']);
+                    Route::post('sdi/jadwaldinas/staf/tambah', [JadwalDinasController::class, 'tambahStaf']);
+                    Route::delete('sdi/jadwaldinas/staf/{id}/hapus', [JadwalDinasController::class, 'hapusStaf']);
+                    Route::get('sdi/jadwaldinas/staf/{id}/ambilalih', [JadwalDinasController::class, 'ambilAlihStaf']);
                     // ATUR STAF
-                        Route::get('sdi/jadwaldinas/staf/atur/{id}', [JadwalDinasController::class, 'showAturStaf'])->name('sdi.jadwaldinas.staf.atur.show');
-                        Route::post('sdi/jadwaldinas/staf/atur/{id}/ubah', [JadwalDinasController::class, 'aturStaf'])->name('sdi.jadwaldinas.staf.atur.update');
+                        Route::get('sdi/jadwaldinas/staf/atur/{id}', [JadwalDinasController::class, 'showAturStaf']);
+                        Route::post('sdi/jadwaldinas/staf/atur/{id}/ubah', [JadwalDinasController::class, 'aturStaf']);
                 // REFERENSI LIBUR NASIONAL
-                    Route::get('sdi/jadwaldinas/ln/table', [JadwalDinasController::class, 'tableLN'])->name('sdi.jadwaldinas.ln.table');
-                    Route::post('sdi/jadwaldinas/ln/tambah', [JadwalDinasController::class, 'tambahLN'])->name('sdi.jadwaldinas.ln.tambah');
-                    Route::delete('sdi/jadwaldinas/ln/{id}/hapus', [JadwalDinasController::class, 'hapusLN'])->name('sdi.jadwaldinas.ln.hapus');
+                    Route::get('sdi/jadwaldinas/ln/table', [JadwalDinasController::class, 'tableLN']);
+                    Route::post('sdi/jadwaldinas/ln/tambah', [JadwalDinasController::class, 'tambahLN']);
+                    Route::delete('sdi/jadwaldinas/ln/{id}/hapus', [JadwalDinasController::class, 'hapusLN']);
 
 
     // PELAYANAN

@@ -373,7 +373,7 @@
                 type: 'GET',
                 dataType: 'json',
                 success: function(res) {
-                    var adminID = @json(Auth::user()->can('admin-kepegawaian'));
+                    var adminID = @json(Auth::user()->can('admin_kepegawaian'));
                     var valid = 1;
                     t=1;
                     $('.inputTgl').removeAttr('required');
@@ -444,7 +444,7 @@
                 type: 'GET',
                 dataType: 'json',
                 success: function(res) {
-                    var adminID = @json(Auth::user()->can('admin-kepegawaian'));
+                    var adminID = @json(Auth::user()->can('admin_kepegawaian'));
                     var valid = 1;
                     t=1;
                     $('.inputTgl').removeAttr('required');
@@ -520,7 +520,7 @@
                 type: 'GET',
                 dataType: 'json',
                 success: function(res) {
-                    var adminID = @json(Auth::user()->can('admin-kepegawaian'));
+                    var adminID = @json(Auth::user()->can('admin_kepegawaian'));
                     var valid = 1;
                     var par = JSON.parse(res.jadwal.staf);
                     var pur = par.toString().split(',');

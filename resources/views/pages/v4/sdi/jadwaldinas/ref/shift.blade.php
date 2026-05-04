@@ -38,9 +38,16 @@
                                 @endif
                             @endif
                         </div>
-                        <button class="btn btn-link-warning" onclick="refresh()" data-bs-toggle="tooltip"
-                            data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                            title="Segarkan Tabel"><i class="fas fa-sync me-1"></i> Segarkan</button>
+                        <div>
+                            <button class="btn btn-warning-transparent" onclick="refresh()" data-bs-toggle="tooltip"
+                                data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" id="btn-refresh-table"
+                                title="Refresh - Tabel Shift Anda"><i class="fas fa-sync me-1"></i> Segarkan</button>
+                            @can('admin_kepegawaian')
+                                <button class="btn btn-teal-transparent ms-2" onclick="refreshAll()" data-bs-toggle="tooltip"
+                                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" id="btn-refreshAll-table"
+                                    title="Lihat Semua Shift Unit"><i class="fas fa-infinity me-1"></i> Lihat Semua Shift</button>
+                            @endcan
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="alert alert-light shadow-sm mb-3 mt-2">
@@ -65,6 +72,7 @@
                                 <thead>
                                     <tr>
                                         <th class="cell-fit">Aksi</th>
+                                        <th class="cell-fit">Unit</th>
                                         <th>(<b class="text-warning">KODE</b>) Nama Shift</th>
                                         <th class="cell-fit">Jam Berangkat (24h)</th>
                                         <th class="cell-fit">Jam Pulang (24h)</th>
@@ -80,9 +88,10 @@
                                         </td>
                                     </tr>
                                 </tbody>
-                                <tfoot>
+                                {{-- <tfoot>
                                     <tr>
                                         <th class="cell-fit">Aksi</th>
+                                        <th class="cell-fit">Unit</th>
                                         <th>(<b class="text-warning">KODE</b>) Nama Shift</th>
                                         <th class="cell-fit">Jam Berangkat (24h)</th>
                                         <th class="cell-fit">Jam Pulang (24h)</th>
@@ -90,7 +99,7 @@
                                         <th>Keterangan</th>
                                         <th class="cell-fit">Diperbarui</th>
                                     </tr>
-                                </tfoot>
+                                </tfoot> --}}
                             </table>
                             <!-- end table -->
                         </div>
@@ -354,21 +363,28 @@
         function refresh() {
             $('.modal').modal('hide');
             $("#tampil-tbody").empty().append(
-                `<tr style='font-size:13px'><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
+                `<tr style='font-size:13px'><td colspan="8"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
             );
+            const btn = $('#btn-refresh-table').find('i');
             $.ajax({
                 url: "/api/v4/sdi/jadwaldinas/shift/table",
                 type: 'GET',
                 dataType: 'json', // added data type
+                beforeSend: function() {
+                    btn.removeClass('fa-sync').addClass('fa-spinner fa-spin');
+                },
                 success: function(res) {
                     $("#tampil-tbody").empty();
-                    $('#dttable').DataTable().clear().destroy();
+                    if ($.fn.DataTable.isDataTable('#dttable')) {
+                        $('#dttable').DataTable().clear().destroy();
+                    }
                     if (res.atasan == @json(Auth::user()->id)) {
                         $('#btn-tambah').prop('disabled',false);
                     } else {
                         $('#btn-tambah').prop('disabled',true);
                     }
                     moment.locale('id');
+                    let content = ``;
                     res.show.forEach(item => {
                         const berangkat = moment(item.berangkat, "HH:mm:ss");
                         const pulang = moment(item.pulang, "HH:mm:ss");
@@ -380,20 +396,21 @@
                         const jam = Math.floor(durasiMenit / 60);
                         const menit = durasiMenit % 60;
                         const menitStr = menit.toString().padStart(2, '0');
-                        content = `<tr><td><div class="d-flex align-items-center">
+                        content += `<tr><td><div class="d-flex align-items-center">
                                             <div class="dropdown">
-                                                <a href="javascript:void(0);" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle" data-bs-toggle="dropdown">` + item.id + `</a>
+                                                <a href="javascript:void(0);" class="${item.pegawai_id == @json(Auth::user()->id)?"link-primary text-decoration-underline dropdown-toggle":"link disabled"} link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" data-bs-toggle="dropdown">` + item.id + `</a>
                                                 <div class="dropdown-menu dropdown-menu-right">`;
-                                                    if (item.pegawai_id == @json(Auth::user()->id)) {
+                                                    if (item.pegawai_id == @json(Auth::user()->id) ) {
                                                         content += `<a href="javascript:;" onclick="ubah(` + item.id + `)" class="dropdown-item text-warning"><i class='fas fa-edit me-1'></i> Ubah</a>`;
                                                         content += `<a href="javascript:;" onclick="hapus(` + item.id + `)" class="dropdown-item text-danger"><i class='fas fa-trash-alt me-1'></i> Hapus</a>`;
                                                     } else {
-                                                        content += `<a href="javascript:;" class="dropdown-item text-secondary"><i class='fas fa-edit me-1'></i> Ubah</a>`;
-                                                        content += `<a href="javascript:;" class="dropdown-item text-secondary"><i class='fas fa-trash-alt me-1'></i> Hapus</a>`;
+                                                        content += `<a href="javascript:;" class="dropdown-item disabled"><i class='fas fa-edit me-1'></i> Ubah</a>`;
+                                                        content += `<a href="javascript:;" class="dropdown-item disabled"><i class='fas fa-trash-alt me-1'></i> Hapus</a>`;
                                                     }
                                     content += `</div>
                                             </div>
                                         </div></td>`;
+                        content += `<td>${item.unit_pegawai?item.unit_pegawai:'-'}</td>`;
                         content += `<td><kbd class="bg-warning text-white me-1">${item.singkat}</kbd> <u><b class='text-dark'>`+item.shift+`</b></u></td>`;
                         content += `<td>`+item.berangkat+`</td>`;
                         content += `<td>`+item.pulang+`</td>`;
@@ -407,26 +424,29 @@
                                             </div>
                                         </div>
                                     </td></tr>`;
-                        $('#tampil-tbody').append(content);
                     })
-                    $('#tampil-tbody').append(`<tr><td><div class="d-flex align-items-center"><i class="ri-prohibited-line text-danger"></i></div></td><td><kbd class="bg-danger text-white me-1">L</kbd> <u><b class='text-dark'>LIBUR</b></u></td><td>-</td><td>-</td><td>-</td><td>-</td><td>Ditambahkan otomatis oleh sistem</td>`);
-                    $('#tampil-tbody').append(`<tr><td><div class="d-flex align-items-center"><i class="ri-prohibited-line text-danger"></i></div></td><td><kbd class="bg-danger text-white me-1">C</kbd> <u><b class='text-dark'>CUTI TAHUNAN</b></u></td><td>-</td><td>-</td><td>-</td><td>-</td><td>Ditambahkan otomatis oleh sistem</td>`);
-                    $('#tampil-tbody').append(`<tr><td><div class="d-flex align-items-center"><i class="ri-prohibited-line text-danger"></i></div></td><td><kbd class="bg-danger text-white me-1">CM</kbd> <u><b class='text-dark'>CUTI MELAHIRKAN</b></u></td><td>-</td><td>-</td><td>-</td><td>-</td><td>Ditambahkan otomatis oleh sistem</td>`);
-                    $('#tampil-tbody').append(`<tr><td><div class="d-flex align-items-center"><i class="ri-prohibited-line text-danger"></i></div></td><td><kbd class="bg-danger text-white me-1">CU</kbd> <u><b class='text-dark'>CUTI UMROH</b></u></td><td>-</td><td>-</td><td>-</td><td>-</td><td>Ditambahkan otomatis oleh sistem</td>`);
-                    $('#tampil-tbody').append(`<tr><td><div class="d-flex align-items-center"><i class="ri-prohibited-line text-danger"></i></div></td><td><kbd class="bg-danger text-white me-1">CH</kbd> <u><b class='text-dark'>CUTI HAJI</b></u></td><td>-</td><td>-</td><td>-</td><td>-</td><td>Ditambahkan otomatis oleh sistem</td>`);
-                    $('#tampil-tbody').append(`<tr><td><div class="d-flex align-items-center"><i class="ri-prohibited-line text-danger"></i></div></td><td><kbd class="bg-danger text-white me-1">CD</kbd> <u><b class='text-dark'>CUTI DILUAR TANGGUNGAN</b></u></td><td>-</td><td>-</td><td>-</td><td>-</td><td>Ditambahkan otomatis oleh sistem</td>`);
-                    var table = $('#dttable').DataTable({
+                    $('#tampil-tbody').append(content);
+                    $('#tampil-tbody').append(`<tr><td><div class="d-flex align-items-center"><i class="ri-prohibited-line text-danger"></i></div></td><td>Semua Unit</td><td><kbd class="bg-danger text-white me-1">L</kbd> <u><b class='text-dark'>LIBUR</b></u></td><td>-</td><td>-</td><td>-</td><td>-</td><td>Ditambahkan otomatis oleh sistem</td>`);
+                    $('#tampil-tbody').append(`<tr><td><div class="d-flex align-items-center"><i class="ri-prohibited-line text-danger"></i></div></td><td>Semua Unit</td><td><kbd class="bg-danger text-white me-1">C</kbd> <u><b class='text-dark'>CUTI TAHUNAN</b></u></td><td>-</td><td>-</td><td>-</td><td>-</td><td>Ditambahkan otomatis oleh sistem</td>`);
+                    $('#tampil-tbody').append(`<tr><td><div class="d-flex align-items-center"><i class="ri-prohibited-line text-danger"></i></div></td><td>Semua Unit</td><td><kbd class="bg-danger text-white me-1">CM</kbd> <u><b class='text-dark'>CUTI MELAHIRKAN</b></u></td><td>-</td><td>-</td><td>-</td><td>-</td><td>Ditambahkan otomatis oleh sistem</td>`);
+                    $('#tampil-tbody').append(`<tr><td><div class="d-flex align-items-center"><i class="ri-prohibited-line text-danger"></i></div></td><td>Semua Unit</td><td><kbd class="bg-danger text-white me-1">CU</kbd> <u><b class='text-dark'>CUTI UMROH</b></u></td><td>-</td><td>-</td><td>-</td><td>-</td><td>Ditambahkan otomatis oleh sistem</td>`);
+                    $('#tampil-tbody').append(`<tr><td><div class="d-flex align-items-center"><i class="ri-prohibited-line text-danger"></i></div></td><td>Semua Unit</td><td><kbd class="bg-danger text-white me-1">CH</kbd> <u><b class='text-dark'>CUTI HAJI</b></u></td><td>-</td><td>-</td><td>-</td><td>-</td><td>Ditambahkan otomatis oleh sistem</td>`);
+                    $('#tampil-tbody').append(`<tr><td><div class="d-flex align-items-center"><i class="ri-prohibited-line text-danger"></i></div></td><td>Semua Unit</td><td><kbd class="bg-danger text-white me-1">CD</kbd> <u><b class='text-dark'>CUTI DILUAR TANGGUNGAN</b></u></td><td>-</td><td>-</td><td>-</td><td>-</td><td>Ditambahkan otomatis oleh sistem</td>`);
+
+                    $('#dttable').DataTable({
                         order: [
-                            [6, "asc"]
+                            [1, "asc"],
+                            [7, "asc"]
                         ],
                         bAutoWidth: false,
                         aoColumns : [
                             { sWidth: '5%' },
+                            { sWidth: '15%' },
                             { sWidth: '30%' },
-                            { sWidth: '15%' },
-                            { sWidth: '15%' },
                             { sWidth: '10%' },
-                            { sWidth: '15%' },
+                            { sWidth: '10%' },
+                            { sWidth: '10%' },
+                            { sWidth: '10%' },
                             { sWidth: '10%' },
                         ],
                         displayLength: 20,
@@ -444,8 +464,101 @@
                         position: 'topRight'
                     });
                     $("#tampil-tbody").empty().append(
-                        `<tr><td colspan="9"><center>Tidak ada Data Shift</center></td></tr>`
+                        `<tr><td colspan="8"><center>Tidak ada Data Shift</center></td></tr>`
                     );
+                },
+                complete: function() {
+                    btn.removeClass('fa-spinner fa-spin').addClass('fa-sync');
+                }
+            })
+        }
+
+        function refreshAll() {
+            $('.modal').modal('hide');
+            $("#tampil-tbody").empty().append(
+                `<tr style='font-size:13px'><td colspan="8"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
+            );
+            const btn = $('#btn-refreshAll-table').find('i');
+            $.ajax({
+                url: "/api/v4/sdi/jadwaldinas/shift/table/all",
+                type: 'GET',
+                dataType: 'json', // added data type
+                beforeSend: function() {
+                    btn.removeClass('fa-infinity').addClass('fa-spinner fa-spin');
+                },
+                success: function(res) {
+                    $("#tampil-tbody").empty();
+                    if ($.fn.DataTable.isDataTable('#dttable')) {
+                        $('#dttable').DataTable().clear().destroy();
+                    }
+                    $('#btn-tambah').prop('disabled',true);
+                    moment.locale('id');
+                    let content = ``;
+                    res.show.forEach(item => {
+                        const berangkat = moment(item.berangkat, "HH:mm:ss");
+                        const pulang = moment(item.pulang, "HH:mm:ss");
+
+                        // hitung selisih dalam menit
+                        const durasiMenit = pulang.diff(berangkat, "minutes");
+
+                        // ubah ke jam dan menit
+                        const jam = Math.floor(durasiMenit / 60);
+                        const menit = durasiMenit % 60;
+                        const menitStr = menit.toString().padStart(2, '0');
+                        content += `<tr><td>${item.id}</td>`;
+                        content += `<td>${item.unit_pegawai?item.unit_pegawai:'-'}</td>`;
+                        content += `<td><kbd class="bg-warning text-white me-1">${item.singkat}</kbd> <u><b class='text-dark'>`+item.shift+`</b></u></td>`;
+                        content += `<td>`+item.berangkat+`</td>`;
+                        content += `<td>`+item.pulang+`</td>`;
+                        content += `<td>${jam} jam${menit !== 0 ? ' ' + menitStr + ' menit' : ''}</td>`;
+                        content += `<td>${item.ket?item.ket:'-'}</td>`;
+                        content += `<td style='white-space: normal !important;word-wrap: break-word;'>
+                                        <div class='d-flex justify-content-start align-items-center'>
+                                            <div class='d-flex flex-column'>
+                                                <a class='mb-0'>` + new Date(item.updated_at).toLocaleString("sv-SE") + `</a>
+                                                <small class='text-truncate text-muted'>Diperbarui Oleh ` + item.nama_pegawai + `</small>
+                                            </div>
+                                        </div>
+                                    </td></tr>`;
+                    })
+                    $('#tampil-tbody').append(content);
+
+                    $('#dttable').DataTable({
+                        order: [
+                            [1, "asc"],
+                            [7, "asc"]
+                        ],
+                        bAutoWidth: false,
+                        aoColumns : [
+                            { sWidth: '5%' },
+                            { sWidth: '15%' },
+                            { sWidth: '30%' },
+                            { sWidth: '10%' },
+                            { sWidth: '10%' },
+                            { sWidth: '10%' },
+                            { sWidth: '10%' },
+                            { sWidth: '10%' },
+                        ],
+                        displayLength: 20,
+                    });
+
+                    // Showing Tooltip
+                    $('[data-bs-toggle="tooltip"]').tooltip({
+                        trigger: 'hover'
+                    })
+                },
+                error: function (res) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: 'Tidak ada data shift ditemukan',
+                        position: 'topRight'
+                    });
+                    $("#tampil-tbody").empty().append(
+                        `<tr><td colspan="8"><center>Tidak ada Data Shift</center></td></tr>`
+                    );
+                },
+                complete: function() {
+                    btn.removeClass('fa-spinner fa-spin').addClass('fa-infinity');
                 }
             })
         }

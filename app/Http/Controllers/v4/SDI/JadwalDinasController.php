@@ -1473,7 +1473,7 @@ class JadwalDinasController extends Controller
 
         return response()->json($tgl, 200);
     }
-    
+
     function tolakBawahan($id)
     {
         $user = Auth::user()->id;
@@ -1520,7 +1520,11 @@ class JadwalDinasController extends Controller
         if ($cekUser) {
             $users  = users::select('id','nama')->where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
             $show  = ref_jadwal_shift::join('users','users.id','=','referensi_jadwal_shift.pegawai_id')
-                    ->select('referensi_jadwal_shift.*','users.nama as nama_pegawai')
+                    ->leftJoin('referensi_jadwal_users as rju', function ($join) use ($cekUser) {
+                        $join->on('referensi_jadwal_shift.pegawai_id', '=', 'rju.pegawai_id')
+                            ->whereNull('rju.deleted_at');
+                    })
+                    ->select('referensi_jadwal_shift.*','users.nama as nama_pegawai', 'rju.unit as unit_pegawai')
                     ->where('referensi_jadwal_shift.pegawai_id',$cekUser->pegawai_id)
                     ->get();
 
@@ -1534,6 +1538,23 @@ class JadwalDinasController extends Controller
         } else {
             return response()->json($pegawai, 400);
         }
+    }
+
+    function tableShiftAll()
+    {
+        $show  = ref_jadwal_shift::join('users','users.id','=','referensi_jadwal_shift.pegawai_id')
+                ->leftJoin('referensi_jadwal_users as rju', function ($join) {
+                    $join->on('referensi_jadwal_shift.pegawai_id', '=', 'rju.pegawai_id')
+                        ->whereNull('rju.deleted_at');
+                })
+                ->select('referensi_jadwal_shift.*','users.nama as nama_pegawai', 'rju.unit as unit_pegawai')
+                ->get();
+
+        $data = [
+            'show' => $show,
+        ];
+
+        return response()->json($data, 200);
     }
 
     function tambahShift(Request $request)
@@ -1752,6 +1773,56 @@ class JadwalDinasController extends Controller
             return response()->json($cekUser, 400);
         }
     }
+
+    function tableStafAll()
+{
+    $data = DB::table('referensi_jadwal_users as rju')
+        ->join('users as u_creator', 'u_creator.id', '=', 'rju.pegawai_id')
+
+        // join users berdasarkan JSON (hack)
+        ->join('users as u', function ($join) {
+            $join->whereRaw("
+                FIND_IN_SET(
+                    u.id,
+                    REPLACE(REPLACE(REPLACE(rju.staf, '[', ''), ']', ''), '\"', '')
+                )
+            ");
+        })
+
+        // join jabatan
+        ->leftJoin('referensi_jadwal_users_jabatan as j', function($join){
+            $join->on('j.id_staf', '=', 'u.id')
+                 ->on('j.pegawai_id', '=', 'rju.pegawai_id')
+                 ->whereNull('j.deleted_at');
+        })
+
+        // join foto
+        ->leftJoin('users_foto as uf', 'uf.user_id', '=', 'u.id')
+
+        ->whereNull('rju.deleted_at')
+
+        ->select(
+            'rju.id',
+            'rju.unit',
+            'rju.updated_at',
+
+            'u.id as staf_id',
+            'u.nama as nama_user',
+
+            'j.jabatan',
+            'j.color',
+            'j.urutan',
+
+            'uf.filename',
+
+            'u_creator.nama as updated_by'
+        )
+
+        ->orderBy('j.jabatan', 'asc')
+        ->get();
+
+    return response()->json($data, 200);
+}
 
     function tambahStaf(Request $request)
     {
