@@ -72,11 +72,11 @@
                                 <thead>
                                     <tr>
                                         <th class="cell-fit">Aksi</th>
-                                        <th class="cell-fit">Unit</th>
+                                        <th class="cell-fit"><center>Unit</center></th>
                                         <th>(<b class="text-warning">KODE</b>) Nama Shift</th>
-                                        <th class="cell-fit">Jam Berangkat (24h)</th>
-                                        <th class="cell-fit">Jam Pulang (24h)</th>
-                                        <th class="cell-fit">Selisih Jam</th>
+                                        <th class="cell-fit"><center>Jam <b class="text-success">Berangkat</b> (<b class="text-warning">24h</b>)</center></th>
+                                        <th class="cell-fit"><center>Jam <b class="text-danger">Pulang</b> (<b class="text-warning">24h</b>)</center></th>
+                                        <th class="cell-fit"><center>Selisih Jam</center></th>
                                         <th>Keterangan</th>
                                         <th class="cell-fit">Diperbarui</th>
                                     </tr>
@@ -387,12 +387,16 @@
                     let content = ``;
                     res.show.forEach(item => {
                         const berangkat = moment(item.berangkat, "HH:mm:ss");
-                        const pulang = moment(item.pulang, "HH:mm:ss");
+                        let pulang = moment(item.pulang, "HH:mm:ss");
 
-                        // hitung selisih dalam menit
+                        // jika pulang lebih kecil, berarti lewat hari
+                        if (pulang.isBefore(berangkat)) {
+                            pulang.add(1, 'day');
+                        }
+
+                        // hitung selisih
                         const durasiMenit = pulang.diff(berangkat, "minutes");
 
-                        // ubah ke jam dan menit
                         const jam = Math.floor(durasiMenit / 60);
                         const menit = durasiMenit % 60;
                         const menitStr = menit.toString().padStart(2, '0');
@@ -410,11 +414,11 @@
                                     content += `</div>
                                             </div>
                                         </div></td>`;
-                        content += `<td>${item.unit_pegawai?item.unit_pegawai:'-'}</td>`;
+                        content += `<td class='text-center'>${item.unit_pegawai?item.unit_pegawai:'-'}</td>`;
                         content += `<td><kbd class="bg-warning text-white me-1">${item.singkat}</kbd> <u><b class='text-dark'>`+item.shift+`</b></u></td>`;
-                        content += `<td>`+item.berangkat+`</td>`;
-                        content += `<td>`+item.pulang+`</td>`;
-                        content += `<td>${jam} jam${menit !== 0 ? ' ' + menitStr + ' menit' : ''}</td>`;
+                        content += `<td class='text-center'>`+item.berangkat+`</td>`;
+                        content += `<td class='text-center'>`+item.pulang+`</td>`;
+                        content += `<td class='text-center'>${jam} jam${menit !== 0 ? ' ' + menitStr + ' menit' : ''}</td>`;
                         content += `<td>${item.ket?item.ket:'-'}</td>`;
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
@@ -473,6 +477,25 @@
             })
         }
 
+        function getUnitClass(unit) {
+            const colors = [
+                'text-primary',
+                'text-success',
+                'text-warning',
+                'text-info',
+                'text-danger',
+                'text-secondary'
+            ];
+
+            // if (unitColorMap[unit]) {
+            //     return unitColorMap[unit];
+            // }
+
+            // auto assign berdasarkan hash sederhana
+            let index = unit ? unit.length % colors.length : 0;
+            return colors[index];
+        }
+
         function refreshAll() {
             $('.modal').modal('hide');
             $("#tampil-tbody").empty().append(
@@ -495,22 +518,30 @@
                     moment.locale('id');
                     let content = ``;
                     res.show.forEach(item => {
+                        let unitClass = 'text-muted';
+                        if (item.unit_pegawai) {
+                            unitClass = getUnitClass(item.unit_pegawai);
+                        }
                         const berangkat = moment(item.berangkat, "HH:mm:ss");
-                        const pulang = moment(item.pulang, "HH:mm:ss");
+                        let pulang = moment(item.pulang, "HH:mm:ss");
 
-                        // hitung selisih dalam menit
+                        // jika pulang lebih kecil, berarti lewat hari
+                        if (pulang.isBefore(berangkat)) {
+                            pulang.add(1, 'day');
+                        }
+
+                        // hitung selisih
                         const durasiMenit = pulang.diff(berangkat, "minutes");
 
-                        // ubah ke jam dan menit
                         const jam = Math.floor(durasiMenit / 60);
                         const menit = durasiMenit % 60;
                         const menitStr = menit.toString().padStart(2, '0');
                         content += `<tr><td>${item.id}</td>`;
-                        content += `<td>${item.unit_pegawai?item.unit_pegawai:'-'}</td>`;
+                        content += `<td class="${unitClass} text-center"><b>${item.unit_pegawai?item.unit_pegawai:'-'}</b></td>`;
                         content += `<td><kbd class="bg-warning text-white me-1">${item.singkat}</kbd> <u><b class='text-dark'>`+item.shift+`</b></u></td>`;
-                        content += `<td>`+item.berangkat+`</td>`;
-                        content += `<td>`+item.pulang+`</td>`;
-                        content += `<td>${jam} jam${menit !== 0 ? ' ' + menitStr + ' menit' : ''}</td>`;
+                        content += `<td class='text-center'>`+item.berangkat+`</td>`;
+                        content += `<td class='text-center'>`+item.pulang+`</td>`;
+                        content += `<td class='text-center'>${jam} jam${menit !== 0 ? ' ' + menitStr + ' menit' : ''}</td>`;
                         content += `<td>${item.ket?item.ket:'-'}</td>`;
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>

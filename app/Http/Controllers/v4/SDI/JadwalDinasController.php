@@ -1775,54 +1775,57 @@ class JadwalDinasController extends Controller
     }
 
     function tableStafAll()
-{
-    $data = DB::table('referensi_jadwal_users as rju')
-        ->join('users as u_creator', 'u_creator.id', '=', 'rju.pegawai_id')
+    {
+        $data = DB::table('referensi_jadwal_users as rju')
+            ->join('users as u_creator', 'u_creator.id', '=', 'rju.pegawai_id')
 
-        // join users berdasarkan JSON (hack)
-        ->join('users as u', function ($join) {
-            $join->whereRaw("
-                FIND_IN_SET(
-                    u.id,
-                    REPLACE(REPLACE(REPLACE(rju.staf, '[', ''), ']', ''), '\"', '')
-                )
-            ");
-        })
+            // join users berdasarkan JSON (hack)
+            ->join('users as u', function ($join) {
+                $join->whereRaw("
+                    JSON_CONTAINS(rju.staf, JSON_QUOTE(CAST(u.id AS CHAR)))
+                ");
+            })
 
-        // join jabatan
-        ->leftJoin('referensi_jadwal_users_jabatan as j', function($join){
-            $join->on('j.id_staf', '=', 'u.id')
-                 ->on('j.pegawai_id', '=', 'rju.pegawai_id')
-                 ->whereNull('j.deleted_at');
-        })
+            // join atasan langsung
+            ->join('users as u_atasan', 'u_atasan.id', '=', 'rju.pegawai_id')
 
-        // join foto
-        ->leftJoin('users_foto as uf', 'uf.user_id', '=', 'u.id')
+            // join jabatan
+            ->leftJoin('referensi_jadwal_users_jabatan as j', function($join){
+                $join->on('j.id_staf', '=', 'u.id')
+                    ->on('j.pegawai_id', '=', 'rju.pegawai_id')
+                    ->whereNull('j.deleted_at');
+            })
 
-        ->whereNull('rju.deleted_at')
+            // join foto
+            ->leftJoin('users_foto as uf', 'uf.user_id', '=', 'u.id')
 
-        ->select(
-            'rju.id',
-            'rju.unit',
-            'rju.updated_at',
+            ->whereNull('rju.deleted_at')
 
-            'u.id as staf_id',
-            'u.nama as nama_user',
+            ->select(
+                'rju.id',
+                'rju.unit',
+                'rju.updated_at',
 
-            'j.jabatan',
-            'j.color',
-            'j.urutan',
+                DB::raw('IF(u.id = rju.pegawai_id, 1, 0) as is_atasan'),
+                'u_atasan.nama as nama_atasan',
+                'rju.pegawai_id as atasan_id',
+                'u.id as staf_id',
+                'u.nama as nama_user',
 
-            'uf.filename',
+                'j.jabatan',
+                'j.color',
+                'j.urutan',
 
-            'u_creator.nama as updated_by'
-        )
+                'uf.filename',
 
-        ->orderBy('j.jabatan', 'asc')
-        ->get();
+                'u_creator.nama as updated_by'
+            )
 
-    return response()->json($data, 200);
-}
+            ->orderBy('j.jabatan', 'asc')
+            ->get();
+
+        return response()->json($data, 200);
+    }
 
     function tambahStaf(Request $request)
     {

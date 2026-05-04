@@ -90,7 +90,7 @@
                         <div class="alert alert-light shadow-sm mb-3">
                             <h6>Hal-hal yang perlu <b class="text-primary">diperhatikan</b> !!</h6>
                             <small>
-                                Setelah berhasil menambahkan semua Staf pada Unit Anda, <b class="text-danger">DIWAJIBKAN</b> segera melengkapi Data (No.Urutan pada Jadwal) pada masing-masing staf (Klik Atur Karyawan). <br>Tombol Atur Karyawan ada pada masing-masing baris Staf Anda, Kolom <b><u>AKSI</u></b>. <br>
+                                Setelah berhasil menambahkan semua Staf pada Unit Anda, <b class="text-danger">DIWAJIBKAN</b> segera melengkapi Data (No.Urutan pada Jadwal) pada masing-masing staf (Klik Atur Karyawan). <br>Tombol Atur Karyawan ada pada masing-masing baris Staf Anda, Kolom <b><u>USERID</u></b>. <br>
                                 <i class="ti ti-arrow-narrow-right me-1"></i> Pastikan Staf ditambahkan oleh Admin Jadwal (<b class="text-info">Setiap Unit/Bagian hanya 1 orang</b>), berkaitan dengan kelengkapan data saat pembuatan Jadwal Dinas <br>
                                 <i class="ti ti-arrow-narrow-right me-1"></i> Akses <b>Tambah</b> hanya bisa dilakukan apabila Data Shift Karyawan yang bersangkutan belum didaftarkan/tergabung pada <b class="text-danger">UNIT</b> manapun (Belum pernah ditambahkan oleh siapapun) <br>
                                 <i class="ti ti-arrow-narrow-right me-1"></i> Akses <b>Ubah</b> maupun <b>Hapus</b> Data Referensi Staf hanya dapat dilakukan oleh Admin Jadwal (User Admin Ref.Staf) <br>
@@ -582,19 +582,28 @@
                     }
                     content = ``;
                     res.forEach(item => {
-                        let unitClass = getUnitClass(item.unit);
+                        let unitClass = 'text-muted';
+                        if (item.unit) {
+                            unitClass = getUnitClass(item.unit);
+                        }
+                        let badgeAtasan = '';
+                        if (item.is_atasan == 1) {
+                            badgeAtasan = `<span class="badge bg-teal-transparent">Admin Jadwal</span>`;
+                        }
                         content += `<tr>
                                         <td><a href="javascript:void(0);" class="pe-none"><b>${item.id}</b></a></td>
                                         <td>${item.urutan}</td>
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-grow-1">
-                                                    <h6 class="mb-0">${item.nama_user} <span class="badge bg-primary-transparent">ID#${item.staf_id}</span></h6>
+                                                    <h6 class="mb-0">
+                                                        ${item.nama_user}
+                                                    </h6><a class='ms-0'>${badgeAtasan} <span class="badge bg-primary-transparent">ID#${item.staf_id}</span></a>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td>${item.jabatan?item.jabatan:'-'}</td>
-                                        <td>
+                                        <td class='text-wrap'>${item.jabatan?item.jabatan:'-'}</td>
+                                        <td class='text-wrap'>
                                             <b class="${unitClass}">
                                                 ${item.unit ? item.unit : '-'}
                                             </b>
@@ -627,10 +636,10 @@
                             { sWidth: '5%' },
                             { sWidth: '5%' },
                             { sWidth: '35%' },
-                            { sWidth: '15%' },
+                            { sWidth: '20%' },
                             { sWidth: '15%' },
                             { sWidth: '10%' },
-                            { sWidth: '15%' },
+                            { sWidth: '10%' },
                         ],
                         displayLength: 30,
                     });
