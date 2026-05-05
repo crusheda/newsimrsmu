@@ -256,7 +256,7 @@
                 </li>
 
                 <li class="slide">
-                    <a href="{{ route('v4.administrasi.pengadaan') }}" class="side-menu__item">
+                    <a href="{{ route('v4.sdi.surtug') }}" class="side-menu__item">
                         <i class="side-menu__icon ri-passport-line"></i>
                         <span class="side-menu__label">Surat Tugas</span>
                     </a>

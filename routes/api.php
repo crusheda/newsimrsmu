@@ -32,6 +32,7 @@ use \App\Http\Controllers\v4\Administrasi\Pengadaan\PengadaanBarangController;
 use \App\Http\Controllers\v4\Administrasi\Pengadaan\PengadaanRekapController;
 use \App\Http\Controllers\v4\Administrasi\ERuang\ERuangController;
 use \App\Http\Controllers\v4\SDI\JadwalDinasController;
+use \App\Http\Controllers\v4\SDI\SurtugController;
 use \App\Http\Controllers\v4\Pelayanan\Kebidanan\SKLController;
 use App\Http\Controllers\v4\AI\KlaimBpjsController;
 
@@ -283,6 +284,23 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
                     Route::post('sdi/jadwaldinas/ln/tambah', [JadwalDinasController::class, 'tambahLN']);
                     Route::delete('sdi/jadwaldinas/ln/{id}/hapus', [JadwalDinasController::class, 'hapusLN']);
 
+        // ABSENSI PEGAWAI
+
+        // REKRUTMEN PEGAWAI
+
+        // PENGAJUAN SDI
+
+        // PERJALANAN DINAS
+
+        // SURAT TUGAS
+        Route::post('sdi/surtug/simpan', [SurtugController::class, 'simpan']);
+        Route::get('sdi/surtug/{id}/ubah', [SurtugController::class, 'ubah']);
+        Route::post('sdi/surtug/{id}/prosesubah', [SurtugController::class, 'prosesUbah']);
+        Route::delete('sdi/surtug/{id}/hapus', [SurtugController::class, 'hapus']);
+            // ADMIN
+                Route::get('sdi/surtug/table', [SurtugController::class, 'tableAdmin']);
+            // USER
+                Route::get('sdi/surtug/table/{id}', [SurtugController::class, 'tableUser']);
 
     // PELAYANAN
         // SKL
