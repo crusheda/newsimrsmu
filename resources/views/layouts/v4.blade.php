@@ -28,6 +28,8 @@
 
         @include('inc.v4.css')
 
+        @include('inc.v4.global-js')
+
     </head>
     <body class="font-sans antialiased">
         <div class="progress-top-bar"></div>

@@ -25,6 +25,11 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\HeaderDataMiddleware::class,
         ]);
         // $middleware->redirectGuestsTo(fn () => route('v4.login'));
+        $middleware->redirectGuestsTo(function ($request) {
+            return $request->expectsJson()
+                ? null
+                : route('v4.login');
+        });
         $middleware->append(ContentSecurityPolicy::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

@@ -15,7 +15,7 @@ class SurtugController extends Controller
 {
     function index()
     {
-        $users  = users::where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
+        $users  = users::where('nik','!=',null)->where('nip','!=',null)->orderBy('nama', 'asc')->get();
 
         $data = [
             'users' => $users,
@@ -24,30 +24,24 @@ class SurtugController extends Controller
         return view('pages.v4.sdi.surtug.index')->with('list', $data);
     }
 
-    function tableAdmin()
+    function table()
     {
-        $show = surtug::join('users','users.id','=','kepegawaian_surtug.user')
-                        ->select('kepegawaian_surtug.*','users.nama as nama_user')
-                        ->orderBy('kepegawaian_surtug.updated_at','desc')
-                        ->get();
-        $users  = users::where('nik','!=',null)->orderBy('nama', 'asc')->get();
+        $user = Auth::user();
 
-        $data = [
-            'show' => $show,
-            'users' => $users,
-        ];
+        if ($user->can('admin_kepegawaian')) {
+            $show = surtug::join('users','users.id','=','kepegawaian_surtug.user')
+                            ->select('kepegawaian_surtug.*','users.nama as nama_user')
+                            ->orderBy('kepegawaian_surtug.updated_at','desc')
+                            ->get();
+        } else {
+            $show = surtug::join('users','users.id','=','kepegawaian_surtug.user')
+                            ->select('kepegawaian_surtug.*','users.nama as nama_user')
+                            ->whereJsonContains('kepegawaian_surtug.pegawai_id', (string) $user->id)
+                            ->orderBy('kepegawaian_surtug.updated_at','desc')
+                            ->get();
+        }
 
-        return response()->json($data);
-    }
-
-    function tableUser($id)
-    {
-        $show = surtug::join('users','users.id','=','kepegawaian_surtug.user')
-                        ->select('kepegawaian_surtug.*','users.nama as nama_user')
-                        ->where('kepegawaian_surtug.id',$id)
-                        ->orderBy('kepegawaian_surtug.updated_at','desc')
-                        ->get();
-        $users  = users::where('nik','!=',null)->orderBy('nama', 'asc')->get();
+        $users  = users::where('nik','!=',null)->where('nip','!=',null)->orderBy('nama', 'asc')->get();
 
         $data = [
             'show' => $show,
@@ -59,6 +53,7 @@ class SurtugController extends Controller
 
     function simpan(Request $request)
     {
+        $user = Auth::user()->id;
         $push = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
         $request->validate([
             'file' => ['max:3000'],
@@ -76,13 +71,13 @@ class SurtugController extends Controller
 
             $data = new surtug;
             $data->tgl = Carbon::now();
-            $data->user = $request->user;
+            $data->user = $user;
             $data->pegawai_id = $request->pegawai;
             $data->title = $title;
             $data->filename = $path;
             $data->save();
 
-            datalogs::record($request->user, 'Baru saja melakukan penambahan Surat Tugas', $request->pegawai_id, null, $title, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
+            datalogs::record($user, 'Baru saja melakukan penambahan Surat Tugas', $request->pegawai_id, null, $title, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
             return Response::json(array(
                 'message' => $push,
                 'code' => 200,
@@ -99,7 +94,7 @@ class SurtugController extends Controller
     function ubah($id)
     {
         $show = surtug::find($id);
-        $users  = users::where('nik','!=',null)->orderBy('nama', 'asc')->get();
+        $users  = users::where('nik','!=',null)->where('nip','!=',null)->orderBy('nama', 'asc')->get();
 
         $data = [
             'show' => $show,
@@ -111,6 +106,7 @@ class SurtugController extends Controller
 
     function prosesUbah(Request $request)
     {
+        $user = Auth::user()->id;
         $push = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
         $file = null;
         $title = null;
@@ -137,7 +133,7 @@ class SurtugController extends Controller
 
         $data = surtug::find($request->id);
         // $data->tgl = Carbon::now();
-        $data->user = $request->user;
+        $data->user = $user;
         $data->pegawai_id = $request->pegawai;
         if ($file) {
             $path = $file->store('public/files/kepegawaian/surtug');
@@ -146,7 +142,7 @@ class SurtugController extends Controller
         }
         $data->save();
 
-        datalogs::record($request->user, 'Baru saja melakukan perubahan Surat Tugas', $request->pegawai_id, null, $title, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
+        datalogs::record($user, 'Baru saja melakukan perubahan Surat Tugas', $request->pegawai_id, null, $title, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
         return Response::json(array(
             'message' => $push,
             'code' => 200,

@@ -297,10 +297,7 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
         Route::get('sdi/surtug/{id}/ubah', [SurtugController::class, 'ubah']);
         Route::post('sdi/surtug/{id}/prosesubah', [SurtugController::class, 'prosesUbah']);
         Route::delete('sdi/surtug/{id}/hapus', [SurtugController::class, 'hapus']);
-            // ADMIN
-                Route::get('sdi/surtug/table', [SurtugController::class, 'tableAdmin']);
-            // USER
-                Route::get('sdi/surtug/table/{id}', [SurtugController::class, 'tableUser']);
+        Route::get('sdi/surtug/table', [SurtugController::class, 'table']);
 
     // PELAYANAN
         // SKL

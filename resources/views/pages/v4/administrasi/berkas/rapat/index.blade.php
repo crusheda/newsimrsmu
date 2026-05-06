@@ -345,20 +345,20 @@
             });
         });
 
-        function getDateTime() {
-            var now = new Date();
-            var year = now.getFullYear();
-            var month = now.getMonth() + 1;
-            var day = now.getDate();
-            if (month.toString().length == 1) {
-                month = '0' + month;
-            }
-            if (day.toString().length == 1) {
-                day = '0' + day;
-            }
-            var dateTime = year + '-' + month + '-' + day;
-            return dateTime;
-        }
+        // function getDateTime() {
+        //     var now = new Date();
+        //     var year = now.getFullYear();
+        //     var month = now.getMonth() + 1;
+        //     var day = now.getDate();
+        //     if (month.toString().length == 1) {
+        //         month = '0' + month;
+        //     }
+        //     if (day.toString().length == 1) {
+        //         day = '0' + day;
+        //     }
+        //     var dateTime = year + '-' + month + '-' + day;
+        //     return dateTime;
+        // }
 
         function refresh() {
             $("#refreshBtn").prop('disabled', true);
@@ -376,8 +376,8 @@
                 success: function(res) {
                     $("#tampil-tbody").empty();
                     // var date = new Date().toISOString().split('T')[0];
-                    var userID = "{{ Auth::user()->id }}";
-                    var adminID = "{{ Auth::user()->can('admin_rapat') }}";
+                    var userID = @json(Auth::user()->id);
+                    var adminID = @json(Auth::user()->can('admin_rapat'));
                     var date = getDateTime();
                     res.show.forEach(item => {
                         if (item.user_id == userID) {
