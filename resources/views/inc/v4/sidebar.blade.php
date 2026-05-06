@@ -249,7 +249,7 @@
                 <!-- End::slide -->
 
                 <li class="slide">
-                    <a href="{{ route('v4.administrasi.pengadaan') }}" class="side-menu__item">
+                    <a href="{{ route('v4.sdi.pd') }}" class="side-menu__item">
                         <i class="side-menu__icon ri-suitcase-2-line"></i>
                         <span class="side-menu__label">Perjalanan Dinas</span>
                     </a>

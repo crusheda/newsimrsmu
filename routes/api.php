@@ -32,6 +32,7 @@ use \App\Http\Controllers\v4\Administrasi\Pengadaan\PengadaanBarangController;
 use \App\Http\Controllers\v4\Administrasi\Pengadaan\PengadaanRekapController;
 use \App\Http\Controllers\v4\Administrasi\ERuang\ERuangController;
 use \App\Http\Controllers\v4\SDI\JadwalDinasController;
+use \App\Http\Controllers\v4\SDI\PDController;
 use \App\Http\Controllers\v4\SDI\SurtugController;
 use \App\Http\Controllers\v4\Pelayanan\Kebidanan\SKLController;
 use App\Http\Controllers\v4\AI\KlaimBpjsController;
@@ -291,6 +292,13 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
         // PENGAJUAN SDI
 
         // PERJALANAN DINAS
+        Route::get('sdi/pd/table', [PDController::class, 'table']);
+        Route::get('sdi/pd/{id}', [PDController::class, 'show']);
+        Route::post('sdi/pd/{id}/ubah', [PDController::class, 'update']);
+        Route::post('sdi/pd/tambah', [PDController::class, 'tambah']);
+        Route::delete('sdi/pd/{id}/hapus', [PDController::class, 'hapus']);
+        Route::post('sdi/pd/paid', [PDController::class, 'confirmPaid']);
+        Route::post('sdi/pd/unpaid', [PDController::class, 'cancelPaid']);
 
         // SURAT TUGAS
         Route::post('sdi/surtug/simpan', [SurtugController::class, 'simpan']);

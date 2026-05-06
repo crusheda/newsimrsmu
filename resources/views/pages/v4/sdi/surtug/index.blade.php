@@ -6,7 +6,7 @@
         <div class="page-header-breadcrumb mb-3">
             <div class="d-flex align-center justify-content-between flex-wrap">
                 <h1 class="page-title fw-medium fs-18 mb-0 pe-none">
-                    Berkas <b class="text-info link-underline-primary text-decoration-underline">Surat Tugas</b>
+                    Surat <b class="text-info link-underline-primary text-decoration-underline">Tugas</b>
                 </h1>
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item pe-none">
@@ -59,19 +59,18 @@
                 @endcan
                 <div class="card custom-card">
                     <div class="card-header d-flex align-items-center justify-content-between py-3">
-                        <h6 class="mb-0">Table</h6>
+                        <h6 class="mb-0">Tabel <b class="text-danger">Riwayat</b></h6>
                         <div class="btn-group">
                             <a href="javascript:void(0);" class="btn btn-sm btn-warning-transparent" onclick="refresh()"><i class="ti ti-refresh me-1"></i> Refresh</a>
                         </div>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="dttable" class="table table-hover dt-responsive align-middle">
+                            <table id="dttable" class="table table-striped dt-responsive align-middle">
                                 <thead>
                                     <tr>
                                         <th class="cell-fit">#ID</th>
                                         <th class="cell-fit">TANGGAL</th>
-                                        <th class="cell-fit">PEGAWAI</th>
                                         <th class="cell-fit">PEGAWAI</th>
                                         <th class="cell-fit">DIPERBARUI</th>
                                     </tr>
@@ -201,14 +200,16 @@
                     res.show.forEach(item => {
                         let updet = new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 10);
                         content = "<tr id='data"+ item.id +"'>";
-                        content += `<td><center><div class='dropend'><a href='javascript:void(0);' class='link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle' data-bs-toggle='dropdown' aria-haspopup="true">${item.id}</a><div class='dropdown-menu'>`;
+                        content += `<td><center><div class='dropend'><a href='javascript:void(0);' class='link-${date==updet?'success':'info'} link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle' data-bs-toggle='dropdown' aria-haspopup="true">${item.id}</a><div class='dropdown-menu'>`;
                             content += `<a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/v4/sdi/surtug/`+item.id+`/download')"><i class='fas fa-download me-1'></i> Download</a>`;
-                            if (date == updet) {
-                                content += `<a href='javascript:void(0);' class='dropdown-item text-warning' id='btn-show-ubah' onclick="showUbahSurtug(`+item.id+`)"><i class='fas fa-edit me-1'></i> Ubah</a>`;
-                                content += `<a href='javascript:void(0);' class='dropdown-item text-danger' id='btn-show-hapus' onclick="showHapusSurtug(`+item.id+`)"><i class='fas fa-trash me-1'></i> Hapus</a>`;
-                            } else {
-                                content += `<a href='javascript:void(0);' class='dropdown-item disabled'><i class='fas fa-edit me-1'></i> Ubah</a>`;
-                                content += `<a href='javascript:void(0);' class='dropdown-item disabled'><i class='fas fa-trash me-1'></i> Hapus</a>`;
+                            if (adminID) {
+                                if (date == updet) {
+                                    content += `<a href='javascript:void(0);' class='dropdown-item text-warning' id='btn-show-ubah' onclick="showUbahSurtug(`+item.id+`)"><i class='fas fa-edit me-1'></i> Ubah</a>`;
+                                    content += `<a href='javascript:void(0);' class='dropdown-item text-danger' id='btn-show-hapus' onclick="showHapusSurtug(`+item.id+`)"><i class='fas fa-trash me-1'></i> Hapus</a>`;
+                                } else {
+                                    content += `<a href='javascript:void(0);' class='dropdown-item disabled'><i class='fas fa-edit me-1'></i> Ubah</a>`;
+                                    content += `<a href='javascript:void(0);' class='dropdown-item disabled'><i class='fas fa-trash me-1'></i> Hapus</a>`;
+                                }
                             }
                         content += `</div></center></td>`;
                         content += `<td>${item.tgl}</td>`;
@@ -226,7 +227,7 @@
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
                                                 <a class='mb-0'>${updet}</a>
-                                                <small class='text-truncate text-muted'>` + item.nama_user + `</small>
+                                                <small class='text-truncate text-muted'>Oleh ` + item.nama_user + `</small>
                                             </div>
                                         </div>
                                     </td>`;
@@ -240,8 +241,8 @@
                         bAutoWidth: false,
                         aoColumns : [
                             { sWidth: '5%' },
-                            { sWidth: '7%' },
-                            { sWidth: '68%' },
+                            { sWidth: '10%' },
+                            { sWidth: '65%' },
                             { sWidth: '20%' },
                         ],
                         displayLength: 10
