@@ -61,7 +61,7 @@
                     <div class="card-header d-flex align-items-center justify-content-between py-3">
                         <h6 class="mb-0">Tabel <b class="text-danger">Riwayat</b></h6>
                         <div class="btn-group">
-                            <a href="javascript:void(0);" class="btn btn-sm btn-warning-transparent" onclick="refresh()"><i class="ti ti-refresh me-1"></i> Refresh</a>
+                            <a href="javascript:void(0);" class="btn btn-sm btn-warning-transparent" onclick="refresh()" id="btn-refresh"><i class="ti ti-refresh me-1"></i> Refresh</a>
                         </div>
                     </div>
                     <div class="card-body">
@@ -188,10 +188,15 @@
 
         function refresh() {
             $("#tampil-tbody").empty().append(`<tr style='font-size:13px'><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            const btn = $('#btn-refresh');
             $.ajax({
                 url: "/api/v4/sdi/surtug/table",
                 type: 'GET',
                 dataType: 'json',
+                beforeSend: function() {
+                    btn.find("i").addClass("ti-spin");
+                    btn.prop('disabled', true);
+                },
                 success: function(res) {
                     // VALIDATION FORM
                     // ------------------------------------------------------
@@ -247,6 +252,16 @@
                         ],
                         displayLength: 10
                     });
+                },
+                error: function (res) {
+                    notifier.show(
+                        res.statusText + " (Code " + res.status + ")", res.responseText,
+                        "danger", "{{ asset('images/notification/high_priority-48.png') }}", 4e3
+                    );
+                },
+                complete: function() {
+                    btn.find("i").removeClass("ti-spin");
+                    btn.prop('disabled', false);
                 }
             })
         }

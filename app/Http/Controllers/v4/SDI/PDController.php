@@ -54,7 +54,7 @@ class PDController extends Controller
         $push = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
         $data = new pd;
-        $data->user_id = $request->user;
+        $data->user_id = Auth::user()->id;
         $data->pegawai_id = $request->pegawai;
         $data->jenis = $request->jenis;
         $data->kendaraan = $request->kendaraan;
@@ -141,7 +141,7 @@ class PDController extends Controller
 
         $data = pd::find($request->id);
         $data->paid = true;
-        $data->user_paid = $request->pegawai;
+        $data->user_paid = Auth::user()->id;
         $data->tgl_paid = Carbon::now();
         $data->save();
 
@@ -154,7 +154,7 @@ class PDController extends Controller
 
         $data = pd::find($request->id);
         $data->paid = false;
-        $data->user_paid = $request->pegawai;
+        $data->user_paid = Auth::user()->id;
         $data->tgl_paid = Carbon::now();
         $data->save();
 

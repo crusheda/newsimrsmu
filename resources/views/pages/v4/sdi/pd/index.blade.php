@@ -114,7 +114,7 @@
                                     </div>
                                     <div class="col-md-12 mb-3">
                                         <div class="form-group">
-                                            <label class="form-label">Deskripsi Perjalanan (<b>Optional</b>)</label>
+                                            <label class="form-label">Deskripsi Perjalanan (<b class="text-warning">Optional</b>)</label>
                                             <textarea class="form-control" name="deskripsi" id="deskripsi" rows="2" placeholder="Deskripsikan perjalanan dinas Anda"></textarea>
                                         </div>
                                     </div>
@@ -137,18 +137,18 @@
             <div class="col-xl-12">
                 <div class="card">
                     <div class="card-header d-flex align-items-center justify-content-between py-3">
-                        <h6 class="mb-0"><b>Riwayat <b class="text-danger">Perjalanan</b></b></h6>
+                        {{-- <h6 class="mb-0"><b>Tabel <b class="text-danger">Riwayat</b></b></h6> --}}
+                        <button class="btn btn-success-transparent fw-bold" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#bukaForm"
+                            aria-expanded="false" aria-controls="flush-collapseOne"><i class="ri-file-check-line me-1"></i> Form Tambah Dinas</button>
                         <div class="btn-group">
-                            <a href="javascript:void(0);" class="btn btn-warning-transparent btn-sm" onclick="showRiwayat()" data-bs-toggle="tooltip"
+                            <a href="javascript:void(0);" class="btn btn-warning-transparent btn-sm" id="btn-refresh" onclick="showRiwayat()" data-bs-toggle="tooltip"
                                 data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Segarkan Tabel"><i class="ti ti-refresh f-20 me-1"></i> Refresh</a>
-                            <button class="btn btn-success-transparent" type="button"
-                                data-bs-toggle="collapse" data-bs-target="#bukaForm"
-                                aria-expanded="false" aria-controls="flush-collapseOne"><b>Form Tambah</b></button>
                         </div>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="dttable" class="table table-hover dt-responsive align-middle">
+                            <table id="dttable" class="table table-striped dt-responsive align-middle">
                                 <thead>
                                     <tr>
                                         <th><center>#ID</center></th>
@@ -187,9 +187,9 @@
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">
-                        Rincian Perjalanan
-                    </h4>
+                    <h6 class="modal-title">
+                        Rincian <b class="text-info">Perjalanan</b>
+                    </h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -207,12 +207,12 @@
                     </div>
                 </div>
                 <div class="modal-footer" id="keu-only" hidden>
-                    <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal"><i class="fas fa-compress-arrows-alt me-1"></i> Tutup</button>
-                    @if (Auth::user()->getPermission('admin_pd_keuangan') == true)
+                    <button type="button" class="btn btn-link text-dark" data-bs-dismiss="modal"><i class="fas fa-compress-arrows-alt me-1"></i> Tutup</button>
+                    @can ('admin_pd_keuangan')
                         <button type="button" class="btn btn-primary" onclick="confirmPaid()" id="btn-confirm" hidden><i class="fas fa-money-bill-wave me-1"></i> Confirm Paid</button>
                         <button type="button" class="btn btn-warning" onclick="cancelPaid()" id="btn-cancel" data-bs-toggle="tooltip"
                         data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Batal Status menjadi <b>UNPAID</b> hanya berlaku <u>hari ini</u> saja!" hidden><i class="fas fa-times-circle me-1"></i> Cancel Paid</button>
-                    @endif
+                    @endcan
                 </div>
             </div>
         </div>
@@ -221,9 +221,9 @@
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">
-                        Form Ubah
-                    </h4>
+                    <h6 class="modal-title">
+                        Form <b class="text-warning">Ubah</b>
+                    </h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -286,7 +286,7 @@
                         </div>
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
-                                <label class="form-label">Deskripsi Perjalanan (<b>Optional</b>)</label>
+                                <label class="form-label">Deskripsi Perjalanan (<b class="text-warning">Optional</b>)</label>
                                 <textarea class="form-control" name="deskripsi_edit" id="deskripsi_edit" rows="1" placeholder="Deskripsikan perjalanan dinas Anda"></textarea>
                             </div>
                         </div>
@@ -300,8 +300,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-link-secondary" data-bs-dismiss="modal">Batalkan</button>
-                    <button class="btn btn-primary" id="btn-ubah" onclick="prosesUbah()"><i class="fa-fw fas fa-save nav-icon"></i> Simpan Perubahan</button>
+                    <button type="button" class="btn btn-link text-dark" data-bs-dismiss="modal">Batalkan</button>
+                    <button class="btn btn-warning" id="btn-ubah" onclick="prosesUbah()"><i class="fa-fw fas fa-save me-1"></i> Simpan Perubahan</button>
                 </div>
             </div>
         </div>
@@ -310,9 +310,9 @@
         <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">
-                        Form Hapus
-                    </h4>
+                    <h6 class="modal-title">
+                        Form <b class="text-danger">Hapus</b>
+                    </h6>
                 </div>
                 <div class="modal-body">
                     <input type="text" id="id_hapus" hidden>
@@ -328,7 +328,7 @@
                 </div>
                 <div class="col-12 text-center mb-4">
                     <button type="submit" id="btn-hapus" class="btn btn-danger me-sm-3 me-1" onclick="prosesHapus()"><i class="fa fa-trash me-1" style="font-size:13px"></i> Hapus</button>
-                    <button type="reset" class="btn btn-link-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
+                    <button type="reset" class="btn btn-link text-dark" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
                 </div>
             </div>
         </div>
@@ -377,10 +377,15 @@
 
         function showRiwayat() {
             $("#tampil-tbody").empty().append(`<tr style='font-size:13px'><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            const btn = $("#btn-refresh");
             $.ajax({
-                url: "/api/kepegawaian/pd/table",
+                url: "/api/v4/sdi/pd/table",
                 type: 'GET',
                 dataType: 'json',
+                beforeSend: function() {
+                    btn.find('i').addClass('ti-spin');
+                    btn.prop('disabled', true);
+                },
                 success: function(res) {
                     $("#tampil-tbody").empty();
                     $('#dttable').DataTable().clear().destroy();
@@ -388,46 +393,45 @@
                         var updet = new Date(item.updated_at).toLocaleDateString("sv-SE");
                         var paiddate = new Date(item.tgl_paid).toLocaleDateString("sv-SE");
                         var date = new Date().toLocaleDateString("sv-SE");
-                        var userID = "{{ Auth::user()->id }}";
-                        var adminID = "{{ Auth::user()->can(['admin_kepegawaian']) }}";
-                        var superID = "{{ Auth::user()->can(['admin_kepegawaian_kepala']) }}";
-                        var keuID = "{{ Auth::user()->can(['admin_pd_keuangan']) }}";
+                        var userID = @json(Auth::user()->id);
+                        var adminID = @json(Auth::user()->can(['admin_kepegawaian']));
+                        var superID = @json(Auth::user()->can(['admin_kepegawaian_kepala']));
+                        var keuID = @json(Auth::user()->can(['admin_pd_keuangan']));
                         if (item.paid == 0) {
-                            statusPaid = `<span class="badge bg-light-danger rounded-pill ms-2">UNPAID</span>`;
+                            statusPaid = `<span class="badge bg-danger ms-2">UNPAID</span>`;
                             color = 'danger';
                         } else {
-                            statusPaid = `<span class="badge bg-light-success rounded-pill ms-2">PAID</span>`;
+                            statusPaid = `<span class="badge bg-success ms-2">PAID</span>`;
                             color = 'success';
                         }
                         content = "<tr id='data" + item.id + "' style='font-size:13px'>";
                         content += `<td><center><div class='btn-group'>
-                                        <button type='button' class='btn btn-sm btn-light-${color} dropdown-toggle hide-arrow btn-rounded' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
+                                        <a href="javascript:void(0);" class='link-${color} link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'>${item.id}</a>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
                                         if (superID == true || adminID == true || keuID == true) {
                                             content += `<li><a href="javascript:void(0);" class="dropdown-item text-info" onclick="rincian(${item.id})"><i class="fa-fw fas fa-file-signature me-2"></i> Rincian</a></li>`;
                                         }
                                         if (superID == true) {
                                             if (item.paid == 1) {
-                                                content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
-                                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                                content += `<li><a href="javascript:void(0);" class="dropdown-item disabled"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
+                                                content += `<li><a href='javascript:void(0);' class='dropdown-item disabled'><i class="fa-fw fas fa-trash me-2"></i> Hapus</a></li>`;
                                             } else {
                                                 content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="ubah(${item.id})"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
-                                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash me-2"></i> Hapus</a></li>`;
                                             }
                                         } else {
-                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
-                                            content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                            content += `<li><a href="javascript:void(0);" class="dropdown-item disabled"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
+                                            content += `<li><a href='javascript:void(0);' class='dropdown-item disabled'><i class="fa-fw fas fa-trash me-2"></i> Hapus</a></li>`;
                                         }
                         content += "</div></center></td>";
                         content += `<td class='text-center'>${new Date(item.tgl).toLocaleString("sv-SE")}</td>`;
-                        //  onclick="window.open('/kepegawaian/pd/`+item.id+`/download')"
                         if (item.kendaraan == 1) {
-                            kendaraan = '[Pribadi] Motor';
+                            kendaraan = '<b class="text-primary">Motor Pribadi</b>';
                         } else {
                             if (item.kendaraan == 2) {
-                                kendaraan = '[Pribadi] Mobil';
+                                kendaraan = '<b class="text-teal">Mobil Pribadi</b>';
                             } else {
-                                kendaraan = '[Rumah Sakit] Mobil';
+                                kendaraan = '<b class="text-secondary">Mobil Rumah Sakit</b>';
                             }
                         }
                         kendaraan_pegawai = '';
@@ -443,11 +447,36 @@
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
-                                                <h6 class='mb-0'><a href="javascript:void(0);" class="text-dark"><u data-bs-toggle="tooltip"
-                                                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Nama Acara">` + item.acara + `</u> ${statusPaid}</a>
-                                                </h6>
-                                                <small class='text-truncate text-muted'>Bertempat di <b>${item.lokasi}</b> dan Diselenggarakan secara ${item.jenis==1?"<b class='text-danger'>Offline</b>":"<b class='text-success'>Online</b>"} selama ${item.lama1 == 1?'kurang dari 4 jam':'lebih dari 4 jam'}</small>
-                                                <small class='text-truncate text-muted text-wrap'>Menggunakan <u><b>Transportasi ${kendaraan}</b></u> ${item.kendaraan == 3?``:`Milik<br>(<a href='javascript:void(0);' class='text-wrap'><b class='text-secondary' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-html='true' title='Pemilik Kendaraan'>`+kendaraan_pegawai+`</b></a>)`}</small>
+                                                <a class='mb-0 text-wrap fs-15' href="javascript:void(0);" onclick="rincian(${item.id})">
+                                                    ${statusPaid}<b class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline ms-2" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Buka Rincian Acara">${item.acara}</b>
+                                                </a>
+                                                <ul>
+                                                    <li><small class='text-wrap text-truncate text-muted'>Bertempat di <b class='text-orange'><u>${item.lokasi}</u></b></small></li>
+                                                    <li><small class='text-wrap text-truncate text-muted'>Diselenggarakan secara <u>${item.jenis==1?"<b class='text-info'>Offline</b>":"<b class='text-purple'>Online</b>"}</u> selama ${item.lama1 == 1?'kurang dari 4 jam':'lebih dari 4 jam'}</small></li>
+                                                    <li>
+                                                        <small class='text-wrap text-truncate text-muted'>
+                                                            Menggunakan <b>Transportasi <u>${kendaraan}</u></b>
+
+                                                            ${
+                                                                item.kendaraan == 3 ||
+                                                                item.kendaraan_pegawai == "[]" ||
+                                                                item.kendaraan_pegawai == null ||
+                                                                item.kendaraan_pegawai == ""
+                                                                ? ``
+                                                                : `<br><b class='text-danger'>Milik</b> :
+                                                                    (<a href='javascript:void(0);' class='text-wrap'>
+                                                                        <b class='text-muted'
+                                                                        data-bs-toggle='tooltip'
+                                                                        data-bs-placement='bottom'
+                                                                        data-bs-html='true'
+                                                                        title='Pemilik Kendaraan'>
+                                                                            <i>${kendaraan_pegawai}</i>
+                                                                        </b>
+                                                                    </a>)`
+                                                            }
+                                                        </small>
+                                                    </li>
+                                                </ul>
                                             </div>
                                         </div>
                                     </td>`;
@@ -462,108 +491,51 @@
                             })
                         })
                         content += `</small></ul></td>`;
-                        content += `<td style='white-space: normal !important;word-wrap: break-word;'>
+                        content += `<td>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
-                                                <a class='mb-0'>` + new Date(item.updated_at).toLocaleString("sv-SE") + `</a>
-                                                <small class='text-truncate text-muted'>` + item.nama_user + `</small>
+                                                <a class='mb-0 text-truncate'>` + new Date(item.updated_at).toLocaleString("sv-SE") + `</a>
+                                                <small class='text-muted text-wrap'>` + item.nama_user + `</small>
                                             </div>
                                         </div>
                                     </td>`;
                         content += "</tr>";
                         $('#tampil-tbody').append(content);
-            // Showing Tooltip
-            $('[data-bs-toggle="tooltip"]').tooltip({
-                trigger: 'hover'
-            })
+                        // Showing Tooltip
+                        $('[data-bs-toggle="tooltip"]').tooltip({
+                            trigger: 'hover'
+                        })
                     });
                     var table = $('#dttable').DataTable({
-                        dom: 'Bfrtip',
                         order: [
                             [4, "desc"]
                         ],
                         bAutoWidth: false,
                         aoColumns : [
-                            { sWidth: '5%' },
+                            { sWidth: '8%' },
                             { sWidth: '10%' },
-                            { sWidth: '45%' },
-                            { sWidth: '28%' },
+                            { sWidth: '50%' },
+                            { sWidth: '20%' },
                             { sWidth: '12%' },
                         ],
-                        columnDefs: [
-                            // { visible: false, targets: [7] },
-                        ],
-                        displayLength: 7,
-                        lengthChange: true,
-                        lengthMenu: [7, 10, 25, 50, 75, 100],
-                        buttons: [
-                            {
-                                extend: 'excel',
-                                text: 'Export Excel',
-                                orientation: 'landscape',
-                                exportOptions: {
-                                    columns: [1,2,3,4] // hanya kolom tertentu
-                                },
-                                pageSize: 'A4',
-                                className: 'btn btn-success'
-                            },
-                            {
-                                extend: 'pdf',
-                                text: 'Export PDF',
-                                orientation: 'landscape',
-                                exportOptions: {
-                                    columns: [1,2,3,4] // hanya kolom tertentu
-                                },
-                                pageSize: 'A4',
-                                className: 'btn btn-danger',
-                                customize: function (doc) {
-                                    // Menambahkan judul di atas tabel
-                                    doc.content.unshift({
-                                        text: 'Laporan Data Perjalanan Dinas',  // Judul yang ingin ditambahkan
-                                        fontSize: 18,   // Ukuran font
-                                        bold: true,     // Menebalkan teks
-                                        alignment: 'center', // Menyelaraskan teks ke tengah
-                                        margin: [0, 0, 0, 10]  // Margin bawah (untuk memberi jarak antara judul dan tabel)
-                                    });
-
-                                    // Pastikan header tabel tetap disembunyikan jika diinginkan
-                                    if (doc.content && doc.content[1] && doc.content[1].table) {
-                                        doc.content[1].table.headerRows = 0;
-                                    }
-                                }
-                            },
-                            {
-                                extend: 'print',
-                                text: 'Cetak',
-                                orientation: 'landscape',
-                                pageSize: 'A4',  // F4 dalam milimeter
-                                className: 'btn btn-warning',
-                                customize: function (win) {
-                                    // Sembunyikan semua selain tabel
-                                    $(win.document.body).find('*').not('table, table *').hide();
-
-                                    $(win.document.body).find('table')
-                                        .addClass('compact')
-                                        .css('font-size', 'inherit');
-                                },
-                                exportOptions: {
-                                    columns: [1,2,3,4] // hanya kolom tertentu
-                                },
-                            },
-                            {
-                                extend: 'colvis',
-                                text: 'Sembunyikan Kolom',
-                                className: 'btn btn-dark',
-                            }
-                        ],
+                        displayLength: 10,
                     });
+                },
+                error: function (res) {
+                    notifier.show(
+                        res.statusText + " (Code " + res.status + ")", res.responseText,
+                        "danger", "{{ asset('images/notification/high_priority-48.png') }}", 4e3
+                    );
+                },
+                complete: function() {
+                    btn.find("i").removeClass("ti-spin");
+                    btn.prop('disabled', false);
                 }
             })
         }
 
         function simpan() {
-            $("#btn-simpan").prop('disabled', true);
-            $("#btn-simpan").find("i").toggleClass("fa-save fa-sync fa-spin");
+            const btn = $("#btn-simpan");
 
             // Definisi
             var save = new FormData();
@@ -578,7 +550,6 @@
             save.append('lokasi',$('#lokasi').val());
             save.append('pegawai',JSON.stringify($('#pegawai').val()));
             save.append('deskripsi',$('#deskripsi').val());
-            save.append('user','{{ Auth::user()->id }}');
             // if (filesAdded) {
             //     save.append('file',filesAdded[0]);
             // }
@@ -603,13 +574,17 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: "{{route('kepegawaian.pd.tambah')}}",
+                    url: "/api/v4/sdi/pd/tambah",
                     method: 'post',
                     data: save,
                     cache: false,
                     contentType: false,
                     processData: false,
                     dataType: 'json',
+                    beforeSend: function() {
+                        btn.find("i").removeClass("fa-save").addClass("fa-sync fa-spin");
+                        btn.prop('disabled', true);
+                    },
                     success: function(res) {
                         if (res.code == 200) {
                             notifier.show(
@@ -630,19 +605,20 @@
                             res.statusText + " (Code " + res.status + ")", res.responseText,
                             "danger", "{{ asset('images/notification/high_priority-48.png') }}", 4e3
                         );
+                    },
+                    complete: function() {
+                        btn.find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
+                        btn.prop('disabled', false);
                     }
                 });
             }
-
-            $("#btn-simpan").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
-            $("#btn-simpan").prop('disabled', false);
         }
 
         function rincian(id) {
             $("#tbody-rincian").empty().append(`<tr style='font-size:13px'><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
             $.ajax(
             {
-                url: "/api/kepegawaian/pd/"+id,
+                url: "/api/v4/sdi/pd/"+id,
                 type: 'GET',
                 dataType: 'json',
                 success: function(res) {
@@ -681,7 +657,7 @@
                                     <h5 class="alert-heading fw-bold mb-2 text-center">
                                         Status Pembayaran Dari <b class="text-primary">Bagian Keuangan</b>
                                     </h5>
-                                    <h6 class="text-center mb-0" style="font-size:20px">${res.show.paid == 0?'<span class="badge bg-light-danger rounded-pill">U N P A I D</span>':'<span class="badge bg-light-success rounded-pill ms-2">P A I D</span>'}</h6>
+                                    <h6 class="text-center mb-0" style="font-size:20px">${res.show.paid == 0?'<span class="badge bg-danger-transparent">BELUM TERBAYARKAN</span>':'<span class="badge bg-success-transparent">TELAH DIBAYARKAN</span>'}</h6>
                                 </div>
                             </th>
                         </tr>
@@ -694,8 +670,8 @@
                         <tr><th>Deskripsi Perjalanan</th><td>${res.show.deskripsi?res.show.deskripsi:''}</td></tr>
                         ${res.show.paid == 1?`<tr><th class="text-danger">Keterangan Pembayaran</th><td>Dibayarkan oleh `+res.show.nama_user_paid+` pada `+res.show.tgl_paid+`</td></tr>`:``}
                     `);
-                    var keuID = "{{ Auth::user()->getManyPermission(['admin_pd_keuangan']) }}";
-                    var userID = "{{ Auth::user()->id }}";
+                    var keuID = @json(Auth::user()->can(['admin_pd_keuangan']));
+                    var userID = @json(Auth::user()->id);
                     if (keuID == true) {
                         $('#keu-only').prop('hidden',false);
                     } else {
@@ -725,12 +701,11 @@
             // PROSES
             var save = new FormData();
             save.append('id',$("#id_rincian").val());
-            save.append('pegawai','{{ Auth::user()->id }}');
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: "{{route('kepegawaian.pd.confirmPaid')}}",
+                url: "/api/v4/sdi/pd/paid",
                 method: 'post',
                 data: save,
                 cache: false,
@@ -760,12 +735,11 @@
             // PROSES
             var save = new FormData();
             save.append('id',$("#id_rincian").val());
-            save.append('pegawai','{{ Auth::user()->id }}');
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: "{{route('kepegawaian.pd.cancelPaid')}}",
+                url: "/api/v4/sdi/pd/unpaid",
                 method: 'post',
                 data: save,
                 cache: false,
@@ -794,7 +768,7 @@
         function ubah(id) {
             $.ajax(
             {
-                url: "/api/kepegawaian/pd/"+id,
+                url: "/api/v4/sdi/pd/"+id,
                 type: 'GET',
                 dataType: 'json',
                 success: function(res) {
@@ -912,7 +886,7 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: "/api/kepegawaian/pd/"+id+"/ubah",
+                    url: "/api/v4/sdi/pd/"+id+"/ubah",
                     method: 'post',
                     data: save,
                     contentType: false,
@@ -963,7 +937,10 @@
                 // PROSES HAPUS
                 var id = $("#id_hapus").val();
                 $.ajax({
-                    url: "/api/kepegawaian/pd/"+id+"/hapus",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: "/api/v4/sdi/pd/"+id+"/hapus",
                     type: 'DELETE',
                     success: function(res) {
                         iziToast.success({
