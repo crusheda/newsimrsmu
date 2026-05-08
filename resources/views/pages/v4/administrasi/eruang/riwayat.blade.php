@@ -41,7 +41,7 @@
     <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="orderdetailsModalLabel">Ubah Data Peminjaman <kbd>ID : <b id="id_show_edit"></b></kbd></h5>
+                <h5 class="modal-title" id="orderdetailsModalLabel">Ubah <b class="text-warning">Data Peminjaman</b> <kbd>ID : <b id="id_show_edit"></b></kbd></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -104,8 +104,8 @@
 
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary" id="btn-ubah" onclick="prosesUbah()"><i class="fa-fw fas fa-edit nav-icon me-1" style="font-size:13px"></i> Ubah</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa-fw fas fa-times nav-icon me-1" style="font-size:13px"></i> Tutup</button>
+                <button class="btn btn-warning" id="btn-ubah" onclick="prosesUbah()"><i class="fa-fw fas fa-edit nav-icon me-1" style="font-size:13px"></i> Ubah</button>
+                <button type="button" class="btn btn-link text-dark" data-bs-dismiss="modal"><i class="fa-fw fas fa-times nav-icon me-1" style="font-size:13px"></i> Tutup</button>
             </div>
         </div>
     </div>
@@ -116,9 +116,9 @@
     <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">
-                    Form Hapus Peminjaman Ruangan
-                </h4>
+                <h6 class="modal-title">
+                    Form <b class="text-danger">Hapus</b> Peminjaman Ruangan
+                </h6>
             </div>
             <div class="modal-body">
                 <input type="text" id="id_hapus" hidden>
@@ -134,7 +134,7 @@
             </div>
             <div class="col-12 text-center mb-4">
                 <button type="submit" id="btn-hapus" class="btn btn-danger me-sm-3 me-1" onclick="prosesHapus()"><i class="fa fa-trash me-1" style="font-size:13px"></i> Hapus</button>
-                <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
+                <button type="reset" class="btn btn-link text-dark" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
             </div>
         </div>
     </div>
@@ -145,9 +145,9 @@
     <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">
-                    Form Penolakan Peminjaman Ruangan
-                </h4>
+                <h6 class="modal-title">
+                    Form <b class="text-info">Penolakan</b> Peminjaman Ruangan
+                </h6>
             </div>
             <div class="modal-body">
                 <input type="text" id="id_tolak" hidden>
@@ -155,11 +155,11 @@
                     <label for="" class ="form-label">Tuliskan Alasan Penolakan <a class="text-danger">*</a></label>
                     <textarea rows="2" class="form-control" id="alasan_penolakan" placeholder="e.g. Pada Tanggal dan Jam tersebut Ruangan akan direnovasi"></textarea>
                 </div>
-                <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Penolakan akan gagal apabila sudah diverifikasi oleh bagian Gizi</small>
+                <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Penolakan tidak dapat dilakukan apabila agenda sudah diverifikasi bagian Gizi</small>
             </div>
             <div class="col-12 text-center mb-4">
-                <button type="submit" id="btn-hapus" class="btn btn-dark me-sm-3 me-1" onclick="prosesTolak()"><i class="fas fa-calendar-times me-1" style="font-size:13px"></i> Tolak</button>
-                <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
+                <button type="submit" id="btn-hapus" class="btn btn-info me-sm-3 me-1" onclick="prosesTolak()"><i class="fas fa-calendar-times me-1" style="font-size:13px"></i> Tolak</button>
+                <button type="reset" class="btn btn-link text-dark" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
             </div>
         </div>
     </div>
@@ -168,9 +168,9 @@
     <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">
+                <h6 class="modal-title">
                     Alasan Penolakan
-                </h4>
+                </h6>
             </div>
             <div class="modal-body">
                 <div class="form-group">
@@ -178,7 +178,7 @@
                 </div>
             </div>
             <div class="col-12 text-center mb-4">
-                <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Tutup</button>
+                <button type="reset" class="btn btn-link text-dark" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Tutup</button>
             </div>
         </div>
     </div>

@@ -143,33 +143,33 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function 
                 Route::get('sdi/jadwaldinas/ln', [JadwalDinasController::class, 'indexLN'])->name('v4.sdi.jadwaldinas.ref.ln');
 
         // ABSENSI
-        Route::get('absensi', [AbsensiController::class, 'index'])->name('v4.sdi.absensi.rekapitulasi');
-        Route::get('absensi/dashboard', [AbsensiDashboardController::class, 'index'])->name('v4.sdi.absensi.dashboard');
-        Route::get('absensi/device', [AbsensiDeviceController::class, 'index'])->name('v4.sdi.absensi.device');
+        Route::get('sdi/absensi', [AbsensiController::class, 'index'])->name('v4.sdi.absensi.rekapitulasi');
+        Route::get('sdi/absensi/dashboard', [AbsensiDashboardController::class, 'index'])->name('v4.sdi.absensi.dashboard');
+        Route::get('sdi/absensi/device', [AbsensiDeviceController::class, 'index'])->name('v4.sdi.absensi.device');
 
         // REKRUTMEN
             // PENGUMUMAN
-            Route::get('rekrutmen/pengumuman', [RekrutmenPengumumanController::class, 'index'])->name('v4.sdi.rekrutmen.pengumuman');
+            Route::get('sdi/rekrutmen/pengumuman', [RekrutmenPengumumanController::class, 'index'])->name('v4.sdi.rekrutmen.pengumuman');
             // REGISTRASI PESERTA
             Route::get('rekrutmen/registrasi', [RekrutmenRegistrasiController::class, 'index'])->name('v4.sdi.rekrutmen.registrasi');
 
 
         // PENGAJUAN
             // SURAT KETERANGAN (SURKET)
-            Route::get('pengajuan/surket', [SurketController::class, 'index'])->name('v4.sdi.pengajuan.surket');
-            Route::get('pengajuan/surket/{id}/download', [SurketController::class, 'download'])->name('v4.sdi.pengajuan.surket.download');
-            Route::get('pengajuan/surket/{id}/generate', [SurketController::class, 'generateFile'])->name('v4.sdi.pengajuan.surket.generate');
+            Route::get('sdi/pengajuan/surket', [SurketController::class, 'index'])->name('v4.sdi.pengajuan.surket');
+            Route::get('sdi/pengajuan/surket/{id}/download', [SurketController::class, 'download'])->name('v4.sdi.pengajuan.surket.download');
+            Route::get('sdi/pengajuan/surket/{id}/generate', [SurketController::class, 'generateFile'])->name('v4.sdi.pengajuan.surket.generate');
 
             // IDCARD
-            Route::get('pengajuan/idcard', [IDCardController::class, 'index'])->name('v4.sdi.pengajuan.idcard');
+            Route::get('sdi/pengajuan/idcard', [IDCardController::class, 'index'])->name('v4.sdi.pengajuan.idcard');
 
         // PERJALANAN DINAS
-        Route::get('pd', [PDController::class, 'index'])->name('v4.sdi.pd');
-        Route::get('pd/{id}/download', [PDController::class, 'download'])->name('v4.sdi.pd.download');
+        Route::get('sdi/pd', [PDController::class, 'index'])->name('v4.sdi.pd');
+        Route::get('sdi/pd/{id}/download', [PDController::class, 'download'])->name('v4.sdi.pd.download');
 
         // SURAT TUGAS
-        Route::get('surtug', [SurtugController::class, 'index'])->name('v4.sdi.surtug');
-        Route::get('surtug/{id}/download', [SurtugController::class, 'download'])->name('v4.sdi.surtug.download');
+        Route::get('sdi/surtug', [SurtugController::class, 'index'])->name('v4.sdi.surtug');
+        Route::get('sdi/surtug/{id}/download', [SurtugController::class, 'download'])->name('v4.sdi.surtug.download');
 
     // PELAYANAN
          // SKL

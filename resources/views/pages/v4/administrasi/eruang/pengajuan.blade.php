@@ -86,7 +86,7 @@
     </div>
 
     <div class="col-md-12 d-flex justify-content-between">
-        <button type="button" class="btn btn-info" onclick="window.location='{{ route('v4.administrasi.eruang') }}'" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Lihat Kalender Digital"><i class="fas fa-calendar-day me-1"></i> Kalender Digital</button>
+        <button type="button" class="btn btn-info-transparent" onclick="window.location='{{ route('v4.administrasi.eruang') }}'" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Lihat Kalender Digital" disabled><i class="fas fa-calendar-day me-1"></i> Kalender Digital</button>
         <button type="button" class="btn btn-success" id="btn-simpan" onclick="prosesSimpan()" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Ajukan untuk melanjutkan proses Verifikasi Jadwal" disabled><i class="fas fa-stamp me-1"></i> Ajukan Sekarang</button>
     </div>
 </form>

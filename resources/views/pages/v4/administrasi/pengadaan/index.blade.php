@@ -293,7 +293,7 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5>Detail <b class="text-success">Pengadaan</b></h5>
+                    <h5><button class="btn btn-sm btn-icon btn-wave btn-secondary-transparent me-1" onclick="kembaliKeRiwayat()"><i class="ri-arrow-left-s-line"></i></button> Detail <b class="text-success">Pengadaan</b></h5>
                     <button class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
@@ -832,7 +832,7 @@
                                 <td class="text-end"><b>${formatRupiah(item.total)}</b></td>
                                 <td class="text-center">
                                     <div class="btn-group">
-                                        <button class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown">
+                                        <button class="btn btn-sm btn-secondary-transparent dropdown-toggle" data-bs-toggle="dropdown" id="btn-menu-riwayat-${item.id}">
                                             Menu
                                         </button>
                                         <ul class="dropdown-menu">
@@ -880,10 +880,14 @@
         }
 
         function lihatDetailPengadaan(id) {
-
+            const btn = $(`#btn-menu-riwayat-${id}`);
             $.ajax({
                 url: '/api/v4/administrasi/pengadaan/riwayat',
                 type: 'get',
+                beforeSend: function() {
+                    btn.prop('disabled', true);
+                    btn.html(`<i class="fa fa-spinner fa-spin"></i>`);
+                },
                 success: function(res) {
 
                     let data = res.data.find(x => x.id == id);
@@ -954,6 +958,17 @@
 
                     $('#riwayatPengadaan').modal('hide');
                     $('#detailPengadaan').modal('show');
+                },
+                complete: function() {
+                    btn.prop('disabled', false);
+                    btn.html(`Menu`);
+                },
+                error: function(xhr) {
+                    iziToast.error({
+                        title: 'Pesan Error!',
+                        message: xhr.responseJSON.message,
+                        position: 'topRight'
+                    });
                 }
             });
         }

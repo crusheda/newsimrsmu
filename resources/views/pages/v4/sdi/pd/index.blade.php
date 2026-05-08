@@ -138,9 +138,13 @@
                 <div class="card">
                     <div class="card-header d-flex align-items-center justify-content-between py-3">
                         {{-- <h6 class="mb-0"><b>Tabel <b class="text-danger">Riwayat</b></b></h6> --}}
-                        <button class="btn btn-success-transparent fw-bold" type="button"
-                            data-bs-toggle="collapse" data-bs-target="#bukaForm"
-                            aria-expanded="false" aria-controls="flush-collapseOne"><i class="ri-file-check-line me-1"></i> Form Tambah Dinas</button>
+                        @can('admin_kepegawaian_kepala')
+                            <button class="btn btn-success-transparent fw-bold" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#bukaForm"
+                                aria-expanded="false" aria-controls="flush-collapseOne"><i class="ri-file-check-line me-1"></i> Form Tambah Dinas</button>
+                        @else
+                            <h6 class="mb-0"><b>Tabel</b></h6>
+                        @endcan
                         <div class="btn-group">
                             <a href="javascript:void(0);" class="btn btn-warning-transparent btn-sm" id="btn-refresh" onclick="showRiwayat()" data-bs-toggle="tooltip"
                                 data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Segarkan Tabel"><i class="ti ti-refresh f-20 me-1"></i> Refresh</a>
@@ -194,8 +198,9 @@
                 </div>
                 <div class="modal-body">
                     <input type="text" class="form-control" name="id_rincian" id="id_rincian" hidden>
+                    <div id="status-rincian"></div>
                     <div class="table-responsive">
-                        <table class="table table-hover dt-responsive align-middle table-borderless">
+                        <table class="table dt-responsive align-middle table-borderless">
                             <tbody style="font-size:13px" id="tbody-rincian">
                                 <tr>
                                     <td colspan="9">
@@ -632,43 +637,63 @@
                             kendaraan = '[Rumah Sakit] Mobil';
                         }
                     }
-                    kendaraan_pegawai = '';
+                    kendaraan_pegawai = '<ul class="mb-0 ps-3">';
                     if (res.show.kendaraan_pegawai) {
                         res.users.forEach(is => {
                             JSON.parse(res.show.kendaraan_pegawai).forEach(val => {
                                 if (val == is.id) {
-                                    kendaraan_pegawai += is.nama + `; `;
+                                    kendaraan_pegawai += '<li>' + is.nama + '</li>';
                                 }
                             })
                         })
                     }
-                    pegawai = ``;
+                    kendaraan_pegawai += '</ul>';
+                    pegawai = `<ol class="list-group list-group-numbered p-0">`;
                     res.users.forEach(us => {
                         JSON.parse(res.show.pegawai_id).forEach(val => {
                             if (val == us.id) {
-                                pegawai += `<li>` + us.nama + `</li>`;
+                                pegawai += `<li class="list-group-item p-2">` + us.nama + `</li>`;
                             }
                         })
                     })
-                    $('#tbody-rincian').append(`
-                        <tr>
-                            <th colspan="2">
-                                <div class="shadow p-3 bg-body rounded" role="alert">
-                                    <h5 class="alert-heading fw-bold mb-2 text-center">
-                                        Status Pembayaran Dari <b class="text-primary">Bagian Keuangan</b>
-                                    </h5>
-                                    <h6 class="text-center mb-0" style="font-size:20px">${res.show.paid == 0?'<span class="badge bg-danger-transparent">BELUM TERBAYARKAN</span>':'<span class="badge bg-success-transparent">TELAH DIBAYARKAN</span>'}</h6>
+                    pegawai += `</ol>`;
+                    $('#status-rincian').empty().append(`
+                        <div class="card custom-card dashboard-main-card warning school-card flex-wrap mb-2">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center gap-2 justify-content-between">
+                                    <div> <span class="d-block mb-1 text-muted fs-15">Status Pembayaran Dari <b class="text-warning">Bagian Keuangan</b></span>
+                                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                                            ${res.show.paid == 0?'<span class="badge bg-danger-transparent fs-18">BELUM TERBAYARKAN</span>':'<span class="badge bg-success-transparent fs-18">TELAH DIBAYARKAN</span>'}
+                                            <div class="fs-12 text-muted">
+                                                ${res.show.tgl_paid?`Dibayarkan pada `+new Date(res.show.tgl_paid).toLocaleString("sv-SE"):``}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="lh-1"> <span class="avatar avatar-lg bg-warning-transparent svg-warning"> <svg
+                                                xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px"
+                                                viewBox="0 0 24 24" width="24px" fill="#5f6368">
+                                                <g>
+                                                    <rect fill="none" height="24" width="24"></rect>
+                                                </g>
+                                                <g>
+                                                    <path
+                                                        d="M12,2C6.48,2,2,6.48,2,12s4.48,10,10,10s10-4.48,10-10S17.52,2,12,2z M12.88,17.76V19h-1.75v-1.29 c-0.74-0.18-2.39-0.77-3.02-2.96l1.65-0.67c0.06,0.22,0.58,2.09,2.4,2.09c0.93,0,1.98-0.48,1.98-1.61c0-0.96-0.7-1.46-2.28-2.03 c-1.1-0.39-3.35-1.03-3.35-3.31c0-0.1,0.01-2.4,2.62-2.96V5h1.75v1.24c1.84,0.32,2.51,1.79,2.66,2.23l-1.58,0.67 c-0.11-0.35-0.59-1.34-1.9-1.34c-0.7,0-1.81,0.37-1.81,1.39c0,0.95,0.86,1.31,2.64,1.9c2.4,0.83,3.01,2.05,3.01,3.45 C15.9,17.17,13.4,17.67,12.88,17.76z">
+                                                    </path>
+                                                </g>
+                                            </svg> </span> </div>
                                 </div>
-                            </th>
-                        </tr>
-                        <tr><th>Nama Acara</th><td>${res.show.acara} (${res.show.jenis})</td></tr>
-                        <tr><th>Lokasi Acara</th><td>${res.show.lokasi}</td></tr>
-                        <tr><th>Tanggal</th><td>Pada ${formatTanggalIndo(res.show.tgl)} Selama ${res.show.lama1 == 1?'< 4 Jam':'> 4 Jam'} ${res.show.lama2?'(Lebih tepatnya selama '+res.show.lama2+' Jam)':''}</td></tr>
-                        <tr><th>Peserta</th><td>${pegawai}</td></tr>
-                        <tr><th>Transportasi</th><td>${kendaraan}</td></tr>
-                        ${res.show.kendaraan_pegawai?`<tr><th>Pemilik Kendaraan</th><td class="text-wrap">`+kendaraan_pegawai+`</td></tr>`:``}
-                        <tr><th>Deskripsi Perjalanan</th><td>${res.show.deskripsi?res.show.deskripsi:''}</td></tr>
-                        ${res.show.paid == 1?`<tr><th class="text-danger">Keterangan Pembayaran</th><td>Dibayarkan oleh `+res.show.nama_user_paid+` pada `+res.show.tgl_paid+`</td></tr>`:``}
+                            </div>
+                        </div>
+                    `);
+                    $('#tbody-rincian').append(`
+                        <tr><th class="text-wrap">Nama Acara</th><td>${res.show.acara} (${res.show.jenis})</td></tr>
+                        <tr><th class="text-wrap">Lokasi Acara</th><td>${res.show.lokasi}</td></tr>
+                        <tr><th class="text-wrap">Tanggal</th><td>Pada ${formatTanggalIndo(res.show.tgl)} Selama ${res.show.lama1 == 1?'< 4 Jam':'> 4 Jam'}${res.show.lama2?'<br>(Lebih tepatnya selama '+res.show.lama2+' Jam)':''}</td></tr>
+                        <tr><th class="text-wrap">Peserta</th><td>${pegawai}</td></tr>
+                        <tr><th class="text-wrap">Transportasi</th><td>${kendaraan}</td></tr>
+                        ${res.show.kendaraan_pegawai?`<tr><th class="text-wrap">Pemilik Kendaraan</th><td class="text-wrap">`+kendaraan_pegawai+`</td></tr>`:``}
+                        <tr><th class="text-wrap">Deskripsi Perjalanan</th><td>${res.show.deskripsi?res.show.deskripsi:''}</td></tr>
+                        ${res.show.paid == 1?`<tr><th class="text-danger">Keterangan Pembayaran</th><td>Dibayarkan oleh <b class='text-info'>${res.show.nama_user_paid}</b> pada <b class='text-warning'>${formatTanggalIndo(res.show.tgl_paid)}</b></td></tr>`:``}
                     `);
                     var keuID = @json(Auth::user()->can(['admin_pd_keuangan']));
                     var userID = @json(Auth::user()->id);

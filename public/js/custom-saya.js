@@ -47,3 +47,8 @@ $.extend(true, $.fn.dataTable.defaults, {
     lengthMenu: [5, 10, 15, 20, 30, 35, 50, 75, 100, 500, 1000, 3000, 5000, 7000, 10000],
     displayLength: 20
 });
+$.extend(true, $.fn.dataTable.defaults, {
+    initComplete: function () {
+        $('.dataTables_wrapper').addClass('text-dark');
+    }
+});

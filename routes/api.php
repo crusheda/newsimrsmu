@@ -290,6 +290,16 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
         // REKRUTMEN PEGAWAI
 
         // PENGAJUAN SDI
+            // SURAT KETERANGAN
+
+            // IDCARD
+                // ADMIN
+                    Route::get('sdi/pengajuan/idcard/table', [IDCardController::class, 'table']);
+                    Route::post('sdi/pengajuan/idcard/status', [IDCardController::class, 'ubahStatus']);
+                // USER
+                    Route::post('sdi/pengajuan/idcard/tambah', [IDCardController::class, 'tambahPengajuan']);
+                    Route::get('sdi/pengajuan/idcard/riwayat/{id}', [IDCardController::class, 'riwayat']);
+                    Route::delete('sdi/pengajuan/idcard/{id}/delete', [IDCardController::class, 'hapusPengajuan']);
 
         // PERJALANAN DINAS
         Route::get('sdi/pd/table', [PDController::class, 'table']);
