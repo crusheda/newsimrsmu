@@ -20,7 +20,7 @@ class IDCardController extends Controller
     function index()
     {
         if (Auth::user()->can('admin_kepegawaian') == true) {
-            return view('pages.v4.sdi.idcard.index-admin');
+            return view('pages.v4.sdi.pengajuan.idcard.index-admin');
         } else {
             $id_user = Auth::user()->id;
             $user  = users::where('id',$id_user)->first();
@@ -36,7 +36,7 @@ class IDCardController extends Controller
                 'role' => $role,
             ];
 
-            return view('pages.v4.sdi.idcard.index-user')->with('list', $data);
+            return view('pages.v4.sdi.pengajuan.idcard.index-user')->with('list', $data);
         }
     }
 
