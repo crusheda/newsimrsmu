@@ -35,6 +35,9 @@ use \App\Http\Controllers\v4\Administrasi\Pengadaan\PengadaanRekapController;
 use \App\Http\Controllers\v4\Administrasi\ERuang\ERuangController;
 use \App\Http\Controllers\v4\SDI\ProfilPegawaiController;
 use \App\Http\Controllers\v4\SDI\DetailProfilPegawaiController;
+use \App\Http\Controllers\v4\SDI\JadwalDinasController;
+use \App\Http\Controllers\v4\SDI\PDController;
+use \App\Http\Controllers\v4\SDI\SurtugController;
 use \App\Http\Controllers\v4\SDI\Absensi\AbsensiController;
 use \App\Http\Controllers\v4\SDI\Absensi\AbsensiDashboardController;
 use \App\Http\Controllers\v4\SDI\Absensi\AbsensiDeviceController;
@@ -42,9 +45,6 @@ use \App\Http\Controllers\v4\SDI\Rekrutmen\PengumumanController as RekrutmenPeng
 use \App\Http\Controllers\v4\SDI\Rekrutmen\RegistrasiController as RekrutmenRegistrasiController;
 use \App\Http\Controllers\v4\SDI\Pengajuan\SurketController;
 use \App\Http\Controllers\v4\SDI\Pengajuan\IDCardController;
-use \App\Http\Controllers\v4\SDI\PDController;
-use \App\Http\Controllers\v4\SDI\SurtugController;
-use \App\Http\Controllers\v4\SDI\JadwalDinasController;
 use \App\Http\Controllers\v4\Pelayanan\Kebidanan\SKLController;
 use App\Http\Controllers\v4\AI\KlaimBpjsController;
 

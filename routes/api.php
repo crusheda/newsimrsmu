@@ -34,6 +34,8 @@ use \App\Http\Controllers\v4\Administrasi\ERuang\ERuangController;
 use \App\Http\Controllers\v4\SDI\JadwalDinasController;
 use \App\Http\Controllers\v4\SDI\PDController;
 use \App\Http\Controllers\v4\SDI\SurtugController;
+use \App\Http\Controllers\v4\SDI\Pengajuan\SurketController;
+use \App\Http\Controllers\v4\SDI\Pengajuan\IDCardController;
 use \App\Http\Controllers\v4\Pelayanan\Kebidanan\SKLController;
 use App\Http\Controllers\v4\AI\KlaimBpjsController;
 
