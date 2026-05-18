@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\v4\Pelayanan\Kebidanan;
+namespace App\Http\Controllers\v4\Pelayanan;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;

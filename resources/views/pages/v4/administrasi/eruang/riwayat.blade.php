@@ -10,7 +10,7 @@
                 </div>
             </div>
             <div>
-                <button type="button" class="btn btn-warning btn-sm" onclick="riwayat($('#filter_tgl').val(''))" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                <button type="button" class="btn btn-warning-transparent btn-sm" onclick="riwayat($('#filter_tgl').val(''))" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                     title="Refresh Tabel Pemesanan Ruangan" id="btn-refresh-table"><i class="fas fa-sync fa-fw nav-icon me-1"></i>Segarkan
                 </button>
             </div>
@@ -219,7 +219,6 @@
     }
 
     function riwayat() {
-        $('#btn-refresh-table').find('i').addClass('fa-spin');
         $("#tampil-tbody").empty().append(
             `<tr style='font-size:13px'><td colspan="20"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
         );
@@ -230,6 +229,10 @@
             dataType: 'json',
             data: {
                 filter_tgl: filterTgl
+            },
+            beforeSend: function() {
+                $('#btn-refresh-table').find('i').addClass('fa-spin');
+                $('#btn-refresh-table').prop("disabled", true);
             },
             success: function(res) {
                 $("#tampil-tbody").empty();
@@ -249,7 +252,7 @@
                         if (item.gizi_verif == null) {
                             if (item.status_penolakan == null) {
                                 content = `<tr><td><center><div class="btn-group">
-                                                <a href="javascript:void(0);" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle" data-bs-toggle="dropdown">${item.id}</a>
+                                                <a href="javascript:void(0);" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle" data-bs-toggle="dropdown" id='btnAct${item.id}'>${item.id}</a>
                                                 <ul class="dropdown-menu dropdown-menu-right">
                                                     <li><a href="javascript:;" onclick="verifTolakTgl(` + item.id + `)" class="dropdown-item text-info"><i class='fas fa-calendar-times me-1'></i> Tolak</a></li>
                                                     <li><a href="javascript:;" onclick="verifEditTgl(` + item.id + `)" class="dropdown-item text-warning"><i class='fas fa-edit me-1'></i> Ubah</a></li>
@@ -258,7 +261,7 @@
                                             </div></center></td>`;
                             } else {
                                 content = `<tr><td><center><div class="btn-group">
-                                                <a href="javascript:void(0);" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle" data-bs-toggle="dropdown">${item.id}</a>
+                                                <a href="javascript:void(0);" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle" data-bs-toggle="dropdown" id='btnAct${item.id}'>${item.id}</a>
                                                 <ul class="dropdown-menu dropdown-menu-right">
                                                     <li><a href="javascript:;" onclick="lihatPenolakan(` + item.id + `)" class="dropdown-item text-primary"><i class='fas fa-calendar-times me-1'></i> Alasan Penolakan</a></li>
                                                     <li><a href="javascript:;" onclick="verifEditTgl(` + item.id + `)" class="dropdown-item text-warning"><i class='fas fa-edit me-1'></i> Ubah</a></li>
@@ -269,7 +272,7 @@
                         } else {
                             if (item.status_penolakan == null) {
                                 content = `<tr><td><center><div class="btn-group">
-                                                <a href="javascript:void(0);" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle" data-bs-toggle="dropdown">${item.id}</a>
+                                                <a href="javascript:void(0);" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle" data-bs-toggle="dropdown" id='btnAct${item.id}'>${item.id}</a>
                                                 <ul class="dropdown-menu dropdown-menu-right">
                                                     <li><a href="javascript:;" class="dropdown-item text-secondary"><i class='fas fa-calendar-times me-1'></i> <s>Tolak</s></a></li>
                                                     <li><a href="javascript:;" onclick="verifEditTgl(` + item.id + `)" class="dropdown-item text-warning"><i class='fas fa-edit me-1'></i> Ubah</a></li>
@@ -278,7 +281,7 @@
                                             </div></center></td>`;
                             } else {
                                 content = `<tr><td><center><div class="btn-group">
-                                                <a href="javascript:void(0);" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle" data-bs-toggle="dropdown">${item.id}</a>
+                                                <a href="javascript:void(0);" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle" data-bs-toggle="dropdown" id='btnAct${item.id}'>${item.id}</a>
                                                 <ul class="dropdown-menu dropdown-menu-right">
                                                     <li><a href="javascript:;" onclick="lihatPenolakan(` + item.id + `)" class="dropdown-item text-primary"><i class='fas fa-calendar-times me-1'></i> Alasan Penolakan</a></li>
                                                     <li><a href="javascript:;" onclick="verifEditTgl(` + item.id + `)" class="dropdown-item text-warning"><i class='fas fa-edit me-1'></i> Ubah</a></li>
@@ -294,7 +297,7 @@
                             if (item.gizi_verif == null) {
                                 if (item.status_penolakan == null) {
                                     content = `<tr><td><center><div class="btn-group">
-                                                    <a href="javascript:void(0);" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle" data-bs-toggle="dropdown">${item.id}</a>
+                                                    <a href="javascript:void(0);" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle" data-bs-toggle="dropdown" id='btnAct${item.id}'>${item.id}</a>
                                                     <ul class="dropdown-menu dropdown-menu-right">
                                                         <li><a href="javascript:;" onclick="verifEditTgl(` + item.id + `)" class="dropdown-item text-warning"><i class='fas fa-edit me-1'></i> Ubah</a></li>
                                                         <li><a href="javascript:;" onclick="verifHapusTgl(` + item.id + `)" class="dropdown-item text-danger"><i class='fas fa-trash-alt me-1'></i> Hapus</a></li>
@@ -302,7 +305,7 @@
                                                 </div></center></td>`;
                                 } else {
                                     content = `<tr><td><center><div class="btn-group">
-                                                    <a href="javascript:void(0);" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle" data-bs-toggle="dropdown">${item.id}</a>
+                                                    <a href="javascript:void(0);" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle" data-bs-toggle="dropdown" id='btnAct${item.id}'>${item.id}</a>
                                                     <ul class="dropdown-menu dropdown-menu-right">
                                                         <li><a href="javascript:;" onclick="lihatPenolakan(` + item.id + `)" class="dropdown-item text-primary"><i class='fas fa-calendar-times me-1'></i> Alasan Penolakan</a></li>
                                                         <li><a href="javascript:;" class="dropdown-item text-secondary" disabled><i class='fas fa-edit me-1'></i> Ubah</a></li>
@@ -312,7 +315,7 @@
                                 }
                             } else {
                                 content = `<tr><td><center><div class="btn-group">
-                                                <a href="javascript:void(0);" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle" data-bs-toggle="dropdown">${item.id}</a>
+                                                <a href="javascript:void(0);" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle" data-bs-toggle="dropdown" id='btnAct${item.id}'>${item.id}</a>
                                                 <ul class="dropdown-menu dropdown-menu-right">
                                                     <li><a href="javascript:;" class="dropdown-item text-secondary" disabled><i class='fas fa-edit me-1'></i> Ubah</a></li>
                                                     <li><a href="javascript:;" class="dropdown-item text-secondary" disabled><i class='fas fa-trash-alt me-1'></i> Hapus</a></li>
@@ -321,7 +324,7 @@
                             }
                         } else {
                             content = `<tr><td><center><div class="btn-group">
-                                            <a href="javascript:void(0);" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle" data-bs-toggle="dropdown">${item.id}</a>
+                                            <a href="javascript:void(0);" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle" data-bs-toggle="dropdown" id='btnAct${item.id}'>${item.id}</a>
                                             <ul class="dropdown-menu dropdown-menu-right">
                                                 <li><a href="javascript:;" class="dropdown-item text-secondary" disabled><i class='fas fa-edit me-1'></i> Ubah</a></li>
                                                 <li><a href="javascript:;" class="dropdown-item text-secondary" disabled><i class='fas fa-trash-alt me-1'></i> Hapus</a></li>
@@ -401,12 +404,26 @@
                 $('[data-bs-toggle="tooltip"]').tooltip({
                     trigger: 'hover'
                 })
+            },
+            error: function(xhr, status, error) {
+                $("#tampil-tbody").empty().append(
+                    `<tr style='font-size:13px'><td colspan="20"><center><i class="fas fa-exclamation-triangle me-1"></i> Terjadi kesalahan saat memuat data</center></td></tr>`
+                );
+                iziToast.error({
+                    title: 'Pesan Galat!',
+                    message: xhr.responseJSON.message ?? 'Terjadi kegagalan saat memuat data',
+                    position: 'topRight'
+                });
+            },
+            complete: function() {
                 $('#btn-refresh-table').find('i').removeClass('fa-spin');
+                $('#btn-refresh-table').prop("disabled", false);
             }
         })
     }
 
     function ubah(id) {
+        const btn = $("#btnAct"+id);
         $("#id_edit").val("");
         $("#agenda_edit").val("");
         $("#tgl_edit").val("");
@@ -416,6 +433,10 @@
             url: "/api/v4/administrasi/eruang/ubah/" + id,
             type: 'GET',
             dataType: 'json',
+            beforeSend: function() {
+                btn.html('<i class="ti ti-refresh ti-spin"></i>');
+                btn.prop("disabled", true);
+            },
             success: function(res) {
                 const today = new Date();
                 today.setHours(0,0,0,0);
@@ -532,8 +553,9 @@
                 $('#modalUbah').modal('show');
             },
             complete: function() {
-                // $("#btn-simpan").prop("disabled", false);
                 $('#info_ketersediaan_edit').prop('hidden', false);
+                btn.html(id);
+                btn.prop("disabled", false);
             },
             error: function(xhr, status, error) {
                 iziToast.error({

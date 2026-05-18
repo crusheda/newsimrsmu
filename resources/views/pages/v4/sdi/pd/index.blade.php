@@ -30,7 +30,7 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-12 mb-3">
-                                        <div class="alert alert-secondary">
+                                        <div class="alert alert-light shadow-sm" role="alert">
                                             <small>
                                                 {{-- <i class="ti ti-arrow-narrow-right me-1"></i> <br> --}}
                                                 <i class="ti ti-arrow-narrow-right me-1"></i> Isian bertanda (<a class="text-danger">*</a>) berarti wajib diisi
@@ -411,7 +411,7 @@
                         }
                         content = "<tr id='data" + item.id + "' style='font-size:13px'>";
                         content += `<td><center><div class='btn-group'>
-                                        <a href="javascript:void(0);" class='link-${color} link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'>${item.id}</a>
+                                        <a href="javascript:void(0);" class='link-${color} link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false' id='btnAct${item.id}'>${item.id}</a>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
                                         if (superID == true || adminID == true || keuID == true) {
                                             content += `<li><a href="javascript:void(0);" class="dropdown-item text-info" onclick="rincian(${item.id})"><i class="fa-fw fas fa-file-signature me-2"></i> Rincian</a></li>`;
@@ -620,12 +620,17 @@
         }
 
         function rincian(id) {
+            const btn = $('#btnAct'+id);
             $("#tbody-rincian").empty().append(`<tr style='font-size:13px'><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
             $.ajax(
             {
                 url: "/api/v4/sdi/pd/"+id,
                 type: 'GET',
                 dataType: 'json',
+                beforeSend: function() {
+                    btn.html(`<i class="ti ti-refresh ti-spin"></i>`);
+                    btn.prop('disabled', true);
+                },
                 success: function(res) {
                     $('#tbody-rincian').empty();
                     if (res.show.kendaraan == 1) {
@@ -718,11 +723,22 @@
                         }
                     }
                     $('#modalRincian').modal('show');
+                },
+                error: function (res) {
+                    notifier.show(
+                        res.statusText + " (Code " + res.status + ")", res.responseText,
+                        "danger", "{{ asset('images/notification/high_priority-48.png') }}", 4e3
+                    );
+                },
+                complete: function() {
+                    btn.html(id);
+                    btn.prop('disabled', false);
                 }
             })
         }
 
         function confirmPaid() {
+            const btn = $("#btn-confirm");
             // PROSES
             var save = new FormData();
             save.append('id',$("#id_rincian").val());
@@ -737,6 +753,10 @@
                 contentType: false,
                 processData: false,
                 dataType: 'json',
+                beforeSend: function() {
+                    btn.find("i").removeClass("fa-money-bill-wave").addClass("fa-sync fa-spin");
+                    btn.prop('disabled', true);
+                },
                 success: function(res) {
                     iziToast.success({
                         title: 'Pesan Sukses!',
@@ -752,11 +772,16 @@
                         message: 'Rincian Perjalanan Dinas gagal dibayarkan',
                         position: 'topRight'
                     });
+                },
+                complete: function() {
+                    btn.find("i").removeClass("fa-sync fa-spin").addClass("fa-money-bill-wave");
+                    btn.prop('disabled', false);
                 }
             });
         }
 
         function cancelPaid() {
+            const btn = $("#btn-cancel");
             // PROSES
             var save = new FormData();
             save.append('id',$("#id_rincian").val());
@@ -771,6 +796,10 @@
                 contentType: false,
                 processData: false,
                 dataType: 'json',
+                beforeSend: function() {
+                    btn.find("i").removeClass("fa-times-circle").addClass("fa-sync fa-spin");
+                    btn.prop('disabled', true);
+                },
                 success: function(res) {
                     iziToast.success({
                         title: 'Pesan Sukses!',
@@ -786,16 +815,25 @@
                         message: 'Batal Pembayaran Fee Perjalanan Dinas gagal dilakukan',
                         position: 'topRight'
                     });
+                },
+                complete: function() {
+                    btn.find("i").removeClass("fa-sync fa-spin").addClass("fa-times-circle");
+                    btn.prop('disabled', false);
                 }
             });
         }
 
         function ubah(id) {
+            const btn = $('#btnAct'+id);
             $.ajax(
             {
                 url: "/api/v4/sdi/pd/"+id,
                 type: 'GET',
                 dataType: 'json',
+                beforeSend: function() {
+                    btn.html(`<i class="ti ti-refresh ti-spin"></i>`);
+                    btn.prop('disabled', true);
+                },
                 success: function(res) {
                     // if (res.show.title) {
                     //     $("#filex_edit").empty().append(`<h6 id="filex_edit" class="text-primary"><a href="javascript:void(0);" onclick="window.open('/kepegawaian/pd/`+res.show.id+`/download')"><u>${res.show.title}</u></a></h6>`);
@@ -868,13 +906,22 @@
                     $("#pegawai_edit").val(un).change();
                     $('#deskripsi_edit').val(res.show.deskripsi);
                     $('#modalUbah').modal('show');
+                },
+                error: function (res) {
+                    notifier.show(
+                        res.statusText + " (Code " + res.status + ")", res.responseText,
+                        "danger", "{{ asset('images/notification/high_priority-48.png') }}", 4e3
+                    );
+                },
+                complete: function() {
+                    btn.html(id);
+                    btn.prop('disabled', false);
                 }
             })
         }
 
         function prosesUbah() {
-            $("#btn-ubah").prop('disabled', true);
-            $("#btn-ubah").find("i").toggleClass("fa-save fa-sync fa-spin");
+            const btn = $("#btn-ubah");
 
             var save = new FormData();
             var id = $('#id_edit').val();
@@ -917,6 +964,10 @@
                     contentType: false,
                     processData: false,
                     dataType: 'json',
+                    beforeSend: function() {
+                        btn.find("i").removeClass("fa-save").addClass("fa-sync fa-spin");
+                        btn.prop('disabled', true);
+                    },
                     success: function(res){
                         notifier.show(
                             "Pesan Sukses!", "Perubahan berhasil dilakukan pada "+res.message,
@@ -934,6 +985,10 @@
                             res.statusText + " (Code " + res.status + ")", res.responseText,
                             "danger", "{{ asset('images/notification/high_priority-48.png') }}", 4e3
                         );
+                    },
+                    complete: function() {
+                        btn.find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
+                        btn.prop('disabled', false);
                     }
                 });
             }
@@ -977,12 +1032,11 @@
                         showRiwayat();
                         clearInput();
                     },
-                    error: function(res) {
-                        iziToast.error({
-                            title: 'Pesan Galat!',
-                            message: 'Berkas perjalanan dinas Anda gagal dihapus',
-                            position: 'topRight'
-                        });
+                    error: function (res) {
+                        notifier.show(
+                            res.statusText + " (Code " + res.status + ")", res.responseText,
+                            "danger", "{{ asset('images/notification/high_priority-48.png') }}", 4e3
+                        );
                     }
                 });
             }

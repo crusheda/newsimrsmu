@@ -153,7 +153,6 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function 
             // REGISTRASI PESERTA
             Route::get('rekrutmen/registrasi', [RekrutmenRegistrasiController::class, 'index'])->name('v4.sdi.rekrutmen.registrasi');
 
-
         // PENGAJUAN
             // SURAT KETERANGAN (SURKET)
             Route::get('sdi/pengajuan/surket', [SurketController::class, 'index'])->name('v4.sdi.pengajuan.surket');
@@ -173,12 +172,12 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function 
 
     // PELAYANAN
          // SKL
-            Route::get('kebidanan/skl', [SKLController::class, 'index'])->name('v4.pelayanan.skl');
+            Route::get('pelayanan/skl', [SKLController::class, 'index'])->name('v4.pelayanan.skl');
             // Route::post('kebidanan/skl', [SKLController::class, 'store'])->name('v4.pelayanan.skl.simpan');
             // Route::put('kebidanan/skl', [SKLController::class, 'update'])->name('v4.pelayanan.skl');
             // Route::delete('kebidanan/skl', [SKLController::class, 'destroy'])->name('v4.pelayanan.skl');
-            Route::get('kebidanan/skl/{id}/cetak', [SKLController::class, 'cetak'])->name('v4.pelayanan.skl.cetak');
-            Route::get('kebidanan/skl/{id}/print', [SKLController::class, 'print'])->name('v4.pelayanan.skl.print');
+            Route::get('pelayanan/skl/{id}/cetak', [SKLController::class, 'cetak'])->name('v4.pelayanan.skl.cetak');
+            Route::get('pelayanan/skl/{id}/print', [SKLController::class, 'print'])->name('v4.pelayanan.skl.print');
             // Route::resource('kebidanan/skl', '\App\Http\Controllers\Pelayanan\Kebidanan\sklController');
 
     // AI

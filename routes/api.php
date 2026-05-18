@@ -293,6 +293,18 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
 
         // PENGAJUAN SDI
             // SURAT KETERANGAN
+                // ADMIN
+                Route::get('sdi/pengajuan/surket/table', [SurketController::class, 'tableAdmin']);
+                Route::get('sdi/pengajuan/surket/{id}/verif/{user}', [SurketController::class, 'verif']);
+                Route::get('sdi/pengajuan/surket/{id}/unverif', [SurketController::class, 'unverif']);
+                Route::post('sdi/pengajuan/surket/tolak', [SurketController::class, 'tolak']);
+                Route::get('sdi/pengajuan/surket/{id}/bataltolak', [SurketController::class, 'batalTolak']);
+                Route::post('sdi/pengajuan/surket/proses', [SurketController::class, 'prosesUpload']);
+                Route::get('sdi/pengajuan/surket/{id}/batalproses', [SurketController::class, 'batalProsesUpload']);
+                // USER
+                Route::get('sdi/pengajuan/surket/{id}/table', [SurketController::class, 'tableUser']);
+                Route::post('sdi/pengajuan/surket/tambah', [SurketController::class, 'tambah']);
+                Route::delete('sdi/pengajuan/surket/{id}/delete', [SurketController::class, 'hapus']);
 
             // IDCARD
                 // ADMIN

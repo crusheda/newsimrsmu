@@ -313,7 +313,7 @@ class SKLController extends Controller
         }elseif ($data->dr == 4) {
             $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(public_path().'/images/pku/kebidanan/skl-putri.docx');
         }elseif ($data->dr == null) {
-            return redirect('/pelayanan/kebidanan/skl')->with('message','Maaf, Input Dokter Belum Terisi');
+            return redirect('/v4/pelayanan/skl')->with('message','Maaf, Input Dokter Belum Terisi');
         }
 
         $filename = "SKL ";
@@ -364,7 +364,7 @@ class SKLController extends Controller
 
         // print_r($data);
         // die();
-        return view('pages.v4.pelayanan.skl.cetak-skl')->with('list', $data);
+        return view('pages.v4.pelayanan.skl.cetak')->with('list', $data);
     }
 
     public function hapus($id)

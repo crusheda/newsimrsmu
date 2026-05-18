@@ -26,7 +26,7 @@
             <div class="col-sm-12">
                 <div class="card custom-card">
                     <div class="card-header d-flex align-items-center justify-content-between py-3">
-                        <h6 class="mb-0">Dafar <b class="text-danger">Riwayat</b></h6>
+                        <h6 class="mb-0">Daftar <b class="text-danger">Riwayat Pengajuan</b> <b class="text-orange">ID Card</b></h6>
                         {{-- <div class="btn-group">
 
                             <a href="javascript:void(0);" class="avtar avtar-s btn-link-secondary dropdown-toggle arrow-none" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti ti-dots-vertical f-20"></i></a>
@@ -48,7 +48,7 @@
                                         <th><span class="badge bg-secondary-transparent me-1">JENIS</span> NAMA PEGAWAI</th>
                                         <th>JABATAN</th>
                                         <th><center>PROGRESS</center></th>
-                                        <th>ESTIMASI</th>
+                                        <th>ESTIMASI PENYELESAIAN</th>
                                         <th>UPDATE</th>
                                     </tr>
                                 </thead>
@@ -66,7 +66,7 @@
                                         <th><span class="badge bg-secondary-transparent me-1">JENIS</span> NAMA PEGAWAI</th>
                                         <th>JABATAN</th>
                                         <th><center>PROGRESS</center></th>
-                                        <th>ESTIMASI</th>
+                                        <th>ESTIMASI PENYELESAIAN</th>
                                         <th>UPDATE</th>
                                     </tr>
                                 </tfoot>
@@ -157,7 +157,7 @@
                             content += `<td>
                                             <center>
                                                 <div class='dropend'>
-                                                    <a href="javascript:void(0);" class='${item.progress == 2 || item.progress == 3 ? 'disabled pe-none' : ''} link-${colbot} link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle' ${item.progress != 2 && item.progress != 3 ? 'onclick="showUbahStatus('+item.id+', '+item.progress+')"' : ''}>${item.id}</a>
+                                                    <a href="javascript:void(0);" class='${item.progress == 2 || item.progress == 3 ? 'disabled pe-none' : 'dropdown-toggle'} link-${colbot} link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline' ${item.progress != 2 && item.progress != 3 ? 'onclick="showUbahStatus('+item.id+', '+item.progress+')"' : ''}>${item.id}</a>
                                                 </div>
                                             </center>
                                         </td>`;
@@ -214,7 +214,7 @@
                                 { sWidth: '15%' },
                                 { sWidth: '15%' },
                             ],
-                            displayLength: 10,
+                            displayLength: 20,
                         });
 
                     },
@@ -236,8 +236,9 @@
         function showUbahStatus(id,progress) {
             $("#id_status").val(id);
             $('#status').find('option').remove();
-            $('#estimasi').prop('disabled',false);
+            $('#estimasi').prop('disabled',false).val('').trigger('change');
             if (progress == 0) {
+                $('#btn-submit').prop('disabled',true);
                 $('#status').append(`
                     <option value="" selected>Pilih</option>
                     <option value="1">Terima</option>
@@ -261,7 +262,7 @@
             }
             $('#status').on('change', function() {
                 $('#estimasi').val('').trigger('change');
-                if ($(this).val() == "3") {
+                if ($(this).val() == "3" || $(this).val() == "2") {
                     $('#hideEstimasi').prop('hidden',true);
                     $('#estimasi').prop('disabled',true);
                 } else {
@@ -296,41 +297,49 @@
             save.append('progress',$('#status').val());
             save.append('estimasi',$('#estimasi').val());
 
-            if (save.get('progress') == "1" && save.get('estimasi') == "") {
+            if (save.get('progress') == "" || save.get('progress') == "0") {
                 iziToast.warning({
                     title: 'Pesan Ambigu!',
                     message: 'Pastikan Anda tidak mengosongi semua isian Wajib',
                     position: 'topRight'
                 });
             } else {
-                // PROCESS
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    method: 'POST',
-                    url: '/api/v4/sdi/pengajuan/idcard/status',
-                    contentType: false,
-                    processData: false,
-                    dataType: 'json',
-                    data: save,
-                    success: function(res) {
-                        iziToast.success({
-                            title: 'Pesan Sukses!',
-                            message: 'Status Pengajuan ID Card telah berhasil diubah pada '+res,
-                            position: 'topRight'
-                        });
-                        $('#modalUbahStatus').modal('hide');
-                        refresh();
-                    },
-                    error: function (res) {
-                        iziToast.error({
-                            title: 'Pesan Galat!',
-                            message: res.responseJSON.error,
-                            position: 'topRight'
-                        });
-                    }
-                })
+                if (save.get('progress') == "1" && save.get('estimasi') == "") {
+                    iziToast.warning({
+                        title: 'Pesan Ambigu!',
+                        message: 'Pastikan Anda tidak mengosongi semua isian Wajib',
+                        position: 'topRight'
+                    });
+                } else {
+                    // PROCESS
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        method: 'POST',
+                        url: '/api/v4/sdi/pengajuan/idcard/status',
+                        contentType: false,
+                        processData: false,
+                        dataType: 'json',
+                        data: save,
+                        success: function(res) {
+                            iziToast.success({
+                                title: 'Pesan Sukses!',
+                                message: 'Status Pengajuan ID Card telah berhasil diubah pada '+res,
+                                position: 'topRight'
+                            });
+                            $('#modalUbahStatus').modal('hide');
+                            refresh();
+                        },
+                        error: function (res) {
+                            iziToast.error({
+                                title: 'Pesan Galat!',
+                                message: res.responseJSON.error,
+                                position: 'topRight'
+                            });
+                        }
+                    })
+                }
             }
         }
 
