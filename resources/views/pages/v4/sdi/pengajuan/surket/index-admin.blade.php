@@ -29,8 +29,8 @@
                         <h6><b>Daftar <b class="text-danger">Pengajuan</b></b></h6>
                         <div class="btn-group">
                             <a href="javascript:void(0);" class="btn btn-sm btn-warning-transparent" onclick="showRiwayat()" id="btn-refresh"><i class="ti ti-refresh f-20 me-1"></i> Refresh Tabel</a>
-                            <a href="javascript:void(0);" class="btn btn-sm btn-primary disabled" onclick="showKategori()"><s>Daftar Kategori</s></a>
                         </div>
+                        <a href="javascript:void(0);" class="btn btn-sm btn-primary disabled" onclick="showKategori()" hidden><s>Daftar Kategori</s></a>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -80,7 +80,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h6 class="modal-title">
-                        Form Verifikasi Pengajuan
+                        Form <b class="text-success">Verifikasi</b>
                     </h6>
                 </div>
                 <div class="modal-body">
@@ -107,7 +107,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h6 class="modal-title">
-                        Form Pembatalan Verifikasi Pengajuan
+                        Form <b class="text-warning">Pembatalan</b> <b class="text-success">Verifikasi</b>
                     </h6>
                 </div>
                 <div class="modal-body">
@@ -134,7 +134,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h6 class="modal-title">
-                        Form Pembatalan Penolakan Pengajuan
+                        Form <b class="text-warning">Pembatalan</b> <b class="text-danger">Penolakan</b>
                     </h6>
                 </div>
                 <div class="modal-body">
@@ -161,7 +161,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h6 class="modal-title">
-                        Form Penolakan Pengajuan
+                        Form <b class="text-danger">Penolakan</b>
                     </h6>
                 </div>
                 <div class="modal-body">
@@ -190,7 +190,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h6 class="modal-title">
-                        Form Upload File/Dokumen Final
+                        Form <b class="text-orange">Upload</b> <b class="text-primary">File/Dokumen Final</b>
                     </h6>
                 </div>
                 <div class="modal-body">
@@ -211,7 +211,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h6 class="modal-title">
-                        Form Pembatalan File Upload
+                        Form <b class="text-warning">Pembatalan</b> <b class="text-orange">Upload</b> <b class="text-primary">File</b>
                     </h6>
                 </div>
                 <div class="modal-body">

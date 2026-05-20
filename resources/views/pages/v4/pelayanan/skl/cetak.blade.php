@@ -77,32 +77,49 @@
             margin: 0;
             margin-left: 15px;
             margin-bottom: 5px;
+            /* margin-top: 5px;
+            padding-left: 45px;
+            padding-right: 30px; */
+            font-size: 12pt;
+            box-sizing: border-box;
         }
 
         table {
             width: 100%;
+            border-collapse: collapse;
             margin-left: 50px;
             margin-right: 30px;
             margin-bottom: 5px;
-            border-collapse: collapse;
+            table-layout: fixed;
         }
 
         td {
             vertical-align: top;
             font-size: 12pt;
-            margin-bottom: 5px;
+            /* margin-bottom: 5px; */
+            /* padding: 12px 0; */
+
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            word-break: break-word;
+            white-space: normal;
         }
 
         .label {
-            width: 28%;
+            width: 150px;
+            /* width: 28%; */
         }
 
         .separator {
-            width: 3%;
+            width: 15px;
+            /* width: 3%; */
         }
 
         .value {
-            width: 69%;
+            width: auto;
+            /* width: 69%;
+            max-width: 69%;
+            overflow-wrap: anywhere; */
         }
 
         .spacer {
@@ -222,7 +239,7 @@
             <tr>
                 <td class="label">Alamat</td>
                 <td class="separator">:</td>
-                <td class="value">{{ $list['show']->alamat }}</td>
+                <td class="value">{!! nl2br(e($list['show']->alamat)) !!}</td>
             </tr>
         </table>
 
