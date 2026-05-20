@@ -5,12 +5,14 @@ namespace App\Http\Controllers\v4\Pelayanan\Kebidanan;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use PhpOffice\PhpWord\TemplateProcessor;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\skl;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Exception;
 use Auth;
-use \PDF;
+// use \PDF;
 
 class SKLController extends Controller
 {
@@ -305,13 +307,13 @@ class SKLController extends Controller
         $jam = Carbon::parse($data->tgl)->toTimeString();
 
         if ($data->dr == 1) {
-            $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(public_path().'/images/pku/kebidanan/skl-gede.docx');
+            $templateProcessor = new TemplateProcessor(public_path().'/images/pku/kebidanan/skl-gede.docx');
         }elseif ($data->dr == 2) {
-            $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(public_path().'/images/pku/kebidanan/skl-ahmad.docx');
+            $templateProcessor = new TemplateProcessor(public_path().'/images/pku/kebidanan/skl-ahmad.docx');
         }elseif ($data->dr == 3) {
-            $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(public_path().'/images/pku/kebidanan/skl-febrian.docx');
+            $templateProcessor = new TemplateProcessor(public_path().'/images/pku/kebidanan/skl-febrian.docx');
         }elseif ($data->dr == 4) {
-            $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(public_path().'/images/pku/kebidanan/skl-putri.docx');
+            $templateProcessor = new TemplateProcessor(public_path().'/images/pku/kebidanan/skl-putri.docx');
         }elseif ($data->dr == null) {
             return redirect('/v4/pelayanan/skl')->with('message','Maaf, Input Dokter Belum Terisi');
         }

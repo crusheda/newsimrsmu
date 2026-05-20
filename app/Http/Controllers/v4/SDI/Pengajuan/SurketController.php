@@ -17,47 +17,51 @@ class SurketController extends Controller
 {
     function index()
     {
-        $user = users::leftJoin('referensi','referensi.id','=','users.ref_subprofesi')
-                        ->select('users.*','referensi.deskripsi as nama_subprofesi')
-                        ->where('users.id',Auth::user()->id)
-                        ->first();
-        $users  = users::where('nik','!=',null)->orderBy('nama', 'asc')->get();
-        // $show  = idcard::get();
-        $kategori = referensi::where('ref_jenis',13)->where('status',1)->get();
-        if ($user->s3) {
-            $pendidikan = 'S3 - '.$user->s3;
+        if (Auth::user()->can('admin_kepegawaian') == true) {
+            return view('pages.v4.sdi.pengajuan.surket.index-admin');
         } else {
-            if ($user->s2) {
-                $pendidikan = 'S2 - '.$user->s2;
+            $user = users::leftJoin('referensi','referensi.id','=','users.ref_subprofesi')
+                            ->select('users.*','referensi.deskripsi as nama_subprofesi')
+                            ->where('users.id',Auth::user()->id)
+                            ->first();
+            $users  = users::where('nik','!=',null)->orderBy('nama', 'asc')->get();
+            // $show  = idcard::get();
+            $kategori = referensi::where('ref_jenis',13)->where('status',1)->get();
+            if ($user->s3) {
+                $pendidikan = 'S3 - '.$user->s3;
             } else {
-                if ($user->s1_profesi) {
-                    $pendidikan = 'S1 Profesi - '.$user->s1_profesi;
+                if ($user->s2) {
+                    $pendidikan = 'S2 - '.$user->s2;
                 } else {
-                    if ($user->s1) {
-                        $pendidikan = 'S1 - '.$user->s1;
+                    if ($user->s1_profesi) {
+                        $pendidikan = 'S1 Profesi - '.$user->s1_profesi;
                     } else {
-                        if ($user->d4) {
-                            $pendidikan = 'D4 - '.$user->d4;
+                        if ($user->s1) {
+                            $pendidikan = 'S1 - '.$user->s1;
                         } else {
-                            if ($user->d3) {
-                                $pendidikan = 'D3 - '.$user->d3;
+                            if ($user->d4) {
+                                $pendidikan = 'D4 - '.$user->d4;
                             } else {
-                                if ($user->d2) {
-                                    $pendidikan = 'D2 - '.$user->d2;
+                                if ($user->d3) {
+                                    $pendidikan = 'D3 - '.$user->d3;
                                 } else {
-                                    if ($user->d1) {
-                                        $pendidikan = 'D1 - '.$user->d1;
+                                    if ($user->d2) {
+                                        $pendidikan = 'D2 - '.$user->d2;
                                     } else {
-                                        if ($user->sma) {
-                                            $pendidikan = $user->sma;
+                                        if ($user->d1) {
+                                            $pendidikan = 'D1 - '.$user->d1;
                                         } else {
-                                            if ($user->smp) {
-                                                $pendidikan = $user->smp;
+                                            if ($user->sma) {
+                                                $pendidikan = $user->sma;
                                             } else {
-                                                if ($user->sd) {
-                                                    $pendidikan = $user->sd;
+                                                if ($user->smp) {
+                                                    $pendidikan = $user->smp;
                                                 } else {
-                                                    $pendidikan = '';
+                                                    if ($user->sd) {
+                                                        $pendidikan = $user->sd;
+                                                    } else {
+                                                        $pendidikan = '';
+                                                    }
                                                 }
                                             }
                                         }
@@ -68,18 +72,14 @@ class SurketController extends Controller
                     }
                 }
             }
-        }
-        $data = [
-            // 'show' => $show,
-            'pendidikan' => $pendidikan,
-            'user' => $user,
-            'users' => $users,
-            'kategori' => $kategori,
-        ];
+            $data = [
+                // 'show' => $show,
+                'pendidikan' => $pendidikan,
+                'user' => $user,
+                'users' => $users,
+                'kategori' => $kategori,
+            ];
 
-        if (Auth::user()->can('admin_kepegawaian') == true) {
-            return view('pages.v4.sdi.pengajuan.surket.index-admin')->with('list', $data);
-        } else {
             return view('pages.v4.sdi.pengajuan.surket.index-user')->with('list', $data);
         }
     }

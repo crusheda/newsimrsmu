@@ -119,8 +119,8 @@
                             <div class="col-md-12 mb-3">
                                 <div class="alert alert-light shadow" role="alert">
                                     <small>
-                                        <i class="fa-fw fas fa-caret-right nav-icon"></i> Pastikan <b>Nomor Surat</b> sudah sesuai sebelum disimpan<br>
-                                        <i class="fa-fw fas fa-caret-right nav-icon"></i> Tanda <a class="text-danger">*</a> berarti isian <b>Wajib</b> diisi<br>
+                                        <i class="fa-fw fas fa-caret-right nav-icon"></i> Pastikan <b class="text-info">Nomor Surat</b> sudah sesuai sebelum disimpan<br>
+                                        <i class="fa-fw fas fa-caret-right nav-icon"></i> Tanda <a class="text-danger">*</a> berarti isian <b class="text-danger">Wajib</b> diisi<br>
                                         <i class="fa-fw fas fa-caret-right nav-icon"></i> Disarankan untuk menggunakan <b>Huruf Besar/Capital/Uppercase</b> saat pengisian
                                     </small>
                                 </div>
@@ -164,7 +164,7 @@
                                     <label class="form-label">Nama Ibu <a class="text-danger">*</a></label>
                                     <div class="input-group input-group-merge">
                                         <span class="input-group-text" id="basic-addon34">NY.</span>
-                                        <input type="text" class="form-control" name="ibu" id="basic-url3"
+                                        <input type="text" class="form-control" name="ibu" id="basic-url3" oninput="this.value = this.value.toUpperCase()"
                                             aria-describedby="basic-addon34" placeholder="Nama Lengkap Ibu" required />
                                     </div>
                                 </div>
@@ -174,7 +174,7 @@
                                     <label class="form-label">Nama Ayah <a class="text-danger">*</a></label>
                                     <div class="input-group input-group-merge">
                                         <span class="input-group-text" id="basic-addon34">TN.</span>
-                                        <input type="text" class="form-control" name="ayah" id="basic-url3"
+                                        <input type="text" class="form-control" name="ayah" id="basic-url3" oninput="this.value = this.value.toUpperCase()"
                                             aria-describedby="basic-addon34" placeholder="Nama Lengkap Ayah" required />
                                     </div>
                                 </div>
@@ -182,7 +182,7 @@
                             <div class="col-md-6 mb-3">
                                 <div class="form-group">
                                     <label class="form-label">Nama Anak (<b class="text-warning">Optional</b>)</label>
-                                    <input type="text" class="form-control" name="anak" id="basic-url3"
+                                    <input type="text" class="form-control" name="anak" id="basic-url3" oninput="this.value = this.value.toUpperCase()"
                                         aria-describedby="basic-addon34" placeholder="Nama Lengkap Anak (Bila Ada)" />
                                 </div>
                             </div>
@@ -240,7 +240,7 @@
                         </div>
                     </div>
                     <div class="modal-footer p-b-0">
-                        <a class="btn btn-label-secondary" href="javascript:void(0);" data-bs-dismiss="modal"><i
+                        <a class="btn btn-secondary-transparent" href="javascript:void(0);" data-bs-dismiss="modal"><i
                                 class="fas fa-chevron-left"></i>&nbsp;&nbsp;Tutup</a>
                         <button class="btn btn-primary" id="btn-simpan" onclick="saveData()"><i
                                 class="fa fa-save"></i>&nbsp;&nbsp;Simpan</button>
@@ -371,7 +371,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a class="btn btn-label-secondary" href="javascript:void(0);" data-bs-dismiss="modal"><i
+                    <a class="btn btn-secondary-transparent" href="javascript:void(0);" data-bs-dismiss="modal"><i
                             class="fas fa-chevron-left"></i>&nbsp;&nbsp;Tutup</a>
                     <button class="btn btn-primary" type="submit" id="submit_edit" onclick="ubah()"><i
                             class="fa fa-save"></i>&nbsp;&nbsp;Simpan</button>
