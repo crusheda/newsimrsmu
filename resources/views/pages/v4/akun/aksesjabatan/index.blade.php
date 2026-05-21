@@ -9,7 +9,10 @@
                 </h1>
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item pe-none">
-                        <a role="button">Manajemen Akun</a>
+                        <a role="button">Setting</a>
+                    </li>
+                    <li class="breadcrumb-item pe-none" aria-current="page">
+                        Manajemen Akun
                     </li>
                     <li class="breadcrumb-item pe-none active" aria-current="page">
                         Akses & Jabatan

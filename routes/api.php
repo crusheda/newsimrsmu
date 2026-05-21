@@ -34,6 +34,11 @@ use \App\Http\Controllers\v4\Administrasi\ERuang\ERuangController;
 use \App\Http\Controllers\v4\SDI\JadwalDinasController;
 use \App\Http\Controllers\v4\SDI\PDController;
 use \App\Http\Controllers\v4\SDI\SurtugController;
+use \App\Http\Controllers\v4\SDI\Absensi\AbsensiController;
+use \App\Http\Controllers\v4\SDI\Absensi\AbsensiDashboardController;
+use \App\Http\Controllers\v4\SDI\Absensi\AbsensiDeviceController;
+use \App\Http\Controllers\v4\SDI\Rekrutmen\PengumumanController as RekrutmenPengumumanController;
+use \App\Http\Controllers\v4\SDI\Rekrutmen\RegistrasiController as RekrutmenRegistrasiController;
 use \App\Http\Controllers\v4\SDI\Pengajuan\SurketController;
 use \App\Http\Controllers\v4\SDI\Pengajuan\IDCardController;
 use \App\Http\Controllers\v4\Pelayanan\Kebidanan\SKLController;
@@ -288,23 +293,51 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
                     Route::delete('sdi/jadwaldinas/ln/{id}/hapus', [JadwalDinasController::class, 'hapusLN']);
 
         // ABSENSI PEGAWAI
+            // DASHBOARD INTERAKTIF
+                Route::get('sdi/absensi/dashboard/1', [AbsensiDashboardController::class, 'grafik1']);
+
+            // PERIZINAN PERANGKAT
+                Route::get('sdi/absensi/perangkat/table', [AbsensiDeviceController::class, 'table']);
+                Route::get('sdi/absensi/perangkat/approve/{id}', [AbsensiDeviceController::class, 'approve']);
+                Route::get('sdi/absensi/perangkat/reject/{id}', [AbsensiDeviceController::class, 'reject']);
+                Route::get('sdi/absensi/perangkat/aktif/{id}', [AbsensiDeviceController::class, 'aktif']);
+                Route::get('sdi/absensi/perangkat/blokir/{id}', [AbsensiDeviceController::class, 'blokir']);
+
+            // REKAPITULASI ABSENSI
+                Route::get('sdi/absensi/ijin/checkBulan/{bln}', [AbsensiController::class, 'checkBulan']);
+                Route::get('sdi/absensi/ijin/checkJadwal/{id}', [AbsensiController::class, 'checkJadwal']);
+                Route::get('sdi/absensi/ijin/checkPegawai/{id}', [AbsensiController::class, 'checkPegawai']);
+                Route::post('sdi/absensi/ijin/push', [AbsensiController::class, 'storeIjin']);
+                Route::post('sdi/absensi/table/monitoring', [AbsensiController::class, 'tableMonitoring']);
+                Route::post('sdi/absensi/table/all', [AbsensiController::class, 'tableAll']);
+                Route::get('sdi/absensi/table/coba', [AbsensiController::class, 'cobaJadwal']);
+                Route::post('sdi/absensi/table/rekapLinda', [AbsensiController::class, 'tableRekapAbsensi']);
+                Route::post('sdi/absensi/table/rekapLindaDetail', [AbsensiController::class, 'tableRekapAbsensiDetail']);
+                Route::post('sdi/absensi/table/getCutiPegawai', [AbsensiController::class, 'getCutiPegawai']);
+                Route::post('sdi/absensi/table/getMonitoringAbsensiHarian', [AbsensiController::class, 'getMonitoringAbsensiHarian']);
+                Route::post('sdi/absensi/table/getBuktifFotoPegawai', [AbsensiController::class, 'getBuktifFotoPegawai']);
+                Route::get('sdi/absensi/deteksiperangkat', [AbsensiController::class, 'deteksiPerangkat']);
+                Route::get('sdi/absensi/{id}/detail', [AbsensiController::class, 'detail']);
+                Route::get('sdi/absensi/{id}/ubah', [AbsensiController::class, 'getUbah']);
+                Route::post('sdi/absensi/{id}/ubah/proses', [AbsensiController::class, 'ubah']);
+                Route::get('sdi/absensi/{id}/hapus/{user}', [AbsensiController::class, 'hapus']);
 
         // REKRUTMEN PEGAWAI
 
         // PENGAJUAN SDI
             // SURAT KETERANGAN
                 // ADMIN
-                Route::get('sdi/pengajuan/surket/table', [SurketController::class, 'tableAdmin']);
-                Route::get('sdi/pengajuan/surket/{id}/verif/{user}', [SurketController::class, 'verif']);
-                Route::get('sdi/pengajuan/surket/{id}/unverif', [SurketController::class, 'unverif']);
-                Route::post('sdi/pengajuan/surket/tolak', [SurketController::class, 'tolak']);
-                Route::get('sdi/pengajuan/surket/{id}/bataltolak', [SurketController::class, 'batalTolak']);
-                Route::post('sdi/pengajuan/surket/proses', [SurketController::class, 'prosesUpload']);
-                Route::get('sdi/pengajuan/surket/{id}/batalproses', [SurketController::class, 'batalProsesUpload']);
+                    Route::get('sdi/pengajuan/surket/table', [SurketController::class, 'tableAdmin']);
+                    Route::get('sdi/pengajuan/surket/{id}/verif/{user}', [SurketController::class, 'verif']);
+                    Route::get('sdi/pengajuan/surket/{id}/unverif', [SurketController::class, 'unverif']);
+                    Route::post('sdi/pengajuan/surket/tolak', [SurketController::class, 'tolak']);
+                    Route::get('sdi/pengajuan/surket/{id}/bataltolak', [SurketController::class, 'batalTolak']);
+                    Route::post('sdi/pengajuan/surket/proses', [SurketController::class, 'prosesUpload']);
+                    Route::get('sdi/pengajuan/surket/{id}/batalproses', [SurketController::class, 'batalProsesUpload']);
                 // USER
-                Route::get('sdi/pengajuan/surket/{id}/table', [SurketController::class, 'tableUser']);
-                Route::post('sdi/pengajuan/surket/tambah', [SurketController::class, 'tambah']);
-                Route::delete('sdi/pengajuan/surket/{id}/delete', [SurketController::class, 'hapus']);
+                    Route::get('sdi/pengajuan/surket/{id}/table', [SurketController::class, 'tableUser']);
+                    Route::post('sdi/pengajuan/surket/tambah', [SurketController::class, 'tambah']);
+                    Route::delete('sdi/pengajuan/surket/{id}/delete', [SurketController::class, 'hapus']);
 
             // IDCARD
                 // ADMIN

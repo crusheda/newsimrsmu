@@ -13,7 +13,7 @@
                         <a role="button">SDI</a>
                     </li>
                     <li class="breadcrumb-item pe-none">
-                        <a role="button">Pengajuan</a>
+                        Pengajuan
                     </li>
                     <li class="breadcrumb-item pe-none active" aria-current="page">
                         Surat Keterangan

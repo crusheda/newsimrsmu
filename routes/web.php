@@ -145,7 +145,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function 
         // ABSENSI
         Route::get('sdi/absensi', [AbsensiController::class, 'index'])->name('v4.sdi.absensi.rekapitulasi');
         Route::get('sdi/absensi/dashboard', [AbsensiDashboardController::class, 'index'])->name('v4.sdi.absensi.dashboard');
-        Route::get('sdi/absensi/device', [AbsensiDeviceController::class, 'index'])->name('v4.sdi.absensi.device');
+        Route::get('sdi/absensi/perangkat', [AbsensiDeviceController::class, 'index'])->name('v4.sdi.absensi.perangkat');
 
         // REKRUTMEN
             // PENGUMUMAN
