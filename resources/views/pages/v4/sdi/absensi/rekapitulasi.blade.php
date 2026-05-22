@@ -55,6 +55,23 @@
                                         data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                                         title="Pilih Rentang Tanggal Ijin" id="pilih_tgl_ijin" hidden>
                                         <div class="form-group">
+                                            <label class="form-label">
+                                                Rentang Ijin <span class="text-danger">*</span>
+                                            </label>
+
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                id="flatpickr_ijin"
+                                                placeholder="Pilih Rentang Tanggal Ijin"
+                                                autocomplete="off"
+                                            >
+
+                                            <!-- hidden input -->
+                                            <input type="hidden" id="ijin_dari">
+                                            <input type="hidden" id="ijin_sampai">
+                                        </div>
+                                        {{-- <div class="form-group">
                                             <label class="form-label">Rentang Ijin <span class="text-danger">*</span></label>
                                             <div class="input-daterange input-group" id="tgl_ijin">
                                                 <span class="input-group-text">Tanggal Mulai</span>
@@ -62,7 +79,7 @@
                                                 <span class="input-group-text">Tanggal Selesai</span>
                                                 <input type="text" class="form-control text-end" placeholder="Masukkan Tanggal" name="range-end" id="ijin_sampai">
                                             </div>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                     <div class="col-md-12 mb-3" id="pilih_ket_ijin" hidden>
                                         <div class="form-group">
@@ -175,13 +192,20 @@
                                 data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                                 title="Pilih Rentang Tanggal" id="tgl_range">
                                 <div class="form-group">
-                                    <label class="form-label">Rentang Tanggal <span class="text-danger">*</span></label>
-                                    <div class="input-daterange input-group" id="pc-datepicker-5">
-                                        <span class="input-group-text">Dari</span>
-                                        <input type="text" class="form-control text-end" placeholder="Masukkan Tanggal" name="range-start" id="filter_dari">
-                                        <span class="input-group-text">Sampai</span>
-                                        <input type="text" class="form-control text-end" placeholder="Masukkan Tanggal" name="range-end" id="filter_sampai">
-                                    </div>
+                                    <label class="form-label">
+                                        Rentang Tanggal <span class="text-danger">*</span>
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        id="flatpickr_range"
+                                        placeholder="Pilih Rentang Tanggal"
+                                        autocomplete="off"
+                                    >
+
+                                    <input type="hidden" id="filter_dari">
+                                    <input type="hidden" id="filter_sampai">
                                 </div>
                             </div>
                             <div class="col-md-12 mb-3" data-bs-toggle="tooltip"
@@ -428,26 +452,88 @@
         let superID = @json(Auth::user()->can('admin_kepegawaian_kepala'));
 
         $(document).ready(function() {
-            // ubah('1034');
-            // ------------------------------------------------------------------------------------- START DATERANGEPICKER
-            datepicker_range = new DateRangePicker(document.querySelector('#pc-datepicker-5'), {
-                buttonClass: 'btn',
-                todayBtn: true,
-                clearBtn: true,
-                format: 'yyyy-mm-dd'
+            // ------------------------------------------------------------------------------------- START DATEPICKER
+            // FILTER RANGE
+            // ======================================================
+
+            datepicker_range = flatpickr("#flatpickr_range", {
+                mode: "range",
+                dateFormat: "Y-m-d",
+                allowInput: false,
+
+                onChange: function(selectedDates, dateStr, instance) {
+
+                    if (selectedDates.length === 2) {
+
+                        let start = instance.formatDate(selectedDates[0], "Y-m-d");
+                        let end   = instance.formatDate(selectedDates[1], "Y-m-d");
+
+                        $('#filter_dari').val(start);
+                        $('#filter_sampai').val(end);
+
+                    } else {
+
+                        $('#filter_dari').val('');
+                        $('#filter_sampai').val('');
+                    }
+                }
             });
-            datepicker_range_ijin = new DateRangePicker(document.querySelector('#tgl_ijin'), {
-                buttonClass: 'btn',
-                todayBtn: true,
-                clearBtn: false,
-                format: 'yyyy-mm-dd'
+
+            // ======================================================
+            // IJIN RANGE
+            // ======================================================
+
+            datepicker_range_ijin = flatpickr("#flatpickr_ijin", {
+                mode: "range",
+                dateFormat: "Y-m-d",
+                allowInput: false,
+
+                onChange: function(selectedDates, dateStr, instance) {
+
+                    if (selectedDates.length === 2) {
+
+                        let start = instance.formatDate(selectedDates[0], "Y-m-d");
+                        let end   = instance.formatDate(selectedDates[1], "Y-m-d");
+
+                        $('#ijin_dari').val(start);
+                        $('#ijin_sampai').val(end);
+
+                    } else {
+
+                        $('#ijin_dari').val('');
+                        $('#ijin_sampai').val('');
+                    }
+                }
             });
-            datepickerd = new Datepicker(document.querySelector('#filter_tanggal'), {
-                buttonClass: 'btn',
-                todayBtn: true,
-                clearBtn: true,
-                format: 'yyyy-mm-dd'
+
+            // ======================================================
+            // FILTER HARIAN
+            // ======================================================
+
+            datepickerd = flatpickr("#filter_tanggal", {
+                dateFormat: "Y-m-d",
+                allowInput: false
             });
+
+            // ------------------------------------------------------------------------------------- END DATERANGEPICKER
+            // datepicker_range = new DateRangePicker(document.querySelector('#pc-datepicker-5'), {
+            //     buttonClass: 'btn',
+            //     todayBtn: true,
+            //     clearBtn: true,
+            //     format: 'yyyy-mm-dd'
+            // });
+            // datepicker_range_ijin = new DateRangePicker(document.querySelector('#tgl_ijin'), {
+            //     buttonClass: 'btn',
+            //     todayBtn: true,
+            //     clearBtn: false,
+            //     format: 'yyyy-mm-dd'
+            // });
+            // datepickerd = new Datepicker(document.querySelector('#filter_tanggal'), {
+            //     buttonClass: 'btn',
+            //     todayBtn: true,
+            //     clearBtn: true,
+            //     format: 'yyyy-mm-dd'
+            // });
             // Set tanggal default
             const today = new Date();
             let tahun = today.getFullYear();
@@ -473,10 +559,18 @@
             $('#filter_sampai').val(formatDate(sampaiDate));
 
             // 🔥 Set nilai ke datepicker RANGE (bukan ke input langsung)
-            datepicker_range_ijin.setDates(dariDateIjin, sampaiDateIjin);
-            datepicker_range.setDates(dariDate, sampaiDate);
+            datepicker_range_ijin.setDate([
+                dariDateIjin,
+                sampaiDateIjin
+            ]);
+
+            datepicker_range.setDate([
+                dariDate,
+                sampaiDate
+            ]);
+
             datepickerd.setDate(new Date());
-            // ------------------------------------------------------------------------------------- END DATERANGEPICKER
+
             // SELECT2
             $('.select2').select2({
                 placeholder: "Pilih",
@@ -497,13 +591,24 @@
             // });
 
             // SWITCH KET MANUAL IJIN
+            $('#ketmanual_ijin').prop('hidden', true);
+            $('#ket_ijin').next('.select2').show();
             $("#switch_ketmanual_ijin").on("change", function() {
                 if ($(this).is(":checked")) {
-                    $("#ket_ijin").prop('hidden',true);
-                    $("#ketmanual_ijin").prop('hidden',false);
+
+                    // hide select2
+                    $('#ket_ijin').next('.select2').hide();
+
+                    // show textarea
+                    $('#ketmanual_ijin').prop('hidden', false);
+
                 } else {
-                    $("#ket_ijin").prop('hidden',false);
-                    $("#ketmanual_ijin").prop('hidden',true);
+
+                    // show select2
+                    $('#ket_ijin').next('.select2').show();
+
+                    // hide textarea
+                    $('#ketmanual_ijin').prop('hidden', true);
                 }
             });
 
@@ -515,9 +620,9 @@
             $('#tgl_harian').prop('hidden',true);
             $('#tgl_range').prop('hidden',false);
             pilihan = $('#filter_pilihan').val();
-            datepicker_range.setDates(dariDate, sampaiDate);
+            datepicker_range.setDate(dariDate, sampaiDate);
             if (pilihan == 1) {
-                datepicker_range.setDates(dariDateIjin, sampaiDateIjin);
+                datepicker_range.setDate(dariDateIjin, sampaiDateIjin);
                 $('#filter_jenis').prop('disabled',false);
             } else {
                 if (pilihan == 2) {
@@ -538,7 +643,7 @@
                                     $('#tgl_harian').prop('hidden',false);
                                 } else {
                                     if (pilihan == 10) {
-                                        datepicker_range.setDates(dariDateIjin, sampaiDateIjin);
+                                        datepicker_range.setDate(dariDateIjin, sampaiDateIjin);
                                         $('#filter_jenis').prop('disabled',false);
                                     } else {
                                         $('#filter_jenis').prop('disabled',false);
@@ -701,6 +806,15 @@
         }
 
         function simpanIjin() {
+            if ($('#ijin_dari').val() == '' || $('#ijin_sampai').val() == '') {
+                iziToast.error({
+                    title: 'Pesan Galat!',
+                    message: 'Rentang tanggal ijin wajib dipilih.',
+                    position: 'topRight'
+                });
+                return;
+            }
+
             var save = new FormData();
             save.append('bulan',$('#bulan_ijin').val());
             save.append('jadwal',$('#pegawai_ijin').val());
@@ -780,17 +894,35 @@
             // Kosongkan tabel info ijin dan sembunyikan
             $('#showInfoIjin').empty().prop('hidden', true);
 
-            // Kosongkan date range
+            // Reset flatpickr ijin
+            if (datepicker_range_ijin) {
+                datepicker_range_ijin.clear();
+            }
+
+            // Reset hidden input
             $('#ijin_dari').val('');
             $('#ijin_sampai').val('');
+
+            // Hide section tanggal
             $('#pilih_tgl_ijin').prop('hidden', true);
 
-            // Reset select keterangan ijin
-            $('#ket_ijin').val('');
+            // Reset keterangan
+            $('#ket_ijin').val('').trigger('change');
+            $('#ketmanual_ijin').val('');
+
+            // Reset switch manual
+            $('#switch_ketmanual_ijin').prop('checked', false);
+
+            // tampilkan select, sembunyikan textarea
+            $('#ket_ijin').prop('hidden', false);
+            $('#ket_ijin').next('.select2').show();
+            $('#ketmanual_ijin').prop('hidden', true);
+
+            // Hide section keterangan
             $('#pilih_ket_ijin').prop('hidden', true);
 
-            // Reset upload ijin
-            $('#upload_ijin').val('');
+            // Reset upload
+            $('#filex').val('');
             $('#upload_ijin').prop('hidden', true);
 
             // Disable tombol simpan
@@ -835,13 +967,13 @@
                         content += `<td class="text-start">
                                         <div class="align-items-center">
                                             <h6 class="mb-1">Berangkat : <b class="text-info">${item.tgl_in}</b></h6>
-                                            <p class="mb-1">Lokasi : 
-                                                <a href="${item.lokasi_in?'https://www.google.com/maps?q='+item.lokasi_in:'javascript:void(0);'}" target="_blank" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" 
+                                            <p class="mb-1">Lokasi :
+                                                <a href="${item.lokasi_in?'https://www.google.com/maps?q='+item.lokasi_in:'javascript:void(0);'}" target="_blank" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom"
                                                     data-bs-html="true" title="Klik disini untuk melihat Lokasi Berangkat">${item.lokasi_in?item.lokasi_in:'-'}</a>
                                             </p>
-                                            <p>Bukti Foto : 
+                                            <p>Bukti Foto :
                                                 <a href="https://absensi.simrsmu.com/api/kepegawaian/detail/foto/${item.id}/1" data-lightbox="gallery" data-title="Bukti Foto Absensi Berangkat (${item.foto_in?item.foto_in:'-'})" style="width:500px;height:500px">
-                                                    <span class="badge bg-info" style="cursor:pointer" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" 
+                                                    <span class="badge bg-info" style="cursor:pointer" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom"
                                                     data-bs-html="true" title="Klik disini untuk melihat Bukti Foto Berangkat">KLIK DISINI</span>
                                                 </a>
                                             </p>
@@ -850,13 +982,13 @@
                         content += `<td class="text-start">
                                         <div class="align-items-center">
                                             <h6 class="mb-1">Pulang : <b class="text-danger">${item.tgl_out?item.tgl_out:'-'}</b></h6>
-                                            <p class="mb-1">Lokasi : 
-                                                <a href="${item.lokasi_out?'https://www.google.com/maps?q='+item.lokasi_out:'javascript:void(0);'}" target="_blank" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" 
+                                            <p class="mb-1">Lokasi :
+                                                <a href="${item.lokasi_out?'https://www.google.com/maps?q='+item.lokasi_out:'javascript:void(0);'}" target="_blank" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom"
                                                     data-bs-html="true" title="Klik disini untuk melihat Lokasi Berangkat">${item.lokasi_out?item.lokasi_out:'-'}</a>
                                             </p>
-                                            <p>Bukti Foto : 
+                                            <p>Bukti Foto :
                                                 ${item.foto_out?`<a href="https://absensi.simrsmu.com/api/kepegawaian/detail/foto/${item.id}/0" data-lightbox="gallery" data-title="Bukti Foto Absensi Pulang (${item.foto_in?item.foto_in:'-'})" style="width:500px;height:500px">
-                                                                        <span class="badge bg-danger" style="cursor:pointer" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" 
+                                                                        <span class="badge bg-danger" style="cursor:pointer" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom"
                                                                         data-bs-html="true" title="Klik disini untuk melihat Bukti Foto Pulang">KLIK DISINI</span>
                                                                     </a>`:`-`}
                                             </p>
@@ -2432,8 +2564,21 @@
             // $('#filter_pilihan').val('').change();
             $('#filter_unit').val('').change();
             $('#filter_jenis').val('0');
+
+            // reset flatpickr range
+            if (datepicker_range) {
+                datepicker_range.clear();
+            }
+
             $('#filter_dari').val('').change();
             $('#filter_sampai').val('').change();
+
+            // reset flatpickr harian
+            if (datepickerd) {
+                datepickerd.clear();
+            }
+
+            $('#filter_tanggal').val('').change();
         }
 
         function getDateTime() {
