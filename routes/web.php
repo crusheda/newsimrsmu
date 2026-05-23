@@ -118,13 +118,13 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function 
 
     // SUMBER DAYA INSANI (SDI)
         // PROFIL PEGAWAI
-        Route::get('profilkaryawan', [ProfilPegawaiController::class, 'index'])->name('v4.sdi.profilpegawai');
-        Route::get('profilkaryawan/{id}', [ProfilPegawaiController::class, 'show'])->name('v4.sdi.profilpegawai.show');
-        Route::get('profilkaryawan/detail/{id}', [ProfilController::class, 'indexKepegawaian'])->name('v4.sdi.profilpegawai.kepegawaian');
-        Route::delete('profilkaryawan/{id}/nonaktif', [ProfilPegawaiController::class, 'destroy'])->name('v4.sdi.profilpegawai.hapus');
-        Route::get('profilkaryawan/dokumen/download/{id}', [DetailProfilPegawaiController::class,'downloadDokumen'])->name('v4.sdi.profilpegawai.detail.downloadDokumen');
-        Route::get('profilkaryawan/spkrkk/download/{id}', [DetailProfilPegawaiController::class,'downloadSpkRkk'])->name('v4.sdi.profilpegawai.detail.downloadSpkRkk');
-        Route::resource('profilkaryawan', '\App\Http\Controllers\Kepegawaian\ProfilKaryawanController');
+        // Route::get('profilkaryawan', [ProfilPegawaiController::class, 'index'])->name('v4.sdi.profilpegawai');
+        // Route::get('profilkaryawan/{id}', [ProfilPegawaiController::class, 'show'])->name('v4.sdi.profilpegawai.show');
+        // Route::get('profilkaryawan/detail/{id}', [ProfilController::class, 'indexKepegawaian'])->name('v4.sdi.profilpegawai.kepegawaian');
+        // Route::delete('profilkaryawan/{id}/nonaktif', [ProfilPegawaiController::class, 'destroy'])->name('v4.sdi.profilpegawai.hapus');
+        // Route::get('profilkaryawan/dokumen/download/{id}', [DetailProfilPegawaiController::class,'downloadDokumen'])->name('v4.sdi.profilpegawai.detail.downloadDokumen');
+        // Route::get('profilkaryawan/spkrkk/download/{id}', [DetailProfilPegawaiController::class,'downloadSpkRkk'])->name('v4.sdi.profilpegawai.detail.downloadSpkRkk');
+        // Route::resource('profilkaryawan', '\App\Http\Controllers\Kepegawaian\ProfilKaryawanController');
 
         // JADWAL DINAS
         Route::get('sdi/jadwaldinas', [JadwalDinasController::class, 'index'])->name('v4.sdi.jadwaldinas');

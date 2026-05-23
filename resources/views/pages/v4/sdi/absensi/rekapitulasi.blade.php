@@ -124,12 +124,15 @@
                 </div>
             @endcanany
             <div class="col-sm-12">
-                <div class="card custom-card">
+                <div class="mb-4" id="loading_filter">
+                    <center><i class="ti ti-refresh ti-spin me-1"></i> Memuat Filter...</center>
+                </div>
+                <div class="card custom-card" id="show_filter" hidden>
                     <div class="card-header d-flex align-items-center justify-content-between px-3">
-                        <h6 class="mb-0">Filter <b class="text-primary">Riwayat</b></h6>
-                        <div class="btn-group">
+                        <h6 class="mb-0">Filter <b class="text-info">Riwayat</b></h6>
+                        <div class="d-flex align-items-center">
                             @canany(['admin_kepegawaian', 'admin_kepegawaian_kepala'])
-                                <a class="btn btn-orange-light" data-bs-toggle="collapse" href="#showIjinManual" role="button" aria-expanded="true" aria-controls="collapseExample"> Ijin Manual </a>
+                                <a class="btn btn-orange-light me-2" data-bs-toggle="collapse" href="#showIjinManual" role="button" aria-expanded="true" aria-controls="collapseExample"><i class="ri-pass-valid-line me-1"></i> Ijin Manual</a>
                             @endcanany
                             <div class="dropdown">
                                 <a href="javascript:void(0);" class="btn btn-secondary-transparent dropdown-toggle arrow-none"
@@ -221,7 +224,7 @@
                     <div class="card-footer p-3">
                         <div class="text-end btn-page mb-0">
                             <button type="button" class="btn btn-link text-dark" id="clear_text" onclick="clearInput()">Kosongkan</button>
-                            <button type="button" class="btn btn-shadow btn-primary" onclick="filter()" data-bs-toggle="tooltip"
+                            <button type="button" class="btn btn-shadow btn-info" onclick="filter()" data-bs-toggle="tooltip"
                             data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                             title="Menampilkan Daftar/Filter Absensi" id="tombol-tampilkan"><i class="fas fa-filter align-middle me-2"></i> Tampilkan</button>
                         </div>
@@ -312,7 +315,7 @@
         </div>
     </div>
     <div class="modal fade animate__animated animate__rubberBand" id="modalDeteksiPerangkat" role="dialog" aria-labelledby="confirmFormLabel" aria-hidden="true" data-bs-backdrop="static">
-        <div class="modal-dialog modal-xxl modal-dialog-centered">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h6 class="modal-title">
@@ -515,25 +518,6 @@
                 allowInput: false
             });
 
-            // ------------------------------------------------------------------------------------- END DATERANGEPICKER
-            // datepicker_range = new DateRangePicker(document.querySelector('#pc-datepicker-5'), {
-            //     buttonClass: 'btn',
-            //     todayBtn: true,
-            //     clearBtn: true,
-            //     format: 'yyyy-mm-dd'
-            // });
-            // datepicker_range_ijin = new DateRangePicker(document.querySelector('#tgl_ijin'), {
-            //     buttonClass: 'btn',
-            //     todayBtn: true,
-            //     clearBtn: false,
-            //     format: 'yyyy-mm-dd'
-            // });
-            // datepickerd = new Datepicker(document.querySelector('#filter_tanggal'), {
-            //     buttonClass: 'btn',
-            //     todayBtn: true,
-            //     clearBtn: true,
-            //     format: 'yyyy-mm-dd'
-            // });
             // Set tanggal default
             const today = new Date();
             let tahun = today.getFullYear();
@@ -555,25 +539,25 @@
             const formatDate = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 
             // Set ke input
-            $('#filter_dari').val(formatDate(dariDate));
-            $('#filter_sampai').val(formatDate(sampaiDate));
+            // $('#filter_dari').val(formatDate(dariDate));
+            // $('#filter_sampai').val(formatDate(sampaiDate));
 
             // 🔥 Set nilai ke datepicker RANGE (bukan ke input langsung)
             datepicker_range_ijin.setDate([
                 dariDateIjin,
                 sampaiDateIjin
-            ]);
+            ], true);
 
             datepicker_range.setDate([
                 dariDate,
                 sampaiDate
-            ]);
+            ], true);
 
             datepickerd.setDate(new Date());
 
             // SELECT2
             $('.select2').select2({
-                placeholder: "Pilih",
+                placeholder: " Pilih",
                 allowClear: true
             });
             // var t = $(".select2");
@@ -612,17 +596,25 @@
                 }
             });
 
+            // SHOWING FILTER
+            $('#loading_filter').prop('hidden',true);
             $('#show_filter').prop('hidden',false);
             filterPilihan();
         });
 
         function filterPilihan() {
+            // Format ke yyyy-mm-dd string
+            const formatDate = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
             $('#tgl_harian').prop('hidden',true);
             $('#tgl_range').prop('hidden',false);
             pilihan = $('#filter_pilihan').val();
-            datepicker_range.setDate(dariDate, sampaiDate);
+            datepicker_range.setDate([dariDate, sampaiDate]);
+            $('#filter_dari').val(formatDate(dariDate));
+            $('#filter_sampai').val(formatDate(sampaiDate));
             if (pilihan == 1) {
-                datepicker_range.setDate(dariDateIjin, sampaiDateIjin);
+                datepicker_range.setDate([dariDateIjin, sampaiDateIjin]);
+                $('#filter_dari').val(formatDate(dariDateIjin));
+                $('#filter_sampai').val(formatDate(sampaiDateIjin));
                 $('#filter_jenis').prop('disabled',false);
             } else {
                 if (pilihan == 2) {
@@ -643,7 +635,9 @@
                                     $('#tgl_harian').prop('hidden',false);
                                 } else {
                                     if (pilihan == 10) {
-                                        datepicker_range.setDate(dariDateIjin, sampaiDateIjin);
+                                        datepicker_range.setDate([dariDateIjin, sampaiDateIjin]);
+                                        $('#filter_dari').val(formatDate(dariDateIjin));
+                                        $('#filter_sampai').val(formatDate(sampaiDateIjin));
                                         $('#filter_jenis').prop('disabled',false);
                                     } else {
                                         $('#filter_jenis').prop('disabled',false);
@@ -999,8 +993,6 @@
                     });
                     $('#tampil-tbody-deteksip').empty().append(content);
                     var table = $('#dttable-deteksip').DataTable({
-                        destroy: true,
-                        dom: 'Bfrtip',
                         order: [
                             [4, "desc"]
                         ],
@@ -1015,19 +1007,8 @@
                             { sWidth: '20%' },
                             { sWidth: '10%' },
                         ],
-                        columnDefs: [
-                            // { visible: false, targets: [7] },
-                        ],
                         displayLength: 100,
-                        lengthChange: true,
-                        lengthMenu: [20,50,100, 300, 500, 1000, 3000, 5000, 10000, 30000, 50000],
-                        buttons: ['excel', 'pdf', 'colvis']
                     });
-                    // iziToast.success({
-                    //     title: 'System Message!',
-                    //     message: 'Berhasil menampilkan data Monitoring Absensi',
-                    //     position: 'topRight'
-                    // });
                     // Showing Tooltip
                     $('[data-bs-toggle="tooltip"]').tooltip({
                         trigger: 'hover'
@@ -1177,7 +1158,6 @@
                         })
                     });
                     var table = $('#dttable').DataTable({
-                        // dom: 'Bfrtip',
                         order: [
                             [4, "desc"]
                         ],
@@ -1189,13 +1169,7 @@
                             { sWidth: '30%' },
                             { sWidth: '10%' },
                         ],
-                        columnDefs: [
-                            // { visible: false, targets: [7] },
-                        ],
                         displayLength: 100,
-                        lengthChange: true,
-                        lengthMenu: [100, 300, 500, 1000, 3000, 5000, 10000, 30000, 50000],
-                        // buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
                     iziToast.success({
                         title: 'System Message!',
@@ -1332,7 +1306,6 @@
                         })
                     });
                     var table = $('#dttable').DataTable({
-                        dom: 'Bfrtip',
                         scrollX: true, // Tambahkan ini untuk memungkinkan scroll horizontal
                         scrollCollapse: true,
                         // fixedColumns: {
@@ -1359,8 +1332,6 @@
                             { visible: false, targets: [2] },
                         ],
                         displayLength: 100,
-                        lengthChange: true,
-                        lengthMenu: [100, 300, 500, 1000, 3000, 5000, 10000, 30000, 50000],
                         buttons: [
                             {
                                 extend: 'excel',
@@ -1523,7 +1494,6 @@
                         })
                     });
                     var table = $('#dttable').DataTable({
-                        dom: 'Bfrtip',
                         scrollX: true, // Tambahkan ini untuk memungkinkan scroll horizontal
                         scrollCollapse: true,
                         fixedColumns: {
@@ -1534,8 +1504,6 @@
                             [1, "asc"]
                         ],
                         displayLength: 100,
-                        lengthChange: true,
-                        lengthMenu: [100, 300, 500, 1000, 3000, 5000, 10000, 30000, 50000],
                         buttons: [
                             {
                                 extend: 'excel',
@@ -1682,7 +1650,6 @@
                         })
                     });
                     var table = $('#dttable').DataTable({
-                        dom: 'Bfrtip',
                         order: [
                             [1, "asc"], // Kolom PEGAWAI (kolom ke-3, index 2)
                             [3, "asc"]   // Kolom TANGGAL (kolom ke-4, index 3)
@@ -1701,8 +1668,6 @@
                         //     { sWidth: '5%' },
                         // ],
                         displayLength: 100,
-                        lengthChange: true,
-                        lengthMenu: [100, 300, 500, 1000, 3000, 5000, 10000, 30000, 50000],
                         buttons: [
                             {
                                 extend: 'excel',
@@ -1835,13 +1800,10 @@
                         })
                     });
                     var table = $('#dttable').DataTable({
-                        dom: 'Bfrtip',
                         order: [
                             [2, "asc"] // Kolom PEGAWAI (kolom ke-3, index 2)
                         ],
                         displayLength: 100,
-                        lengthChange: true,
-                        lengthMenu: [100, 300, 500, 1000, 3000, 5000, 10000, 30000, 50000],
                         buttons: [
                             {
                                 extend: 'excel',
