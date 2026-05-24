@@ -153,7 +153,7 @@
                             </small>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-5 mb-3">
                                 <div class="form-group">
                                     <label class="form-label">Pilihan Filter <a class="text-danger">*</a></label>
                                     <select class="form-select select2" id="filter_pilihan" onchange="filterPilihan()" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required>
@@ -167,31 +167,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-4 mb-3">
-                                <div class="form-group">
-                                    <label class="form-label">Pilihan Unit</label>
-                                    <select class="form-select select2" name="filter_unit[]" id="filter_unit" style="width: 100%" multiple>
-                                        @if (!empty($list['jabatan']))
-                                            @foreach ($list['jabatan'] as $item)
-                                                <option value="{{ $item->id }}">{{ $item->unit }}</option>
-                                            @endforeach
-                                        @endif
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-2 mb-3">
-                                <div class="form-group">
-                                    <label class="form-label">Jenis Absensi</label>
-                                    <select class="form-select" name="filter_jenis" id="filter_jenis" style="width: 100%">
-                                        <option value="0" selected>Semua Jenis</option>
-                                        <option value="1">Shift/Masuk</option>
-                                        {{-- <option value="2"><s>Cuti</s></option> --}}
-                                        <option value="3">Ijin/TIdak Masuk</option>
-                                        <option value="4">Dinas Luar</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-12 mb-3" data-bs-toggle="tooltip"
+                            <div class="col-md-5 mb-3" data-bs-toggle="tooltip"
                                 data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                                 title="Pilih Rentang Tanggal" id="tgl_range">
                                 <div class="form-group">
@@ -209,6 +185,30 @@
 
                                     <input type="hidden" id="filter_dari">
                                     <input type="hidden" id="filter_sampai">
+                                </div>
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <div class="form-group">
+                                    <label class="form-label">Jenis Absensi</label>
+                                    <select class="form-select" name="filter_jenis" id="filter_jenis" style="width: 100%">
+                                        <option value="0" selected>Semua Jenis</option>
+                                        <option value="1">Shift/Masuk</option>
+                                        {{-- <option value="2"><s>Cuti</s></option> --}}
+                                        <option value="3">Ijin/TIdak Masuk</option>
+                                        <option value="4">Dinas Luar</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <div class="form-group">
+                                    <label class="form-label">Pilihan Unit</label>
+                                    <select class="form-select select2" name="filter_unit[]" id="filter_unit" style="width: 100%" multiple>
+                                        @if (!empty($list['jabatan']))
+                                            @foreach ($list['jabatan'] as $item)
+                                                <option value="{{ $item->id }}">{{ $item->unit }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-12 mb-3" data-bs-toggle="tooltip"
@@ -314,8 +314,8 @@
             </div>
         </div>
     </div>
-    <div class="modal fade animate__animated animate__rubberBand" id="modalDeteksiPerangkat" role="dialog" aria-labelledby="confirmFormLabel" aria-hidden="true" data-bs-backdrop="static">
-        <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal fade animate__animated animate__rubberBand" id="modalDeteksiPerangkat" role="dialog" aria-labelledby="confirmFormLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xxl modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h6 class="modal-title">
@@ -362,30 +362,32 @@
                 <div class="modal-body">
                     <input type="text" id="id_ubah_absensi" hidden>
                     <div class="row">
-                        <div class="alert alert-secondary">
-                            <small>
-                                <i class="ti ti-arrow-narrow-right me-1"></i> Silakan memperbaiki data absensi dan shift <mark><b>HANYA YANG PERLU DIUBAH SAJA</b></mark><br>
-                                <i class="ti ti-arrow-narrow-right me-1"></i> Form Ubah Absensi ini diperlukan jika pegawai menginginkan perubahan/perbaikan shift dengan kondisi pegawai tersebut telah melakukan/menyelesaikan absensi
-                            </small>
+                        <div class="col-md-12 mb-3">
+                            <div class="alert alert-light shadow-sm" role="alert">
+                                <small>
+                                    <i class="ti ti-arrow-narrow-right me-1"></i> Silakan memperbaiki data absensi dan shift <b class="text-danger">HANYA YANG PERLU DIUBAH SAJA</b><br>
+                                    <i class="ti ti-arrow-narrow-right me-1"></i> Form Ubah Absensi ini diperlukan jika pegawai menginginkan perubahan/perbaikan shift dengan kondisi pegawai tersebut telah melakukan/menyelesaikan absensi
+                                </small>
+                            </div>
                         </div>
-                        <h5>DATA <b class="text-primary">SHIFT</b></h5>
-                        <div class="col-md-12">
-                            <div class="form-group mb-3">
+                        <h6>DATA <b class="text-primary">SHIFT</b></h6>
+                        <div class="col-md-12 mb-3">
+                            <div class="form-group">
                                 <label class="form-label">Pilih Perbaikan Shift <a class="text-danger">*</a></label>
                                 <select class="form-control" id="shift_ubah">
                                     <option value="" hidden>Pilih</option>
                                 </select>
                             </div>
                         </div>
-                        <h5>DATA <b class="text-primary">ABSENSI</b></h5>
-                        <div class="col-md-6">
-                            <div class="form-group mb-3">
+                        <h6>DATA <b class="text-primary">ABSENSI</b></h6>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
                                 <label class="form-label">Absensi Masuk <a class="text-danger">*</a></label>
                                 <input type="datetime-local" class="form-control" id="masuk_ubah">
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group mb-3">
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
                                 <div class=" d-flex align-items-center justify-content-between">
                                     <label class="form-label">Absensi Pulang</label>
                                     <div class="form-check">
@@ -428,7 +430,7 @@
                         <span class="switch-on"></span>
                         <span class="switch-off"></span>
                         </span>
-                        <span class="switch-label">Anda siap menerima Risiko</span>
+                        <span class="switch-label"> Anda siap menerima Risiko</span>
                     </label>
                 </div>
                 <div class="col-12 text-center mb-4">
@@ -1055,16 +1057,16 @@
                         var date = new Date().toLocaleDateString("sv-SE");
                         content = "<tr id='data" + item.id + "' style='font-size:13px'>";
                         content += `<td><center><div class='btn-group'>
-                                        <button type='button' class='btn btn-sm ${item.jenis == 1?'btn-light-info':'btn-light-warning'} dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
+                                        <a href="javascript:void(0);" class='link-${item.jenis == 1?'info':'warning'} link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</a>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
                                         if (adminID) {
                                             content += `<li><a href="javascript:void(0);" class="dropdown-item text-info" onclick="detail(${item.id})"><i class="fas fa-calendar-alt me-2"></i> Detail</a></li>`;
                                             content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="ubah(${item.id})"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
                                             if (superID || devID) {
-                                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(${item.id})"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(${item.id})"><i class="fa-fw fas fa-trash nav-icon me-2"></i> Hapus</a></li>`;
                                             }
                                         } else {
-                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fas fa-calendar-alt me-2"></i> Detail</a></li>`;
+                                            content += `<li><a href="javascript:void(0);" class="dropdown-item disabled"><i class="fas fa-calendar-alt me-2"></i> Detail</a></li>`;
                                         }
                         content += "</div></center></td>";
                         role = '';
@@ -1075,12 +1077,14 @@
                         })
                         content += `<td>
                                         <div class="d-flex align-items-center">
-                                            <div class="flex-shrink-0"><img
-                                                    src="${item.foto_user?`/storage/`+item.foto_user.substring(7,10000):'/images/pku/user.png'}" alt="user image"
-                                                    class="img-radius wid-40 hei-40 align-top m-r-15"></div>
+                                            <div class="flex-shrink-0">
+                                                <span class="avatar avatar-lg avatar-rounded">
+                                                    <img src="${item.foto_user?`/storage/`+item.foto_user.substring(7,10000):'/images/pku/user.png'}" alt="profile image">
+                                                </span>
+                                            </div>
                                             <div class="flex-grow-1 ms-3">
                                                 <h6 class="mb-1">${item.nama_pegawai} ${item.is_fake_gps?'<span class="badge rounded-pill text-bg-danger">FAKE GPS</span>':''}</h6>
-                                                <small class='text-truncate text-muted'>${role}</small>
+                                                <small class='text-truncate text-dark'>${role}</small>
                                             </div>
                                         </div>
                                     </td>`;
@@ -1227,16 +1231,16 @@
                         var date = new Date().toLocaleDateString("sv-SE");
                         content = "<tr id='data" + item.id + "' style='font-size:13px'>";
                         content += `<td><center><div class='btn-group'>
-                                        <button type='button' class='btn btn-sm btn-light-secondary dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
+                                        <a href="javascript:void(0);" class='link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</a>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
                                         if (adminID) {
                                             content += `<li><a href="javascript:void(0);" class="dropdown-item text-info" onclick="detail(${item.id})"><i class="fas fa-calendar-alt me-2"></i> Detail</a></li>`;
                                             content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="ubah(${item.id})"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
                                             if (superID || devID) {
-                                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(${item.id})"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(${item.id})"><i class="fa-fw fas fa-trash nav-icon me-2"></i> Hapus</a></li>`;
                                             }
                                         } else {
-                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fas fa-calendar-alt me-2"></i> Detail</a></li>`;
+                                            content += `<li><a href="javascript:void(0);" class="dropdown-item disabled"><i class="fas fa-calendar-alt me-2"></i> Detail</a></li>`;
                                         }
                         content += "</div></center></td>";
                         content += `<td>${moment(item.ref_jam_masuk).format('YYYY-MM-DD')}</td>`;
@@ -1929,20 +1933,20 @@
                         content = "<tr id='data" + item.pegawai_id + "' style='font-size:13px'>";
                         if (item.id) {
                             content += `<td><center><div class='btn-group'>
-                                            <button type='button' class='btn btn-sm btn-light-primary dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
+                                            <a href="javascript:void(0);" class='link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</a>
                                             <ul class='dropdown-menu dropdown-menu-right'>`;
                                             if (adminID) {
                                                 content += `<li><a href="javascript:void(0);" class="dropdown-item text-info" onclick="detail(${item.id})"><i class="fas fa-calendar-alt me-2"></i> Detail</a></li>`;
                                                 content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="ubah(${item.id})"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
                                                 if (superID || devID) {
-                                                    content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(${item.id})"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                                    content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(${item.id})"><i class="fa-fw fas fa-trash nav-icon me-2"></i> Hapus</a></li>`;
                                                 }
                                             } else {
-                                                content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fas fa-calendar-alt me-2"></i> Detail</a></li>`;
+                                                content += `<li><a href="javascript:void(0);" class="dropdown-item disabled"><i class="fas fa-calendar-alt me-2"></i> Detail</a></li>`;
                                             }
                             content += "</div></center></td>";
                         } else {
-                            content += `<td><center><span class="badge bg-light-secondary">-</span></center></td>`;
+                            content += `<td><center><span class="badge bg-light">-</span></center></td>`;
                         }
                         content += `<td class="text-center">${item.nip?item.nip:'-'}</td>`;
                         content += `<td>${item.nama}</td>`;
@@ -1958,32 +1962,32 @@
                         content += `<td class="text-center">${item.absen_berangkat}</td>`;
                         content += `<td class="text-center">${item.absen_pulang}</td>`;
                         if (item.status_disiplin == 'Tepat Waktu') {
-                            status_disiplin = `<span class="badge bg-light-success">${item.status_disiplin}</span>`;
+                            status_disiplin = `<span class="badge bg-success">${item.status_disiplin}</span>`;
                         } else {
                             if (item.status_disiplin == 'Toleransi') {
-                                status_disiplin = `<span class="badge bg-light-warning">${item.status_disiplin}</span>`;
+                                status_disiplin = `<span class="badge bg-warning">${item.status_disiplin}</span>`;
                             } else {
                                 if (item.status_disiplin == 'Terlambat') {
-                                    status_disiplin = `<span class="badge bg-light-danger">${item.status_disiplin}</span>`;
+                                    status_disiplin = `<span class="badge bg-danger">${item.status_disiplin}</span>`;
                                 } else {
-                                    status_disiplin = `<span class="badge bg-light-secondary">-</span>`;
+                                    status_disiplin = `<span class="badge bg-light">-</span>`;
                                 }
                             }
                         }
                         content += `<td class="text-center">${status_disiplin}</td>`;
                         if (item.status_absensi == 'Lengkap') {
-                            status_absensi = `<span class="badge bg-light-success">${item.status_absensi}</span>`;
+                            status_absensi = `<span class="badge bg-success">${item.status_absensi}</span>`;
                         } else {
                             if (item.status_absensi == 'Absen 1x / Tidak Lengkap') {
-                                status_absensi = `<span class="badge bg-light-warning">${item.status_absensi}</span>`;
+                                status_absensi = `<span class="badge bg-warning">${item.status_absensi}</span>`;
                             } else {
                                 if (item.status_absensi == 'Belum Absen / Alpha') {
-                                    status_absensi = `<span class="badge bg-light-danger">${item.status_absensi}</span>`;
+                                    status_absensi = `<span class="badge bg-danger">${item.status_absensi}</span>`;
                                 } else {
                                     if (item.status_absensi == 'Tidak Valid') {
                                         status_absensi = `<span class="badge bg-danger">Jam Shift Tidak Valid</span>`;
                                     } else {
-                                        status_absensi = `<span class="badge bg-light-secondary">-</span>`;
+                                        status_absensi = `<span class="badge bg-light">-</span>`;
                                     }
                                 }
                             }
@@ -2218,8 +2222,8 @@
                             </tr>
                             <tr>
                                 <th class="text-start">Tanggal Absen</th>
-                                <td>${moment(date_in).format('dddd, D MMMM YYYY')}</td>
-                                <td>${res.show.tgl_out?moment(date_out).format('dddd, D MMMM YYYY'):'-'}</td>
+                                <td>${moment(date_in).locale('id').format('dddd, D MMMM YYYY')}</td>
+                                <td>${res.show.tgl_out?moment(date_out).locale('id').format('dddd, D MMMM YYYY'):'-'}</td>
                             </tr>
                             <tr>
                                 <th class="text-start">Waktu/Jam Absen</th>

@@ -1,5 +1,6 @@
 <!-- Popper JS -->
 <script src="{{ asset('libs/moment/min/moment.min.js') }}"></script>
+<script src="{{ asset('libs/moment/min/id.min.js') }}"></script>
 {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script> --}}
 
 <!-- Popper JS -->

@@ -250,7 +250,7 @@
 
     {{-- TAMPIL RIWAYAT PENGADAAN --}}
     <div class="modal fade" tabindex="-1" id="riwayatPengadaan" role="dialog" aria-labelledby="riwpeng" aria-hidden="true" data-bs-backdrop="static">
-        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-xxl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="riwpeng">Riwayat <b class="text-secondary">Belanja</b> <b class="text-primary">Pengadaan</b></h5>
@@ -290,7 +290,7 @@
 
     {{-- TAMPIL DETAIL DARI RIWAYAT PENGADAAN --}}
     <div class="modal fade" id="detailPengadaan" tabindex="-1">
-        <div class="modal-dialog modal-xl">
+        <div class="modal-dialog modal-xxl">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5><button class="btn btn-sm btn-icon btn-wave btn-secondary-transparent me-1" onclick="kembaliKeRiwayat()"><i class="ri-arrow-left-s-line"></i></button> Detail <b class="text-success">Pengadaan</b></h5>
