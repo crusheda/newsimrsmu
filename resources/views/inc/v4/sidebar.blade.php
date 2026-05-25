@@ -173,7 +173,7 @@
 
                 @canany(['admin_kepegawaian', 'admin_kepegawaian_kepala'])
                     <li class="slide">
-                        <a href="{{ route('v4.administrasi.pengadaan') }}" class="side-menu__item">
+                        <a href="{{ route('v4.sdi.profilpegawai') }}" class="side-menu__item">
                             <i class="side-menu__icon ri-group-2-line"></i>
                             <span class="side-menu__label">Profil Pegawai</span>
                         </a>
