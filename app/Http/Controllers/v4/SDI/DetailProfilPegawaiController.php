@@ -37,7 +37,7 @@ class DetailProfilPegawaiController extends Controller
 
     function getDataDiri($id_pegawai)
     {
-        $user = User::where('id',$id_pegawai)->first();
+        $user = User::withTrashed()->where('id',$id_pegawai)->first();
         $foto_user = users_foto::where('user_id',$id_pegawai)->first();
         $status_user = users_status::leftjoin('referensi','referensi.id','=','users_status.ref_id')
                                 ->select('referensi.deskripsi AS nama_status')
@@ -48,10 +48,10 @@ class DetailProfilPegawaiController extends Controller
                                 ->whereNull('referensi.deleted_at')
                                 ->first();
         $log_user = logs::where('user_id', $id_pegawai)->where('log_type', '=', 'login')->select('log_date')->orderBy('log_date', 'DESC')->first();
-        $role = $user->roles()->select('roles.id','roles.name','roles.deskripsi')->get();
+        $role = $user?->roles()->select('roles.id','roles.name','roles.deskripsi')->get();
 
-        $provinsi = alamat::select('provinsi')->groupBy('provinsi')->get();
-        $kota = alamat::select('nama_kabkota')->groupBy('nama_kabkota')->get();
+        // $provinsi = alamat::select('provinsi')->groupBy('provinsi')->get();
+        // $kota = alamat::select('nama_kabkota')->groupBy('nama_kabkota')->get();
         $ref_dokumen = referensi::where('ref_jenis',8)->get(); // 8 is Jenis Dokumen User
 
         $data = [
@@ -60,8 +60,8 @@ class DetailProfilPegawaiController extends Controller
             'status_user' => $status_user,
             'log_user' => $log_user,
             'role' => $role,
-            'provinsi' => $provinsi,
-            'kota' => $kota,
+            // 'provinsi' => $provinsi,
+            // 'kota' => $kota,
             'ref_dokumen' => $ref_dokumen,
         ];
 
@@ -71,71 +71,101 @@ class DetailProfilPegawaiController extends Controller
         ], 200);
     }
 
-    function table() // Table PROFIL KARYAWAN JS
+    function getKepegawaian($id_pegawai)
     {
-        $show = users::where('status',null)->orderBy('updated_at','desc')->get();
+        $maxNip = sprintf('%03d',User::max('urutan_masuk'));
+        $maxNipThl = sprintf('%03d',User::where('nip','LIKE','THL%')->max('urutan_masuk'));
+        $show = User::withTrashed()
+                        ->leftJoin('users as penghapus', 'penghapus.id', '=', 'users.user_hapus')
+                        ->where('users.id', $id_pegawai)
+                        ->select(
+                            'users.*',
+                            'penghapus.nama as nama_admin'
+                        )
+                        ->first();
+        $ref_klasifikasi = referensi::where('ref_jenis',11)->get(); // 11 is Jenis Klasifikasi Pegawai
+        $ref_subprofesi = referensi::where('ref_jenis',14)->get(); // 14 is Jenis Profesi / Sub Klasifikasi Pegawai
 
         $data = [
-            'show' => $show
+            'show' => $show,
+            'maxNip' => $maxNip,
+            'maxNipThl' => $maxNipThl,
+            'ref_klasifikasi' => $ref_klasifikasi,
+            'ref_subprofesi' => $ref_subprofesi,
         ];
 
         return response()->json($data, 200);
     }
 
-    function tablePenetapan($id)
+    function getPenetapan($id_pegawai)
     {
         $show = users_status::withTrashed()
                 ->join('referensi','referensi.id','=','users_status.ref_id')
                 ->join('users','users.id','=','users_status.user_id')
                 ->select('users.nama as nama_kepegawaian','referensi.deskripsi as nama_referensi','users_status.*')
-                ->where('users_status.pegawai_id',$id)
+                ->where('users_status.pegawai_id',$id_pegawai)
                 ->orderBy('users_status.updated_at','desc')
                 ->get();
+        $ref_penetapan = referensi::where('ref_jenis',10)->orderBy('queue','ASC')->get(); // 10 is Jenis Penetapan Pegawai
 
         $data = [
-            'show' => $show
+            'show' => $show,
+            'ref_penetapan' => $ref_penetapan
         ];
 
         return response()->json($data, 200);
     }
 
-    function tableRotasi($id)
+    function getRotasi($id_pegawai)
     {
         $show = users_rotasi::withTrashed()
                 ->join('referensi','referensi.id','=','users_rotasi.ref_id')
                 ->join('users','users.id','=','users_rotasi.user_id')
                 ->select('users.nama as nama_kepegawaian','referensi.deskripsi as nama_referensi','users_rotasi.*')
-                ->where('users_rotasi.pegawai_id',$id)
+                ->where('users_rotasi.pegawai_id',$id_pegawai)
                 ->orderBy('users_rotasi.updated_at','desc')
                 ->get();
         $role = model_has_roles::join('roles', 'model_has_roles.role_id', '=', 'roles.id')
                 ->select('model_has_roles.role_id as id_role','roles.name as nama_role','roles.deskripsi as deskripsi_role')
-                ->where('model_has_roles.model_id',$id)
+                ->where('model_has_roles.model_id',$id_pegawai)
                 ->get();
         $onlyRole = roles::select('id as id_role','name as nama_role','deskripsi as deskripsi_role')->get();
-        $model = model_has_roles::where('model_id', $id)->get();
+        $model = model_has_roles::where('model_id', $id_pegawai)->get();
+        $ref_rotasi = referensi::where('ref_jenis',9)->get(); // 9 is Jenis Rotasi Pegawai
 
         $data = [
             'show' => $show,
             'role' => $role,
             'onlyRole' => $onlyRole,
             'model' => $model,
+            'ref_rotasi' => $ref_rotasi,
         ];
 
         return response()->json($data, 200);
     }
 
-    function tableDokumen($id)
+    function getDokumen($id_pegawai)
     {
         $show = users_doc::join('referensi','referensi.id','=','users_doc.ref_id')
                 ->join('users','users.id','=','users_doc.user_id')
                 ->select('users.nama as nama_pegawai','referensi.deskripsi as nama_ref','referensi.color','users_doc.*')
-                ->where('users_doc.user_id',$id)
+                ->where('users_doc.user_id',$id_pegawai)
                 ->orderBy('users_doc.updated_at','desc')
                 ->get();
 
         $data = [
             'show' => $show,
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    function table() // Table PROFIL KARYAWAN JS
+    {
+        $show = users::where('status',null)->orderBy('updated_at','desc')->get();
+
+        $data = [
+            'show' => $show
         ];
 
         return response()->json($data, 200);
@@ -173,7 +203,11 @@ class DetailProfilPegawaiController extends Controller
 
         // CEK DATA & SAVE LOG
         $cekData = referensi::find($request->ref_id);
-        $cekPegawai = users::find($request->pegawai_id);
+        $cekPegawai = users::where('id', $request->pegawai_id)->where('status', '==', null)->where('deleted_at', null)->first();
+
+        if (!$cekPegawai) {
+            return response()->json(['message' => 'Pegawai tidak ditemukan/telah dinonaktifkan'], 404);
+        }
 
         // VALIDASI DATA
         $validasi = users_status::where('pegawai_id',$request->pegawai_id)->orderBy('created_at','desc')->first();
@@ -330,25 +364,6 @@ class DetailProfilPegawaiController extends Controller
     }
 
     // FUNCTION KEPEGAWAIAN
-    function showKepegawaian($id)
-    {
-        $maxNip = sprintf('%03d',users::max('urutan_masuk'));
-        $maxNipThl = sprintf('%03d',users::where('nip','LIKE','THL%')->max('urutan_masuk'));
-        $show = users::where('id', $id)->first();
-        $ref_klasifikasi = referensi::where('ref_jenis',11)->get(); // 11 is Jenis Klasifikasi Pegawai
-        $ref_subprofesi = referensi::where('ref_jenis',14)->get(); // 14 is Jenis Profesi / Sub Klasifikasi Pegawai
-
-        $data = [
-            'show' => $show,
-            'maxNip' => $maxNip,
-            'maxNipThl' => $maxNipThl,
-            'ref_klasifikasi' => $ref_klasifikasi,
-            'ref_subprofesi' => $ref_subprofesi,
-        ];
-
-        return response()->json($data, 200);
-    }
-
     function tambahNIP(Request $request)
     {
         $now = Carbon::now()->isoFormat('YYYY-MM-DD HH:mm:ss');

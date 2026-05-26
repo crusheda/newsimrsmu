@@ -245,7 +245,7 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
             Route::get('sdi/profilpegawai/setnonaktif/{id}', [ProfilPegawaiController::class, 'setNonAktif']);
             Route::get('sdi/profilpegawai/nonaktif', [ProfilPegawaiController::class, 'tableNonaktif']);
             Route::get('sdi/profilpegawai/nonlengkap', [ProfilPegawaiController::class, 'tableNonLengkap']);
-            Route::get('sdi/profilpegawai/{user}/hapus/{id}/proses', [ProfilPegawaiController::class, 'hapusPegawai']);
+            Route::get('sdi/profilpegawai/hapus/{id}/proses', [ProfilPegawaiController::class, 'hapusPegawai']);
 
             // GRAFIK INTERAKTIF
                 Route::get('sdi/profilpegawai/grafik/1', [ProfilPegawaiController::class, 'grafik1']); // Jenis Pegawai
@@ -259,25 +259,25 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
                 Route::get('sdi/profilpegawai/datadiri/{id}', [DetailProfilPegawaiController::class, 'getDataDiri']);
 
             // PENETAPAN
-                Route::get('sdi/profilpegawai/penetapan/table/{id}', [DetailProfilPegawaiController::class, 'tablePenetapan']);
+                Route::get('sdi/profilpegawai/penetapan/table/{id}', [DetailProfilPegawaiController::class, 'getPenetapan']);
                 Route::post('sdi/profilpegawai/penetapan/tambah', [DetailProfilPegawaiController::class, 'tambahPenetapan']);
                 Route::get('sdi/profilpegawai/penetapan/ubah/{id}', [DetailProfilPegawaiController::class, 'showUbahPenetapan']);
                 Route::post('sdi/profilpegawai/penetapan/ubah/{id}/proses', [DetailProfilPegawaiController::class, 'ubahPenetapan']);
                 Route::delete('sdi/profilpegawai/penetapan/hapus/{id}/proses', [DetailProfilPegawaiController::class, 'hapusPenetapan']);
 
             // ROTASI
-                Route::get('sdi/profilpegawai/rotasi/table/{id}', [DetailProfilPegawaiController::class, 'tableRotasi']);
+                Route::get('sdi/profilpegawai/rotasi/table/{id}', [DetailProfilPegawaiController::class, 'getRotasi']);
                 Route::post('sdi/profilpegawai/rotasi/tambah', [DetailProfilPegawaiController::class, 'tambahRotasi']);
                 Route::get('sdi/profilpegawai/rotasi/ubah/{id}', [DetailProfilPegawaiController::class, 'showUbahRotasi']);
                 Route::post('sdi/profilpegawai/rotasi/ubah/{id}/proses', [DetailProfilPegawaiController::class, 'ubahRotasi']);
                 Route::delete('sdi/profilpegawai/rotasi/hapus/{id}/proses', [DetailProfilPegawaiController::class, 'hapusRotasi']);
 
             // DOKUMEN
-                Route::get('sdi/profilpegawai/dokumen/table/{id}', [DetailProfilPegawaiController::class, 'tableDokumen']);
+                Route::get('sdi/profilpegawai/dokumen/table/{id}', [DetailProfilPegawaiController::class, 'getDokumen']);
 
             // SPK RKK
                 // KEPEGAWAIAN (NIP, KLASIFIKASI, dan TAT/TMT)
-                Route::get('sdi/profilpegawai/kepegawaian/{id}', [DetailProfilPegawaiController::class, 'showKepegawaian']);
+                Route::get('sdi/profilpegawai/kepegawaian/{id}', [DetailProfilPegawaiController::class, 'getKepegawaian']);
                 Route::post('sdi/profilpegawai/kepegawaian/nip/simpan', [DetailProfilPegawaiController::class, 'tambahNIP']);
                 Route::post('sdi/profilpegawai/kepegawaian/profesi/simpan', [DetailProfilPegawaiController::class, 'tambahProfesi']);
                 Route::post('sdi/profilpegawai/kepegawaian/klasifikasi/simpan', [DetailProfilPegawaiController::class, 'tambahKlasifikasi']);

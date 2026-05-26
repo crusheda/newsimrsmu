@@ -237,7 +237,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <p class="mb-1 text-muted">
-                                    Nama Lengkap
+                                    Nama Lengkap + Gelar
                                 </p>
                                 <p class="mb-0">
                                     <a id="nama_lengkap"><i class="fas fa-sync-alt fa-spin ms-1"></i></a>
@@ -378,32 +378,20 @@
 
     });
 
-    function formatTanggal(date) {
-        if (!date) return '-';
+    // function formatTanggalJam(datetime) {
+    //     if (!datetime) return '-';
 
-        const [year, month, day] = date.split('-');
-        const bulan = [
-            'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-            'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
-        ];
+    //     const [date, time] = datetime.split(' ');
+    //     const [year, month, day] = date.split('-');
+    //     const [hour, minute] = time.split(':');
 
-        return `${parseInt(day)} ${bulan[parseInt(month) - 1]} ${year}`;
-    }
+    //     const bulan = [
+    //         'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
+    //         'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'
+    //     ];
 
-    function formatTanggalJam(datetime) {
-        if (!datetime) return '-';
-
-        const [date, time] = datetime.split(' ');
-        const [year, month, day] = date.split('-');
-        const [hour, minute] = time.split(':');
-
-        const bulan = [
-            'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
-            'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'
-        ];
-
-        return `${parseInt(day)} ${bulan[parseInt(month) - 1]} ${year} ${hour}.${minute} WIB`;
-    }
+    //     return `${parseInt(day)} ${bulan[parseInt(month) - 1]} ${year} ${hour}.${minute} WIB`;
+    // }
 
     function loadDataDiri() {
         const btn = $("#btn-load-datadiri");
@@ -419,6 +407,16 @@
                 if (!res.status) {
                     Swal.fire('Info', res.message, 'info');
                     return;
+                }
+
+                if (res.data.user && res.data.user.deleted_at !== null) {
+                    Swal.fire({
+                        title: 'Mohon Perhatian!!',
+                        text: 'Pegawai ini telah dinonaktifkan atau dihapus. Hanya dapat melihat data diri dan riwayat lainnya.',
+                        icon: 'info',
+                        timer: 5000,
+                        timerProgressBar: true
+                    });
                 }
 
                 let roles = res.data.role;
@@ -481,7 +479,8 @@
                 }
 
                 $('#username').text(nama_lengkap);
-                $('#name').text(res.data.user?.name ?? 'xx');
+                $('#id-pegawai').html(`<span class="badge bg-purple-gradient">ID PEGAWAI: ${res.data.user?.id ?? 'xx'}</span>`);
+                $('#name').html(`<b>${res.data.user?.name ?? 'xx'}</b>`);
                 $('#log_akun').empty().append(res.data.log_user?.log_date ? formatTanggalJam(res.data.log_user.log_date) : '-');
                 $('#status_jabatan').text(res.data.status_user?.nama_status || 'Tidak Diketahui');
                 $('#status_akun').text(res.data.user?.deleted_at == null ? 'Akun Aktif' : 'Akun Dinonaktifkan');

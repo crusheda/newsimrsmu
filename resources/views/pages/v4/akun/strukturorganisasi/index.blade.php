@@ -23,81 +23,82 @@
 
         <div class="row justify-content-center">
             <div class="col-xl-12">
-                <div class="card card-body table-responsive text-nowrap">
-                    <h4 classs="card-title">
+                <div class="card custom-card">
+                    <div class="card-header d-flex align-items-center justify-content-between py-3">
                         <button class="btn btn-outline-primary"
-                            onclick="window.location.href='{{ route('v4.akun.strukturorganisasi.tambah') }}'"><i
-                                class="fas fa-plus"></i>&nbsp;&nbsp;Tambah Struktur</button>
-                    </h4>
-                    <hr>
-                    <table id="dttable" class="table dt-responsive table-hover nowrap w-100">
-                        <thead>
-                            <tr>
-                                <th class="cell-fit">ID DB</th>
-                                <th class="cell-fit">ID USER</th>
-                                <th>NAMA USER (<b class="text-info">USERNAME</b>)</th>
-                                <th>ROLE USER</th>
-                                <th class="cell-fit">ROLE BAWAHAN</th>
-                                <th class="cell-fit">UPDATE</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (count($list['struktur_organisasi']) > 0)
-                                @foreach ($list['struktur_organisasi'] as $item)
-                                    <tr>
-                                        <td>
-                                            <center>
-                                                <div class='btn-group'>
-                                                    <a href="javascript:void(0)" class='link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle'
-                                                        data-bs-toggle='dropdown' aria-expanded='false'>{{ $item->id }}
-                                                    </a>
-                                                    <ul class='dropdown-menu dropdown-menu-end'>
-                                                        <li><a href='javascript:void(0);' class='dropdown-item text-warning'
-                                                                onclick="window.location.href='{{ url('v4/akun/strukturorganisasi/' . $item->id . '/ubah') }}'"><i
-                                                                    class="fa-fw fas fa-edit nav-icon me-1"></i> Ubah</a></li>
-                                                        <li><a href='javascript:void(0);' class='dropdown-item text-danger'
-                                                                onclick="hapus({{ $item->id }})"><i
-                                                                    class="fa-fw fas fa-trash nav-icon me-1"></i> Hapus</a></li>
-                                                    </ul>
-                                                </div>
-                                            </center>
-                                        </td>
-                                        <td>{{ $item->id_user }}</td>
-                                        <td>{{ $item->nama_user }}</td>
-                                        <td>
-                                            @foreach (json_decode($item->role) as $val)
-                                                @foreach ($list['roles'] as $key)
-                                                    @if ($val == $key->id)
-                                                        <span class="badge bg-primary-transparent">{{ $key->name }}</span>
-                                                    @endif
+                            onclick="window.location.href='{{ route('v4.akun.strukturorganisasi.tambah') }}'">
+                            <i class="fas fa-plus me-1"></i> Tambah Struktur Pegawai</button>
+                    </div>
+                    <div class="card-body table-responsive text-nowrap">
+                        <table id="dttable" class="table dt-responsive table-hover nowrap w-100">
+                            <thead>
+                                <tr>
+                                    <th class="cell-fit">ID DB</th>
+                                    <th class="cell-fit">ID USER</th>
+                                    <th>NAMA USER (<b class="text-info">USERNAME</b>)</th>
+                                    <th>ROLE USER</th>
+                                    <th class="cell-fit">ROLE BAWAHAN</th>
+                                    <th class="cell-fit">UPDATE</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (count($list['struktur_organisasi']) > 0)
+                                    @foreach ($list['struktur_organisasi'] as $item)
+                                        <tr>
+                                            <td>
+                                                <center>
+                                                    <div class='btn-group'>
+                                                        <a href="javascript:void(0)" class='link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle'
+                                                            data-bs-toggle='dropdown' aria-expanded='false'>{{ $item->id }}
+                                                        </a>
+                                                        <ul class='dropdown-menu dropdown-menu-end'>
+                                                            <li><a href='javascript:void(0);' class='dropdown-item text-warning'
+                                                                    onclick="window.location.href='{{ url('v4/akun/strukturorganisasi/' . $item->id . '/ubah') }}'"><i
+                                                                        class="fa-fw fas fa-edit nav-icon me-1"></i> Ubah</a></li>
+                                                            <li><a href='javascript:void(0);' class='dropdown-item text-danger'
+                                                                    onclick="hapus({{ $item->id }})"><i
+                                                                        class="fa-fw fas fa-trash nav-icon me-1"></i> Hapus</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </center>
+                                            </td>
+                                            <td>{{ $item->id_user }}</td>
+                                            <td>{{ $item->nama_user }}</td>
+                                            <td>
+                                                @foreach (json_decode($item->role) as $val)
+                                                    @foreach ($list['roles'] as $key)
+                                                        @if ($val == $key->id)
+                                                            <span class="badge bg-primary-transparent">{{ $key->name }}</span>
+                                                        @endif
+                                                    @endforeach
                                                 @endforeach
-                                            @endforeach
-                                        </td>
-                                        <td class="text-wrap">
-                                            @foreach (json_decode($item->bawahan) as $val)
-                                                @foreach ($list['roles'] as $key)
-                                                    @if ($val == $key->id)
-                                                        <span class="badge bg-danger-transparent">{{ $key->name }}</span>
-                                                    @endif
+                                            </td>
+                                            <td class="text-wrap">
+                                                @foreach (json_decode($item->bawahan) as $val)
+                                                    @foreach ($list['roles'] as $key)
+                                                        @if ($val == $key->id)
+                                                            <span class="badge bg-danger-transparent">{{ $key->name }}</span>
+                                                        @endif
+                                                    @endforeach
                                                 @endforeach
-                                            @endforeach
-                                        </td>
-                                        <td>{{ $item->updated_at }}</td>
-                                    </tr>
-                                @endforeach
-                            @endif
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <th class="cell-fit">ID DB</th>
-                                <th class="cell-fit">ID USER</th>
-                                <th>NAMA USER</th>
-                                <th>ROLE USER</th>
-                                <th class="cell-fit">ROLE BAWAHAN</th>
-                                <th class="cell-fit">UPDATE</th>
-                            </tr>
-                        </tfoot>
-                    </table>
+                                            </td>
+                                            <td>{{ $item->updated_at }}</td>
+                                        </tr>
+                                    @endforeach
+                                @endif
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th class="cell-fit">ID DB</th>
+                                    <th class="cell-fit">ID USER</th>
+                                    <th>NAMA USER</th>
+                                    <th>ROLE USER</th>
+                                    <th class="cell-fit">ROLE BAWAHAN</th>
+                                    <th class="cell-fit">UPDATE</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

@@ -389,7 +389,7 @@
                         content += `<td><center><div class='btn-group'>
                                         <a href='javascript:void(0);' class='link-${item.nik?'primary':'danger'} link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</a>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
-                            content += `<li><a href="/v4/sdi/profilpegawai/${item.id}" class='dropdown-item text-primary'><i class="fa-fw fas fa-search nav-icon me-1"></i> Lihat Profil</a></li>`;
+                            content += `<li><a href="/v4/sdi/profilpegawai/${item.id}" class='dropdown-item text-success'><i class="fa-fw fas fa-search nav-icon me-1"></i> Lihat Profil</a></li>`;
                             // content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="nonaktif(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon me-1"></i> Nonaktif</a></li>`;
                         content += `</div></center></td>`;
                         content += `<td class="text-truncate">${item.name}</td>`;
@@ -455,7 +455,7 @@
                         content += `<td><center><div class='btn-group'>
                                         <a href='javascript:void(0);' class='link-${item.nik?'primary':'danger'} link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</a>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
-                            content += `<li><a href="/v4/sdi/profilpegawai/${item.id}" class='dropdown-item text-primary'><i class="fa-fw fas fa-search nav-icon me-1"></i> Lihat Profil</a></li>`;
+                            content += `<li><a href="/v4/sdi/profilpegawai/${item.id}" class='dropdown-item text-success'><i class="fa-fw fas fa-search nav-icon me-1"></i> Lihat Profil</a></li>`;
                         content += `</div></center></td>`;
                         content += `<td>${item.nip?item.nip:'-'}</td>`;
                         content += `<td>${item.nik?item.nik:'-'}</td>`;

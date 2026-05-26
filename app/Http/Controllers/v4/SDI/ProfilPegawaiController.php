@@ -242,7 +242,7 @@ class ProfilPegawaiController extends Controller
         $data->save();
 
         // CEK DATA & SAVE LOG
-        datalogs::record($user, 'Baru saja mengaktifkan status Login Pegawai ID : '.$id, null, null, null, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
+        datalogs::record(Auth::user()->id, 'Baru saja mengaktifkan status Login Pegawai ID : '.$id, null, null, null, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
 
         return response()->json($tgl, 200);
     }
@@ -255,11 +255,11 @@ class ProfilPegawaiController extends Controller
         $data->delete();
 
         // CEK DATA & SAVE LOG
-        // datalogs::record($user, 'Baru saja mengaktifkan status Login Pegawai ID : '.$id, null, null, null, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
+        datalogs::record(Auth::user()->id, 'Baru saja mengnonaktifkan status Login Pegawai ID : '.$id, null, null, null, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
         return response()->json($tgl, 200);
     }
 
-    function hapusPegawai($user,$id)
+    function hapusPegawai($id)
     {
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
@@ -270,13 +270,13 @@ class ProfilPegawaiController extends Controller
         $switch = $data;
 
         // Proses Hapus Data dari DB
-        $data->user_hapus = $user;
+        $data->user_hapus = Auth::user()->id;
         $data->status = 1;
         $data->save();
         $data->delete();
 
         // CEK DATA & SAVE LOG
-        datalogs::record($user, 'Baru saja menghapus/menonaktifkan Pegawai ID : '.$id, null, null, $switch, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
+        datalogs::record(Auth::user()->id, 'Baru saja menghapus/menonaktifkan Pegawai ID : '.$id, null, null, $switch, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
 
         return response()->json($tgl, 200);
     }

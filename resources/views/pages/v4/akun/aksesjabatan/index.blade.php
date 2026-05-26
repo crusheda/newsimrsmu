@@ -544,7 +544,7 @@
                             <tr>
                                 <td>${item.id}</td>
                                 <td>${item.name}</td>
-                                <td>${item.deskripsi ?? '-'}</td>
+                                <td class="text-wrap">${item.deskripsi ?? '-'}</td>
                                 <td class="text-wrap">${badges}</td>
                                 <td class="text-wrap">
                                     <div class="avatar-list-stacked">
