@@ -55,6 +55,16 @@
                     </div>
                 </div>
                 <div class="card custom-card">
+                    <div class="card-body text-center position-relative">
+                        <img src="{{ asset('images/white.jpg') }}" alt="Foto Profil" class="img-thumbnail rounded-pill" id="fotoProfil" style="width:auto;height:auto;max-width:300px;max-height:450px;object-fit:cover">
+                        <!-- LOADING -->
+                        <div id="avatarLoading"
+                            class="position-absolute top-50 start-50 translate-middle">
+                            <div class="spinner-border text-dark custom-spinner"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card custom-card">
                     <div class="card-header">
                         <div class="card-title">
                             Pengalaman Kerja
@@ -72,6 +82,15 @@
                     </div>
                     <div class="card-body">
                         <div class="text-muted">
+                            <div class="mb-2 d-flex align-items-center gap-1 flex-wrap">
+                                <span class="avatar avatar-sm avatar-rounded text-default">
+                                    <i class="ri-user-2-line align-middle fs-15"></i>
+                                </span>
+                                <span class="fw-medium text-default">
+                                    Status Pegawai :
+                                </span>
+                                <a id="status_jabatan"><i class="fas fa-sync-alt fa-spin ms-1"></i></a>
+                            </div>
                             <div class="mb-2 d-flex align-items-center gap-1 flex-wrap">
                                 <span class="avatar avatar-sm avatar-rounded text-default">
                                     <i class="ri-shield-user-line align-middle fs-15"></i>
@@ -108,7 +127,7 @@
                                 </span>
                                 <a id="email"><i class="fas fa-sync-alt fa-spin ms-1"></i></a>
                             </div>
-                            <div class="mb-0 d-flex align-items-center gap-1">
+                            <div class="mb-2 d-flex align-items-center gap-1 flex-wrap">
                                 <span class="avatar avatar-sm avatar-rounded text-default">
                                     <i class="ri-phone-line align-middle fs-15"></i>
                                 </span>
@@ -116,6 +135,24 @@
                                     No.HP :
                                 </span>
                                 <a id="hp"><i class="fas fa-sync-alt fa-spin ms-1"></i></a>
+                            </div>
+                            <div class="mb-2 d-flex align-items-center gap-1 flex-wrap">
+                                <span class="avatar avatar-sm avatar-rounded text-default">
+                                    <i class="ri-history-line align-middle fs-15"></i>
+                                </span>
+                                <span class="fw-medium text-default">
+                                    Terakhir Login :
+                                </span>
+                                <a id="log_akun"><i class="fas fa-sync-alt fa-spin ms-1"></i></a>
+                            </div>
+                            <div class="mb-0 d-flex align-items-center gap-1">
+                                <span class="avatar avatar-sm avatar-rounded text-default">
+                                    <i class="ri-rotate-lock-line align-middle fs-15"></i>
+                                </span>
+                                <span class="fw-medium text-default">
+                                    Terakhir Ubah Password :
+                                </span>
+                                <a id="last_update_password"><i class="fas fa-sync-alt fa-spin ms-1"></i></a>
                             </div>
                         </div>
                     </div>
@@ -267,7 +304,7 @@
                             <div class="col-md-6">
                                 <p class="mb-1 text-muted">
                                     Tanggal
-                                    Lahir
+                                    Lahir (Umur)
                                 </p>
                                 <p class="mb-0">
                                     <a id="tgl_lahir"><i class="fas fa-sync-alt fa-spin ms-1"></i></a>
@@ -393,6 +430,41 @@
     //     return `${parseInt(day)} ${bulan[parseInt(month) - 1]} ${year} ${hour}.${minute} WIB`;
     // }
 
+    function hitungUmurLengkap(tanggalLahir) {
+
+        if (!tanggalLahir) return '-';
+
+        const lahir = new Date(tanggalLahir);
+        const hariIni = new Date();
+
+        let tahun = hariIni.getFullYear() - lahir.getFullYear();
+        let bulan = hariIni.getMonth() - lahir.getMonth();
+        let hari = hariIni.getDate() - lahir.getDate();
+
+        // jika hari minus
+        if (hari < 0) {
+
+            bulan--;
+
+            // ambil jumlah hari bulan sebelumnya
+            const lastMonth = new Date(
+                hariIni.getFullYear(),
+                hariIni.getMonth(),
+                0
+            );
+
+            hari += lastMonth.getDate();
+        }
+
+        // jika bulan minus
+        if (bulan < 0) {
+            tahun--;
+            bulan += 12;
+        }
+
+        return `${tahun} Tahun ${bulan} Bulan ${hari} Hari`;
+    }
+
     function loadDataDiri() {
         const btn = $("#btn-load-datadiri");
         $.ajax({
@@ -452,12 +524,12 @@
 
                 $('#jabatan-wrapper').html(html);
 
-                let defaultImg = "{{ asset('images/no-image-person.png') }}";
+                let defaultImg = "{{ asset('images/pku/user.png') }}";
 
                 if(res.data.foto_user == null){
 
                     // tidak ada foto
-                    $('#fotoProfil').attr('href', defaultImg);
+                    $('#fotoProfil').attr('src', defaultImg);
                     $('#imgProfil').attr('src', defaultImg);
 
                 }else{
@@ -465,7 +537,7 @@
                     // ada foto
                     let fotoUrl = "{{ url('storage') }}/" + res.data.foto_user.filename.replace('public/','');
 
-                    $('#fotoProfil').attr('href', fotoUrl);
+                    $('#fotoProfil').attr('src', fotoUrl);
                     $('#imgProfil').attr('src', fotoUrl);
                 }
 
@@ -483,7 +555,7 @@
                 $('#name').html(`<b>${res.data.user?.name ?? 'xx'}</b>`);
                 $('#log_akun').empty().append(res.data.log_user?.log_date ? formatTanggalJam(res.data.log_user.log_date) : '-');
                 $('#status_jabatan').text(res.data.status_user?.nama_status || 'Tidak Diketahui');
-                $('#status_akun').text(res.data.user?.deleted_at == null ? 'Akun Aktif' : 'Akun Dinonaktifkan');
+                $('#status_akun').html(res.data.user?.deleted_at == null ? '<span class="badge bg-success-gradient">Akun Aktif</span>' : '<span class="badge bg-danger-gradient">Akun Dinonaktifkan</span>');
                 $('#pengalaman_kerja').text(res.data.user?.pengalaman_kerja ?? 'Tidak ada deskripsi pengalaman kerja.');
 
                 $('#nip').text(res.data.user?.nip ?? '-');
@@ -517,7 +589,17 @@
                 $('#nama_lengkap').text(nama_lengkap);
                 $('#nick').text(res.data.user?.nick ?? '-');
                 $('#temp_lahir').text(res.data.user?.temp_lahir ?? '-');
-                $('#tgl_lahir').text(res.data.user?.tgl_lahir ? formatTanggal(res.data.user.tgl_lahir) : '-');
+
+                tgl_lahir = res.data.user?.tgl_lahir ? formatTanggal(res.data.user.tgl_lahir) : '';
+                umur = hitungUmurLengkap(res.data.user?.tgl_lahir);
+                if (tgl_lahir && umur) {
+                    $('#tgl_lahir').html(`${tgl_lahir} (<b class="text-info">${umur}</b>)`);
+                } else if (tgl_lahir) {
+                    $('#tgl_lahir').text(tgl_lahir);
+                } else {
+                    $('#tgl_lahir').text(res.data.user?.tgl_lahir ? formatTanggal(res.data.user.tgl_lahir) : '-');
+                }
+
                 $('#jk').text(res.data.user?.jns_kelamin ?? '-');
                 $('#sk').text(res.data.user?.status_kawin ?? '-');
                 $('#alamat_ktp').text(res.data.user?.alamat_ktp ?? '-');

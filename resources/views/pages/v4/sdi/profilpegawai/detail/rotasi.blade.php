@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12 status-aktif-rotasi" hidden>
         <div class="card custom-card">
             <div class="card-header d-flex align-items-center justify-content-between py-3">
                 <h6 class="mb-0 card-title flex-grow-1">Rotasi <b class="text-orange">Pegawai</b></h6>
@@ -46,7 +46,7 @@
     <div class="col-md-12">
         <div class="card custom-card">
             <div class="card-header d-flex align-items-center justify-content-between py-3">
-                <h6 class="mb-0 card-title flex-grow-1">Tabel <b class="text-primary">Riwayat</b></h6>
+                <h6 class="mb-0 card-title flex-grow-1">Tabel <b class="text-primary">Riwayat</b> <b class="text-info">Rotasi</b></h6>
                 <div class="flex-shrink-0">
                     <div class="btn-group">
                         <button type="button" class="btn btn-warning-transparent" id="btn-refresh" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
@@ -55,7 +55,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card-body p-b-0 p-3">
+            <div class="card-body">
                 <div class="alert alert-light shadow-sm" role="alert">
                     <small>
                         <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Data record yang dapat di <b class="text-warning">ubah</b>/<b class="text-danger">hapus</b> adalah data paling terakhir<br>
@@ -188,16 +188,27 @@
                     btn2.prop('disabled', true).find("i").addClass("fa-spin");
                 },
                 success: function(res) {
+                    // CEK STATUS AKTIF/TIDAKNYA DATA USER
+                    if (res.user && res.user.status != null && res.user.deleted_at != null) {
+                        $(".status-aktif-rotasi").prop('hidden', true);
+                    } else {
+                        $(".status-aktif-rotasi").prop('hidden', false);
+                    }
+
                     $("#tampil-tbody-rotasi").empty();
                     $('#dttable-rotasi').DataTable().clear().destroy();
 
                     res.show.forEach(item => {
                         content = "<tr id='data"+ item.id +"'>";
                         content += `<td><center><div class='dropend'><a href='javascript:void(0);' class='link-${item.status==0?'danger':'success'} link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle' data-bs-toggle='dropdown' aria-haspopup="true">${item.id}</a><div class='dropdown-menu'>`;
-                            if (item.status == 0) {
-                                content += `<a href='javascript:void(0);' class='dropdown-item disabled'><i class='ti ti-arrow-back-up me-1'></i> Batalkan Rotasi</a>`;
+                            if (res.user && res.user.status != null && res.user.deleted_at != null) {
+                                content += `<a href='javascript:void(0);' class='dropdown-item disabled'><i class='ti ti-trash me-1'></i> Batalkan Rotasi</a>`;
                             } else {
-                                content += `<a href='javascript:void(0);' class='dropdown-item text-danger' onclick="showHapusRotasi(`+item.id+`)" value="animate__rubberBand"><i class='ti ti-arrow-back-up me-1'></i> Batalkan Rotasi</a>`;
+                                if (item.status == 0) {
+                                    content += `<a href='javascript:void(0);' class='dropdown-item disabled'><i class='ti ti-arrow-back-up me-1'></i> Batalkan Rotasi</a>`;
+                                } else {
+                                    content += `<a href='javascript:void(0);' class='dropdown-item text-danger' onclick="showHapusRotasi(`+item.id+`)" value="animate__rubberBand"><i class='ti ti-arrow-back-up me-1'></i> Batalkan Rotasi</a>`;
+                                }
                             }
                         content += `</div></center></td>`;
                         if (item.deleted_at != null) {

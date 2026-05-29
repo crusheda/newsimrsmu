@@ -35,7 +35,19 @@
                         <div class="d-flex align-items-center gap-2">
                             <div class=" text-end">
                                 <h6 class="mb-0" id="username"><i class="ti ti-rotate-clockwise ti-spin"></i></h6>
-                                <h6 class="mb-0" id="id-pegawai"><span class="badge bg-purple-gradient">ID PEGAWAI: <i class="ti ti-rotate-clockwise ti-spin"></i></span></h6>
+                                <div class="d-flex justify-content-end gap-1">
+                                    <h6 class="mb-0" id="status_akun">
+                                        <span class="badge bg-info-gradient">
+                                            <i class="ti ti-rotate-clockwise ti-spin"></i>
+                                        </span>
+                                    </h6>
+                                    <h6 class="mb-0" id="id-pegawai">
+                                        <span class="badge bg-purple-gradient">
+                                            ID PEGAWAI:
+                                            <i class="ti ti-rotate-clockwise ti-spin"></i>
+                                        </span>
+                                    </h6>
+                                </div>
                             </div>
                             <span class="avatar avatar-rounded">
                                 <img src="{{ asset('images/pku/user.png') }}" alt="Avatar" class="avatar-img" id="imgProfil">

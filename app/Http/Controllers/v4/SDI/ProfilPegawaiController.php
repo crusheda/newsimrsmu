@@ -169,7 +169,16 @@ class ProfilPegawaiController extends Controller
     // API
     function table()
     {
-        $show = User::with('roles')->where('status',null)->orderBy('updated_at','desc')->get();
+        $show = User::from('users as usr')->with('roles')
+                    ->withTrashed()
+                    ->leftJoin('users as us', 'us.id', '=', 'usr.user_hapus')
+                    ->select('us.nama as nama_penghapus','usr.*')
+                    ->where(function ($q) {
+                        $q->where('usr.status', '!=', 99)
+                        ->orWhereNull('usr.status');
+                    })
+                    ->orderBy('usr.updated_at','desc')
+                    ->get();
 
         $data = [
             'show' => $show
@@ -181,6 +190,7 @@ class ProfilPegawaiController extends Controller
     function tableAll()
     {
         $show = User::with('roles')
+                ->withTrashed()
                 ->leftJoin('referensi as rp','rp.id','=','users.ref_profesi')
                 ->leftJoin('users_status as us', function($join) {
                     $join->on('us.pegawai_id', '=', 'users.id')
@@ -192,13 +202,14 @@ class ProfilPegawaiController extends Controller
                             ->where('rus.ref_jenis', '=', 10);
                 })
                 // ->where('us.deleted_at',null)
-                ->where('users.status',null)
+                // ->where('users.status',null)
+                ->where(function ($q) {
+                    $q->where('users.status', '!=', 99)
+                    ->orWhereNull('users.status');
+                })
                 ->select('users.*','rus.deskripsi as profesi','rp.deskripsi as klasifikasi_user','rus.deskripsi as status_pegawai')
                 ->orderBy('users.nip','asc')
                 ->get();
-        // $role = model_has_roles::join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-        //         ->select('model_has_roles.model_id as id_user','roles.name as nama_role')
-        //         ->get();
 
         $data = [
             'show' => $show,

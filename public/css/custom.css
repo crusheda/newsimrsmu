@@ -1,6 +1,11 @@
 #imgProfil.loading {
     opacity: .4;
 }
+.custom-spinner{
+    width: 2rem;
+    height: 2rem;
+    border-width: 0.4em;
+}
 .select2-container .select2-selection--multiple {
     display: flex !important;
     flex-wrap: wrap !important;

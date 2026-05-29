@@ -73,7 +73,7 @@
 
 {{-- MODAL --}}
 <div class="modal fade animate__animated animate__rubberBand" id="modalCutiUnit" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true" data-bs-backdrop="static">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-dialog modal-xxl modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h6 class="modal-title">

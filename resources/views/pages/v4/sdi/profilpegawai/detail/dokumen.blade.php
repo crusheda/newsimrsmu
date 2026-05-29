@@ -37,93 +37,93 @@
     </div>
 </div>
 
-    <div class="modal fade animate__animated animate__rubberBand" id="ubahDokumen" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true" data-bs-backdrop="static">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h6 class="modal-title">
-                        Form <b class="text-warning">Ubah Dokumen</b>
-                    </h6>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <input type="text" id="id_edit_dokumen" hidden>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group mb-3">
-                                <label class="form-label">Jenis Surat <span class="text-danger">*</span></label>
-                                <select class="form-control" id="jenis_dokumen_edit"></select>
-                            </div>
+<div class="modal fade animate__animated animate__rubberBand" id="ubahDokumen" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title">
+                    Form <b class="text-warning">Ubah Dokumen</b>
+                </h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="id_edit_dokumen" hidden>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group mb-3">
+                            <label class="form-label">Jenis Surat <span class="text-danger">*</span></label>
+                            <select class="form-control" id="jenis_dokumen_edit"></select>
                         </div>
-                        <div class="col-md-8">
-                            <div class="form-group mb-3">
-                                <label class="form-label">Nomor Surat <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="no_surat_dokumen_edit">
-                            </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group mb-3">
+                            <label class="form-label">Nomor Surat <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="no_surat_dokumen_edit">
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group mb-3">
-                                <label class="form-label">Tgl. Mulai Berlaku <span class="text-danger">*</span></label>
-                                <input type="date" class="form-control" id="tgl_mulai_dokumen_edit">
-                            </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label class="form-label">Tgl. Mulai Berlaku <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="tgl_mulai_dokumen_edit">
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group mb-3">
-                                <label class="form-label">Tgl. Berakhir Surat <span class="text-danger">*</span></label>
-                                <input type="date" class="form-control" id="tgl_akhir_dokumen_edit">
-                            </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label class="form-label">Tgl. Berakhir Surat <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="tgl_akhir_dokumen_edit">
                         </div>
-                        <div class="col-md-7">
-                            <div class="form-group mb-3">
-                                <label class="form-label">Deskripsi</label>
-                                <textarea id="deskripsi_dokumen_edit" class="form-control" placeholder="" rows="1"></textarea>
-                            </div>
+                    </div>
+                    <div class="col-md-7">
+                        <div class="form-group mb-3">
+                            <label class="form-label">Deskripsi</label>
+                            <textarea id="deskripsi_dokumen_edit" class="form-control" placeholder="" rows="1"></textarea>
                         </div>
-                        <div class="col-md-5">
-                            <label class="form-label">Nama File Dokumen</label>
-                            <div class="alert alert-secondary">
-                                <a id="lampiran_edit"></a>
-                            </div>
+                    </div>
+                    <div class="col-md-5">
+                        <label class="form-label">Nama File Dokumen</label>
+                        <div class="alert alert-secondary">
+                            <a id="lampiran_edit"></a>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" id="btn-ubah-dokumen" onclick="prosesUbahDokumen()"><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</button>
-                    <button type="button" class="btn btn-link text-dark" data-bs-dismiss="modal"><i class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="btn-ubah-dokumen" onclick="prosesUbahDokumen()"><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</button>
+                <button type="button" class="btn btn-link text-dark" data-bs-dismiss="modal"><i class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="modal animate__animated animate__rubberBand fade" id="hapusDokumen" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
-        <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h6 class="modal-title">
-                        Form <b class="text-danger">Hapus Dokumen</b>
-                    </h6>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <input type="text" id="id_hapus_dokumen" hidden>
-                    <p style="text-align: justify;">Anda akan menghapus berkas dokumen tersebut. Penghapusan berkas akan menyebabkan hilangnya data/dokumen yang terhapus tersebut pada Storage Sistem.
-                        Maka dari itu, lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan penghapusan.</p>
-                    <label class="switch">
-                        <input type="checkbox" class="switch-input" id="setujuhapusdokumen">
-                        <span class="switch-toggle-slider">
-                        <span class="switch-on"></span>
-                        <span class="switch-off"></span>
-                        </span>
-                        <span class="switch-label">Anda siap menerima Risiko</span>
-                    </label>
-                </div>
-                <div class="col-12 text-center mb-4">
-                    <button type="submit" id="btn-hapus-dokumen" class="btn btn-danger me-sm-3 me-1" onclick="prosesHapusDokumen()"><i class="fa fa-trash me-1" style="font-size:13px"></i> Hapus</button>
-                    <button type="reset" class="btn btn-link text-dark" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
-                </div>
+<div class="modal animate__animated animate__rubberBand fade" id="hapusDokumen" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title">
+                    Form <b class="text-danger">Hapus Dokumen</b>
+                </h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="id_hapus_dokumen" hidden>
+                <p style="text-align: justify;">Anda akan menghapus berkas dokumen tersebut. Penghapusan berkas akan menyebabkan hilangnya data/dokumen yang terhapus tersebut pada Storage Sistem.
+                    Maka dari itu, lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan penghapusan.</p>
+                <label class="switch">
+                    <input type="checkbox" class="switch-input" id="setujuhapusdokumen">
+                    <span class="switch-toggle-slider">
+                    <span class="switch-on"></span>
+                    <span class="switch-off"></span>
+                    </span>
+                    <span class="switch-label">Anda siap menerima Risiko</span>
+                </label>
+            </div>
+            <div class="col-12 text-center mb-4">
+                <button type="submit" id="btn-hapus-dokumen" class="btn btn-danger me-sm-3 me-1" onclick="prosesHapusDokumen()"><i class="fa fa-trash me-1" style="font-size:13px"></i> Hapus</button>
+                <button type="reset" class="btn btn-link text-dark" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
             </div>
         </div>
     </div>
+</div>
 
 <script>
     $(document).ready(function() {

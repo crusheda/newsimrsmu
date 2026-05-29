@@ -66,7 +66,7 @@
                                 <i class="fas fa-sync me-1"></i> Tabel Simpel</button>
                             <button type="button" class="btn btn-danger-transparent" id="btn-tabel-lengkap" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Menampilkan Seluruh Data Profil Pegawai" onclick="showAll()">
                                 <i class="fa-fw fas fa-infinity nav-icon me-1"></i> Tabel Lengkap</button>
-                            <button class="btn btn-info-transparent" onclick="showGrafikStatusPegawai()" id="btn-show-grafik" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Menampilkan Grafik Profil Pegawai">
+                            <button class="btn btn-info-transparent" onclick="showGrafikStatusKawin()" id="btn-show-grafik" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Menampilkan Grafik Profil Pegawai">
                                 <i class="fas fa-chart-pie me-1"></i> Grafik Interaktif</button>
                         </div>
                         <div class="btn-group">
@@ -92,6 +92,7 @@
                                         <th class="cell-fit">AKUN / USERNAME</th>
                                         <th class="cell-fit">NAMA LENGKAP</th>
                                         <th class="cell-fit">JABATAN</th>
+                                        <th class="cell-fit">STATUS PEGAWAI</th>
                                         <th class="cell-fit">TERAKHIR DIPERBARUI</th>
                                     </tr>
                                 </thead>
@@ -103,11 +104,14 @@
                                     </tr>
                                 </tbody>
                                 <tfoot>
-                                    <th class="cell-fit"><center>#ID</center></th>
-                                    <th class="cell-fit">AKUN / USERNAME</th>
-                                    <th class="cell-fit">NAMA LENGKAP</th>
-                                    <th class="cell-fit">JABATAN</th>
-                                    <th class="cell-fit">TERAKHIR DIPERBARUI</th>
+                                    <tr>
+                                        <th class="cell-fit"><center>#ID</center></th>
+                                        <th class="cell-fit">AKUN / USERNAME</th>
+                                        <th class="cell-fit">NAMA LENGKAP</th>
+                                        <th class="cell-fit">JABATAN</th>
+                                        <th class="cell-fit">STATUS PEGAWAI</th>
+                                        <th class="cell-fit">TERAKHIR DIPERBARUI</th>
+                                    </tr>
                                 </tfoot>
                             </table>
                         </div>
@@ -278,7 +282,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a class="btn btn-label-secondary" href="javascript:void(0);" data-bs-dismiss="modal"><i
+                    <a class="btn btn-link text-dark" href="javascript:void(0);" data-bs-dismiss="modal"><i
                         class="fas fa-chevron-left"></i>&nbsp;&nbsp;Tutup</a>
                     <div class="btn-group">
                         <button class="btn btn-warning" onclick="refreshNonAktif()"><i class='fa-fw fas fa-sync nav-icon'></i>&nbsp;&nbsp;Segarkan</button>
@@ -372,6 +376,56 @@
         });
 
         // FUNCTION-FUNCTION
+        const badgeColors = [
+            'bg-primary',
+            'bg-info',
+            'bg-warning',
+            'bg-success',
+            'bg-danger',
+            'bg-secondary'
+        ];
+
+        const roleColorMap = {};
+
+        /**
+         * Ambil warna badge berdasarkan nama role
+         */
+        function getBadgeColor(roleName) {
+
+            if (!roleColorMap[roleName]) {
+
+                let index = Object.keys(roleColorMap).length % badgeColors.length;
+
+                roleColorMap[roleName] = badgeColors[index];
+            }
+
+            return roleColorMap[roleName];
+        }
+
+        /**
+         * Generate HTML badge role
+         */
+        function renderRoleBadges(roles = []) { // PENGGUNAAN = renderRoleBadges(item.roles) => didalan foreach show;
+
+            if (!roles.length) {
+                return `<span class="text-muted">-</span>`;
+            }
+
+            return roles.map(role => {
+
+                let roleName = role.deskripsi ?? role.name;
+
+                let color = getBadgeColor(roleName);
+
+                return `
+                    <span class="badge rounded-pill ${color}-transparent me-1">
+                        ${roleName}
+                    </span>
+                `;
+
+            }).join('');
+        }
+
         function refresh() {
             $('#btn-tabel-simpel').find('i').addClass('fa-spin');
             $("#tampil-tbody").empty().append(
@@ -386,39 +440,56 @@
                     $('#dttable').DataTable().clear().destroy();
                     res.show.forEach(item => {
                         content = "<tr id='data" + item.id + "'>";
+                        colBtn = '';
+                        stt = '';
+                        if (item.nik) {
+                            colBtn = 'primary';
+                        } else {
+                            colBtn = 'warning';
+                        }
+                        if (item.status != null || item.deleted_at != null) {
+                            stt = `<span class="badge bg-danger-transparent fs-14">Akun Dinonaktifkan</span>`;
+                            colBtn = 'danger';
+                        } else {
+                            stt = `<span class="badge bg-success-transparent fs-14">Akun Aktif</span>`;
+                        }
                         content += `<td><center><div class='btn-group'>
-                                        <a href='javascript:void(0);' class='link-${item.nik?'primary':'danger'} link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</a>
+                                        <a href='javascript:void(0);' class='link-${colBtn} link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</a>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
                             content += `<li><a href="/v4/sdi/profilpegawai/${item.id}" class='dropdown-item text-success'><i class="fa-fw fas fa-search nav-icon me-1"></i> Lihat Profil</a></li>`;
                             // content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="nonaktif(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon me-1"></i> Nonaktif</a></li>`;
                         content += `</div></center></td>`;
                         content += `<td class="text-truncate">${item.name}</td>`;
-                        content += `<td class="text-truncate">${item.nama?item.nama:'<b class="text-danger">Data Tidak Valid</b>'}</td>`;
+                        content += `<td class="text-truncate"><b class='text-${colBtn}'>${item.nama?item.nama:'Data Belum Lengkap'}</b></td>`;
+                        content += `<td>${renderRoleBadges(item.roles)}</td>`;
 
-                        badges = ``;
-                        item.roles.forEach((p, i) => {
-                            badges += `<span class="badge rounded-pill bg-primary-transparent me-1">${p.deskripsi ?? p.name}</span>`;
-                        })
-                        content += `<td>${badges}</td>`;
+                        content += `<td>
+                                        <div class='d-flex justify-content-start align-items-center'>
+                                            <div class='d-flex flex-column'>
+                                                <a class='mb-0 text-truncate'>${stt}</a>
+                                                <small class='text-muted text-wrap ms-1'>${item.nama_penghapus?'Oleh '+item.nama_penghapus:''}</small>
+                                            </div>
+                                        </div>
+                                    </td>`;
                         content += '<td>' + new Date(item.updated_at).toLocaleString("sv-SE") + '</td>';
                         content += `</tr>`;
                         $('#tampil-tbody').append(content);
                     });
                     var table = $('#dttable').DataTable({
                         order: [
-                            [4, "desc"]
+                            [4, "asc"],
+                            [5, "desc"]
                         ],
                         bAutoWidth: false,
                         aoColumns : [
                             { sWidth: '10%' },
                             { sWidth: '15%' },
-                            { sWidth: '40%' },
+                            { sWidth: '30%' },
                             { sWidth: '20%' },
+                            { sWidth: '10%' },
                             { sWidth: '15%' },
                         ],
-                        displayLength: 10,
-                        lengthChange: true,
-                        lengthMenu: [10, 25, 50, 75, 100],
+                        displayLength: 15,
                     });
 
                     // Set True / False Table
@@ -452,8 +523,16 @@
                     res.show.forEach(item => {
                         // var us = JSON.parse(res.user);
                         content = "<tr id='data" + item.id + "' style='font-size:13px'>";
+                        if (item.nik) {
+                            colBtn = 'primary';
+                        } else {
+                            colBtn = 'warning';
+                        }
+                        if (item.status != null || item.deleted_at != null) {
+                            colBtn = 'danger';
+                        }
                         content += `<td><center><div class='btn-group'>
-                                        <a href='javascript:void(0);' class='link-${item.nik?'primary':'danger'} link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</a>
+                                        <a href='javascript:void(0);' class='link-${colBtn} link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</a>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
                             content += `<li><a href="/v4/sdi/profilpegawai/${item.id}" class='dropdown-item text-success'><i class="fa-fw fas fa-search nav-icon me-1"></i> Lihat Profil</a></li>`;
                         content += `</div></center></td>`;
@@ -469,19 +548,13 @@
                                 pNama = '-';
                             }
                         }
-                        content += `<td>${pNama}</td>`;
+                        content += `<td class="text-${colBtn}">${pNama}</td>`;
                         content += `<td>${item.nick?item.nick:'-'}</td>`;
                         content += `<td>${item.temp_lahir?item.temp_lahir:'-'}${item.tgl_lahir?', '+item.tgl_lahir:''}</td>`;
                         content += `<td>${item.jns_kelamin?item.jns_kelamin:'-'}</td>`;
                         content += `<td>${item.status_kawin?item.status_kawin:'-'}</td>`;
                         content += `<td>${item.status_pegawai?item.status_pegawai:'-'}</td>`;
-
-                        badges = ``;
-                        item.roles.forEach((p, i) => {
-                            badges += `<span class="badge rounded-pill bg-primary-transparent me-1">${p.deskripsi ?? p.name}</span>`;
-                        })
-
-                        content += `<td>${badges}</td>`;
+                        content += `<td>${renderRoleBadges(item.roles)}</td>`;
                         content += `<td>${item.klasifikasi_user?item.klasifikasi_user:'-'}</td>`;
                         content += `<td>${item.masuk_kerja?item.masuk_kerja:'-'}</td>`;
                         content += `<td>${item.urutan_masuk?item.urutan_masuk:'-'}</td>`;
@@ -524,7 +597,9 @@
                     });
                     var table = $('#dttable-all').DataTable({
                         order: [
-                            [47, "desc"]
+                            [10, "asc"],
+                            [47, "desc"],
+                            [4, "asc"],
                         ],
                         // bAutoWidth: false,
                         // aoColumns : [

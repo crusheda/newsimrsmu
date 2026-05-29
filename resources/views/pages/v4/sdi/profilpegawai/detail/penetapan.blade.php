@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12 status-aktif-penetapan" hidden>
         <div class="card custom-card">
             <div class="card-header d-flex align-items-center justify-content-between py-3">
                 <h6 class="mb-0 card-title flex-grow-1">Penetapan <b class="text-info">Pegawai</b></h6>
@@ -37,7 +37,7 @@
     <div class="col-md-12">
         <div class="card custom-card">
             <div class="card-header d-flex align-items-center justify-content-between py-3">
-                <h6 class="mb-0 card-title flex-grow-1">Tabel <b class="text-primary">Riwayat</b></h6>
+                <h6 class="mb-0 card-title flex-grow-1">Tabel <b class="text-primary">Riwayat</b> <b class="text-danger">Penetapan</b></h6>
                 <div class="flex-shrink-0">
                     <div class="btn-group">
                         <button type="button" class="btn btn-warning-transparent" id="btn-refresh" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
@@ -187,18 +187,30 @@
                     btn.prop('disabled', true).empty().append('<i class="fas fa-sync fa-spin me-1"></i> memuat...');
                 },
                 success: function(res) {
+                    // CEK STATUS AKTIF/TIDAKNYA DATA USER
+                    if (res.user && res.user.status != null && res.user.deleted_at != null) {
+                        $(".status-aktif-penetapan").prop('hidden', true);
+                    } else {
+                        $(".status-aktif-penetapan").prop('hidden', false);
+                    }
+                    
                     var bgHapus = null;
                     $("#tampil-tbody-penetapan").empty();
                     $('#dttable-penetapan').DataTable().clear().destroy();
                     res.show.forEach(item => {
                         content = "<tr id='data"+ item.id +"'>";
                         content += `<td><center><div class='dropend'><a href='javascript:void(0);' class='link-${item.status==0?'danger':'success'} link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle' data-bs-toggle='dropdown' aria-haspopup="true">${item.id}</a><div class='dropdown-menu'>`;
-                            if (item.status == 0) {
+                            if (res.user && res.user.status != null && res.user.deleted_at != null) {
                                 content += `<a href='javascript:void(0);' class='dropdown-item disabled'><i class='fas fa-edit me-1'></i> Ubah</a>`;
                                 content += `<a href='javascript:void(0);' class='dropdown-item disabled'><i class='fas fa-trash me-1'></i> Hapus</a>`;
                             } else {
-                                content += `<a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbahPenetapan(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-edit me-1'></i> Ubah</a>`;
-                                content += `<a href='javascript:void(0);' class='dropdown-item text-danger' onclick="showHapusPenetapan(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-trash me-1'></i> Hapus</a>`;
+                                if (item.status == 0) {
+                                    content += `<a href='javascript:void(0);' class='dropdown-item disabled'><i class='fas fa-edit me-1'></i> Ubah</a>`;
+                                    content += `<a href='javascript:void(0);' class='dropdown-item disabled'><i class='fas fa-trash me-1'></i> Hapus</a>`;
+                                } else {
+                                    content += `<a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbahPenetapan(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-edit me-1'></i> Ubah</a>`;
+                                    content += `<a href='javascript:void(0);' class='dropdown-item text-danger' onclick="showHapusPenetapan(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-trash me-1'></i> Hapus</a>`;
+                                }
                             }
                         content += `</div></center></td>`;
                         if (item.deleted_at != null) {

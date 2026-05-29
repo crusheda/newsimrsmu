@@ -199,7 +199,7 @@
                 } else {
                     $(".status-aktif").prop('hidden', true);
                     $(".status-nonaktif").prop('hidden', false);
-                    $("#txStatusNonaktif").html(`Pegawai telah resmi <b class="text-danger">dihapus/dinonaktifkan</b> pada <b class="text-warning">${formatTanggalJam(res.show?.deleted_at)}</b> Oleh <b class="text-primary">${res.show?.nama_admin}</b>`); // Update teks dengan tanggal dan nama admin
+                    $("#txStatusNonaktif").html(`Pegawai telah resmi <b class="text-danger">dihapus/dinonaktifkan</b> pada <b class="text-warning">${formatTanggalJam(res.show?.deleted_at)}</b> Oleh <b class="text-primary">${res.show?.nama_admin ?? 'Bagian SDI'}</b>`); // Update teks dengan tanggal dan nama admin
                 }
 
                 $("#show_nip_terakhir").text(res.maxNip);

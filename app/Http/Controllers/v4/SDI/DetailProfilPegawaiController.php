@@ -99,6 +99,14 @@ class DetailProfilPegawaiController extends Controller
 
     function getPenetapan($id_pegawai)
     {
+        $user = User::withTrashed()
+                        ->leftJoin('users as penghapus', 'penghapus.id', '=', 'users.user_hapus')
+                        ->where('users.id', $id_pegawai)
+                        ->select(
+                            'users.*',
+                            'penghapus.nama as nama_admin'
+                        )
+                        ->first();
         $show = users_status::withTrashed()
                 ->join('referensi','referensi.id','=','users_status.ref_id')
                 ->join('users','users.id','=','users_status.user_id')
@@ -109,6 +117,7 @@ class DetailProfilPegawaiController extends Controller
         $ref_penetapan = referensi::where('ref_jenis',10)->orderBy('queue','ASC')->get(); // 10 is Jenis Penetapan Pegawai
 
         $data = [
+            'user' => $user,
             'show' => $show,
             'ref_penetapan' => $ref_penetapan
         ];
@@ -118,6 +127,14 @@ class DetailProfilPegawaiController extends Controller
 
     function getRotasi($id_pegawai)
     {
+        $user = User::withTrashed()
+                        ->leftJoin('users as penghapus', 'penghapus.id', '=', 'users.user_hapus')
+                        ->where('users.id', $id_pegawai)
+                        ->select(
+                            'users.*',
+                            'penghapus.nama as nama_admin'
+                        )
+                        ->first();
         $show = users_rotasi::withTrashed()
                 ->join('referensi','referensi.id','=','users_rotasi.ref_id')
                 ->join('users','users.id','=','users_rotasi.user_id')
@@ -134,6 +151,7 @@ class DetailProfilPegawaiController extends Controller
         $ref_rotasi = referensi::where('ref_jenis',9)->get(); // 9 is Jenis Rotasi Pegawai
 
         $data = [
+            'user' => $user,
             'show' => $show,
             'role' => $role,
             'onlyRole' => $onlyRole,

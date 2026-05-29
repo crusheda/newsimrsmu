@@ -267,7 +267,7 @@
                             <div class="col-md-6">
                                 <p class="mb-1 text-muted">
                                     Tanggal
-                                    Lahir
+                                    Lahir (Umur)
                                 </p>
                                 <p class="mb-0">
                                     <a id="tgl_lahir"><i class="fas fa-sync-alt fa-spin ms-1"></i></a>
@@ -377,6 +377,41 @@
     $(document).ready(function() {
 
     });
+
+    function hitungUmurLengkap(tanggalLahir) {
+
+        if (!tanggalLahir) return '-';
+
+        const lahir = new Date(tanggalLahir);
+        const hariIni = new Date();
+
+        let tahun = hariIni.getFullYear() - lahir.getFullYear();
+        let bulan = hariIni.getMonth() - lahir.getMonth();
+        let hari = hariIni.getDate() - lahir.getDate();
+
+        // jika hari minus
+        if (hari < 0) {
+
+            bulan--;
+
+            // ambil jumlah hari bulan sebelumnya
+            const lastMonth = new Date(
+                hariIni.getFullYear(),
+                hariIni.getMonth(),
+                0
+            );
+
+            hari += lastMonth.getDate();
+        }
+
+        // jika bulan minus
+        if (bulan < 0) {
+            tahun--;
+            bulan += 12;
+        }
+
+        return `${tahun} Tahun ${bulan} Bulan ${hari} Hari`;
+    }
 
     function formatTanggal(date) {
         if (!date) return '-';
@@ -550,7 +585,15 @@
                 $('#nama_lengkap').text(nama_lengkap);
                 $('#nick').text(res.data.user?.nick ?? '-');
                 $('#temp_lahir').text(res.data.user?.temp_lahir ?? '-');
-                $('#tgl_lahir').text(res.data.user?.tgl_lahir ? formatTanggal(res.data.user.tgl_lahir) : '-');
+                tgl_lahir = res.data.user?.tgl_lahir ? formatTanggal(res.data.user.tgl_lahir) : '';
+                umur = hitungUmurLengkap(res.data.user?.tgl_lahir);
+                if (tgl_lahir && umur) {
+                    $('#tgl_lahir').html(`${tgl_lahir} (<b class="text-info">${umur}</b>)`);
+                } else if (tgl_lahir) {
+                    $('#tgl_lahir').text(tgl_lahir);
+                } else {
+                    $('#tgl_lahir').text(res.data.user?.tgl_lahir ? formatTanggal(res.data.user.tgl_lahir) : '-');
+                }
                 $('#jk').text(res.data.user?.jns_kelamin ?? '-');
                 $('#sk').text(res.data.user?.status_kawin ?? '-');
                 $('#alamat_ktp').text(res.data.user?.alamat_ktp ?? '-');
