@@ -15,7 +15,14 @@ class SurtugController extends Controller
 {
     function index()
     {
-        $users  = users::where('nik','!=',null)->where('nip','!=',null)->orderBy('nama', 'asc')->get();
+        $users  = users::where('nik','!=',null)
+                        ->where('nip','!=',null)
+                        ->where(function ($q) {
+                            $q->where('status', '!=', 99)
+                            ->orWhereNull('status');
+                        })
+                        ->whereNull('deleted_at')
+                        ->orderBy('nama', 'asc')->get();
 
         $data = [
             'users' => $users,

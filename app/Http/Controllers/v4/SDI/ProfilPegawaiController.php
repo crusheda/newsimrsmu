@@ -232,7 +232,13 @@ class ProfilPegawaiController extends Controller
 
     function tableNonLengkap()
     {
-        $show = User::where('nik', null)->whereNull('deleted_at')->whereNull('status')->orderBy('updated_at','desc')->get();
+        $show = User::where('nik', null)
+                    ->where(function ($q) {
+                        $q->where('status', '!=', 99)
+                        ->orWhereNull('status');
+                    })
+                    ->whereNull('deleted_at')
+                    ->orderBy('updated_at','desc')->get();
 
         $data = [
             'show' => $show

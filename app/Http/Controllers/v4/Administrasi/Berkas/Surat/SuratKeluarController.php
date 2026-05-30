@@ -21,7 +21,14 @@ class SuratKeluarController extends Controller
     {
         if (Auth::user()->can('surat_keluar') == true) {
             $user = User::role('staf-sekretariatan')->select('id','nama')->get();
-            $users = user::whereNotNull('nik')->where('status',null)->orderBy('nama','ASC')->get();
+            $users = user::whereNotNull('nik')
+                        ->where(function ($q) {
+                            $q->where('status', '!=', 99)
+                            ->orWhereNull('status');
+                        })
+                        ->whereNull('deleted_at')
+                        ->orderBy('nama','ASC')
+                        ->get();
             $kode = kode_surat_keluar::orderBy('nama','ASC')->get();
             $year = Carbon::now()->isoFormat('YYYY');
             $lastyear = Carbon::now()->subYear()->isoFormat('YYYY');
@@ -248,7 +255,13 @@ class SuratKeluarController extends Controller
     public function showChange($id)
     {
         $user = User::role('staf-sekretariatan')->select('id','nama')->get();
-        $users = user::whereNotNull('nik')->where('status',null)->orderBy('nama','ASC')->get();
+        $users = user::whereNotNull('nik')
+                        ->where(function ($q) {
+                            $q->where('status', '!=', 99)
+                            ->orWhereNull('status');
+                        })
+                        ->whereNull('deleted_at')
+                        ->orderBy('nama','ASC')->get();
         $show = surat_keluar::find($id);
         $getKode = kode_surat_keluar::where('id',$show->kode)->first();
         $refKode = kode_surat_keluar::get();

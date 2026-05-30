@@ -31,10 +31,10 @@
                     <div class="card-header d-flex align-items-center justify-content-between py-3">
                         <h5 class="mb-0">
                             <div class="btn-group">
-                                <a class="btn btn-primary text-white" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                                title="<i class='fa-fw fas fa-upload nav-icon'></i> <span>Upload Surat Masuk Baru</span>" onclick="modalTambah()">
+                                <a class="btn btn-primary" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                title="<i class='fa-fw fas fa-upload nav-icon'></i> <span>Upload Surat Keluar Baru</span>" onclick="modalTambah()">
                                     <i class='fa-fw fas fa-upload nav-icon me-1'></i>
-                                    <span class="align-middle">Upload Surat Keluar</span>
+                                    Upload <span class="badge ms-2 bg-danger">Surat Keluar</span>
                                 </a>
                                 <button type="button" class="btn btn-warning-transparent" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                                     title="<i class='fa-fw fas fa-sync nav-icon'></i> <span>Tampilkan 100 Data</span>" onclick="refresh()">

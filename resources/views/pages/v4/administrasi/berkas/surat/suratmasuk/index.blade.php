@@ -6,7 +6,7 @@
         <div class="page-header-breadcrumb mb-3">
             <div class="d-flex align-center justify-content-between flex-wrap">
                 <h1 class="page-title fw-medium fs-18 mb-0 pe-none">
-                    Berkas <b class="text-primary link-underline-primary text-decoration-underline">Surat Masuk</b>
+                    Berkas <b class="text-info link-underline-info text-decoration-underline">Surat Masuk</b>
                 </h1>
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item pe-none">
@@ -31,10 +31,10 @@
                     <div class="card-header d-flex align-items-center justify-content-between py-3">
                         <h5 class="mb-0">
                             <div class="btn-group">
-                                <a class="btn btn-primary text-white" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                <a class="btn btn-primary" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                                 title="<i class='fa-fw fas fa-upload nav-icon'></i> <span>Upload Surat Masuk Baru</span>" onclick="modalTambah()">
                                     <i class='fa-fw fas fa-upload nav-icon me-1'></i>
-                                    <span class="align-middle">Upload Surat Masuk</span>
+                                    Upload <span class="badge ms-2 bg-info">Surat Masuk</span>
                                 </a>
                                 <button type="button" class="btn btn-warning-transparent" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                                     title="<i class='fa-fw fas fa-sync nav-icon'></i> <span>Tampilkan 100 Data</span>" onclick="refresh()">

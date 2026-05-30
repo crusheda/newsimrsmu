@@ -27,11 +27,7 @@ class RKAController extends Controller
     public function index()
     {
         $show = berkas_rka::get();
-        $user = Auth::user();
-        $nama = $user->nama;
         $bln = Carbon::now()->isoFormat('MM');
-
-        $users = DB::table('users')->get();
 
         $data = [
             'show' => $show,
@@ -67,8 +63,6 @@ class RKAController extends Controller
         $verifikasi = berkas_rka::get();
         $tahun = Carbon::now()->isoFormat('YYYY');
         $tgl = $now->isoFormat('dddd, D MMMM Y, HH:mm:ss a');
-        // print_r($now);
-        // die();
 
         $uploadedFile = $request->file('file');
 
@@ -76,7 +70,6 @@ class RKAController extends Controller
         foreach ($verifikasi as $key => $value) {
             if ($value->title == $title) {
                 return redirect()->back()->withErrors('File yang Anda Upload sudah Ada, mohon Rename file dan silakan Upload ulang.');
-                // return response()->json($value->title, 500);
             }
         }
         $path = $uploadedFile->storeAs("public/files/rka/", $title);

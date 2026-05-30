@@ -22,7 +22,16 @@ class PDController extends Controller
                 Auth::user()->can('admin_kepegawaian') == true ||
                 Auth::user()->can('admin_pd_keuangan') == true
             ) {
-            $users  = users::where('nik','!=',null)->where('nama','!=',null)->where('nip','!=',null)->orderBy('nama', 'asc')->get();
+            $users  = users::where('nik','!=',null)
+                            ->where('nama','!=',null)
+                            ->where('nip','!=',null)
+                            ->where(function ($q) {
+                                $q->where('status', '!=', 99)
+                                ->orWhereNull('status');
+                            })
+                            ->whereNull('deleted_at')
+                            ->orderBy('nama', 'asc')
+                            ->get();
 
             $data = [
                 'users' => $users,
@@ -36,7 +45,17 @@ class PDController extends Controller
 
     function table()
     {
-        $users  = users::select('id','nama')->where('nik','!=',null)->where('nama','!=',null)->where('nip','!=',null)->orderBy('nama', 'asc')->get();
+        $users  = users::where('nik','!=',null)
+                        ->where('nama','!=',null)
+                        ->where('nip','!=',null)
+                        ->where(function ($q) {
+                            $q->where('status', '!=', 99)
+                            ->orWhereNull('status');
+                        })
+                        ->whereNull('deleted_at')
+                        ->select('id','nama')
+                        ->orderBy('nama', 'asc')
+                        ->get();
         $show  = pd::join('users','users.id','=','kepegawaian_pd.user_id')
                     ->select('users.name as name_user','users.nama as nama_user','kepegawaian_pd.*')
                     ->get();

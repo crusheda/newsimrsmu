@@ -25,9 +25,16 @@ class RapatController extends Controller
      */
     public function index()
     {
-        $users = users::whereNotNull('nik')->where('status',null)->orderBy('nama','ASC')->get();
-        // print_r($users);
-        // die();
+        $users = users::whereNotNull('nik')
+                        ->where('status',null)
+                        ->whereNull('deleted_at')
+                        ->where(function ($q) {
+                            $q->where('status', '!=', 99)
+                            ->orWhereNull('status');
+                        })
+                        ->orderBy('nama','ASC')
+                        ->get();
+
         $tgl = Carbon::now();
         $today = Carbon::now()->isoFormat('YYYY/MM/DD');
 

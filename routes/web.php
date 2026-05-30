@@ -38,6 +38,7 @@ use \App\Http\Controllers\v4\SDI\DetailProfilPegawaiController;
 use \App\Http\Controllers\v4\SDI\JadwalDinasController;
 use \App\Http\Controllers\v4\SDI\PDController;
 use \App\Http\Controllers\v4\SDI\SurtugController;
+use \App\Http\Controllers\v4\SDI\SpkRkkController;
 use \App\Http\Controllers\v4\SDI\Absensi\AbsensiController;
 use \App\Http\Controllers\v4\SDI\Absensi\AbsensiDashboardController;
 use \App\Http\Controllers\v4\SDI\Absensi\AbsensiDeviceController;
@@ -124,6 +125,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function 
                 Route::get('sdi/profilpegawai/{id}', [DetailProfilPegawaiController::class, 'index'])->name('v4.sdi.profilpegawai.detail');
                 Route::get('sdi/profilpegawai/dokumen/download/{id}', [DetailProfilPegawaiController::class,'downloadDokumen'])->name('v4.sdi.profilpegawai.detail.downloadDokumen');
                 Route::get('sdi/profilpegawai/spkrkk/download/{id}', [DetailProfilPegawaiController::class,'downloadSpkRkk'])->name('v4.sdi.profilpegawai.detail.downloadSpkRkk');
+
+        // SPK & RKK
+        Route::get('sdi/spkrkk', [SpkRkkController::class, 'index'])->name('v4.sdi.spkrkk');
 
         // JADWAL DINAS
         Route::get('sdi/jadwaldinas', [JadwalDinasController::class, 'index'])->name('v4.sdi.jadwaldinas');

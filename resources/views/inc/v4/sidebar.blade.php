@@ -180,6 +180,15 @@
                     </li>
                 @endcanany
 
+                @can('admin_spkrkk')
+                    <li class="slide">
+                        <a href="{{ route('v4.sdi.spkrkk') }}" class="side-menu__item">
+                            <i class="side-menu__icon ri-folder-shield-2-line"></i>
+                            <span class="side-menu__label">Spk & Rkk</span>
+                        </a>
+                    </li>
+                @endcan
+
                 <li class="slide">
                     <a href="{{ route('v4.sdi.jadwaldinas') }}" class="side-menu__item">
                         <i class="side-menu__icon ri-calendar-schedule-line"></i>
