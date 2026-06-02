@@ -68,7 +68,7 @@
                         </label>
                         <div class="form-group">
                             <label class="form-label">Tanggal Acara <a class="text-danger">*</a></label>
-                            <input type="text" id="tgl_edit" class="form-control" placeholder="YYYY-MM-DD" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tanggal acara"/>
+                            <input type="text" id="tgl_edit" class="form-control" placeholder="YYYY-MM-DD" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tanggal acara" disabled/>
                         </div>
                     </div>
                     <div class="col-md-6 mb-3">
@@ -78,16 +78,16 @@
 
                         <div class="time-group">
                             <div class="time-box">
-                                <small>Jam Mulai <a class="text-danger">*</a></small>
+                                <label class="form-label">Jam Mulai <a class="text-danger">*</a></label>
                                 <div class="time-input">
-                                    <input id="jam_mulai_edit" class="form-control" type="text" placeholder="HH:mm">
+                                    <input id="jam_mulai_edit" class="form-control" type="text" placeholder="HH:mm" disabled>
                                 </div>
                             </div>
 
                             <div class="time-box">
-                                <small>Jam Selesai <a class="text-danger">*</a></small>
+                                <label class="form-label">Jam Selesai <a class="text-danger">*</a></label>
                                 <div class="time-input">
-                                    <input id="jam_selesai_edit" class="form-control" type="text" placeholder="HH:mm">
+                                    <input id="jam_selesai_edit" class="form-control" type="text" placeholder="HH:mm" disabled>
                                 </div>
                             </div>
                         </div>
@@ -274,7 +274,7 @@
                                 content = `<tr><td><center><div class="btn-group">
                                                 <a href="javascript:void(0);" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle" data-bs-toggle="dropdown" id='btnAct${item.id}'>${item.id}</a>
                                                 <ul class="dropdown-menu dropdown-menu-right">
-                                                    <li><a href="javascript:;" class="dropdown-item text-secondary"><i class='fas fa-calendar-times me-1'></i> <s>Tolak</s></a></li>
+                                                    <li><a href="javascript:;" class="dropdown-item disabled"><i class='fas fa-calendar-times me-1'></i> <s>Tolak</s></a></li>
                                                     <li><a href="javascript:;" onclick="verifEditTgl(` + item.id + `)" class="dropdown-item text-warning"><i class='fas fa-edit me-1'></i> Ubah</a></li>
                                                     <li><a href="javascript:;" onclick="verifHapusTgl(` + item.id + `)" class="dropdown-item text-danger"><i class='fas fa-trash-alt me-1'></i> Hapus</a></li>
                                                 </ul>
@@ -308,8 +308,8 @@
                                                     <a href="javascript:void(0);" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle" data-bs-toggle="dropdown" id='btnAct${item.id}'>${item.id}</a>
                                                     <ul class="dropdown-menu dropdown-menu-right">
                                                         <li><a href="javascript:;" onclick="lihatPenolakan(` + item.id + `)" class="dropdown-item text-primary"><i class='fas fa-calendar-times me-1'></i> Alasan Penolakan</a></li>
-                                                        <li><a href="javascript:;" class="dropdown-item text-secondary" disabled><i class='fas fa-edit me-1'></i> Ubah</a></li>
-                                                        <li><a href="javascript:;" class="dropdown-item text-secondary" disabled><i class='fas fa-trash-alt me-1'></i> Hapus</a></li>
+                                                        <li><a href="javascript:;" class="dropdown-item disabled"><i class='fas fa-edit me-1'></i> Ubah</a></li>
+                                                        <li><a href="javascript:;" class="dropdown-item disabled"><i class='fas fa-trash-alt me-1'></i> Hapus</a></li>
                                                     </ul>
                                                 </div></center></td>`;
                                 }
@@ -317,8 +317,8 @@
                                 content = `<tr><td><center><div class="btn-group">
                                                 <a href="javascript:void(0);" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle" data-bs-toggle="dropdown" id='btnAct${item.id}'>${item.id}</a>
                                                 <ul class="dropdown-menu dropdown-menu-right">
-                                                    <li><a href="javascript:;" class="dropdown-item text-secondary" disabled><i class='fas fa-edit me-1'></i> Ubah</a></li>
-                                                    <li><a href="javascript:;" class="dropdown-item text-secondary" disabled><i class='fas fa-trash-alt me-1'></i> Hapus</a></li>
+                                                    <li><a href="javascript:;" class="dropdown-item disabled"><i class='fas fa-edit me-1'></i> Ubah</a></li>
+                                                    <li><a href="javascript:;" class="dropdown-item disabled"><i class='fas fa-trash-alt me-1'></i> Hapus</a></li>
                                                 </ul>
                                             </div></center></td>`;
                             }
@@ -326,8 +326,8 @@
                             content = `<tr><td><center><div class="btn-group">
                                             <a href="javascript:void(0);" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle" data-bs-toggle="dropdown" id='btnAct${item.id}'>${item.id}</a>
                                             <ul class="dropdown-menu dropdown-menu-right">
-                                                <li><a href="javascript:;" class="dropdown-item text-secondary" disabled><i class='fas fa-edit me-1'></i> Ubah</a></li>
-                                                <li><a href="javascript:;" class="dropdown-item text-secondary" disabled><i class='fas fa-trash-alt me-1'></i> Hapus</a></li>
+                                                <li><a href="javascript:;" class="dropdown-item disabled"><i class='fas fa-edit me-1'></i> Ubah</a></li>
+                                                <li><a href="javascript:;" class="dropdown-item disabled"><i class='fas fa-trash-alt me-1'></i> Hapus</a></li>
                                             </ul>
                                         </div></center></td>`;
                         }
@@ -508,6 +508,7 @@
                 $("#id_edit").val(res.show.id);
                 $("#agenda_edit").val(res.show.agenda);
                 $("#ket_edit").val(res.show.ket);
+                $("#gizi_edit").val(res.show.gizi);
 
                 // RUANGAN
                 res.ruangan.forEach(item => {

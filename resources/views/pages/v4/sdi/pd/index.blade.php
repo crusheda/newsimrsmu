@@ -135,7 +135,7 @@
                 </div>
             @endcan
             <div class="col-xl-12">
-                <div class="card">
+                <div class="card custom-card">
                     <div class="card-header d-flex align-items-center justify-content-between py-3">
                         {{-- <h6 class="mb-0"><b>Tabel <b class="text-danger">Riwayat</b></b></h6> --}}
                         @can('admin_kepegawaian_kepala')

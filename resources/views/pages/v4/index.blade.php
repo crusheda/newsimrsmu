@@ -198,10 +198,10 @@
                             </li>
                             <li class="slide">
                                 <a href="#fitur" class="side-menu__item">
-                                    <span class="side-menu__label">Fitur</span>
+                                    <span class="side-menu__label">Unggulan</span>
                                 </a>
                             </li>
-                            <li class="slide">
+                            <li class="slide" hidden>
                                 <a href="#faq" class="side-menu__item">
                                     <span class="side-menu__label">FAQ's</span>
                                 </a>
@@ -249,7 +249,7 @@
                                     <span class="side-menu__label">Subscription</span>
                                 </a>
                             </li> --}}
-                            <li class="slide">
+                            <li class="slide" hidden>
                                 <a href="#kustom" class="side-menu__item">
                                     <span class="side-menu__label">Pengajuan</span>
                                 </a>
@@ -317,7 +317,7 @@
                             <span class="d-block fs-18">Platform yang mendukung manajemen data yang efektif, komunikasi yang lancar antar bagian manajemen, mempermudah proses administrasi, dan meningkatkan kinerja pegawai dengan dukungan sistem yang terintegrasi dan interkoneksi.</span>
                             <div class="btn-list banner-buttons">
                                 <a href="{{ route('v4.login') }}" class="btn btn-primary btn-lg rounded-pill btn-w-lg">Masuk Sekarang</a>
-                                <a class="btn btn-lg btn-light border rounded-pill btn-w-lg" href="javascript:void(0);">Web Resmi RS</a>
+                                <a class="btn btn-lg btn-light border rounded-pill btn-w-lg" href="https://www.rspkusukoharjo.com/" target="_blank">Web Resmi RS</a>
                             </div>
                         </div>
                         <div class="col-xl-6">
@@ -505,7 +505,7 @@
             <!-- End:: Section-3 -->
 
             <!-- Start:: Buy Now Section -->
-            <section class="section section-md section-primary text-fixed-white py-5 buy-now-section">
+            <section class="section section-md section-primary text-fixed-white py-5 buy-now-section" hidden>
                 <div class="testimonials-background-container">
                     <img src="{{ asset('images/media/backgrounds/1.png') }}" alt="">
                 </div>
@@ -527,7 +527,7 @@
             <!-- End:: Buy Now Section -->
 
             <!-- Start:: Section-5 -->
-            <section class="section" id="faq">
+            <section class="section" id="faq" hidden>
                 <div class="container">
                     <div class="heading-section">
                         <div class="heading-subtitle">FAQ's</div>
@@ -619,7 +619,7 @@
             <!-- End:: Section-5 -->
 
             <!-- Start:: Setion-7 -->
-            <section class="section bg-light py-5">
+            <section class="section bg-light py-5" hidden>
                 <div class="container">
                     <div class="row gy-4">
                         <div class="col-lg-3 col-6">
@@ -652,7 +652,7 @@
             <!-- End:: Setion-7 -->
 
             <!-- Start:: Section-8 -->
-            <section class="section" id="kustom">
+            <section class="section" id="kustom" hidden>
                 <div class="container">
                     <div class="heading-section">
                         <div class="heading-subtitle">Efektifitas</div>
@@ -931,7 +931,7 @@
             <!-- End:: Section-10 -->
 
             <!-- Start:: Buy Now Section -->
-            <section class="section section-md section-primary text-fixed-white py-5 buy-now-section">
+            <section class="section section-md section-primary text-fixed-white py-5 buy-now-section" hidden>
                 <div class="testimonials-background-container">
                     <img src="{{ asset('images/media/backgrounds/1.png') }}" alt="">
                 </div>
@@ -953,7 +953,7 @@
         <!-- End::app-content -->
 
         <!-- Start:: Footer -->
-        <section class="section landing-footer text-fixed-white">
+        <section class="section landing-footer text-fixed-white" hidden>
             <div class="container">
                 <div class="row my-auto justify-content-between align-items-center mb-5 pb-5 newsletter-area gap-3">
                     <div class="col-lg-6">
@@ -1043,7 +1043,7 @@
                 </div>
             </div>
         </section>
-        <div class="py-3 landing-payment-gateways">
+        <div class="py-3 landing-payment-gateways" hidden>
             <div class="container">
                 <div class="row align-items-center justify-content-center">
                     <div class="col-xl-7 col-lg-9">
@@ -1077,7 +1077,7 @@
                 </div>
             </div>
         </div>
-        <div class="landing-main-footer py-3">
+        <div class="landing-main-footer py-3" hidden>
             <div class="container">
                 <div class="row">
                     <div></div>

@@ -163,15 +163,9 @@
                         }
                         // console.log(item.foto_profil);
 
-                        if (item.foto_profil) {
-                            try {
-                                var foto = `<img src="/storage/` + item.foto_profil.substr(7,1000) + `" alt="Avatar" class="img-radius wid-40 align-top">`;
-                            } catch (e) {
-                                var foto = `<img src="/images/pku/user.png" alt="" class="img-radius wid-40 align-top" />`;
-                            }
-                        } else {
-                            var foto = `<img src="/images/pku/user.png" alt="" class="img-radius wid-40 align-top" />`;
-                        }
+                        const foto = item.users_foto
+                                    ? `<img src="/storage/${item.users_foto.replace(/^public\//, '')}" alt="Avatar" class="img-radius wid-40 align-top">`
+                                    : `<img src="/images/pku/user.png" alt="" class="img-radius wid-40 align-top">`;
                         if (item.nama_profil) {
                             var namamu = item.nama_profil;
                         } else {
@@ -228,7 +222,7 @@
                                         </div>
                                     </td>`;
                         content += `<td>` + item.title +
-                            `&nbsp;&nbsp;<span class="badge bg-dark rounded-pill">RKA ` +
+                            `&nbsp;&nbsp;<span class="badge bg-dark text-light">RKA ` +
                             tahunrka + `</span></td>`;
                         content += `<td class="text-start">` + new Date(item.updated_at).toLocaleString("sv-SE") + `</td></tr>`;
                         $('#tampil-tbody').append(content);
@@ -246,9 +240,6 @@
                             { sWidth: '10%' },
                         ],
                         displayLength: 20,
-                        lengthChange: true,
-                        lengthMenu: [20, 35, 50, 75, 100, 500, 1000, 3000, 7000, 10000, 20000],
-                        buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
                     $("#refreshBtn").prop('disabled', false);
                     $("#refreshBtn").find("i").removeClass("fa-spinner fa-spin").addClass("fa-sync");

@@ -6,7 +6,7 @@
         <div class="page-header-breadcrumb mb-3">
             <div class="d-flex align-center justify-content-between flex-wrap">
                 <h1 class="page-title fw-medium fs-18 mb-0 pe-none">
-                    <b class="text-secondary link-underline-secondary text-decoration-underline">Elektronik</b> <b class="text-primary link-underline-primary text-decoration-underline">Ruangan</b>
+                    <b class="text-secondary link-underline-secondary text-decoration-underline">Elektronik</b> <b class="text-primary link-underline-primary text-decoration-underline">Ruangan</b> (<b class="text-secondary">E</b>-<b class="text-primary">Ruang</b>)
                 </h1>
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item pe-none">

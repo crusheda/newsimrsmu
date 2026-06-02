@@ -6,7 +6,7 @@
             <small><i class="ti ti-arrow-narrow-right me-1"></i> Display diperbarui secara otomatis per 5 menit sekali dengan tampilan yang dibatasi (<strong>5 Antrean</strong>)</small>
         </div>
     </div>
-    <div class="col-xxl-5">
+    <div class="col-xxl-3">
         <div class="position-relative">
             <select class="select2 form-control validasiTgl" id="tampil_gizi_ruangan" style="width: 100%" data-bs-auto-close="outside" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Pilih salah satu/Kosongi untuk menampilkan semua Ruangan">
                 <option value="" selected hidden>Pilih Ruangan</option>
@@ -35,12 +35,12 @@
             </select>
         </div>
     </div>
-    <div class="col-xxl-2" id="start-display">
+    <div class="col-xxl-4" id="start-display">
         <div class="position-relative h-100 hstack gap-3">
             <button type="submit" class="btn btn-primary h-100 w-100" id="btn-tampil-gizi" onclick="showDisplay()"><i class="fas fa-tv align-middle me-1"></i> Tampilkan Display</button>
         </div>
     </div>
-    <div class="col-xxl-2" id="stop-display" hidden>
+    <div class="col-xxl-4" id="stop-display" hidden>
         <div class="position-relative h-100 hstack gap-3">
             <button type="submit" class="btn btn-danger h-100 w-100" id="btn-tampil-gizi" onclick="stopDisplay()"><i class="fas fa-times align-middle me-1"></i> Berhenti <span class="badge bg-light text-dark ms-1" id="detik"></span></button>
         </div>

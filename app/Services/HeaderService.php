@@ -37,8 +37,8 @@ class HeaderService
             'email' => $user->email,
             'role'  => optional($user->roles->first())->name,
             'foto' => optional($user->foto)->filename
-                ? asset('storage/' . $user->foto->filename)
-                : asset('images/users/user-dummy-img.jpg'),
+                    ? asset('storage/' . str_replace('public/', '', $user->foto->filename))
+                    : asset('images/users/user-dummy-img.jpg'),
         ];
     }
 }

@@ -67,8 +67,8 @@
                             <h6>PERHATIAN !!! SHIFT SELAIN YANG <b class="text-danger">DITAMBAHKAN OTOMATIS OLEH SISTEM</b> MAKA AKAN DIANGGAP SHIFT MASUK JAGA ( <u class="text-danger"><b>TIDAK LIBUR</b></u> ) !!</h6>
                             <h6 class="mb-0"><small>MOHON HATI-HATI DALAM MENENTUKAN SHIFT PADA UNIT ANDA, HAL INI BERKAITAN DENGAN PENGHITUNGAN ABSENSI. DATA SHIFT SEPENUHNYA DIPANTAU LANGSUNG OLEH BAGIAN SDI.</small></h6>
                         </div>
-                        <div class="table-responsive text-nowrap" style="border: 0px">
-                            <table id="dttable" class="table dt-responsive table-hover nowrap w-100">
+                        <div class="table-responsive" style="border: 0px">
+                            <table id="dttable" class="table dt-responsive table-hover w-100">
                                 <thead>
                                     <tr>
                                         <th class="cell-fit">Aksi</th>
@@ -545,9 +545,9 @@
                         content += `<td>${item.ket?item.ket:'-'}</td>`;
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
-                                            <div class='d-flex flex-column'>
-                                                <a class='mb-0'>` + new Date(item.updated_at).toLocaleString("sv-SE") + `</a>
-                                                <small class='text-truncate text-muted'>Diperbarui Oleh ` + item.nama_pegawai + `</small>
+                                            <div class='d-flex flex-column text-truncate'>
+                                                <a class='mb-0 text-truncate'>` + new Date(item.updated_at).toLocaleString("sv-SE") + `</a>
+                                                <small class='text-truncate text-muted'>Diperbarui Oleh <br>` + item.nama_pegawai + `</small>
                                             </div>
                                         </div>
                                     </td></tr>`;

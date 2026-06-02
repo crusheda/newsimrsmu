@@ -37,9 +37,9 @@
                     </a>
                 </li>
 
-                <li class="slide__category"><span class="category-name">Informasi & Teknologi (<b class="text-pink">IT</b>)</span></li>
+                <li class="slide__category" hidden><span class="category-name">Informasi & Teknologi (<b class="text-pink">IT</b>)</span></li>
 
-                <li class="slide has-sub">
+                <li class="slide has-sub" hidden>
                     <a href="javascript:void(0);" class="side-menu__item">
                         <i class="side-menu__icon ri-bug-line"></i>
                         <span class="side-menu__label">Tiket Pengajuan</span>
