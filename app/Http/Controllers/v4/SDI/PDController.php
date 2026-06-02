@@ -135,7 +135,7 @@ class PDController extends Controller
         $data = pd::where('id', $id)->first();
         $filename = $data->filename;
         $title = $data->title;
-        return Storage::download($filename, $title);
+        return Storage::disk('public')->download($filename, $title);
     }
 
     function hapus($id)

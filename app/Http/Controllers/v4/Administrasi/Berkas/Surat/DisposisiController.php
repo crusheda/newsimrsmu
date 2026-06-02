@@ -102,7 +102,7 @@ class DisposisiController extends Controller
     {
         $data = disposisi::where('id_surat',$id)->first();
         if (!empty($data)) {
-            return Storage::download($data->filename, $data->title);
+            return Storage::disk('public')->download($data->filename, $data->title);
         } else {
             return redirect()->back()->with('message','Berkas Disposisi tidak ditemukan!');
         }

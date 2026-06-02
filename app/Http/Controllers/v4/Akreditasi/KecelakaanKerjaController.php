@@ -173,7 +173,7 @@ class KecelakaanKerjaController extends Controller
     public function show($id)
     {
         $data = accident_report::find($id);
-        return Storage::download($data->filename, $data->title);
+        return Storage::disk('public')->download($data->filename, $data->title);
     }
 
     /**

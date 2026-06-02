@@ -105,7 +105,7 @@ class RKAController extends Controller
     public function show($id)
     {
         $data = berkas_rka::find($id);
-        return Storage::download($data->filename, $data->title);
+        return Storage::disk('public')->download($data->filename, $data->title);
     }
 
     /**

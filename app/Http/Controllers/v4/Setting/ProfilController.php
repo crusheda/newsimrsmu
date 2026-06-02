@@ -765,6 +765,6 @@ class ProfilController extends Controller
     function downloadDokumen($id)
     {
         $data = users_doc::find($id);
-        return Storage::download($data->filename, $data->title);
+        return Storage::disk('public')->download($data->filename, $data->title);
     }
 }

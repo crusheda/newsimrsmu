@@ -181,7 +181,7 @@ class RapatController extends Controller
     public function show($id)
     {
         $data = berkas_rapat::find($id);
-        return Storage::download($data->filename1, $data->title1);
+        return Storage::disk('public')->download($data->filename1, $data->title1);
     }
 
     public function showAll($id)

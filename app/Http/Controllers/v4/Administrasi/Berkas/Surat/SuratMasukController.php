@@ -191,7 +191,7 @@ class SuratMasukController extends Controller
     public function download($id)
     {
         $data = surat_masuk::find($id);
-        return Storage::download($data->filename, $data->title);
+        return Storage::disk('public')->download($data->filename, $data->title);
     }
 
     public function showChange($id)
