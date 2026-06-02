@@ -356,7 +356,7 @@
             </div>
         </div>
     </div>
-    <div class="modal fade animate__animated animate__jackInTheBox" id="tutor" tabindex="-1" aria-hidden="true">
+    {{-- <div class="modal fade animate__animated animate__jackInTheBox" id="tutor" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -445,7 +445,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     <div class="modal fade animate__animated animate__jackInTheBox" id="info" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">

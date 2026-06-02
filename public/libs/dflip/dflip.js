@@ -9153,10 +9153,9 @@
                 value: function() {
                     var t = this.options;
                     if (void 0 !== window[e.locationVar]) {
-                        if (
-                        t.pdfjsSrc = window[e.locationVar] + "../../js/pdf.min.js",
-                        t.threejsSrc = window[e.locationVar] + "../../js/three.min.js",
-                        t.pdfjsWorkerSrc = window[e.locationVar] + "../../js/pdf.worker.min.js",
+                        if (t.pdfjsSrc = window[e.locationVar] + "js/libs/pdf.min.js",
+                        t.threejsSrc = window[e.locationVar] + "js/libs/three.min.js",
+                        t.pdfjsWorkerSrc = window[e.locationVar] + "js/libs/pdf.worker.min.js",
                         t.soundFile = window[e.locationVar] + t.soundFile,
                         t.imagesLocation = window[e.locationVar] + t.imagesLocation,
                         t.imageResourcesPath = window[e.locationVar] + t.imageResourcesPath,
