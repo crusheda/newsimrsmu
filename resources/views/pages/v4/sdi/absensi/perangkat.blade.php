@@ -209,36 +209,36 @@
                             txtBtn = 'Belum/Tidak Disetujui';
                         }
                         content = "<tr id='data" + item.id + "' style='font-size:13px'>";
-                        content += `<td><center>`;
+                        content += `<td><center><div class='btn-group'>`;
                                 if (item.status == 1) {
                                     if (superID || adminID || devID) {
                                         if (item.nama_user) {
                                             if (item.accepted) {
-                                                content += `<buttoon class="btn btn-danger-transparent btn-icon me-2" onclick="reject(${item.id})" data-bs-toggle="tooltip"
+                                                content += `<buttoon class="btn btn-sm btn-danger-transparent btn-icon me-2" onclick="reject(${item.id})" data-bs-toggle="tooltip"
                                                 data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Hapus Perizinan Device"><i class="fas fa-frown"></i></buttoon>`;
                                             } else {
-                                                content += `<buttoon class="btn btn-success btn-icon me-2" onclick="approve(${item.id})" data-bs-toggle="tooltip"
+                                                content += `<buttoon class="btn btn-sm btn-success btn-icon me-2" onclick="approve(${item.id})" data-bs-toggle="tooltip"
                                                 data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tetapkan Perizinan Device"><i class="fas fa-smile-beam"></i></buttoon>`;
                                             }
                                         } else {
-                                            content += `<buttoon class="btn btn-success disabled btn-icon me-2" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                                            content += `<buttoon class="btn btn-sm btn-success disabled btn-icon me-2" data-bs-toggle="tooltip" data-bs-offset="0,4"
                                             data-bs-placement="bottom" data-bs-html="true" title="Perizinan Belum dibuka sampai Pengguna melengkapi Profil" disabled><i class="fas fa-smile-beam"></i></buttoon>`;
                                         }
                                     }
                                 } else {
-                                    content += `<buttoon class="btn btn-success disabled btn-icon me-2" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                                    content += `<buttoon class="btn btn-sm btn-success disabled btn-icon me-2" data-bs-toggle="tooltip" data-bs-offset="0,4"
                                     data-bs-placement="bottom" data-bs-html="true" title="Tetapkan Perizinan Device" disabled><i class="fas fa-smile-beam"></i></buttoon>`;
                                 }
                                 if (superID || devID) {
                                     if (item.status) {
-                                        content += `<buttoon class="btn btn-danger-transparent btn-icon" onclick="blokir(${item.id})" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                                        content += `<buttoon class="btn btn-sm btn-danger-transparent btn-icon" onclick="blokir(${item.id})" data-bs-toggle="tooltip" data-bs-offset="0,4"
                                         data-bs-placement="bottom" data-bs-html="true" title="Blokir Device"><i class="fas fa-lock"></i></buttoon>`;
                                     } else {
-                                        content += `<buttoon class="btn btn-info-transparent btn-icon" onclick="bukaBlokir(${item.id})" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                                        content += `<buttoon class="btn btn-sm btn-info-transparent btn-icon" onclick="bukaBlokir(${item.id})" data-bs-toggle="tooltip" data-bs-offset="0,4"
                                         data-bs-placement="bottom" data-bs-html="true" title="Buka Blokir Device"><i class="fas fa-lock-open"></i></buttoon>`;
                                     }
                                 }
-                        content += "</center></td>";
+                        content += "</div></center></td>";
                         content += `<td>${item.nama_user?"<b class='text-"+clrBtn+"'>"+item.nama_user+"</b>":'<b class="text-secondary">Profil Pengguna Tidak Lengkap</b>'} [<b class="text-orange">#${item.user_id}</b>]</td>`;
                         content += `<td>${item.nama_brand?item.nama_brand+' - ':''}${item.nama_android?item.nama_android:'Perangkat Tidak Diketahui'} ${item.nama_device?'(ID#'+item.nama_device+')':''}</td>`;
                         content += `<td>${item.platform} (Ver. ${item.os_version})</td>`;
