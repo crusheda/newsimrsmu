@@ -6,7 +6,7 @@
         <div class="page-header-breadcrumb mb-3">
             <div class="d-flex align-center justify-content-between flex-wrap">
                 <h1 class="page-title fw-medium fs-18 mb-0 pe-none">
-                    <b class="text-pink">Verifikasi</b> Berkas <b class="text-primary link-underline-primary text-decoration-underline">Laporan Rutin Bawahan</b>
+                    <b class="text-danger">Verifikasi</b> Berkas <b class="text-primary link-underline-primary text-decoration-underline">Laporan Rutin</b> <b class="text-info link-underline-info text-decoration-underline">Bawahan</b>
                 </h1>
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item pe-none">
@@ -27,14 +27,14 @@
 
         <div class="row justify-content-center">
             <div class="col-sm-12">
-                <div class="card table-card">
+                <div class="card custom-card">
                     <div class="card-header d-flex align-items-center justify-content-between py-3">
                         <button class="btn btn-secondary-light btn-sm" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom"
                             data-bs-html="true" title="Kembali ke halaman sebelumnya" onclick="window.location='{{ route('v4.administrasi.berkas.laporan') }}'">
                             <i class="fas fa-chevron-left me-2"></i> Kembali
                         </button>
                         <h6 class="mb-0">Tabel <b class="text-danger">Verifikasi</b> Laporan</h6>
-                        <button class="btn btn-warning btn-sm" id="refreshBtn" onclick="refresh()"><i class="fas fa-sync me-1"></i> Segarkan</button>
+                        <button class="btn btn-warning-transparent btn-sm" id="refreshBtn" onclick="refresh()"><i class="fas fa-sync me-1"></i> Segarkan</button>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -303,15 +303,16 @@
                         }
                         content += `</td><td style="white-space: normal; word-wrap: break-word; word-break: break-word;">` + new Date(item.updated_at).toLocaleString("sv-SE") + `</td></tr>`;
                         $('#tampil-tbody').append(content);
+                        // Showing Tooltip
+                        $('[data-bs-toggle="tooltip"]').tooltip({
+                            trigger : 'hover'
+                        })
                     });
                     var table = $('#dttable').DataTable({
                         order: [
                             [6, "desc"]
                         ],
                         displayLength: 20,
-                        lengthChange: true,
-                        lengthMenu: [20, 35, 50, 75, 100, 300, 500, 1000],
-                        buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
                 },
                 error: function(xhr) {
@@ -448,9 +449,6 @@
                             { sWidth: '20%' },
                         ],
                         displayLength: 20,
-                        lengthChange: true,
-                        lengthMenu: [20, 35, 50, 75, 100, 300, 500, 1000],
-                        buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
 
                     // TAMPIL BUTTON VERIFIKASI
@@ -539,9 +537,6 @@
                         //     { sWidth: '20%' },
                         // ],
                         displayLength: 10,
-                        lengthChange: true,
-                        lengthMenu: [10, 25, 50, 75, 100],
-                        buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
                     $('#catatan').modal('show');
                     $("#btnCatatan"+id).prop('disabled', false);

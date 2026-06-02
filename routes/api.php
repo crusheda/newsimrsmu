@@ -45,6 +45,7 @@ use \App\Http\Controllers\v4\SDI\Rekrutmen\RegistrasiController as RekrutmenRegi
 use \App\Http\Controllers\v4\SDI\Pengajuan\SurketController;
 use \App\Http\Controllers\v4\SDI\Pengajuan\IDCardController;
 use \App\Http\Controllers\v4\Pelayanan\Kebidanan\SKLController;
+use \App\Http\Controllers\v4\Akreditasi\KecelakaanKerjaController;
 use App\Http\Controllers\v4\AI\KlaimBpjsController;
 
 Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU v.4
@@ -428,6 +429,15 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
             // Route::get('antigen/getubah/{id}', '\App\Http\Controllers\Pelayanan\Lab\antigenController@getubah')->name('antigen.getubah');
             // Route::get('antigen/hapus/{id}', '\App\Http\Controllers\Pelayanan\Lab\antigenController@hapus')->name('antigen.hapus');
             // Route::get('antigen/getpasien/{id}', '\App\Http\Controllers\Pelayanan\Lab\antigenController@getPasien');
+
+    // AKREDITASI
+            // KECELAKAAN KERJA
+                Route::get('akreditasi/kecelakaankerja/data',[KecelakaanKerjaController::class, 'table']);
+                Route::get('akreditasi/kecelakaankerja/{id}/hapus',[KecelakaanKerjaController::class, 'destroy']);
+
+            // MANAJEMEN RISIKO
+                // Route::get('manrisk/data','\App\Http\Controllers\Mutu\ManriskController@table');
+                // Route::get('manrisk/hapus/{id}', '\App\Http\Controllers\Mutu\ManriskController@hapus');
 
     // AI
         // KLAIM BPJS

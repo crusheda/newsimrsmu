@@ -143,18 +143,26 @@
         <div class="modal-dialog modal-fullscreen">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">
-                        Ditambahkan oleh <a class="text-primary" id="showUser"></a>
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div class="d-flex align-items-center w-100">
+                        <div class="">
+                            <div class="fs-15 fw-medium text-dark" id="showUser"></div>
+                            <p class="mb-0 op-7 fs-12 text-dark" id="showUserTime"></p>
+                        </div>
+                        <div class="ms-auto me-4">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-body" id="tampil-jadwal">
                     <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" id="btn-cetak" class="btn btn-primary me-sm-3 me-1"><i class="fa fa-print me-1" style="font-size:13px"></i> Cetak</button>
-                    <button type="submit" id="btn-refresh-lihat" class="btn btn-warning me-sm-2"><i class="fa fa-sync me-1" style="font-size:13px"></i> Segarkan</button>
-                    <button type="button" class="btn btn-link text-dark" data-bs-dismiss="modal">Tutup &nbsp;<i class="fa-fw fas fa-chevron-right nav-icon" style="font-size:13px"></i></button>
+                <div class="modal-footer d-flex justify-content-between">
+                    <div id="footerLihat" class="d-none d-md-block"></div>
+                    <div>
+                        <button type="button" id="btn-cetak" class="btn btn-primary-transparent me-2"><i class="fa fa-print me-1"></i> Cetak</button>
+                        <button type="button" id="btn-refresh-lihat" class="btn btn-warning-transparent me-2"><i class="fa fa-sync me-1"></i> Segarkan</button>
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Tutup &nbsp;<i class="fas fa-chevron-right"></i></button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -541,22 +549,22 @@
                         var bulan = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
                         if (item.progress == 0) {
                             var colButton = 'btn-danger-transparent';
-                            var status = `<span class="badge rounded-pill text-bg-danger">Ditolak</span>`;
+                            var status = `<span class="badge fs-14 text-bg-danger">Ditolak</span>`;
                         } else {
                             if (item.progress == 1) {
                                 var colButton = 'btn-warning-transparent';
-                                var status = `<span class="badge rounded-pill text-bg-warning">Pending</span>`;
+                                var status = `<span class="badge fs-14 text-bg-warning">Pending</span>`;
                             } else {
                                 if (item.progress == 2) {
                                     var colButton = 'btn-success-transparent';
-                                    var status = `<span class="badge rounded-pill text-bg-success">Diverifikasi</span>`;
+                                    var status = `<span class="badge fs-14 text-bg-success">Diverifikasi</span>`;
                                 } else {
                                     if (item.progress == 3) {
                                         var colButton = 'btn-primary-transparent';
-                                        var status = `<span class="badge rounded-pill text-bg-primary">Divalidasi</span>`;
+                                        var status = `<span class="badge fs-14 text-bg-primary">Divalidasi</span>`;
                                     } else {
                                         var colButton = 'btn-orange-transparent';
-                                        var status = `<span class="badge rounded-pill text-bg-orange">Tidak Valid</span>`;
+                                        var status = `<span class="badge fs-14 text-bg-orange">Tidak Valid</span>`;
                                     }
                                 }
                             }
@@ -715,7 +723,18 @@
                         return;
                     }
 
-                    $("#showUser").text(res.jadwal.nama_pegawai);
+                    $("#showUser").empty().html('Dibuat Oleh <b class="text-primary">'+res.jadwal.nama_pegawai+'</b>');
+                    $("#showUserTime").text('Pada '+new Date(res.jadwal.updated_at).toLocaleString("sv-SE"));
+
+                    let footer = '';
+                    if(res.jadwal.nama_verif) {
+                        footer += `Diverifikasi Oleh <b class="text-success">${res.jadwal.nama_verif}</b> (${res.jadwal.tgl_verif})<br>`;
+                    }
+                    if(res.jadwal.nama_valid) {
+                        footer += `Divalidasi Oleh <b class="text-primary">${res.jadwal.nama_valid}</b> (${res.jadwal.tgl_valid})`;
+                    }
+                    $('#footerLihat').empty().append(footer);
+
                     let n = 1;
                     let content = `
                         <h4 class="text-center mb-2">Jadwal Dinas Unit <b class="text-primary">${res.jadwal.unit}</b></h4>
@@ -723,21 +742,21 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="table-responsive p-10 pb-0">
-                                    <table id="dttable" class="table table-bordered" style="width: 100%;table-layout: auto">
+                                    <table id="dttable-lihat-jadwal" class="table table-bordered" style="width:100%;table-layout:auto;">
                                         <thead>
                                             <tr>
                                                 <th class="text-center" rowspan="2">NO</th>
                                                 <th class="text-center" rowspan="2">NAMA</th>
                                                 <th class="text-center" colspan="${res.totalDay}">TANGGAL</th>
                                                 <th ${hideJadwal?"hidden":""} class="text-center" rowspan="2">JAM KERJA (JAM)</th>
-                                                <th ${hideJadwal?"hidden":""} class="text-center" colspan="${res.shift.length + 6}" style="background-color:#eaeeaf;border-top: 3px solid #eaeeaf;border-left: 3px solid #eaeeaf;border-right: 3px solid #eaeeaf;">JUMLAH SHIFT</th>
+                                                <th ${hideJadwal?"hidden":""} class="text-center" colspan="${res.shift.length + 6}" style="background-color:#eaeeaf !important;border-top: 3px solid #eaeeaf;border-left: 3px solid #eaeeaf;border-right: 3px solid #eaeeaf;">JUMLAH SHIFT</th>
                                             </tr>
                                             <tr>`;
 
                     // Header tanggal
                     for (let i = 1; i <= res.totalDay; i++) {
                         let lnItem = res.ln.find(ln => ln.tgl === i);
-                        let style = lnItem ? ` style="background-color: ${lnItem.color};"` : '';
+                        let style = lnItem ? ` style="background-color: ${lnItem.color} !important;"` : '';
                         content += `<th class="p-2 text-center tgl${i}"${style}>${i < 10 ? '0'+i : i}</th>`;
                     }
 
@@ -789,14 +808,14 @@
 
                         content += `
                         <tr class="text-center">
-                            <td style="background-color: ${pegawai.color}">${n++}</td>
-                            <td class="text-start" style="background-color: ${pegawai.color}">
+                            <td style="background-color: ${pegawai.color} !important;">${n++}</td>
+                            <td class="text-start" style="background-color: ${pegawai.color} !important;">
                                 <div class="d-flex justify-content-start align-items-center">
                                     <div class="d-flex flex-column" style="max-width:150px;">
                                         <h6 class="mb-0 text-truncate">
                                             ${pegawai.pegawai_nama}
                                         </h6>
-                                        <small class="text-muted text-truncate">
+                                        <small class="text-truncate">
                                             ${pegawai.jabatan || ''}
                                         </small>
                                     </div>
@@ -817,7 +836,7 @@
                         for (let i=1;i<=res.totalDay;i++){
                             let kodeShift = pegawai[`tgl${i}`]||'';
                             let lnItem = res.ln.find(ln => ln.tgl==i);
-                            let style = lnItem ? ` style="background-color: ${lnItem.color};"` : '';
+                            let style = lnItem ? ` style="background-color: ${lnItem.color} !important;"` : '';
                             content += `<td class="p-2 tgl${i}"${style}>${kodeShift}</td>`;
                         }
 
@@ -831,10 +850,10 @@
 
                         // shift counts
                         res.shift.forEach((s,index)=>{
-                            content += `<td class="p-2 text-center" ${index==0?"style='border-left: 3px solid #eaeeaf;'":""} ${hideJadwal?"hidden":""}>${pegawaiShiftCounts[s.singkat]}</td>`;
+                            content += `<td class="p-2 text-center" ${index==0?"style='border-left: 3px solid #eaeeaf !important;'":""} ${hideJadwal?"hidden":""}>${pegawaiShiftCounts[s.singkat]}</td>`;
                         });
                         ['L','C','CM','CU','CH','CD'].forEach(s=>{
-                            let border = (s==='CD') ? "style='border-right: 3px solid #eaeeaf;'" : '';
+                            let border = (s==='CD') ? "style='border-right: 3px solid #eaeeaf !important;'" : '';
                             content += `<td class="p-2 text-center" ${border} ${hideJadwal?"hidden":""}>${pegawaiShiftCounts[s]}</td>`;
                         });
 
@@ -844,7 +863,7 @@
                     // tfoot
                     content += `<tfoot style="border:3px solid #eaeeaf;" ${hideJadwal?"hidden":""}>`;
                     shifts.forEach((shift,index)=>{
-                        content += `<tr>${index===0 ? `<th rowspan="${shifts.length}" style="writing-mode: vertical-rl; transform: rotate(180deg); text-align:center;background-color:#eaeeaf;">JUMLAH SHIFT</th>` : '' }
+                        content += `<tr>${index===0 ? `<th rowspan="${shifts.length}" style="writing-mode: vertical-rl; transform: rotate(180deg); text-align:center;background-color:#eaeeaf !important;">JUMLAH SHIFT</th>` : '' }
                                         <th>${shift}</th>`;
                         for (let i=1;i<=res.totalDay;i++){
                             content += `<td class="text-center">${tfootCounts[i][shift]}</td>`;
@@ -869,11 +888,11 @@
                     // Keterangan warna
                     content += `<div class="col-md-6 mt-3"><div class="p-10"><h6>Keterangan :</h6><div class="list-group">`;
                     content += `<label class="list-group-item border-0 p-1">
-                                    <a class="btn btn-light me-2" style="background-color: #fed8b9" href="javascript:void(0);"></a>Hari Minggu
+                                    <a class="btn btn-light me-2" style="background-color: #fed8b9 !important;" href="javascript:void(0);"></a>Hari Minggu
                                 </label>`;
                     res.ln.forEach(item=>{
                         content += `<label class="list-group-item border-0 p-1">
-                                        <a class="btn btn-light me-1" style="background-color: ${item.color}" href="javascript:void(0);"></a>
+                                        <a class="btn btn-light me-1" style="background-color: ${item.color} !important;" href="javascript:void(0);"></a>
                                         ${item.deskripsi}${item.keterangan ? ' ('+item.keterangan+')' : ''} ${item.tgl ? ' - Tanggal '+item.tgl : ''}
                                     </label>`;
                     });
@@ -882,9 +901,11 @@
                     $('#tampil-jadwal').empty().append(content);
 
                     // warna hari minggu
-                    for (let i=0;i<res.totalDay;i++){
-                        if(res.dataArray[i]==='Minggu'){
-                            $('.tgl'+(i+1)).css('background-color','#fed8b9');
+                    for (let i = 0; i < res.totalDay; i++) {
+                        if (res.dataArray[i] === 'Minggu') {
+                            $('.tgl' + (i + 1)).each(function () {
+                                this.style.setProperty('background-color', '#fed8b9', 'important');
+                            });
                         }
                     }
 

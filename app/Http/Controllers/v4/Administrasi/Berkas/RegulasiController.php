@@ -24,10 +24,6 @@ class RegulasiController extends Controller
 {
     public function index()
     {
-        // print_r(Auth::user()->hasRole('it|sekretaris-direktur|administrator'));
-        // die();
-        // print_r(Auth::user()->id);
-        // die();
         $unit = unit::orderBy('nama','asc')->get();
 
         $data = [
@@ -94,10 +90,11 @@ class RegulasiController extends Controller
             $request->jns_regulasi == 9 ||
             $request->jns_regulasi == 10 ||
             $request->jns_regulasi == 11 ||
-            $request->jns_regulasi == 12
+            $request->jns_regulasi == 12 ||
+            $request->jns_regulasi == 13
             ) {
             $request->validate([
-                'file' => ['max:5000','mimes:pdf'],
+                'file' => ['max:10000','mimes:pdf'],
             ]);
         } else {
             $request->validate([
@@ -138,6 +135,8 @@ class RegulasiController extends Controller
                 $path = $uploadedFile->store('public/files/regulasi/perment');
             } elseif ($request->jns_regulasi == 12) {
                 $path = $uploadedFile->store('public/files/regulasi/perda');
+            } elseif ($request->jns_regulasi == 13) {
+                $path = $uploadedFile->store('public/files/regulasi/mou');
             }
 
             $data = new berkas_regulasi;
@@ -150,7 +149,8 @@ class RegulasiController extends Controller
                 $request->jns_regulasi != '9'  ||
                 $request->jns_regulasi != '10' ||
                 $request->jns_regulasi != '11' ||
-                $request->jns_regulasi != '12'
+                $request->jns_regulasi != '12' ||
+                $request->jns_regulasi != '13'
                 )
             {
                 $data->sah = $request->tgl;
@@ -181,7 +181,8 @@ class RegulasiController extends Controller
             $request->jns_regulasi == 9 ||
             $request->jns_regulasi == 10 ||
             $request->jns_regulasi == 11 ||
-            $request->jns_regulasi == 12
+            $request->jns_regulasi == 12 ||
+            $request->jns_regulasi == 13
             ) {
             if ($uploadedFile != null) {
                 $request->validate([
@@ -207,7 +208,8 @@ class RegulasiController extends Controller
                 $request->jns_regulasi != '9'  ||
                 $request->jns_regulasi != '10' ||
                 $request->jns_regulasi != '11' ||
-                $request->jns_regulasi != '12'
+                $request->jns_regulasi != '12' ||
+                $request->jns_regulasi != '13'
                 )
             {
                 $data->sah = $request->tgl;
@@ -253,6 +255,8 @@ class RegulasiController extends Controller
                     $path = $uploadedFile->store('public/files/regulasi/perment');
                 } elseif ($request->jns_regulasi == 12) {
                     $path = $uploadedFile->store('public/files/regulasi/perda');
+                } elseif ($request->jns_regulasi == 13) {
+                    $path = $uploadedFile->store('public/files/regulasi/mou');
                 }
 
                 $data = berkas_regulasi::find($request->id_edit);
@@ -265,7 +269,8 @@ class RegulasiController extends Controller
                     $request->jns_regulasi != '9'  ||
                     $request->jns_regulasi != '10' ||
                     $request->jns_regulasi != '11' ||
-                    $request->jns_regulasi != '12'
+                    $request->jns_regulasi != '12' ||
+                    $request->jns_regulasi != '13'
                     )
                 {
                     $data->sah = $request->tgl;
@@ -371,10 +376,9 @@ class RegulasiController extends Controller
         $totPerPres     = berkas_regulasi::where('jns_regulasi',10)->count();
         $totPerMent     = berkas_regulasi::where('jns_regulasi',11)->count();
         $totPerDa       = berkas_regulasi::where('jns_regulasi',12)->count();
+        $totMou         = berkas_regulasi::where('jns_regulasi',13)->count();
 
-        $total = $totKebijakan + $totPedoman + $totPanduan + $totProgram + $totSpo + $totPpk + $totUU + $totPerPu + $totPP + $totPerPres + $totPerMent + $totPerDa;
-        // print_r($total);
-        // die();
+        $total = $totKebijakan + $totPedoman + $totPanduan + $totProgram + $totSpo + $totPpk + $totUU + $totPerPu + $totPP + $totPerPres + $totPerMent + $totPerDa + $totMou;
 
         $data = [
             'total' => $total,
@@ -390,6 +394,7 @@ class RegulasiController extends Controller
             'totperpres' => $totPerPres,
             'totperment' => $totPerMent,
             'totperda' => $totPerDa,
+            'totmou' => $totMou,
         ];
 
         return response()->json($data, 200);

@@ -48,7 +48,7 @@
                                     <li>Penghapusan laporan lewat hari hanya dilakukan Oleh Admin Laporan</li>
                                     <li>Tidak ada batasan upload per Bulan, pengguna bebas melakukan upload laporan rutin dengan ketentuan sebagai berikut :
                                         <ul>
-                                            <li>File Upload yang disarankan berupa Dokumen PDF <b class="text-pink">(.pdf)</b> dan Word <b class="text-pink">(.doc/.docx)</b></li>
+                                            <li>File Upload yang disarankan berupa Dokumen PDF <b class="text-pink">(.pdf)</b> atau Word <b class="text-pink">(.doc/.docx)</b></li>
                                             <li>Batas ukuran maksimum dokumen adalah <b class="text-primary">5 mb</b></li>
                                         </ul>
                                     </li>
@@ -74,7 +74,7 @@
                                 </thead>
                                 <tbody id="tampil-tbody">
                                     <tr>
-                                        <td colspan="6" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Menginisialisasi data...</center></td>
+                                        <td colspan="10" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Menginisialisasi data...</center></td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
@@ -163,7 +163,7 @@
                                 <div class="form-group">
                                     <label class="form-label">Upload Dokumen <a class="text-danger">*</a></label>
                                     <div class="alert alert-solid-light shadow-sm">
-                                        <i class="fa-fw fas fa-caret-right nav-icon"></i> File Upload yang disarankan berupa Dokumen <b><b class="text-pink">PDF</b></b> (<i>.pdf</i>) dan <b><b class="text-pink">Word</b></b> (<i>.doc/.docx</i>)<br>
+                                        <i class="fa-fw fas fa-caret-right nav-icon"></i> File Upload yang disarankan berupa Dokumen <b><b class="text-pink">PDF</b></b> (<i>.pdf</i>) atau <b><b class="text-pink">Word</b></b> (<i>.doc/.docx</i>)<br>
                                         <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <b class="text-primary">5 mb</b>
                                     </div>
                                     <input type="file" name="file" class="form-control" required>
@@ -348,7 +348,7 @@
             if ($.fn.DataTable.isDataTable('#dttable')) {
                 $('#dttable').DataTable().clear().destroy();
             }
-            $("#tampil-tbody").empty().append(`<tr><td colspan="6" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            $("#tampil-tbody").empty().append(`<tr><td colspan="10" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
             $.ajax({
                 url: "/api/v4/administrasi/berkas/laporan/table/{{ Auth::user()->id }}",
                 type: 'GET',
@@ -438,7 +438,6 @@
                         })
                     });
                     var table = $('#dttable').DataTable({
-                        dom: 'lfrtip',
                         order: [
                             [6, "desc"]
                         ],
@@ -452,9 +451,7 @@
                             { sWidth: '15%' },
                             { sWidth: '10%' },
                         ],
-                        displayLength: 10,
-                        lengthChange: true,
-                        lengthMenu: [10, 25, 50, 75, 100, 500],
+                        displayLength: 15,
                     });
                 },
                 error: function(xhr, status, error) {

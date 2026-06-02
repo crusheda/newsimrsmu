@@ -47,6 +47,7 @@ use \App\Http\Controllers\v4\SDI\Rekrutmen\RegistrasiController as RekrutmenRegi
 use \App\Http\Controllers\v4\SDI\Pengajuan\SurketController;
 use \App\Http\Controllers\v4\SDI\Pengajuan\IDCardController;
 use \App\Http\Controllers\v4\Pelayanan\Kebidanan\SKLController;
+use \App\Http\Controllers\v4\Akreditasi\KecelakaanKerjaController;
 use App\Http\Controllers\v4\AI\KlaimBpjsController;
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function () { // SIMRSMU v.4
@@ -182,6 +183,14 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function 
             Route::get('pelayanan/skl/{id}/cetak', [SKLController::class, 'cetak'])->name('v4.pelayanan.skl.cetak');
             Route::get('pelayanan/skl/{id}/print', [SKLController::class, 'print'])->name('v4.pelayanan.skl.print');
             // Route::resource('kebidanan/skl', '\App\Http\Controllers\Pelayanan\Kebidanan\sklController');
+
+    // AKREDITASI
+        // KECELAKAAN KERJA (MFK)
+            Route::get('akreditasi/kecelakaankerja',[KecelakaanKerjaController::class, 'index'])->name('v4.akreditasi.kecelakaankerja');
+            Route::get('akreditasi/kecelakaankerja/tambah',[KecelakaanKerjaController::class, 'tambah'])->name('v4.akreditasi.kecelakaankerja.tambah');
+            Route::post('akreditasi/kecelakaankerja/simpan',[KecelakaanKerjaController::class, 'store'])->name('v4.akreditasi.kecelakaankerja.store');
+            Route::get('akreditasi/kecelakaankerja/ubah/{id}',[KecelakaanKerjaController::class, 'ubah'])->name('v4.akreditasi.kecelakaankerja.showupdate');
+            Route::put('akreditasi/kecelakaankerja/ubah',[KecelakaanKerjaController::class, 'update'])->name('v4.akreditasi.kecelakaankerja.update');
 
     // AI
         // KLAIM BPJS

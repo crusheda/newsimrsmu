@@ -21,7 +21,7 @@
 
         <div class="row">
             <div class="col-sm-12" id="show-card-grafik" hidden>
-                <div class="card">
+                <div class="card custom-card">
                     <div class="card-body p-4 pb-1">
                         <div class="d-flex align-items-center mb-2">
                             <div class="flex-grow-1">
@@ -57,7 +57,7 @@
                 </div>
             </div>
             <div class="col-sm-12">
-                <div class="card">
+                <div class="card custom-card">
                     <div class="card-header d-flex align-items-center justify-content-between py-3">
                         <div class="btn-group shadow">
                             <button class="btn btn-primary-transparent" onclick="window.location.href='{{ route('v4.akun.akunpengguna.index') }}'" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Pengaturan Akun Pengguna (Tambah/Ubah/Hapus Akun Pegawai)">
@@ -99,7 +99,7 @@
                                 <tbody id="tampil-tbody">
                                     <tr>
                                         <td colspan="9" style="font-size:13px">
-                                            <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
+                                            <center><i class="fa fa-spinner fa-spin fa-fw"></i> Menginisialisasi data...</center>
                                         </td>
                                     </tr>
                                 </tbody>

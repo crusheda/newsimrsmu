@@ -33,18 +33,19 @@
                                     <i class="bx bx-help-circle text-muted" data-bs-toggle="tooltip" data-bs-placement="top" title="Anda dapat memilih satu dari tiga pilihan filter dibawah, lalu klik Submit"></i>
                                         <select class="form-select selectFilter" id="search_regulasi" style="width: 100%" data-allow-clear="false" data-bs-auto-close="outside">
                                             <option value="">Pilih</option>
-                                            <option value="1">Kebijakan</option>
-                                            <option value="2">Panduan</option>
-                                            <option value="3">Pedoman</option>
-                                            <option value="4">Program</option>
-                                            <option value="5">SPO</option>
-                                            <option value="6">PPK</option>
+                                            <option value="1">Kebijakan RS</option>
+                                            <option value="2">Panduan RS</option>
+                                            <option value="3">Pedoman RS</option>
+                                            <option value="4">Program RS</option>
+                                            <option value="5">Standar Prosedur Operasional (SPO)</option>
+                                            <option value="6">Pedoman Praktik Klinis (PPK)</option>
+                                            <option value="13">Memorandum of Understanding (MOU)</option>
                                             <option value="7">Undang-undang</option>
-                                            <option value="8">PERPU</option>
-                                            <option value="9">Peraturan Pemerintah</option>
-                                            <option value="10">Peraturan Presiden</option>
-                                            <option value="11">Peraturan Menteri</option>
-                                            <option value="12">Peraturan Daerah</option>
+                                            <option value="8">Peraturan Pemerintah Pengganti Undang-Undang (PERPPU)</option>
+                                            <option value="9">Peraturan Pemerintah (PP)</option>
+                                            <option value="10">Peraturan Presiden (PERPRES)</option>
+                                            <option value="11">Peraturan Menteri (PERMEN)</option>
+                                            <option value="12">Peraturan Daerah (PERDA)</option>
                                         </select>
                                 </div>
                             </div>
@@ -71,10 +72,10 @@
                             <div class="col-xxl-3 col-lg-4">
                                 <label class="form-label">Klik <a class="text-primary">Filter</a> untuk menampilkan data</label>
                                 <div class="position-relative btn-group w-100 h-80 m-t-5">
-                                    <button type="button" class="btn btn-primary" id="btn-cari-show" onclick="cari()" disabled><i class="fa-fw fas fa-sync fa-spin me-1 nav-icon"></i> Filter</button>
-                                    <button type="button" class="btn btn-warning" onclick="bersih()"><i class="fa-fw fas fa-eraser me-1 nav-icon"></i> Reset</button>
+                                    <button type="button" class="btn btn-primary-transparent" id="btn-cari-show" onclick="cari()" disabled><i class="fa-fw fas fa-sync fa-spin me-1 nav-icon"></i> Filter</button>
+                                    <button type="button" class="btn btn-warning-transparent" onclick="bersih()"><i class="fa-fw fas fa-eraser me-1 nav-icon"></i> Reset</button>
                                     <div class="dropdown">
-                                        <button type="button" class="btn btn-dark text-light" role="button" data-bs-toggle="dropdown" aria-haspopup="true" style="border-top-left-radius:0px;border-bottom-left-radius:0px">
+                                        <button type="button" class="btn btn-info-transparent" role="button" data-bs-toggle="dropdown" aria-haspopup="true" style="border-top-left-radius:0px;border-bottom-left-radius:0px">
                                             <i class="ti ti-brand-asana me-1"></i> Menu
                                         </button>
 
@@ -185,18 +186,19 @@
                                 <label class="form-label">Jenis Regulasi <a class="text-danger">*</a></label>
                                 <select class="form-select" id="jns_regulasi" style="width: 100%">
                                     <option value="" hidden>Pilih</option>
-                                    <option value="1">Kebijakan</option>
-                                    <option value="2">Panduan</option>
-                                    <option value="3">Pedoman</option>
-                                    <option value="4">Program</option>
-                                    <option value="5">SPO</option>
-                                    <option value="6">PPK</option>
+                                    <option value="1">Kebijakan RS</option>
+                                    <option value="2">Panduan RS</option>
+                                    <option value="3">Pedoman RS</option>
+                                    <option value="4">Program RS</option>
+                                    <option value="5">Standar Prosedur Operasional (SPO)</option>
+                                    <option value="6">Pedoman Praktik Klinis (PPK)</option>
+                                    <option value="13">Memorandum of Understanding (MOU)</option>
                                     <option value="7">Undang-undang</option>
-                                    <option value="8">PERPU</option>
-                                    <option value="9">Peraturan Pemerintah</option>
-                                    <option value="10">Peraturan Presiden</option>
-                                    <option value="11">Peraturan Menteri</option>
-                                    <option value="12">Peraturan Daerah</option>
+                                    <option value="8">Peraturan Pemerintah Pengganti Undang-Undang (PERPPU)</option>
+                                    <option value="9">Peraturan Pemerintah (PP)</option>
+                                    <option value="10">Peraturan Presiden (PERPRES)</option>
+                                    <option value="11">Peraturan Menteri (PERMEN)</option>
+                                    <option value="12">Peraturan Daerah (PERDA)</option>
                                 </select>
                             </div>
                         </div>
@@ -230,10 +232,10 @@
                     <div class="form-group">
                         <label class="form-label">Upload <a class="text-danger">*</a></label>
                         <input type="file" class="form-control mb-2" id="filex" name="filex" accept="application/pdf">
-                        <div class="alert alert-secondary">
+                        <div class="alert alert-light shadow-sm">
                             <small>
                                 @if (Auth::user()->can('admin_regulasi_humas'))
-                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>5 mb</strong><br>
+                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>10 mb</strong><br>
                                 @else
                                     <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>2 mb</strong><br>
                                 @endif
@@ -300,7 +302,7 @@
                     <div class="form-group">
                         <label class="form-label">Upload Ulang Berkas? <a class="text-danger">*</a></label>
                         <div class="mb-3" id="upload_ulang"></div>
-                        <div class="alert alert-secondary">
+                        <div class="alert alert-light shadow-sm">
                             <small>
                                 <i class="fa-fw fas fa-caret-right nav-icon"></i> Apabila terdapat kesalahan File Upload, Anda dapat melakukan <b>Input Dokumen Ulang</b> di bawah ini<br>
                                 <i class="fa-fw fas fa-caret-right nav-icon"></i> Hubungi Admin untuk melakukan penghapusan berkas<br>
@@ -464,51 +466,55 @@
                             </thead>
                             <tbody id="tampil-tbody">
                                 <tr>
-                                    <th><h6>Kebijakan</h6></th>
+                                    <th><h6>Kebijakan RS</h6></th>
                                     <td id="count_kebijakan"></td>
                                 </tr>
                                 <tr>
-                                    <th><h6>Panduan</h6></th>
+                                    <th><h6>Panduan RS</h6></th>
                                     <td id="count_panduan"></td>
                                 </tr>
                                 <tr>
-                                    <th><h6>Pedoman</h6></th>
+                                    <th><h6>Pedoman RS</h6></th>
                                     <td id="count_pedoman"></td>
                                 </tr>
                                 <tr>
-                                    <th><h6>Program</h6></th>
+                                    <th><h6>Program RS</h6></th>
                                     <td id="count_program"></td>
                                 </tr>
                                 <tr>
-                                    <th><h6>SPO</h6></th>
+                                    <th><h6>Standar Prosedur Operasional (SPO)</h6></th>
                                     <td id="count_spo"></td>
                                 </tr>
                                 <tr>
-                                    <th><h6>PPK</h6></th>
+                                    <th><h6>Pedoman Praktik Klinis (PPK)</h6></th>
                                     <td id="count_ppk"></td>
+                                </tr>
+                                <tr>
+                                    <th><h6>Memorandum of Understanding (MOU)</h6></th>
+                                    <td id="count_mou"></td>
                                 </tr>
                                 <tr>
                                     <th><h6>Undang-Undang</h6></th>
                                     <td id="count_uu"></td>
                                 </tr>
                                 <tr>
-                                    <th><h6>Peraturan Pemerintah Pengganti Undang-Undang (PERPU)</h6></th>
+                                    <th><h6>Peraturan Pemerintah Pengganti Undang-Undang (PERPPU)</h6></th>
                                     <td id="count_perpu"></td>
                                 </tr>
                                 <tr>
-                                    <th><h6>Peraturan Pemerintah</h6></th>
+                                    <th><h6>Peraturan Pemerintah (PP)</h6></th>
                                     <td id="count_pp"></td>
                                 </tr>
                                 <tr>
-                                    <th><h6>Peraturan Presiden</h6></th>
+                                    <th><h6>Peraturan Presiden (PERPRES)</h6></th>
                                     <td id="count_perpres"></td>
                                 </tr>
                                 <tr>
-                                    <th><h6>Peraturan Menteri</h6></th>
+                                    <th><h6>Peraturan Menteri (PERMEN)</h6></th>
                                     <td id="count_perment"></td>
                                 </tr>
                                 <tr>
-                                    <th><h6>Peraturan Daerah</h6></th>
+                                    <th><h6>Peraturan Daerah (PERDA)</h6></th>
                                     <td id="count_perda"></td>
                                 </tr>
                             </tbody>
@@ -816,7 +822,7 @@
                     position: 'topRight'
                 });
             } else {
-                if (jns_regulasi == '7' || jns_regulasi == '8' || jns_regulasi == '9' || jns_regulasi == '10' || jns_regulasi == '11' || jns_regulasi == '12') {
+                if (jns_regulasi == '7' || jns_regulasi == '8' || jns_regulasi == '9' || jns_regulasi == '10' || jns_regulasi == '11' || jns_regulasi == '12' || jns_regulasi == '13') {
                     var fd = new FormData();
 
                     // Get the selected file
@@ -947,20 +953,21 @@
                     $("#tgl_edit").val(res.show.sah);
                     $("#jns_regulasi_edit").find('option').remove();
                     $("#jns_regulasi_edit").append(`
-                        <option value="1" ${res.show.jns_regulasi == 1 ? "selected":""}>Kebijakan</option>
-                        <option value="2" ${res.show.jns_regulasi == 2 ? "selected":""}>Panduan</option>
-                        <option value="3" ${res.show.jns_regulasi == 3 ? "selected":""}>Pedoman</option>
-                        <option value="4" ${res.show.jns_regulasi == 4 ? "selected":""}>Program</option>
-                        <option value="5" ${res.show.jns_regulasi == 5 ? "selected":""}>SPO</option>
-                        <option value="6" ${res.show.jns_regulasi == 6 ? "selected":""}>PPK</option>
+                        <option value="1" ${res.show.jns_regulasi == 1 ? "selected":""}>Kebijakan RS</option>
+                        <option value="2" ${res.show.jns_regulasi == 2 ? "selected":""}>Panduan RS</option>
+                        <option value="3" ${res.show.jns_regulasi == 3 ? "selected":""}>Pedoman RS</option>
+                        <option value="4" ${res.show.jns_regulasi == 4 ? "selected":""}>Program RS</option>
+                        <option value="5" ${res.show.jns_regulasi == 5 ? "selected":""}>Standar Prosedur Operasional (SPO)</option>
+                        <option value="6" ${res.show.jns_regulasi == 6 ? "selected":""}>Pedoman Praktik Klinis (PPK)</option>
+                        <option value="13" ${res.show.jns_regulasi == 13 ? "selected":""}>Memorandum of Understanding (MOU)</option>
                         <option value="7" ${res.show.jns_regulasi == 7 ? "selected":""}>Undang-undang</option>
-                        <option value="8" ${res.show.jns_regulasi == 8 ? "selected":""}>PERPU</option>
-                        <option value="9" ${res.show.jns_regulasi == 9 ? "selected":""}>Peraturan Pemerintah</option>
-                        <option value="10" ${res.show.jns_regulasi == 10 ? "selected":""}>Peraturan Presiden</option>
-                        <option value="11" ${res.show.jns_regulasi == 11 ? "selected":""}>Peraturan Menteri</option>
-                        <option value="12" ${res.show.jns_regulasi == 12 ? "selected":""}>Peraturan Daerah</option>
+                        <option value="8" ${res.show.jns_regulasi == 8 ? "selected":""}>Peraturan Pemerintah Pengganti Undang-Undang (PERPPU)</option>
+                        <option value="9" ${res.show.jns_regulasi == 9 ? "selected":""}>Peraturan Pemerintah (PP)</option>
+                        <option value="10" ${res.show.jns_regulasi == 10 ? "selected":""}>Peraturan Presiden (PERPRES)</option>
+                        <option value="11" ${res.show.jns_regulasi == 11 ? "selected":""}>Peraturan Menteri (PERMEN)</option>
+                        <option value="12" ${res.show.jns_regulasi == 12 ? "selected":""}>Peraturan Daerah (PERDA)</option>
                     `);
-                    if ($("#jns_regulasi_edit").val() == '7' || $("#jns_regulasi_edit").val() == '8' || $("#jns_regulasi_edit").val() == '9' || $("#jns_regulasi_edit").val() == '10' || $("#jns_regulasi_edit").val() == '11' || $("#jns_regulasi_edit").val() == '12') {
+                    if ($("#jns_regulasi_edit").val() == '7' || $("#jns_regulasi_edit").val() == '8' || $("#jns_regulasi_edit").val() == '9' || $("#jns_regulasi_edit").val() == '10' || $("#jns_regulasi_edit").val() == '11' || $("#jns_regulasi_edit").val() == '12' || $("#jns_regulasi_edit").val() == '13') {
                         $('#tgl_edit').prop('disabled',true);
                         $('#pembuat_edit').prop('disabled',true);
                         $('#unit_edit').prop('disabled',true);
@@ -983,7 +990,7 @@
                 }
             });
             $('#jns_regulasi_edit').on('change', function() {
-                if ($(this).val() == '7' || $(this).val() == '8' || $(this).val() == '9' || $(this).val() == '10' || $(this).val() == '11' || $(this).val() == '12') {
+                if ($(this).val() == '7' || $(this).val() == '8' || $(this).val() == '9' || $(this).val() == '10' || $(this).val() == '11' || $(this).val() == '12' || $(this).val() == '13') {
                     $('#tgl_edit').prop('disabled',true);
                     $('#pembuat_edit').prop('disabled',true);
                     $('#unit_edit').prop('disabled',true);
@@ -1142,6 +1149,7 @@
                     $("#count_perpres").text(res.totperpres);
                     $("#count_perment").text(res.totperment);
                     $("#count_perda").text(res.totperda);
+                    $("#count_mou").text(res.totmou);
                     $("#count_total").text(res.total);
                 }
                 }

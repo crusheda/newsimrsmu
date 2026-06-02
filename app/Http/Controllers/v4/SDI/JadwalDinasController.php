@@ -606,8 +606,10 @@ class JadwalDinasController extends Controller
                 ->orderBy('id','ASC')
                 ->get();
 
-        $jadwal  = jadwal::join('users','users.id','=','kepegawaian_jadwal.pegawai_id')
-                ->select('kepegawaian_jadwal.*','users.nama as nama_pegawai')
+        $jadwal  = jadwal::leftJoin('users as np','np.id','=','kepegawaian_jadwal.pegawai_id')
+                ->leftJoin('users as nv','nv.id','=','kepegawaian_jadwal.verif')
+                ->leftJoin('users as nl','nl.id','=','kepegawaian_jadwal.valid')
+                ->select('kepegawaian_jadwal.*','np.nama as nama_pegawai', 'nv.nama as nama_verif','nl.nama as nama_valid')
                 ->where('kepegawaian_jadwal.id',$id)
                 ->whereNull('kepegawaian_jadwal.deleted_at')
                 ->first();

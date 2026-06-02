@@ -8123,6 +8123,13 @@ caption {
   border-color: var(--default-border);
   margin-block-end: 0;
 }
+#modalLihat #dttable-lihat-jadwal {
+    --bs-table-bg: #ffffff !important;
+    --bs-table-color: #212529 !important;
+    --bs-table-border-color: #212529 !important;
+    --default-text-color: #212529 !important;
+    --default-border: #212529 !important;
+}
 .table tbody tr th {
   font-weight: 500;
 }
