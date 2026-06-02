@@ -83,9 +83,9 @@
         <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                <h5 class="modal-title">
+                <h6 class="modal-title">
                     Verifikasi <b class="text-info">Dokumen</b>
-                </h5>
+                </h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                 </div>
                 <div class="modal-body">
@@ -126,9 +126,9 @@
         <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                <h5 class="modal-title">
+                <h6 class="modal-title">
                     Catatan <b class="text-pink">Dokumen</b>&nbsp;<span class="badge rounded-pill text-bg-primary align-middle" id="id_laporan_tx"></span>
-                </h5>
+                </h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                 </div>
                 <div class="modal-body">
@@ -180,9 +180,9 @@
         <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">
+                    <h6 class="modal-title">
                         Preview <b class="text-info">Dokumen</b>&nbsp;<span class="badge bg-dark badge-sm"><a id="show_id_dokumen"></a></span>
-                    </h4>
+                    </h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                 </div>
                 <div class="modal-body" id="tampil-preview-word"></div>

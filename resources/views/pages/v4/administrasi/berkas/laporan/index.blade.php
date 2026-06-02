@@ -105,9 +105,9 @@
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">
+                    <h6 class="modal-title">
                         Form <b class="text-primary">Tambah</b>
-                    </h4>
+                    </h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                 </div>
                 <div class="modal-body">
@@ -188,9 +188,9 @@
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">
+                    <h6 class="modal-title">
                             Form <b class="text-warning">Ubah</b> <span class="badge bg-warning badge-sm ms-1 align-middle"><a id="show_edit"></a></span>
-                    </h4>
+                    </h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                 </div>
                 <div class="modal-body">
@@ -248,9 +248,9 @@
         <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">
+                    <h6 class="modal-title">
                         Preview <b class="text-info">Dokumen</b>&nbsp;<span class="badge bg-dark badge-sm"><a id="show_id_dokumen"></a></span>
-                    </h4>
+                    </h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                 </div>
                 <div class="modal-body" id="tampil-preview-word"></div>
@@ -271,7 +271,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                 </div>
                 <div class="modal-body">
-                    <h5 class="mb-0">Cara Setting PDF Viewer pada browser Google Chrome</h5>
+                    <h6 class="mb-0">Cara Setting PDF Viewer pada browser Google Chrome</h6>
                     <sub>Terdapat 2 cara untuk melihat laporan bulanan PDF tanpa mendownload. Apabila anda menggunakan
                         browser Firefox, silakan abaikan semua langkah di bawah.</sub>
                     <div class="divider text-end">
@@ -409,7 +409,7 @@
                         if (item.catatan_list && item.catatan_list.length > 0) {
                             content += `<ul>`;
                             item.catatan_list.forEach(cat => {
-                                content += `<li style="white-space: normal; word-wrap: break-word; word-break: break-word;">${cat.deskripsi}<br><small><mark>Ditambahkan Oleh</mark> <span class="badge bg-light-warning">${cat.nama_user}</span></small></li>`;
+                                content += `<li style="white-space: normal; word-wrap: break-word; word-break: break-word;">${cat.deskripsi}<br><small><b>Ditambahkan Oleh</b> <span class="badge bg-light-warning">${cat.nama_user}</span></small></li>`;
                             })
                             content += `</ul>`;
                         } else {
