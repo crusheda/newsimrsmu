@@ -466,7 +466,14 @@ class RapatController extends Controller
                 // for ($i=0; $i < $key ; $i++) {
                 //     $namaFile = $arrNama[$i];
                 // }
-                $sizeFile = number_format(Storage::size($value) / 1048576,2);
+                // $sizeFile = number_format(Storage::size($value) / 1048576,2);
+                $path = preg_replace('/^public\//', '', $value);
+                $sizeFile = 0;
+                if (Storage::disk('public')->exists($path)) {
+                    $sizeFile = number_format(
+                        Storage::disk('public')->size($path) / 1048576,2
+                    );
+                }
                 $file [] = array(
                     'nama' => $arrNama[$key],
                     'size' => $sizeFile

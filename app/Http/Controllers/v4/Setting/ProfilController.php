@@ -185,17 +185,47 @@ class ProfilController extends Controller
             'sd', 'smp', 'sma', 'd2', 'd3', 'd4', 's1', 's1_profesi', 's2', 's3'
         ];
 
+        // foreach ($uploadFields as $field) {
+        //     $uploadField = "upload_{$field}";
+        //     if ($request->hasFile($uploadField)) {
+        //         $file = $request->file($uploadField);
+        //         if ($file->isValid()) {
+        //             // hapus file lama
+        //             if ($data->{"filename_{$field}"} && Storage::exists($data->{"filename_{$field}"})) {
+        //                 Storage::delete($data->{"filename_{$field}"});
+        //             }
+        //             // simpan baru
+        //             $path = $file->store("public/files/profil/ijazah/{$id}");
+        //             $data->{"filename_{$field}"} = $path;
+        //         }
+        //     }
+        // }
+
         foreach ($uploadFields as $field) {
             $uploadField = "upload_{$field}";
             if ($request->hasFile($uploadField)) {
                 $file = $request->file($uploadField);
                 if ($file->isValid()) {
-                    // hapus file lama
-                    if ($data->{"filename_{$field}"} && Storage::exists($data->{"filename_{$field}"})) {
-                        Storage::delete($data->{"filename_{$field}"});
+
+                    // Hapus file lama
+                    if ($data->{"filename_{$field}"}) {
+
+                        $oldPath = preg_replace(
+                            '/^public\//',
+                            '',
+                            $data->{"filename_{$field}"}
+                        );
+
+                        if (Storage::disk('public')->exists($oldPath)) {
+                            Storage::disk('public')->delete($oldPath);
+                        }
                     }
-                    // simpan baru
-                    $path = $file->store("public/files/profil/ijazah/{$id}");
+
+                    // Simpan file baru
+                    $path = $file->store(
+                        "public/files/profil/ijazah/{$id}"
+                    );
+
                     $data->{"filename_{$field}"} = $path;
                 }
             }
@@ -406,8 +436,19 @@ class ProfilController extends Controller
 
                 if ($request->hasFile($input)) {
 
-                    if ($user->{"filename_$f"} && Storage::exists($user->{"filename_$f"})) {
-                        Storage::delete($user->{"filename_$f"});
+                    // if ($user->{"filename_$f"} && Storage::exists($user->{"filename_$f"})) {
+                    //     Storage::delete($user->{"filename_$f"});
+                    // }
+
+                    if ($user->{"filename_$f"}) {
+                        $oldPath = preg_replace(
+                            '/^public\//',
+                            '',
+                            $user->{"filename_$f"}
+                        );
+                        if (Storage::disk('public')->exists($oldPath)) {
+                            Storage::disk('public')->delete($oldPath);
+                        }
                     }
 
                     $path = $request->file($input)->store("files/profil/ijazah/$userId", 'public');

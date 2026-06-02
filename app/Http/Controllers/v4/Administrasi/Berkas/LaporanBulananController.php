@@ -353,35 +353,64 @@ class LaporanBulananController extends Controller
         return response()->json($data, 200);
     }
 
+    // public function previewLaporan($id)
+    // {
+    //     $show = berkas_laporan_bulanan::find($id);
+
+    //     if (!$show) {
+    //         return response()->json(['message' => 'Data tidak ditemukan.'], 404);
+    //     }
+
+    //     // Ambil path file dari database, contoh:
+    //     // public/files/laporan-bulanan/2025/8/YzekBgDmSIOgO3nZM7dZXubS6xuxKZFS2wre5JR7.docx
+    //     $filename = $show->filename;
+
+    //     // Pastikan file benar-benar ada
+    //     $path = str_replace('public/', '', $filename);
+    //     if (!Storage::disk('public')->exists($path)) {
+    //         return response()->json(['message' => 'File tidak ditemukan.'], 404);
+    //     }
+
+    //     // Hapus prefix "public/" agar bisa dicek dan diakses via storage
+    //     $relativePath = str_replace('public/', '', $filename);
+
+    //     // Buat URL publik dari file (karena storage:link mengarah ke public/storage)
+    //     $publicUrl = asset('storage/' . $relativePath);
+
+    //     // Dapatkan ekstensi file
+    //     $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
+    //     return response()->json([
+    //         'url' => $publicUrl,
+    //         'ext' => $extension,
+    //     ]);
+    // }
+
     public function previewLaporan($id)
     {
         $show = berkas_laporan_bulanan::find($id);
 
         if (!$show) {
-            return response()->json(['message' => 'Data tidak ditemukan.'], 404);
+            return response()->json([
+                'message' => 'Data tidak ditemukan.'
+            ], 404);
         }
 
-        // Ambil path file dari database, contoh:
-        // public/files/laporan-bulanan/2025/8/YzekBgDmSIOgO3nZM7dZXubS6xuxKZFS2wre5JR7.docx
         $filename = $show->filename;
 
-        // Pastikan file benar-benar ada
-        if (!Storage::exists($filename)) {
-            return response()->json(['message' => 'File tidak ditemukan.'], 404);
+        // Hilangkan prefix public/
+        $relativePath = preg_replace('/^public\//', '', $filename);
+
+        // Cek file pada disk public
+        if (!Storage::disk('public')->exists($relativePath)) {
+            return response()->json([
+                'message' => 'File tidak ditemukan.'
+            ], 404);
         }
 
-        // Hapus prefix "public/" agar bisa dicek dan diakses via storage
-        $relativePath = str_replace('public/', '', $filename);
-
-        // Buat URL publik dari file (karena storage:link mengarah ke public/storage)
-        $publicUrl = asset('storage/' . $relativePath);
-
-        // Dapatkan ekstensi file
-        $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
-
         return response()->json([
-            'url' => $publicUrl,
-            'ext' => $extension,
+            'url' => asset('storage/' . $relativePath),
+            'ext' => strtolower(pathinfo($filename, PATHINFO_EXTENSION)),
         ]);
     }
 
@@ -589,7 +618,14 @@ class LaporanBulananController extends Controller
         $jml_bulan=count($bulan);
         $tahun = Carbon::now()->isoFormat('Y');
 
-        $sizeFile = number_format(Storage::size($show->filename) / 1048576,2);
+        // $sizeFile = number_format(Storage::disk('public')->size(preg_replace('/^public\//', '', $data->filename)) / 1048576,2);
+        $path = preg_replace('/^public\//', '', $data->filename);
+        $sizeFile = 0;
+        if (Storage::disk('public')->exists($path)) {
+            $sizeFile = number_format(
+                Storage::disk('public')->size($path) / 1048576,2
+            );
+        }
 
         $data = [
             'id' => $id,
