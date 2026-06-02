@@ -45,6 +45,9 @@
 <!-- Node Waves Css -->
 <link href="{{ asset('libs/node-waves/waves.min.css') }}" rel="stylesheet" >
 
+<!-- DEARFLIP / 3D FLIPBOOK CSS -->
+<link href="{{ asset('libs/dflip/dflip.css') }}" rel="stylesheet" type="text/css">
+
 <!-- Simplebar Css -->
 <link href="{{ asset('libs/simplebar/simplebar.min.css') }}" rel="stylesheet" >
 

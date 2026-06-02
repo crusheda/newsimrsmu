@@ -29,8 +29,8 @@
                         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tambah">
                             <i class="fa-fw fas fa-upload nav-icon me-1"></i> Upload Berkas</button>
                         <div class="btn-group">
-                            <button class="btn btn-warning" id="refreshBtn" onclick="refresh()"><i class="fas fa-sync me-1"></i> 30 Data Terakhir</button>
-                            <button class="btn btn-danger" id="refreshBtnAll" onclick="refreshAll()"><i class="fas fa-sync me-1"></i> Semua Data</button>
+                            <button class="btn btn-warning-transparent" id="refreshBtn" onclick="refresh()"><i class="fas fa-sync me-1"></i> 30 Data Terakhir</button>
+                            <button class="btn btn-danger-transparent" id="refreshBtnAll" onclick="refreshAll()"><i class="fas fa-sync me-1"></i> Semua Data</button>
                         </div>
                     </div>
                     <div class="card-body">
@@ -98,7 +98,7 @@
                         <input type="hidden" name="user_nama" value="{{ Auth::user()->nama }}">
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="alert alert-secondary mb-3">
+                                <div class="alert alert-light shadow-sm mb-3">
                                     <small><i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berupa Dokumen dan bisa lebih dari satu file</small><br>
                                     <small><i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum setiap file adalah <strong>5 mb</strong></small>
                                 </div>
@@ -167,8 +167,7 @@
         </div>
     </div>
 
-    <div class="modal fade bd-example-modal-lg" id="ubah" role="dialog" aria-labelledby="confirmFormLabel"
-        aria-hidden="true">
+    <div class="modal fade bd-example-modal-lg" id="ubah" role="dialog" aria-labelledby="confirmFormLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -181,7 +180,7 @@
                     <input type="text" id="id_edit" class="form-control" hidden>
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="alert alert-secondary mb-3">
+                            <div class="alert alert-light shadow-sm mb-3">
                                 <small><i class="fa-fw fas fa-caret-right nav-icon"></i> Waktu pengubahan berkas rapat hanya berlaku pada hari saat anda mengupload</small><br>
                                 <small><i class="fa-fw fas fa-caret-right nav-icon"></i> Periksa ulang lampiran berkas anda, apabila terdapat kesalahan upload dokumen mohon hapus dan upload ulang</small>
                             </div>
@@ -231,14 +230,14 @@
                         <sub><i class="fa-fw fas fa-caret-right nav-icon"></i> Biarkan kosong jika tidak ada perubahan file</sub>
                     </div> --}}
                 </div>
-                <div class="modal-footer">
-                    Ditambahkan oleh&nbsp;<a id="user_edit"></a>
-                    <button class="btn btn-primary" id="submit_edit" onclick="ubah()"><i
-                            class="fa-fw fas fa-save nav-icon"></i> Simpan</button>
-                    </form>
-
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
-                            class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
+                <div class="modal-footer d-flex align-items-center justify-content-between">
+                    <div>Ditambahkan oleh&nbsp;<a id="user_edit"></a></div>
+                    <div>
+                        <button class="btn btn-primary" id="submit_edit" onclick="ubah()"><i
+                                class="fa-fw fas fa-save nav-icon"></i> Simpan</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
+                                class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -271,12 +270,14 @@
                     </div>
                     <sub><i class="fa-fw fas fa-caret-right nav-icon"></i> File download akan digabungkan dan dikonversikan dalam bentuk <kbd>ZIP FILE</kbd></sub>
                 </div>
-                <div class="modal-footer">
-                    Diupload<a id="tgl_upload"></a>
-                    <a type="button" class="btn btn-primary" id="download_btn"><i
-                            class="fa fa-download"></i> Download</a>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
-                            class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
+                <div class="modal-footer d-flex align-items-center justify-content-between">
+                    <div>Diupload <a id="tgl_upload"></a></div>
+                    <div>
+                        <button class="btn btn-primary" id="download_btn"><i
+                                class="fa fa-download"></i> Download</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
+                                class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -425,7 +426,7 @@
                         content += "<td>" + item.nama + "</td><td>" +
                                     (item.nama_kepala_user?item.nama_kepala_user:item.nama_kepala) + "</td><td class='text-start'>" +
                                     item.tanggal + "</td><td>" +
-                                    item.lokasi + "</td><td>";
+                                    item.lokasi + "</td><td class='text-wrap'>";
                         if (item.keterangan != null) {
                             content += item.keterangan;
                         }
@@ -450,9 +451,7 @@
                             { sWidth: '8%' },
                             { sWidth: '10%' },
                         ],
-                        displayLength: 20,
-                        lengthChange: true,
-                        lengthMenu: [20, 35, 50, 75, 100, 500, 1000, 3000, 7000, 10000, 20000],
+                        displayLength: 10,
                     });
                     $("#refreshBtn").prop('disabled', false);
                     $("#refreshBtn").find("i").removeClass("fa-spinner fa-spin").addClass("fa-sync");
@@ -530,7 +529,7 @@
                         content += "<td>" + item.nama + "</td><td>" +
                                     (item.nama_kepala_user?item.nama_kepala_user:item.nama_kepala) + "</td><td class='text-start'>" +
                                     item.tanggal + "</td><td>" +
-                                    item.lokasi + "</td><td>";
+                                    item.lokasi + "</td><td class='text-wrap'>";
                         if (item.keterangan != null) {
                             content += item.keterangan;
                         }
@@ -541,7 +540,6 @@
                         $('#tampil-tbody').append(content);
                     });
                     var table = $('#dttable').DataTable({
-                        // dom: 'Bfrtip',
                         order: [
                             [6, "desc"]
                         ],
@@ -557,9 +555,6 @@
                             { sWidth: '10%' },
                         ],
                         displayLength: 20,
-                        lengthChange: true,
-                        lengthMenu: [20, 35, 50, 75, 100, 500, 1000, 3000, 7000, 10000, 20000],
-                        // buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
                 }, complete: function() {
                     $("#refreshBtnAll").prop('disabled', false);

@@ -28,6 +28,9 @@
 <!-- Sticky JS -->
 <script src="{{ asset('js/sticky.js') }}"></script>
 
+<!-- DEARFLIP / 3D FLIPBOOK JS -->
+<script src="{{ asset('libs/dflip/dflip.js') }}"></script>
+
 <!-- Simplebar JS -->
 <script src="{{ asset('libs/simplebar/simplebar.min.js') }}"></script>
 <script src="{{ asset('js/simplebar.js') }}"></script>
