@@ -95,7 +95,7 @@ class SurtugController extends Controller
     public function download($id)
     {
         $data = surtug::find($id);
-        return Storage::disk('public')->download($data->filename, $data->title);
+        return Storage::disk('public')->download(preg_replace('/^public\//', '', $data->filename), $data->title);
     }
 
     function ubah($id)

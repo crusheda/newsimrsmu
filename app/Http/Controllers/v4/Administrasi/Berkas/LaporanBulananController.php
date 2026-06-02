@@ -195,7 +195,7 @@ class LaporanBulananController extends Controller
     public function show($id)
     {
         $data = berkas_laporan_bulanan::find($id);
-        return Storage::disk('public')->download($data->filename, $data->title);
+        return Storage::disk('public')->download(preg_replace('/^public\//', '', $data->filename), $data->title);
 
         // $headers = [
         //     'Content-Description' => 'Laporan Bulanan',

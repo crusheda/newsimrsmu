@@ -69,7 +69,7 @@ class PengadaanBarangController extends Controller
     public function show($id)
     {
         $data = pengadaan_barang::find($id);
-        return Storage::disk('public')->download($data->filename, $data->title);
+        return Storage::disk('public')->download(preg_replace('/^public\//', '', $data->filename), $data->title);
     }
 
     /**
@@ -134,7 +134,7 @@ class PengadaanBarangController extends Controller
     function download($id)
     {
         $data = pengadaan_barang::find($id);
-        return Storage::disk('public')->download($data->filename, $data->title);
+        return Storage::disk('public')->download(preg_replace('/^public\//', '', $data->filename), $data->title);
     }
 
     function tambah(Request $request)

@@ -181,7 +181,7 @@ class RapatController extends Controller
     public function show($id)
     {
         $data = berkas_rapat::find($id);
-        return Storage::disk('public')->download($data->filename1, $data->title1);
+        return Storage::disk('public')->download(preg_replace('/^public\//', '', $data->filename1), $data->title1);
     }
 
     public function showAll($id)
@@ -203,13 +203,18 @@ class RapatController extends Controller
         $path_folder_zip = storage_path().'/app/public/files/rapat/'.$data->id_user.'/zip';
         if(!File::exists($path_folder_zip)) {
             // Make Directory for ZIP
-            File::makeDirectory($path_folder_zip);
+            // File::makeDirectory($path_folder_zip);
+            File::makeDirectory(
+                $path_folder_zip,
+                0755,
+                true
+            );
         }
 
         // Making ZIP ARCHIVE
         $zip = new ZipArchive();
         if ($zip->open($zip_path, ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE) !== TRUE) {
-            die ("ERROR: Saat proses pembuatan ZIP, silakan hubungi IT");
+            throw new \Exception("ERROR: Saat proses pembuatan ZIP, silakan hubungi IT");
         }
 
         // Looping with Foreach
@@ -221,8 +226,11 @@ class RapatController extends Controller
             $filename = str_replace('"','',$filename_mentah2);     // Remove Quotes "" from Encoding Json
 
             // Adding Path into String Each File From DB
-            $path = storage_path().'/app/'.$file;
-            $filepath = $path;
+                // $path = storage_path().'/app/'.$file;
+                // $filepath = $path;
+            $filepath = storage_path(
+                            'app/' . ltrim($file, '/')
+                        );
 
             // Checking File and Adding File
             if (file_exists($filepath)) {
@@ -230,14 +238,16 @@ class RapatController extends Controller
                 // $filename = nama file yang digunakan untuk mengganti nama file dari $filepath
                 $zip->addFile($filepath, $filename) or die ("ERROR: Tidak bisa menambahkan file $filename");
             } else {
-                die("File $filename di Direktori $filepath tidak ditemukan");
+                throw new \Exception("File {$filename} tidak ditemukan");
             }
         }
 
         $zip->close();
 
         // Konten apa saja yang terkandung dalam ZIP (Contoh : PDF, Application, etc)
-        $headers = ["Content-Type"=>"pdf/zip"];
+        $headers = [
+            'Content-Type' => 'application/zip'
+        ];
 
         return response()->download($zip_path,$zip_name,$headers);
     }

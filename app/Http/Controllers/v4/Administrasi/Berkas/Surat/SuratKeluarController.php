@@ -249,7 +249,7 @@ class SuratKeluarController extends Controller
     public function download($id)
     {
         $data = surat_keluar::find($id);
-        return Storage::disk('public')->download($data->filename, $data->title);
+        return Storage::disk('public')->download(preg_replace('/^public\//', '', $data->filename), $data->title);
     }
 
     public function showChange($id)

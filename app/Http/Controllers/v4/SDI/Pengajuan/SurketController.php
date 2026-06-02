@@ -327,7 +327,7 @@ class SurketController extends Controller
     function download($id)
     {
         $data = surket::find($id);
-        return Storage::disk('public')->download($data->filename, $data->title);
+        return Storage::disk('public')->download(preg_replace('/^public\//', '', $data->filename), $data->title);
     }
 }
 
