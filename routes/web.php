@@ -46,6 +46,7 @@ use \App\Http\Controllers\v4\SDI\Rekrutmen\PengumumanController as RekrutmenPeng
 use \App\Http\Controllers\v4\SDI\Rekrutmen\RegistrasiController as RekrutmenRegistrasiController;
 use \App\Http\Controllers\v4\SDI\Pengajuan\SurketController;
 use \App\Http\Controllers\v4\SDI\Pengajuan\IDCardController;
+use \App\Http\Controllers\v4\Publik\IPSRS\PerbaikanIPSRSController;
 use \App\Http\Controllers\v4\Pelayanan\Kebidanan\SKLController;
 use \App\Http\Controllers\v4\Akreditasi\KecelakaanKerjaController;
 use App\Http\Controllers\v4\AI\KlaimBpjsController;
@@ -173,6 +174,18 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function 
         // SURAT TUGAS
         Route::get('sdi/surtug', [SurtugController::class, 'index'])->name('v4.sdi.surtug');
         Route::get('sdi/surtug/{id}/download', [SurtugController::class, 'download'])->name('v4.sdi.surtug.download');
+
+    // PUBLIK
+        // PERBAIKAN IPSRS
+            Route::get('publik/perbaikan/ipsrs', [PerbaikanIPSRSController::class, 'index'])->name('v4.publik.ipsrs.perbaikan');
+            Route::get('publik/perbaikan/ipsrs/{id}', [PerbaikanIPSRSController::class, 'show'])->name('v4.publik.ipsrs.perbaikan.show');
+            Route::post('publik/perbaikan/ipsrs', [PerbaikanIPSRSController::class, 'store'])->name('v4.publik.ipsrs.perbaikan.store');
+            Route::post('publik/perbaikan/ipsrs/catatan', [PerbaikanIPSRSController::class, 'catatan'])->name('v4.publik.ipsrs.perbaikan.catatan');
+            Route::get('publik/perbaikan/ipsrs/catatan/{id}', [PerbaikanIPSRSController::class, 'downloadCatatan'])->name('v4.publik.ipsrs.perbaikan.downloadcatatan');
+            Route::post('publik/perbaikan/ipsrs/catatan/ubah', [PerbaikanIPSRSController::class, 'ubahCatatan'])->name('v4.publik.ipsrs.perbaikan.ubahCatatan');
+            Route::get('publik/perbaikan/ipsrs/detail/{id}', [PerbaikanIPSRSController::class, 'detail'])->name('v4.publik.ipsrs.perbaikan.detail');
+            Route::get('publik/perbaikan/ipsrs/riwayat', [PerbaikanIPSRSController::class, 'riwayat'])->name('v4.publik.ipsrs.perbaikan.riwayat');
+            // Route::resource('ipsrs', '');
 
     // PELAYANAN
          // SKL

@@ -44,6 +44,7 @@ use \App\Http\Controllers\v4\SDI\Rekrutmen\PengumumanController as RekrutmenPeng
 use \App\Http\Controllers\v4\SDI\Rekrutmen\RegistrasiController as RekrutmenRegistrasiController;
 use \App\Http\Controllers\v4\SDI\Pengajuan\SurketController;
 use \App\Http\Controllers\v4\SDI\Pengajuan\IDCardController;
+use \App\Http\Controllers\v4\Publik\IPSRS\PerbaikanIPSRSController;
 use \App\Http\Controllers\v4\Pelayanan\Kebidanan\SKLController;
 use \App\Http\Controllers\v4\Akreditasi\KecelakaanKerjaController;
 use App\Http\Controllers\v4\AI\KlaimBpjsController;
@@ -102,6 +103,9 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
         Route::get('akun/pengguna/verif/{id}', [AkunPenggunaController::class, 'verifName']);
         Route::delete('akun/pengguna/hapus/{id}', [AkunPenggunaController::class, 'destroy']);
 
+    // STRUKTUR ORGANISASI
+        Route::delete('strukturorganisasi/hapus/{id}', [StrukturOrganisasiController::class, 'destroy']);
+
     // ADMINISTRASI
         // BERKAS
             // LAPORAN RUTIN
@@ -112,8 +116,8 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
                 Route::get('administrasi/berkas/laporan/table/verif/{id}', [LaporanBulananController::class, 'verif']);
                 Route::get('administrasi/berkas/laporan/table/verif/{id}/batal', [LaporanBulananController::class, 'batalVerif']);
                 Route::get('administrasi/berkas/laporan/table/verif/{id}/user/{user}', [LaporanBulananController::class, 'verifUser']);
-                Route::get('administrasi/berkas/laporan/formverif/{id}', [LaporanBulananController::class, 'formVerif']);
-                Route::get('administrasi/berkas/laporan/formupload/{id}', [LaporanBulananController::class, 'formUpload']);
+                Route::get('administrasi/berkas/laporan/formverif', [LaporanBulananController::class, 'formVerif']);
+                Route::get('administrasi/berkas/laporan/formupload', [LaporanBulananController::class, 'formUpload']);
                 Route::get('administrasi/berkas/laporan/table/{id}/verif', [LaporanBulananController::class, 'tableVerif']);
                 Route::get('administrasi/berkas/laporan/table/{id}', [LaporanBulananController::class, 'table']);
                 Route::get('administrasi/berkas/laporan/getubah/{id}',[LaporanBulananController::class, 'getUbah']);
@@ -409,6 +413,28 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
             Route::post('sdi/surtug/{id}/prosesubah', [SurtugController::class, 'prosesUbah']);
             Route::delete('sdi/surtug/{id}/hapus', [SurtugController::class, 'hapus']);
             Route::get('sdi/surtug/table', [SurtugController::class, 'table']);
+
+    // PUBLIK
+        // PERBAIKAN IPSRS
+            // USER
+                Route::get('publik/perbaikan/ipsrs/lokasi', [PerbaikanIPSRSController::class, 'autocompleteLokasi']);
+                Route::get('publik/perbaikan/ipsrs/user/table', [PerbaikanIPSRSController::class, 'tableUser']);
+                Route::get('publik/perbaikan/ipsrs/user/track/{id}', [PerbaikanIPSRSController::class, 'track']);
+                Route::get('publik/perbaikan/ipsrs/user/ubah/{id}', [PerbaikanIPSRSController::class, 'getUbah']);
+                Route::post('publik/perbaikan/ipsrs/user/ubah', [PerbaikanIPSRSController::class, 'prosesUbah']);
+                Route::delete('publik/perbaikan/ipsrs/user/hapus/{id}', [PerbaikanIPSRSController::class, 'prosesHapus']);
+            // ADMIN
+                Route::get('publik/perbaikan/ipsrs/admin/diagram/{tahun}', [PerbaikanIPSRSController::class, 'diagram']);
+                Route::get('publik/perbaikan/ipsrs/admin/tableAll', [PerbaikanIPSRSController::class, 'tableAdminAll']);
+                Route::get('publik/perbaikan/ipsrs/admin/table', [PerbaikanIPSRSController::class, 'tableAdmin']);
+                Route::get('publik/perbaikan/ipsrs/admin/lampiran/{id}', [PerbaikanIPSRSController::class, 'lampiranAdmin']);
+                Route::post('publik/perbaikan/ipsrs/filter', [PerbaikanIPSRSController::class, 'filter']);
+                // DETAIL
+                    Route::post('publik/perbaikan/ipsrs/verif/{id}', [PerbaikanIPSRSController::class, 'verif']);
+                    Route::post('publik/perbaikan/ipsrs/unverif/{id}', [PerbaikanIPSRSController::class, 'unverif']);
+                    Route::post('publik/perbaikan/ipsrs/process/{id}', [PerbaikanIPSRSController::class, 'process']);
+                    Route::post('publik/perbaikan/ipsrs/finish/{id}', [PerbaikanIPSRSController::class, 'finish']);
+                    Route::get('publik/perbaikan/ipsrs/result/{id}', [PerbaikanIPSRSController::class, 'result']);
 
     // PELAYANAN
         // SKL

@@ -1098,6 +1098,9 @@
                 // PROSES HAPUS
                 var id = $("#id_hapus").val();
                 $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
                     url: "/api/v4/administrasi/berkas/regulasi/"+id,
                     type: 'DELETE',
                     success: function(res) {

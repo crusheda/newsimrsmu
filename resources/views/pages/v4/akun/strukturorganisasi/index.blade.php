@@ -156,7 +156,7 @@
         function hapus(id) {
             Swal.fire({
                 title: 'Apakah anda yakin?',
-                text: 'Hapus Permanen Akun Pengguna ID : ' + id,
+                text: 'Hapus Permanen Pengguna dari Struktur Organisasi dengan ID : ' + id,
                 icon: 'warning',
                 reverseButtons: false,
                 showDenyButton: false,
@@ -170,29 +170,25 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: "/api/strukturorganisasi/hapus/" + id,
-                        type: 'GET',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: "/api/v4/strukturorganisasi/hapus/" + id,
+                        type: 'DELETE',
                         dataType: 'json', // added data type
                         success: function(res) {
                             iziToast.success({
                                 title: 'Sukses!',
-                                message: 'Hapus Akun berhasil pada ' + res,
+                                message: 'Hapus Pengguna dari Struktur Organisasi berhasil pada ' + res,
                                 position: 'topRight'
                             });
                             window.location.reload();
                         },
-                        error: function(res) {
-                            Swal.fire({
-                                title: `Gagal di hapus!`,
-                                text: 'Pada ' + res,
-                                icon: `error`,
-                                showConfirmButton: false,
-                                showCancelButton: false,
-                                allowOutsideClick: true,
-                                allowEscapeKey: true,
-                                timer: 3000,
-                                timerProgressBar: true,
-                                backdrop: `rgba(26,27,41,0.8)`,
+                        error: function(xhr, status, error) {
+                            iziToast.error({
+                                title: 'Pesan Galat!',
+                                message: xhr.responseJSON?.message ?? 'Terjadi kesalahan / Gagal memanggil Function',
+                                position: 'topRight'
                             });
                         }
                     });

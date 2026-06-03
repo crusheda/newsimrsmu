@@ -50,9 +50,9 @@ class LaporanBulananController extends Controller
     }
 
     // Validasi User boleh Upload atau tidak
-    public function formUpload($id)
+    public function formUpload()
     {
-        // $cek = struktur_organisasi::where('id_user',$id)->first();
+        // $cek = struktur_organisasi::where('id_user',Auth::user()->id)->first();
 
         // if (!empty($cek->nama_user)) {
         //     $res = 1;
@@ -70,7 +70,7 @@ class LaporanBulananController extends Controller
         //     return response()->json($res, 200);
         // }
 
-        // $user = $this->userUpload($id);
+        // $user = $this->userUpload(Auth::user()->id);
 
         // if ($user == 1) {
         //     $res = 1;
@@ -84,7 +84,7 @@ class LaporanBulananController extends Controller
                     ->join('role_has_permissions','role_has_permissions.role_id','=','model_has_roles.role_id')
                     ->join('permissions','permissions.id','=','role_has_permissions.permission_id')
                     ->whereIn('permissions.name', ['laporan_bulanan','admin_laporan_bulanan'])
-                    ->where('model_has_roles.model_id', $id)
+                    ->where('model_has_roles.model_id', Auth::user()->id)
                     ->select('users.name')
                     ->first();
 
@@ -416,8 +416,9 @@ class LaporanBulananController extends Controller
 
     // VERIF LAPORAN BULANAN ----------------------------------------------------------------------------------------------------------------------------------
     // Verifikasi User boleh verifikasi atau tidak / boleh berpindah ke halaman laporan bawahan atau tidak
-    public function formVerif($id)
+    public function formVerif()
     {
+        $id = Auth::user()->id;
         $user = User::find($id);
 
         if (!$user) {

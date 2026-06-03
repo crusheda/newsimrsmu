@@ -283,10 +283,10 @@
                     </a>
                 </li>
 
-                <li class="slide__category"><span class="category-name">Umum</span></li>
+                <li class="slide__category"><span class="category-name">Publik</span></li>
 
                 <li class="slide">
-                    <a href="javascript:void(0);" class="side-menu__item" onclick="runDevlMessage()">
+                    <a href="{{ route('v4.publik.ipsrs.perbaikan') }}" class="side-menu__item">
                         <i class="side-menu__icon ri-paint-brush-line"></i>
                         <span class="side-menu__label">Perbaikan <b class="text-orange ms-1">IPSRS</b></span>
                     </a>

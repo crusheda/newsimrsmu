@@ -250,10 +250,10 @@
                         `);
                     });
                 },
-                error: function(res) {
+                error: function(xhr, status, error) {
                     iziToast.error({
                         title: 'Pesan Galat!',
-                        message: 'Record Penetapan Pegawai tidak ditemukan.',
+                        message: xhr.responseJSON.message ?? 'Record Penetapan Pegawai tidak ditemukan',
                         position: 'topRight'
                     });
                 },

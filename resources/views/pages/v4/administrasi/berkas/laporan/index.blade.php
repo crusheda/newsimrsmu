@@ -536,7 +536,7 @@
             $("#btn-tambah").prop('disabled', true);
             $("#btn-tambah").find("i").toggleClass("fa-plus fa-sync fa-spin");
             $.ajax({
-                url: "/api/v4/administrasi/berkas/laporan/formupload/{{ Auth::user()->id }}",
+                url: "/api/v4/administrasi/berkas/laporan/formupload",
                 type: 'GET',
                 dataType: 'json', // added data type
                 success: function(res) {
@@ -557,12 +557,14 @@
         }
 
         function verif() {
-            $("#btn-verif").prop('disabled', true);
-            $("#btn-verif").find("i").toggleClass("fa-history fa-sync fa-spin");
             $.ajax({
-                url: "/api/v4/administrasi/berkas/laporan/formverif/{{ Auth::user()->id }}",
+                url: "/api/v4/administrasi/berkas/laporan/formverif",
                 type: 'GET',
                 dataType: 'json', // added data type
+                beforeSend: function() {
+                    $("#btn-verif").prop('disabled', true);
+                    $("#btn-verif").find("i").removeClass("fa-history").addClass("fa-sync fa-spin");
+                },
                 success: function(res) {
                     if (res === 1) {
                         window.location.href = "./laporan/verif";
@@ -581,10 +583,18 @@
                             });
                         }
                     }
+                },
+                error: function(xhr, status, error) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: xhr.responseJSON.message ?? 'Terjadi kegagalan saat memeriksa data',
+                        position: 'topRight'
+                    });
+                },
+                complete: function() {
                     $("#btn-verif").prop('disabled', false);
                     $("#btn-verif").find("i").removeClass("fa-sync fa-spin").addClass("fa-history");
-                },
-                error: function(res) {}
+                }
             });
         }
 
