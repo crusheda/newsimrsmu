@@ -112,31 +112,31 @@ class RegulasiController extends Controller
             // simpan berkas yang diunggah ke sub-direktori 'public/files'
             // direktori 'files' otomatis akan dibuat jika belum ada
             if ($request->jns_regulasi == 1) {
-                $path = $uploadedFile->store('files/regulasi/kebijakan','public');
+                $path = $uploadedFile->store('public/files/regulasi/kebijakan');
             } elseif ($request->jns_regulasi == 2) {
-                $path = $uploadedFile->store('files/regulasi/panduan','public');
+                $path = $uploadedFile->store('public/files/regulasi/panduan');
             } elseif ($request->jns_regulasi == 3) {
-                $path = $uploadedFile->store('files/regulasi/pedoman','public');
+                $path = $uploadedFile->store('public/files/regulasi/pedoman');
             } elseif ($request->jns_regulasi == 4) {
-                $path = $uploadedFile->store('files/regulasi/program','public');
+                $path = $uploadedFile->store('public/files/regulasi/program');
             } elseif ($request->jns_regulasi == 5) {
-                $path = $uploadedFile->store('files/regulasi/spo','public');
+                $path = $uploadedFile->store('public/files/regulasi/spo');
             } elseif ($request->jns_regulasi == 6) {
-                $path = $uploadedFile->store('files/regulasi/ppk','public');
+                $path = $uploadedFile->store('public/files/regulasi/ppk');
             } elseif ($request->jns_regulasi == 7) {
-                $path = $uploadedFile->store('files/regulasi/uu','public');
+                $path = $uploadedFile->store('public/files/regulasi/uu');
             } elseif ($request->jns_regulasi == 8) {
-                $path = $uploadedFile->store('files/regulasi/perpu','public');
+                $path = $uploadedFile->store('public/files/regulasi/perpu');
             } elseif ($request->jns_regulasi == 9) {
-                $path = $uploadedFile->store('files/regulasi/pp','public');
+                $path = $uploadedFile->store('public/files/regulasi/pp');
             } elseif ($request->jns_regulasi == 10) {
-                $path = $uploadedFile->store('files/regulasi/perpres','public');
+                $path = $uploadedFile->store('public/files/regulasi/perpres');
             } elseif ($request->jns_regulasi == 11) {
-                $path = $uploadedFile->store('files/regulasi/perment','public');
+                $path = $uploadedFile->store('public/files/regulasi/perment');
             } elseif ($request->jns_regulasi == 12) {
-                $path = $uploadedFile->store('files/regulasi/perda','public');
+                $path = $uploadedFile->store('public/files/regulasi/perda');
             } elseif ($request->jns_regulasi == 13) {
-                $path = $uploadedFile->store('files/regulasi/mou','public');
+                $path = $uploadedFile->store('public/files/regulasi/mou');
             }
 
             $data = new berkas_regulasi;
