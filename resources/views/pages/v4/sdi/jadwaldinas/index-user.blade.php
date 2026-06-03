@@ -675,7 +675,7 @@
                         for (let i=1;i<=res.totalDay;i++){
                             let kodeShift = pegawai[`tgl${i}`]||'';
                             let lnItem = res.ln.find(ln => ln.tgl==i);
-                            let style = lnItem ? ` style="background-color: ${lnItem.color} !important;"` : '';
+                            let style = lnItem ? ` style="background-color: ${lnItem.color} !important;"` : ` style="background-color: ${pegawai.color} !important;"`;
                             content += `<td class="p-2 tgl${i}" ${style}>${kodeShift}</td>`;
                         }
 
