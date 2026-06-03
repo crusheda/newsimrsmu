@@ -8687,6 +8687,10 @@ caption {
   --bs-body-bg: var(--custom-white);
   color: inherit;
 }
+table.dttable-jadwaldinas > :not(caption) > * > * {
+  --bs-body-bg: var(--custom-white);
+  /* color: inherit; */
+}
 .table-striped-columns > :not(caption) > tr > :nth-child(2n) {
   --bs-table-bg-type: rgba(var(--light-rgb), 0.5);
 }

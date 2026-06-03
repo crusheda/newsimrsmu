@@ -132,7 +132,7 @@
                                                                         name="tgl{{ $i }}[]" id="{{ $n-1 }}tgl{{ $i }}"
                                                                         value=""
                                                                         placeholder=""
-                                                                        style="padding: 0;border-radius: 0;height: 2rem;background-color: #FFFFFF !important;"
+                                                                        style="padding: 0;border-color: #ced4da;border-width: 1px;border-radius: 0;height: 2rem;background-color: #FFFFFF !important;"
                                                                         required>
                                                                 </td>
                                                         @endfor
