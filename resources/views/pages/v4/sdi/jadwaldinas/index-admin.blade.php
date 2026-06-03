@@ -1025,7 +1025,7 @@
                 // PROSES
                 var id = $("#id_validasi").val();
                 $.ajax({
-                    url: "/api/v4/sdi/jadwaldinas/"+id+"/verif/{{ Auth::user()->id }}",
+                    url: "/api/v4/sdi/jadwaldinas/"+id+"/verif",
                     type: 'GET',
                     dataType: 'json',
                     success: function(res) {
@@ -1060,7 +1060,7 @@
                 // PROSES
                 var id = $("#id_batal_validasi").val();
                 $.ajax({
-                    url: "/api/v4/sdi/jadwaldinas/"+id+"/batalverif/{{ Auth::user()->id }}",
+                    url: "/api/v4/sdi/jadwaldinas/"+id+"/batalverif",
                     type: 'GET',
                     dataType: 'json',
                     success: function(res) {
@@ -1095,7 +1095,7 @@
                 // PROSES
                 var id = $("#id_verif").val();
                 $.ajax({
-                    url: "/api/v4/sdi/jadwaldinas/bawahan/"+id+"/verif/{{ Auth::user()->id }}",
+                    url: "/api/v4/sdi/jadwaldinas/bawahan/"+id+"/verif",
                     type: 'GET',
                     dataType: 'json',
                     success: function(res) {
@@ -1131,7 +1131,7 @@
                 // PROSES
                 var id = $("#id_batal_verif").val();
                 $.ajax({
-                    url: "/api/v4/sdi/jadwaldinas/bawahan/"+id+"/batalverif/{{ Auth::user()->id }}",
+                    url: "/api/v4/sdi/jadwaldinas/bawahan/"+id+"/batalverif",
                     type: 'GET',
                     dataType: 'json',
                     success: function(res) {

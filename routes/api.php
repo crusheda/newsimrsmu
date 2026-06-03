@@ -286,9 +286,9 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
                 Route::get('sdi/jadwaldinas/table/admin', [JadwalDinasController::class, 'tableAll']);
                 Route::get('sdi/jadwaldinas/tambah/admin', [JadwalDinasController::class, 'jokiAdmin']);
                 Route::get('sdi/jadwaldinas/table/admin/{month}', [JadwalDinasController::class, 'tableAllMonth']);
-                Route::get('sdi/jadwaldinas/{id}/verif/{user}', [JadwalDinasController::class, 'verif']);
+                Route::get('sdi/jadwaldinas/{id}/verif', [JadwalDinasController::class, 'verif']);
                 // Route::get('sdi/jadwaldinas/{id}/tolak/{user}', [JadwalDinasController::class, 'tolak']);
-                Route::get('sdi/jadwaldinas/{id}/batalverif/{user}', [JadwalDinasController::class, 'batalVerif']);
+                Route::get('sdi/jadwaldinas/{id}/batalverif', [JadwalDinasController::class, 'batalVerif']);
                 // Route::get('sdi/jadwaldinas/{id}/bataltolak/{user}', [JadwalDinasController::class, 'batalTolak']);
 
             // VERIFIKASI BAWAHAN
