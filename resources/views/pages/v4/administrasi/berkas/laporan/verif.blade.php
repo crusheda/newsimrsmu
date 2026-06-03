@@ -181,7 +181,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h6 class="modal-title">
-                        Preview <b class="text-info">Dokumen</b>&nbsp;<span class="badge bg-dark badge-sm"><a id="show_id_dokumen"></a></span>
+                        Preview <b class="text-info">Dokumen</b>&nbsp;<span class="badge text-bg-success badge-sm"><a id="show_id_dokumen"></a></span>
                     </h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                 </div>

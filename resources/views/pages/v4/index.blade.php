@@ -258,9 +258,20 @@
                         <div class="slide-right" id="slide-right"><svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24" height="24" viewBox="0 0 24 24"> <path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z"></path> </svg></div>
                         <div class="d-lg-flex d-none align-items-center">
                             <div class="btn-list d-xl-flex d-none">
-                                <a href="{{ route('v4.login') }}" class="btn btn-wave btn-primary border">
-                                    <i class="las la-sign-in-alt me-1"></i> Log in
-                                </a>
+                                @if (auth()->check())
+                                    <button class="btn btn-wave btn-primary-transparent border dropdown-toggle" data-bs-toggle="dropdown">
+                                        Menu
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li><a class="dropdown-item text-primary" href="{{ route('v4.dashboard') }}">Dashboard</a></li>
+                                        <li><a class="dropdown-item text-warning" href="{{ route('v4.profil') }}">Profil Saya</a></li>
+                                        <li><a class="dropdown-item text-danger" href="{{ route('v4.logout') }}">Logout</a></li>
+                                    </ul>
+                                @else
+                                    <a href="{{ route('v4.login') }}" class="btn btn-wave btn-primary border">
+                                        <i class="las la-sign-in-alt me-1"></i> Log in
+                                    </a>
+                                @endif
                             </div>
                             <div class="form-check form-switch d-flex align-items-center gap-2 ms-2">
                                 <input
@@ -316,8 +327,12 @@
                             <h1 class="fw-semibold mt-3 landing-banner-heading">Sistem Informasi <br> RS <span class="text-primary">PKU Muhammadiyah</span> Sukoharjo</h1>
                             <span class="d-block fs-18">Platform yang mendukung manajemen data yang efektif, komunikasi yang lancar antar bagian manajemen, mempermudah proses administrasi, dan meningkatkan kinerja pegawai dengan dukungan sistem yang terintegrasi dan interkoneksi.</span>
                             <div class="btn-list banner-buttons">
-                                <a href="{{ route('v4.login') }}" class="btn btn-primary btn-lg rounded-pill btn-w-lg">Masuk Sekarang</a>
-                                <a class="btn btn-lg btn-light border rounded-pill btn-w-lg" href="https://www.rspkusukoharjo.com/" target="_blank">Web Resmi RS</a>
+                                @if (auth()->check())
+                                    <a href="{{ route('v4.dashboard') }}" class="btn btn-primary-transparent btn-lg rounded-pill btn-w-lg">Dashboard</a>
+                                @else
+                                    <a href="{{ route('v4.login') }}" class="btn btn-primary btn-lg rounded-pill btn-w-lg">Masuk Sekarang</a>
+                                @endif
+                                <a class="btn btn-lg btn-teal-transparent border rounded-pill btn-w-lg" href="https://www.rspkusukoharjo.com/" target="_blank">Web Resmi RS</a>
                             </div>
                         </div>
                         <div class="col-xl-6">
