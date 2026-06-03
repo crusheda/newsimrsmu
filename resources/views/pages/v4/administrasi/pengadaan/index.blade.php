@@ -63,7 +63,7 @@
                         </div>
                         <div class="flex-shrink-0">
                             <div class="btn-group">
-                                <button type="button" class="btn btn-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Menu Grafik</button>
+                                <button type="button" class="btn btn-info-transparent dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Menu Grafik</button>
                                 <ul class="dropdown-menu p-2">
                                     <li><a class="dropdown-item" href="javascript:void(0);" onclick="grafikPengadaan(1)">Grafik Anda</a></li>
                                     <li><a class="dropdown-item" href="javascript:void(0);" onclick="grafikPengadaan(0)">Grafik Internal RS</a></li>
@@ -103,9 +103,9 @@
                                 data-bs-placement="bottom" data-bs-html="true" title="Lihat Riwayat Pengadaan" id="btn-riwayat-pengadaan">
                                 <i class="ri-shopping-bag-line me-1"></i> Riwayat
                             </button>
-                            <button class="btn btn-warning btn-shadow" onclick="applyFilters()" data-bs-toggle="tooltip"
+                            <button class="btn btn-warning-transparent btn-shadow" id="btn-refresh" onclick="applyFilters()" data-bs-toggle="tooltip"
                                 data-bs-placement="bottom" data-bs-html="true" title="Refresh Tabel Pengadaan">
-                                <i class="ri-loop-left-line nav-icon"></i>
+                                <i class="ri-loop-left-line nav-icon" id="icon-refresh"></i>
                             </button>
                             @can('admin_pengadaan')
                                 <div class="btn-group">
@@ -761,6 +761,10 @@
         }
 
         function applyFilters(){
+            $('#btn-refresh').prop('disabled', true);
+            $('#icon-refresh')
+                .removeClass('ri-loop-left-line')
+                .addClass('ri-loader-4-line ri-spin');
 
             const search = $('#search-input').val();
             const jenis = $('#category-filter').val();
@@ -777,7 +781,14 @@
             grid.updateConfig({
                 server: {
                     url: url,
-                    then: data => data.data.map(mapData),
+                    then: data => {
+                        $('#btn-refresh').prop('disabled', false);
+                        $('#icon-refresh')
+                            .removeClass('ri-loader-4-line ri-spin')
+                            .addClass('ri-loop-left-line');
+
+                        return data.data.map(mapData);
+                    },
                     total: data => data.total
                 }
             }).forceRender();

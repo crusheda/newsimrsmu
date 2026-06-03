@@ -436,12 +436,16 @@ class PengadaanController extends Controller
 
         try {
 
-            // if (now()->day > $tutupPengadaan) {
-            //     return response()->json([
-            //         'success' => false,
-            //         'message' => 'Pengadaan telah ditutup per tanggal '.$tutupPengadaan.' setiap bulannya'
-            //     ], 400);
-            // }
+            if (
+                !auth()->user()->can('admin_pengadaan') &&
+                now()->day > $tutupPengadaan
+            ) {
+                DB::rollBack();
+                return response()->json([
+                    'success' => false,
+                    'message' => "Pengadaan telah ditutup per tanggal {$tutupPengadaan} setiap bulannya. Silakan lakukan pengadaan pada bulan berikutnya mulai dari tgl 1 - {$tutupPengadaan}."
+                ], 400);
+            }
 
             $user = auth()->user();
 

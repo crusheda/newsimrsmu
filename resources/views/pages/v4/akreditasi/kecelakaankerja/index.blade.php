@@ -247,11 +247,11 @@
                         })
                     })
 
-                    iziToast.success({
-                        title: 'Pesan Refresh!',
-                        message: 'Berhasil menampilkan semua data dengan kolom terbatas',
-                        position: 'topRight'
-                    });
+                    // iziToast.success({
+                    //     title: 'Pesan Refresh!',
+                    //     message: 'Berhasil menampilkan semua data dengan kolom terbatas',
+                    //     position: 'topRight'
+                    // });
 
                 }
             });
@@ -390,14 +390,14 @@
 
                     iziToast.warning({
                         title: 'Pesan Tambahan!',
-                        message: 'Tombol Column Visibility untuk menampilkan kolom terpilih pada tabel',
+                        message: 'Tombol Kolom di atas tabel untuk menampilkan kolom tersembunyi pada tabel',
                         position: 'topRight'
                     });
-                    iziToast.success({
-                        title: 'Pesan Sukses!',
-                        message: 'Silakan klik tombol Excel untuk mengekspor semua data ke Excel',
-                        position: 'topRight'
-                    });
+                    // iziToast.success({
+                    //     title: 'Pesan Sukses!',
+                    //     message: 'Silakan klik tombol Excel untuk mengekspor semua data ke Excel',
+                    //     position: 'topRight'
+                    // });
                     $("#dttable").prop('hidden',true);
                     $("#dttable2").prop('hidden',false);
                 }
