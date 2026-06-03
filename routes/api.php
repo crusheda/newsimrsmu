@@ -254,7 +254,7 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
                 Route::delete('sdi/profilpegawai/penetapan/hapus/{id}/proses', [DetailProfilPegawaiController::class, 'hapusPenetapan']);
 
             // ROTASI
-                Route::get('sdi/profilpegawai/rotasi/table', [DetailProfilPegawaiController::class, 'getRotasi']);
+                Route::get('sdi/profilpegawai/rotasi/table/{id}', [DetailProfilPegawaiController::class, 'getRotasi']);
                 Route::post('sdi/profilpegawai/rotasi/tambah', [DetailProfilPegawaiController::class, 'tambahRotasi']);
                 Route::get('sdi/profilpegawai/rotasi/ubah/{id}', [DetailProfilPegawaiController::class, 'showUbahRotasi']);
                 Route::post('sdi/profilpegawai/rotasi/ubah/{id}/proses', [DetailProfilPegawaiController::class, 'ubahRotasi']);

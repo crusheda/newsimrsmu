@@ -193,7 +193,7 @@
                     } else {
                         $(".status-aktif-penetapan").prop('hidden', false);
                     }
-                    
+
                     var bgHapus = null;
                     $("#tampil-tbody-penetapan").empty();
                     $('#dttable-penetapan').DataTable().clear().destroy();

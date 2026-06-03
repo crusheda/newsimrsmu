@@ -180,7 +180,7 @@
         $("#tampil-tbody-rotasi").empty().append(`<tr><td colspan="9" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
         $.ajax(
             {
-                url: `/api/v4/sdi/profilpegawai/rotasi/table`,
+                url: `/api/v4/sdi/profilpegawai/rotasi/table/${id_pegawai}`,
                 type: 'GET',
                 dataType: 'json', // added data type
                 beforeSend: function() {
