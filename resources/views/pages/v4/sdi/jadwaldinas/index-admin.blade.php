@@ -535,10 +535,15 @@
             } else {
                 url = "/api/v4/sdi/jadwaldinas/table/admin/"+month;
             }
+            const btn = $("#btn-refresh");
             $.ajax({
                 url: url,
                 type: 'GET',
                 dataType: 'json',
+                beforeSend: function() {
+                    btn.prop('disabled', true);
+                    btn.find("i").addClass("fa-spin");
+                },
                 success: function(res) {
                     $("#tampil-tbody").empty();
                     $('#dttable').DataTable().clear().destroy();
@@ -672,6 +677,17 @@
                         displayLength: 20,
                         // buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
+                },
+                error: function(xhr, status, error) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: xhr.responseJSON.message ?? 'Jadwal Dinas unit gagal dimuat, silakan coba beberapa saat lagi',
+                        position: 'topRight'
+                    });
+                },
+                complete: function() {
+                    btn.prop('disabled', false);
+                    btn.find("i").removeClass("fa-spin");
                 }
             })
         }
@@ -742,7 +758,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="table-responsive p-10 pb-0">
-                                    <table id="dttable-lihat-jadwal" class="table table-bordered" style="width:100%;table-layout:auto;">
+                                    <table id="dttable-lihat-jadwal" class="table table-bordered dttable-jadwaldinas" style="width:100%;table-layout:auto;">
                                         <thead>
                                             <tr>
                                                 <th class="text-center" rowspan="2">NO</th>
@@ -912,14 +928,16 @@
                     $('#btn-refresh-lihat').attr('onClick', `lihat(${id});`);
                     $('#btn-cetak').attr('onClick', `printJadwal(${id});`);
                     $('#modalLihat').modal('show');
-                    $('#btnoptshow'+id).empty().text(id);
                 },
-                error: function(res) {
+                error: function(xhr, status, error) {
                     iziToast.error({
                         title: 'Pesan Galat!',
-                        message: 'Jadwal Dinas gagal dimuat, silakan coba beberapa saat lagi',
+                        message: xhr.responseJSON.message ?? 'Jadwal Dinas gagal dimuat, silakan coba beberapa saat lagi',
                         position: 'topRight'
                     });
+                },
+                complete: function() {
+                    $('#btnoptshow' + id).empty().text(id);
                 }
             })
         }

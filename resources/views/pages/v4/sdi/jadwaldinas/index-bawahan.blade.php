@@ -478,7 +478,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="table-responsive p-10 pb-0">
-                                    <table id="dttable-lihat-jadwal" class="table table-bordered" style="width: 100%;table-layout: auto">
+                                    <table id="dttable-lihat-jadwal" class="table table-bordered dttable-jadwaldinas" style="width: 100%;table-layout: auto">
                                         <thead>
                                             <tr>
                                                 <th class="text-center" rowspan="2">NO</th>
@@ -648,7 +648,6 @@
                     $('#btn-refresh-lihat').attr('onClick', `lihat(${id});`);
                     $('#btn-cetak').attr('onClick', `printJadwal(${id});`);
                     $('#modalLihat').modal('show');
-                    $('#btnoptshow'+id).empty().text(id);
                 },
                 error: function(res) {
                     iziToast.error({
@@ -656,7 +655,10 @@
                         message: 'Jadwal Dinas gagal dimuat, silakan coba beberapa saat lagi',
                         position: 'topRight'
                     });
-                    $('#btnoptshow'+id).empty().text(id);
+                    // $('#btnoptshow'+id).empty().text(id);
+                },
+                complete: function() {
+                    $('#btnoptshow' + id).empty().text(id);
                 }
             })
         }

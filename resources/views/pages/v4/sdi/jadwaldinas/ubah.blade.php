@@ -33,7 +33,7 @@
                         </div>
                     </div>
                     <div class="text-center mt-4 mb-3" id="show-loading">
-                        <h5><i class="fas fa-sync fa-spin fa-1x me-1"></i> Memproses <b class="text-primary">Jadwal Dinas</b></h5>
+                        <h6><i class="fas fa-sync fa-spin fa-1x me-1"></i> Memproses <b class="text-primary">Jadwal Dinas</b></h6>
                     </div>
                     <div id="show-jadwal" hidden>
                         <form action="{{ route('v4.sdi.jadwaldinas.prosesUbah') }}" id="formUbah" class="needs-validation mb-0" method="POST" enctype="multipart/form-data" novalidate>
@@ -43,6 +43,7 @@
                                 @php
                                     $bulan = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
                                     $totalDay = \Carbon\Carbon::create($list['jadwal']->tahun, $list['jadwal']->bulan)->format('t');
+                                    $nowDay = \Carbon\Carbon::now()->day;
                                     $n = 1;
                                 @endphp
                                 <h4 class="text-center p-10 mb-3">Bulan
@@ -53,7 +54,7 @@
                                     @endforeach Tahun <b class="text-primary">{{ $list['jadwal']->tahun }}</b>
                                 </h4>
                                 <div class="table-responsive p-10 pb-0">
-                                    <table id="dttable" class="table table-bordered" style="width: 100%;table-layout: auto">
+                                    <table id="dttable" class="table table-bordered dttable-jadwaldinas" style="width: 100%;table-layout: auto">
                                         <thead>
                                             <tr>
                                                 <th class="text-center" rowspan="2">NO</th>
@@ -88,9 +89,9 @@
                                         <tbody>
                                             {{-- @foreach (json_decode($list['ref_users']->staf) as $item) --}}
                                             @foreach ($list['detail'] as $item)
-                                                <tr style="background-color: @if($item->color) {{ $item->color }} @endif">
-                                                    <td>{{ $n++ }}</td>
-                                                    <td>
+                                                <tr style="{{ $item->color ? 'background-color: '.$item->color.' !important;' : '' }}">
+                                                    <td style="{{ $item->color ? 'background-color: '.$item->color.' !important;' : '' }}">{{ $n++ }}</td>
+                                                    <td style="{{ $item->color ? 'background-color: '.$item->color.' !important;' : '' }}">
                                                         <input type="text" class="form-control" name="id_staf[]" value="{{ $item->pegawai_id }}" hidden>
                                                         <input type="text" class="form-control" name="nama_staf[]" value="{{ $item->pegawai_nama }}" hidden>
                                                         <input type="text" class="form-control" name="jabatan_staf[]" value="{{ $item->jabatan?$item->jabatan:'' }}" hidden>
@@ -100,7 +101,7 @@
                                                                 <h6 class="mb-0 text-truncate">
                                                                     {{ $item->nick != null ? $item->nick : $item->name }}
                                                                 </h6>
-                                                                <small class="text-muted text-truncate">
+                                                                <small class="text-truncate">
                                                                     {{ $item->jabatan ?? '' }}
                                                                 </small>
                                                             </div>
@@ -127,8 +128,15 @@
                                                         @elseif ($dayb == 'Minggu')
                                                             <td class="p-2" style="background-color: #fed8b9">
                                                         @else
-                                                            <td class="p-2">
+                                                            <td class="p-2" style="{{ $item->color ? 'background-color: '.$item->color.' !important;' : '' }}">
                                                         @endif
+
+                                                            @if ($i < $nowDay)
+                                                                @php $isNowDay = 'background-color: #E5C2C5 !important;'; @endphp
+                                                            @else
+                                                                @php $isNowDay = 'background-color: #FFFFFF !important;'; @endphp
+                                                            @endif
+
                                                                 @php
                                                                     $tanggalFull = sprintf(
                                                                         '%04d-%02d-%02d',
@@ -140,7 +148,6 @@
                                                                     $isReadonly = isset($list['absensi'][$item->pegawai_id])
                                                                         && in_array($tanggalFull, $list['absensi'][$item->pegawai_id]);
                                                                 @endphp
-
                                                                 <input type="text"
                                                                     class="form-control inputTgl text-center clearTxt {{ $isReadonly ? 'absen-locked' : '' }}"
                                                                     maxlength="2"
@@ -152,7 +159,8 @@
                                                                         padding: 0;
                                                                         border-radius: 0;
                                                                         border-color: {{ $isReadonly ? '#0d6efd' : '#ced4da' }};
-                                                                        {{ $isReadonly ? 'background-color:#f8f9fa; pointer-events:none;' : '' }};
+                                                                        border-width: {{ $isReadonly ? '3px' : '1px' }};
+                                                                        {{ $isReadonly ? 'background-color:#A3ADBD !important; pointer-events:none;' : $isNowDay }};
                                                                         height: 2rem;
                                                                     "
                                                                     {{ $isReadonly ? 'readonly' : '' }}
@@ -160,7 +168,6 @@
                                                                     data-bs-placement="bottom"
                                                                     data-bs-original-title="{{ $isReadonly ? 'User telah melakukan Absensi' : '' }}"
                                                                     required>
-                                                                {{-- <input type="text" class="form-control inputTgl text-center clearTxt" maxlength="2" name="tgl{{ $i }}[]" id="{{ $n-1 }}tgl{{ $i }}" value="{{ $item->$hit?$item->$hit:'' }}" placeholder="......." style="padding: 0;border-radius: 0" required> --}}
                                                             </td>
                                                     @endfor
                                                 </tr>
@@ -170,7 +177,7 @@
                                 </div>
                                 <div class="row p-10 mt-3">
                                     <div class="col-md-6">
-                                        <div class="alert alert-light">
+                                        <div class="alert alert-light shadow-sm" role="alert">
                                             <h5>Hal-hal yang perlu <b class="text-danger">diperhatikan</b></h5>
                                             <small>
                                                 <i class="ti ti-arrow-narrow-right me-1"></i> Apabila terdapat data gagal saat memproses Jadwal, silakan Refresh Browser <br>
@@ -182,6 +189,7 @@
                                                 <i class="ti ti-arrow-narrow-right me-1"></i> Apabila terdapat anggota unit yang sudah ditambahkan pada referensi namun belum masuk ke tabel di atas, silakan melengkapi Jabatan dan Urutan pada masing-masing karyawan tersebut <br>
                                                 <i class="ti ti-arrow-narrow-right me-1"></i> Pengubahan shift pada jadwal dinas diluar per tanggal 1 sampai dengan sebelum hari ini (Kemarin) akan terkunci oleh Sistem (Tidak dapat diubah lagi) <br>
                                                 <i class="ti ti-arrow-narrow-right me-1"></i> <u>Garis Border</u> berwarna <b style="color:blue">BIRU</b> pada kolom isian menandakan bahwa user telah melakukan absensi pada tanggal tersebut, sehingga kolom isian menjadi terkunci dan tidak dapat diubah lagi <br>
+                                                <i class="ti ti-arrow-narrow-right me-1"></i> Input Shift berwarna <b style="color:#E5C2C5"><u>MERAH MUDA</u></b> pada kolom isian Shift menandakan bahwa user tidak melakukan absensi pada tanggal tersebut dapat dikarenakan Mangkir / Libur / Cuti <br>
                                                 <i class="ti ti-arrow-narrow-right me-1"></i> Apabila User terkendala dalam pengisian Jadwal Dinas yang sudah terkunci oleh Sistem, silakan menghubungi Bagian SDI untuk dilakukan perubahan pada Sistem
                                             </small>
                                         </div>

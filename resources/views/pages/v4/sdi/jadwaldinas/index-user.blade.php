@@ -28,13 +28,13 @@
                     <div class="card-header d-flex align-items-center justify-content-between py-3">
                         <h6 class="mb-0">Tabel <b class="text-danger">Riwayat</b></h6>
                         <div class="btn-group">
-                            <button class="btn btn-outline-info dropdown-toggle position-relative" id="tombolMenu" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-sync fa-spin me-2"></i></button>
-                            <ul class="dropdown-menu" aria-labelledby="tombolMenu">
+                            <button class="btn btn-outline-warning" onclick="showRiwayat()" id="btn-refresh-riwayat"><i class="fas fa-sync me-1"></i> Refresh</button>
+                            <button class="btn btn-outline-info dropdown-toggle" id="tombolMenu" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-sync fa-spin me-2"></i></button>
+                            <ul class="dropdown-menu dropdown-menu-start" aria-labelledby="tombolMenu">
                                 <li>
                                     <a class="dropdown-item" href="javascript:void(0);" onclick="dokumentasi()">Lihat Dokumentasi</a>
                                     <div class="divider pb-1"></div>
                                     <a class="dropdown-item" href="javascript:void(0);" onclick="tambah()">Tambah Jadwal Dinas</a>
-                                    <a class="dropdown-item" href="javascript:void(0);" onclick="showRiwayat()">Segarkan Tabel</a>
                                     <div class="divider pb-1"></div>
                                     <a class="dropdown-item" href="{{ route('v4.sdi.jadwaldinas.ref.staf') }}">Referensi Staf <b class="text-danger">[UTAMA]</b></a>
                                     <a class="dropdown-item" href="{{ route('v4.sdi.jadwaldinas.ref.shift') }}">Referensi Jaga Shift</a>
@@ -359,11 +359,16 @@
         }
 
         function showRiwayat() {
+            const btn = $("#btn-refresh-riwayat");
             $("#tampil-tbody").empty().append(`<tr style='font-size:13px'><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
             $.ajax({
                 url: "/api/v4/sdi/jadwaldinas/table",
                 type: 'GET',
                 dataType: 'json',
+                beforeSend: function() {
+                    btn.prop('disabled', true);
+                    btn.find("i").addClass("fa-spin");
+                },
                 success: function(res) {
                     $("#tampil-tbody").empty();
                     $('#dttable').DataTable().clear().destroy();
@@ -478,7 +483,6 @@
                         })
                     });
                     var table = $('#dttable').DataTable({
-                        // dom: 'Bfrtip',
                         order: [
                             [5, "desc"]
                         ],
@@ -495,10 +499,18 @@
                             // { visible: false, targets: [7] },
                         ],
                         displayLength: 15,
-                        lengthChange: true,
-                        lengthMenu: [15, 25, 50, 75, 100, 300, 500, 1000],
-                        // buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
+                },
+                error: function(xhr, status, error) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: xhr.responseJSON.message ?? 'Terjadi kegagalan saat memproses data',
+                        position: 'topRight'
+                    });
+                },
+                complete: function() {
+                    btn.find("i").removeClass("fa-spin");
+                    btn.prop('disabled', false);
                 }
             })
         }
@@ -569,7 +581,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="table-responsive p-10 pb-0">
-                                    <table id="dttable-lihat-jadwal" class="table table-bordered" style="width: 100%;table-layout: auto">
+                                    <table id="dttable-lihat-jadwal" class="table table-bordered dttable-jadwaldinas" style="width: 100%;table-layout: auto">
                                         <thead>
                                             <tr>
                                                 <th class="text-center" rowspan="2">NO</th>
@@ -664,7 +676,7 @@
                             let kodeShift = pegawai[`tgl${i}`]||'';
                             let lnItem = res.ln.find(ln => ln.tgl==i);
                             let style = lnItem ? ` style="background-color: ${lnItem.color} !important;"` : '';
-                            content += `<td class="p-2 tgl${i}"${style}>${kodeShift}</td>`;
+                            content += `<td class="p-2 tgl${i}" ${style}>${kodeShift}</td>`;
                         }
 
                         // total jam kerja
@@ -739,14 +751,16 @@
                     $('#btn-refresh-lihat').attr('onClick', `lihat(${id});`);
                     $('#btn-cetak').attr('onClick', `printJadwal(${id});`);
                     $('#modalLihat').modal('show');
-                    $('#btnoptshow'+id).empty().text(id);
                 },
-                error: function(res) {
+                error: function(xhr, status, error) {
                     iziToast.error({
                         title: 'Pesan Galat!',
-                        message: 'Jadwal Dinas gagal dimuat, silakan coba beberapa saat lagi',
+                        message: xhr.responseJSON.message ?? 'Jadwal Dinas gagal dimuat, silakan coba beberapa saat lagi',
                         position: 'topRight'
                     });
+                },
+                complete: function() {
+                    $('#btnoptshow' + id).empty().text(id);
                 }
             })
         }

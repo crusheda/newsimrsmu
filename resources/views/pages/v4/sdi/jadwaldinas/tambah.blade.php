@@ -39,6 +39,7 @@
                             @php
                                 $bulan = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
                                 $totalDay = \Carbon\Carbon::create($list['jadwal']->tahun, $list['jadwal']->bulan)->format('t');
+                                $nowDay = \Carbon\Carbon::now()->day;
                                 $n = 1;
                             @endphp
                             <h4 class="text-center p-10 mb-3">Bulan
@@ -49,8 +50,7 @@
                                 @endforeach Tahun <b class="text-primary">{{ $list['jadwal']->tahun }}</b>
                             </h4>
                             <div class="table-responsive p-10 pb-0">
-                                <table class="table table-bordered text-nowrap"
-                                style="width: 100%;table-layout: auto;">
+                                <table class="table table-bordered text-nowrap dttable-jadwaldinas" style="width: 100%;table-layout: auto;">
                                     <thead>
                                         <tr>
                                             <th class="text-center" rowspan="2">NO</th>
@@ -86,16 +86,16 @@
                                         @if ($list['ref_users'])
                                             @if ($list['ref_jabatan'])
                                                 @foreach ($list['ref_jabatan'] as $item)
-                                                    <tr style="background-color: @if($item->color) {{ $item->color }} @endif">
-                                                        <td>{{ $n++ }}</td>
-                                                        <td style='white-space: normal !important;word-wrap: break-word;'>
+                                                    <tr style="{{ $item->color ? 'background-color: '.$item->color.' !important;' : '' }}">
+                                                        <td style="{{ $item->color ? 'background-color: '.$item->color.' !important;' : '' }}">{{ $n++ }}</td>
+                                                        <td style="{{ $item->color ? 'background-color: '.$item->color.' !important;' : '' }}white-space: normal !important;word-wrap: break-word;">
                                                             @foreach ($list['users'] as $val)
                                                                 @if ($item->id_staf == $val->id)
                                                                     <input type="text" class="form-control" name="id_staf[]" value="{{ $val->id }}" hidden>
                                                                     <input type="text" class="form-control" name="nama_staf[]" value="{{ $val->nick != null?$val->nick:$val->name }}" hidden>
                                                                     <input type="text" class="form-control" name="jabatan_staf[]" value="{{ $item->jabatan?$item->jabatan:'' }}" hidden>
                                                                     <input type="text" class="form-control" name="color_staf[]" value="{{ $item->color?$item->color:'' }}" hidden>
-                                                                    <div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>{{ $val->nick != null?$val->nick:$val->name }}</h6><small class='text-truncate text-muted'>{{ $item->jabatan?$item->jabatan:'' }}</small></div></div>
+                                                                    <div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>{{ $val->nick != null?$val->nick:$val->name }}</h6><small class='text-truncate'>{{ $item->jabatan?$item->jabatan:'' }}</small></div></div>
                                                                 @endif
                                                             @endforeach
                                                         </td>
@@ -118,9 +118,22 @@
                                                             @elseif ($dayb == 'Minggu')
                                                                 <td class="p-2 text-center" style="background-color: #fed8b9">
                                                             @else
-                                                                <td class="p-2 text-center">
+                                                                <td class="p-2 text-center" style="{{ $item->color ? 'background-color: '.$item->color.' !important;' : '' }}">
                                                             @endif
-                                                                    <input type="text" class="form-control inputTgl text-center clearTxt" maxlength="2" name="tgl{{ $i }}[]" id="{{ $n-1 }}tgl{{ $i }}" value="" placeholder="" style="padding: 0;border-radius: 0;height: 2rem;" required>
+
+                                                            {{-- @if ($i < $nowDay)
+                                                                @php $isNowDay = 'background-color: #E5C2C5 !important;'; @endphp
+                                                            @else
+                                                                @php $isNowDay = 'background-color: #FFFFFF !important;'; @endphp
+                                                            @endif --}}
+                                                                    <input type="text"
+                                                                        class="form-control inputTgl text-center clearTxt"
+                                                                        maxlength="2"
+                                                                        name="tgl{{ $i }}[]" id="{{ $n-1 }}tgl{{ $i }}"
+                                                                        value=""
+                                                                        placeholder=""
+                                                                        style="padding: 0;border-radius: 0;height: 2rem;background-color: #FFFFFF !important;"
+                                                                        required>
                                                                 </td>
                                                         @endfor
                                                     </tr>
@@ -136,7 +149,7 @@
                             </div>
                             <div class="row p-10 mt-3">
                                 <div class="col-md-6">
-                                    <div class="alert alert-light">
+                                    <div class="alert alert-light shadow-sm" role="alert">
                                         <h5>Hal-hal yang perlu <b class="text-danger">diperhatikan</b></h5>
                                         <small>
                                             <i class="ti ti-arrow-narrow-right me-1"></i> Apabila terdapat data gagal saat memproses Jadwal, silakan Refresh Browser <br>
@@ -148,6 +161,7 @@
                                             <i class="ti ti-arrow-narrow-right me-1"></i> Apabila terdapat anggota unit yang sudah ditambahkan pada referensi namun belum masuk ke tabel di atas, silakan melengkapi Jabatan dan Urutan pada masing-masing karyawan tersebut pada halaman Referensi Staf <a href="{{ route('v4.sdi.jadwaldinas.ref.staf') }}"><u><b>(Klik Disini)</b></u></a> <br>
                                             {{-- <i class="ti ti-arrow-narrow-right me-1"></i> Pengubahan shift pada jadwal dinas diluar per tanggal 1 sampai dengan sebelum hari ini (Kemarin) akan terkunci oleh Sistem (Tidak dapat diubah lagi) <br> --}}
                                             <i class="ti ti-arrow-narrow-right me-1"></i> <u>Garis Border</u> berwarna <b style="color:blue">BIRU</b> pada kolom isian menandakan bahwa user telah melakukan absensi pada tanggal tersebut, sehingga kolom isian menjadi terkunci dan tidak dapat diubah lagi <br>
+                                            <i class="ti ti-arrow-narrow-right me-1"></i> Input Shift berwarna <b style="color:#E5C2C5"><u>MERAH MUDA</u></b> pada kolom isian Shift menandakan bahwa user tidak melakukan absensi pada tanggal tersebut dapat dikarenakan Mangkir / Libur / Cuti <br>
                                             <i class="ti ti-arrow-narrow-right me-1"></i> Apabila User terkendala dalam pengisian Jadwal Dinas yang sudah terkunci oleh Sistem, silakan menghubungi Bagian SDI untuk dilakukan perubahan pada Sistem
                                         </small>
                                     </div>
