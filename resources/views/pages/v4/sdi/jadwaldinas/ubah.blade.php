@@ -134,6 +134,7 @@
                                                             @if ($i < $nowDay)
                                                                 @php $isNowDay = 'background-color: #E5C2C5 !important;'; @endphp
                                                             @else
+                                                                {{-- @php $isNowDay = ''; @endphp --}}
                                                                 @php $isNowDay = 'background-color: #FFFFFF !important;'; @endphp
                                                             @endif
 
@@ -160,7 +161,7 @@
                                                                         border-radius: 0;
                                                                         border-color: {{ $isReadonly ? '#0d6efd' : '#ced4da' }};
                                                                         border-width: {{ $isReadonly ? '3px' : '1px' }};
-                                                                        {{ $isReadonly ? 'background-color:#A3ADBD !important; pointer-events:none;' : $isNowDay }};
+                                                                        {{ $isReadonly ? 'background-color:#A3ADBD !important; pointer-events:none;' : $isNowDay }}
                                                                         height: 2rem;
                                                                     "
                                                                     {{ $isReadonly ? 'readonly' : '' }}
