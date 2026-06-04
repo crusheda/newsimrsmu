@@ -172,29 +172,40 @@
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="orderdetailsModalLabel">Tambah ke <b class="text-primary">keranjang</b></h5>
+                    <h5 class="modal-title" id="orderdetailsModalLabel"><b class="text-info">Tambah</b> ke <b class="text-success">keranjang</b></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <input type="hidden" id="id_barang_input">
-
-                    <div class="mb-3">
-                        <label>Jumlah</label>
-                        <input type="number" id="jml_input" class="form-control" value="1" min="1">
-                    </div>
-
-                    <div class="mb-3">
-                        <label>Keterangan</label>
-                        <textarea id="ket_input" class="form-control" placeholder="Opsional..."></textarea>
+                    <div class="row g-0">
+                        <div class="col-md-5">
+                            <img src="" alt="img" id="img_barang_input" class="img-fluid rounded w-100">
+                        </div>
+                        <div class="col-md-7 ps-4">
+                            <div class="mb-3">
+                                <a href="javascript:void(0);">
+                                    <h6 class="fw-medium mb-1" id="nama_barang_input"></h6>
+                                </a>
+                                <span class="text-muted fs-14" id="harga_barang_input"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Jumlah Permintaan</label>
+                                <input type="number" id="jml_input" class="form-control" value="1" min="1">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Keterangan</label>
+                                <textarea id="ket_input" rows="3" class="form-control" placeholder="Opsional..."></textarea>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-between">
                     <button class="btn btn-primary-transparent" onclick="bukaKeranjang()"><i
                             class="ri-shopping-cart-2-line me-1 align-middle"></i> Lihat Keranjang</button>
                     <div>
-                        <button class="btn btn-info" onclick="submitTambahKeranjang()" id="btn-tambah-keranjang"><i
+                        <button class="btn btn-info me-1" onclick="submitTambahKeranjang()" id="btn-tambah-keranjang"><i
                             class="ri-add-box-line me-1"></i> Masukkan ke Keranjang</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
+                        <button type="button" class="btn btn-secondary-transparent" data-bs-dismiss="modal"><i
                                 class="ri-close-line me-1"></i> Tutup</button>
                     </div>
                 </div>
@@ -724,7 +735,7 @@
                         // },
                         formatter: (_, row) => gridjs.html(`
                             <div class="d-flex justify-content-center">
-                                <button class="btn btn-sm btn-success btn-add" data-id="${row.cells[0].data}"
+                                <button class="btn btn-sm btn-success btn-add" id="btn-add-${row.cells[0].data}" data-id="${row.cells[0].data}"
                                     onclick="tambahKeranjang(${row.cells[0].data})">
                                     <i class="ri-add-box-line me-1"></i> Tambah
                                 </button>
@@ -1026,8 +1037,41 @@
             $('#id_barang_input').val(id_barang);
             $('#jml_input').val(1);
             $('#ket_input').val('');
+            const btn = $('#btn-add-' + id_barang);
 
-            $('#addKeranjang').modal('show');
+            $.ajax({
+                url: '/api/v4/administrasi/pengadaan/tambahkeranjang/' + id_barang,
+                type: 'get',
+                beforeSend: function() {
+                    btn.prop('disabled', true);
+                    btn.html(`<i class="ri-spinner-line ri-spin me-1"></i> Memuat...`);
+                },
+                success: function(res) {
+                    let img = res.filename
+                        ? '/' + res.filename.replace('public/', 'storage/')
+                        : '/images/no-image.png';
+
+                    let isDummy = img === '/images/no-image.png';
+
+                    $('#img_barang_input').attr('src', img);
+
+                    $('#nama_barang_input').empty().html(res.nama+' <b class="text-warning">(</b><b class="text-primary">'+res.jenis+'</b><b class="text-warning">)</b>');
+                    $('#harga_barang_input').empty().html((formatRupiah(res.harga))+(res.satuan? ' <b class="text-warning">/</b> <b class="text-danger">'+res.satuan.toUpperCase()+'</b>' : ''));
+
+                    $('#addKeranjang').modal('show');
+                },
+                error: function(xhr) {
+                    iziToast.error({
+                        title: 'Pesan Error!',
+                        message: xhr.responseJSON.message,
+                        position: 'topRight'
+                    });
+                },
+                complete: function() {
+                    btn.prop('disabled', false);
+                    btn.html(`<i class="ri-add-box-line me-1"></i> Tambah`);
+                }
+            });
         }
 
         function submitTambahKeranjang() {

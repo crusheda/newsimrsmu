@@ -189,6 +189,7 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
             // Route::delete('administrasi/pengadaan/riwayat/{id}/hapus', [PengadaanController::class, 'hapusRiwayatPengadaan']);
             // Route::get('administrasi/pengadaan/keranjang/{id}/tampil', [PengadaanController::class, 'tampilTambahKeranjang']);
             Route::get('administrasi/pengadaan/keranjang', [PengadaanController::class, 'tampilKeranjang']);
+            Route::get('administrasi/pengadaan/tambahkeranjang/{id}', [PengadaanController::class, 'tampilTambahKeranjang']);
             Route::get('administrasi/pengadaan/keranjang/update/{id}', [PengadaanController::class, 'updateKeranjang']);
             Route::post('administrasi/pengadaan/keranjang/tambah', [PengadaanController::class, 'tambahKeranjang']);
             Route::post('administrasi/pengadaan/checkout', [PengadaanController::class, 'checkoutKeranjang']);

@@ -368,7 +368,11 @@ class PengadaanController extends Controller
 
     function tampilTambahKeranjang($id)
     {
-        $barang = pengadaan_barang::where('id',$id)->first();
+        $barang = pengadaan_barang::leftJoin('pengadaan_ref', 'pengadaan_ref.id', '=', 'pengadaan_barang.ref_barang')
+                                    ->select('pengadaan_barang.*', 'pengadaan_ref.nama as jenis')
+                                    ->where('pengadaan_barang.id', $id)
+                                    ->whereNull('pengadaan_barang.deleted_at')
+                                    ->first();
 
         return response()->json($barang, 200);
     }

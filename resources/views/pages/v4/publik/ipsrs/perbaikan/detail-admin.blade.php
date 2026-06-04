@@ -137,7 +137,7 @@
                                     data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Klik untuk lihat lampiran">
                                     <img class="img-fluid" alt="" src="{{ url('storage/' . substr($list['show']->filename_pengaduan, 7, 1000)) }}">
                                 </a>
-                                <button class="btn btn-success-transparent" onclick="window.location.href='{{ url('/v4/publik/perbaikan/ipsrs/' . $list['show']->id) }}'">
+                                <button class="btn btn-success-transparent mt-4" onclick="window.location.href='{{ url('/v4/publik/perbaikan/ipsrs/' . $list['show']->id) }}'">
                                     <i class="fas fa-download me-1"></i> Unduh
                                 </button>
                             </center>

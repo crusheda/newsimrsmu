@@ -259,7 +259,7 @@
                     <h6 id="titleImgPush" class="text-center"></h6>
                 </div>
                 <div class="col-12 text-center mb-4">
-                    <button type="reset" class="btn btn-link-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Tutup</button>
+                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Tutup</button>
                 </div>
             </div>
         </div>
