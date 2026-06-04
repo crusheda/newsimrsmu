@@ -25,7 +25,7 @@
         <!-- [ Main Content ] start -->
         <div class="row pt-1">
             <div class="col-md-4">
-                <div class="card mb-4">
+                <div class="card custom-card">
                     <div class="card-header d-flex align-items-center justify-content-between border border-0 py-3">
                         <div class=" flex-grow-1">
                             <div class="btn-group">
@@ -65,58 +65,98 @@
                                     @endif
                                 </span>
                             </div>
-                            <div class="flex-grow-1">
-                                <div class="text-muted">
-                                    <h6>Pengaduan ID<b class="text-primary">#{{ $list['show']->id }}</b></h6>
-                                    <p class="mb-1">{{ $list['show']->nama }}</p>
-                                    <p class="mb-0">{{ str_replace(str_split('[]"'), ' ', $list['show']->unit) }}</p>
+                            <div class="flex-grow-1 d-flex align-items-center justify-content-between">
+                                <div class="text-start">
+                                    <h6 class="mb-1 fs-17">Pengaduan ID <b class="text-primary">#{{ $list['show']->id }}</b></h6>
+                                    <h6 class="mb-0 fs-12" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom"
+                                        data-bs-html="true" title="{{ $list['show']->tgl_pengaduan }}">{{ \Carbon\Carbon::parse($list['show']->tgl_pengaduan)->diffForHumans() }}</h6>
+                                </div>
+                                <div class="text-end text-muted">
+                                    {{-- <h6 class="mb-1 fs-17">Dia<b class="text-warning">{{ $list['show']->tgl_pengaduan }}</b></h6>
+                                    <h6 class="mb-0 fs-12" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom"
+                                        data-bs-html="true" title="{{ $list['show']->tgl_pengaduan }}">{{ \Carbon\Carbon::parse($list['show']->tgl_pengaduan)->diffForHumans() }}</h6> --}}
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="card-body border-top text-dark">
-                        <div class="">
-                            <h6 class="fw-semibold mb-2 text-warning"><i class="ti ti-arrow-narrow-right"></i> Lokasi</h6>
-                            <p>{{ $list['show']->lokasi }}</p>
-                        </div>
-                        <div class="">
-                            <h6 class="fw-semibold mb-2 text-primary"><i class="ti ti-arrow-narrow-right"></i> Deskripsi Laporan</h6>
-                            <p>{{ $list['show']->ket_pengaduan }}</p>
+                    <div class="card-body border-top">
+                        <div class="text-muted">
+                            <div class="mb-2 d-flex align-items-center gap-1 flex-wrap">
+                                <span class="avatar avatar-sm avatar-rounded text-default">
+                                    <i class="ri-shield-user-line align-middle fs-15"></i>
+                                </span>
+                                <span class="fw-medium text-default">
+                                    Nama Pelapor :
+                                </span>
+                                <a>{{ $list['show']->nama_user }}</a>
+                            </div>
+                            <div class="mb-2 d-flex align-items-center gap-1 flex-wrap">
+                                <span class="avatar avatar-sm avatar-rounded text-default">
+                                    <i class="ri-group-2-line align-middle fs-15"></i>
+                                </span>
+                                <span class="fw-medium text-default">
+                                    Jabatan :
+                                </span>
+                                <a>
+                                    {{ $list['user']->roles->pluck('deskripsi')->implode(', ') }}
+                                </a>
+                            </div>
+                            <div class="mb-0 d-flex align-items-center gap-1">
+                                <span class="avatar avatar-sm avatar-rounded text-default">
+                                    <i class="ri-phone-line align-middle fs-15"></i>
+                                </span>
+                                <span class="fw-medium text-default">
+                                    No.HP :
+                                </span>
+                                @php
+                                    $wa = preg_replace('/[^0-9]/', '', $list['show']->hp);
+
+                                    if (substr($wa, 0, 1) === '0') {
+                                        $wa = '62' . substr($wa, 1);
+                                    }
+                                @endphp
+
+                                <a href="https://wa.me/{{ $wa }}" target="_blank" class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline">
+                                    {{ $list['show']->hp }}
+                                </a>
+                            </div>
                         </div>
                     </div>
-                    <div class="card-body border-top">
-                        <center>
-                            @if (empty($list['show']->filename_pengaduan))
-                                <img class="card-img-top img-thumbnail border mb-3" src="{{ url('images/no-image.png') }}"
-                                    style="height: 210px;width: auto" alt="Foto Pengaduan">
-                                    <br>
-                                <button class="btn btn-primary" disabled><i
-                                    class="fas fa-download me-1"></i> Unduh</button>
-                            @else
-                                <a class="image-popup-no-margins" href="{{ url('storage/' . substr($list['show']->filename_pengaduan, 7, 1000)) }}" data-bs-toggle="tooltip" data-bs-offset="0,4"
-                                    data-bs-placement="bottom" data-bs-html="true" title="Klik untuk lihat lampiran">
+                    <div class="card-body border-top text-dark">
+                        <h6 class="fw-semibold mb-2 text-warning"><i class="ti ti-arrow-narrow-right"></i> Lokasi</h6>
+                        <p class="mb-0">{{ $list['show']->lokasi }}</p>
+                    </div>
+                    <div class="card-body border-top text-dark">
+                        <h6 class="fw-semibold mb-2 text-primary"><i class="ti ti-arrow-narrow-right"></i> Deskripsi Laporan</h6>
+                        <p class="mb-0">{{ $list['show']->ket_pengaduan }}</p>
+                    </div>
+                    @if (!empty($list['show']->filename_pengaduan))
+                        <div class="card-body border-top">
+                            <center>
+                                <a class="image-popup-no-margins" href="{{ url('storage/' . substr($list['show']->filename_pengaduan, 7, 1000)) }}"
+                                    data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Klik untuk lihat lampiran">
                                     <img class="img-fluid" alt="" src="{{ url('storage/' . substr($list['show']->filename_pengaduan, 7, 1000)) }}">
                                 </a>
-                                <button class="btn btn-success-transparent"
-                                    onclick="window.location.href='{{ url('/v4/publik/perbaikan/ipsrs/' . $list['show']->id) }}'"><i
-                                        class="fas fa-download me-1"></i> Unduh</button>
-                            @endif
-                        </center>
-                    </div>
+                                <button class="btn btn-success-transparent" onclick="window.location.href='{{ url('/v4/publik/perbaikan/ipsrs/' . $list['show']->id) }}'">
+                                    <i class="fas fa-download me-1"></i> Unduh
+                                </button>
+                            </center>
+                        </div>
+                    @endif
                 </div>
             </div>
             <div class="col-md-8">
-                <div class="card card-action mb-4">
-                    <div class="card-header align-middle bg-transparent border-bottom">
+                <div class="card custom-card">
+                    {{-- <div class="card-header align-middle bg-transparent border-bottom">
                         <div class="d-flex flex-wrap align-items-start">
                             <div class="me-2">
                                 <h6 class="card-title mt-1 mb-0">Proses Pengaduan</h6>
                             </div>
                             <div class="hstack gap-3 ms-auto">
-                                <h6 class="card-title mt-1 mb-0">Tgl Pengaduan : <span class="badge text-bg-info">{{ \Carbon\Carbon::parse($list['show']->tgl_pengaduan)->diffForHumans() }}</span></h6>
+
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="row card-body">
                         <div class="col-md-12 order-md-0 order-0">
                             <!-- VERIFYING -->
@@ -126,11 +166,11 @@
                                 $list['show']->ket_penolakan == null)
                                 <div class="alert alert-light shadow-sm mb-3" role="alert">
                                     <h6 class="mb-0">Verifying</h6>
-                                    <small>Proses Verifikasi Laporan menjadi Status <kbd style="background-color: salmon">DITERIMA</kbd></small>
+                                    <small>Proses Verifikasi Laporan menjadi Status <span class="badge bg-info">DITERIMA</span></small>
                                 </div>
                                 <div class="row g-3">
                                     <div class="form-group">
-                                        <label for="defaultFormControlInput" class="form-label">Tuliskan Keterangan Tolak / Terima Laporan <a class="text-danger">*</a></label>
+                                        <label for="defaultFormControlInput" class="form-label">Tuliskan Keterangan <b class="text-danger">Tolak</b> / <b class="text-primary">Terima</b> Laporan <a class="text-danger">*</a></label>
                                         <div class="form-group">
                                             <textarea rows="2" class="autosize1 form-control" name="ket" id="ket"
                                                 placeholder="Tuliskan Keterangan" required></textarea>
@@ -157,8 +197,7 @@
                                 $list['show']->ket_penolakan == null)
                                 <div class="alert alert-light shadow-sm mb-3">
                                     <h6 class="mb-0">Processing</h6>
-                                    <small>Proses Pengerjaan Laporan menjadi status <kbd
-                                            style="background-color: orange">DIKERJAKAN</kbd></small>
+                                    <small>Proses Pengerjaan Laporan menjadi status <span class="badge bg-warning">DIKERJAKAN</span></small>
                                 </div>
                                 <div class="row g-3">
                                     <div class="col-md-12">
@@ -169,18 +208,18 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-12">
-                                        <div class="form-group mb-3">
-                                            <label for="defaultFormControlInput" class="form-label">Estimasi Penyelesaian</label>
+                                    <div class="col-md-12 mb-1">
+                                        <div class="form-group">
+                                            <label for="defaultFormControlInput" class="form-label">Estimasi Penyelesaian (<b class="text-warning">Optional</b>)</label>
                                             <div class="form-group mb-2">
-                                                <input type="text" class="form-control" placeholder="Tambahkan Estimasi Waktu (Optional)" id="estimasi" />
+                                                <input type="text" class="form-control" placeholder="Tambahkan Estimasi Waktu" id="estimasi" />
                                             </div>
-                                            <sub><strong>Nb. </strong>Untuk menambahkan Catatan Pengerjaan pada Sub Halaman Selanjutnya, Silakan klik Kerjakan di bawah ini.</sub>
+                                            <sub><strong>Nb. </strong>Untuk menambahkan <b class="text-orange">Catatan Pengerjaan</b> pada Sub Halaman Selanjutnya, Silakan klik <b class="text-warning">Kerjakan</b> di bawah ini.</sub>
                                         </div>
                                     </div>
                                     <div class="col-12 d-flex justify-content-between">
-                                        <button class="btn btn-light-warning" onclick="kerjakan({{ $list['show']->id }})">
-                                            <span class="align-middle d-sm-inline-block d-none me-sm-1">Kerjakan </span>
+                                        <button class="btn btn-warning" onclick="kerjakan({{ $list['show']->id }})">
+                                            <span class="align-middle d-sm-inline-block d-none me-sm-1">Mulai Kerjakan </span>
                                             <i class="fas fa-wrench"></i>
                                         </button>
                                     </div>
@@ -193,8 +232,7 @@
                                 $list['show']->ket_penolakan == null)
                                 <div class="alert alert-light shadow-sm mb-3">
                                     <h6 class="mb-0">Finishing</h6>
-                                    <small>Proses Penyelesaian Laporan Pengaduan IPSRS menjadi status <kbd
-                                            style="background-color: turquoise">SELESAI</kbd></small>
+                                    <small>Proses Penyelesaian Laporan Pengaduan IPSRS menjadi status <span class="badge bg-success">SELESAI</span></small>
                                 </div>
                                 <div class="row g-3">
                                     <div class="form-group">
@@ -205,11 +243,11 @@
                                         </div>
                                     </div>
                                     <div class="col-12 d-flex justify-content-between">
-                                        <button class="btn btn-light-warning" data-bs-toggle="modal" data-bs-target="#catatan">
+                                        <button class="btn btn-warning-transparent btn-wave" data-bs-toggle="modal" data-bs-target="#catatan">
                                             <i class="ti ti-note me-1"></i>
                                             <span class="align-middle d-sm-inline-block d-none">Catatan Pengerjaan</span>
                                         </button>
-                                        <button class="btn text-white" style="background-color: turquoise"
+                                        <button class="btn btn-success btn-wave"
                                             onclick="selesai({{ $list['show']->id }})"><i class="ti ti-checks me-1"></i> Laporan Selesai</button>
                                     </div>
                                 </div>
@@ -220,18 +258,10 @@
                                     <h6 class="mb-0">Result</h6>
                                     <small>Hasil Laporan Pengerjaan IPSRS</small>
                                 </div>
-                                <h6 class="text-center mb-3">Hasil Akhir Laporan</h6>
-                                <div class="row g-3" id="tampil-result"></div>
+                                <h5 class="text-center mb-3">Hasil Akhir Laporan</h5>
+                                <div class="row g-3" id="tampil-result"><center><i class="fas fa-sync fa-spin me-1"></i> Memuat hasil laporan...</center></div>
                             @endif
                         </div>
-                        {{-- <div class="col-md-4 order-md-1 order-1">
-                            <div class="text-center mt-4 mx-3 mx-md-0">
-                                <img src="{{ asset('images/sitting-girl-with-laptop-light.png') }}"
-                                    class="img-fluid" alt="Api Key Image" width="350"
-                                    data-app-light-img="images/sitting-girl-with-laptop-light.png"
-                                    data-app-dark-img="images/sitting-girl-with-laptop-dark.html">
-                            </div>
-                        </div> --}}
                     </div>
                 </div>
             </div>
@@ -260,7 +290,7 @@
                                     placeholder="e.g. Pengerjaan membutuhkan waktu dikarenakan terdapat beberapa komponen yang harus dibeli terlebih dahulu" required></textarea>
                             </div>
                             <div class="form-group mb-3">
-                                <label for="defaultFormControlInput" class="form-label"><i class="ti ti-arrow-narrow-right text-primary me-1"></i> Lampiran (Optional) : </label>
+                                <label for="defaultFormControlInput" class="form-label"><i class="ti ti-arrow-narrow-right text-primary me-1"></i> Lampiran (<b class="text-warning">Optional</b>) : </label>
                                 <input type="file" name="file" id="imgInp" class="form-control">
                             </div>
                             <div class="col-12 d-flex justify-content-between mb-3">
@@ -271,7 +301,7 @@
                             </div>
                         </form>
                         <hr>
-                        <h6><i class="ti ti-arrow-narrow-right text-primary"></i> Daftar Catatan</h6>
+                        <h6 class="fs-14">&nbsp;<i class="ti ti-arrow-narrow-right text-primary"></i> Daftar Catatan</h6>
                         <div class="table-responsive" style="border: 0px">
                             <table id="dikerjakan" class="table dt-responsive table-striped table-hover w-100 align-middle">
                                 <thead>
@@ -378,29 +408,29 @@
                     if (res.show[0].ket_penolakan == null) {
                         res.show.forEach(item => {
                             content = `<div class="col-md-8">
-                            <small class="text-muted text-uppercase"><i class="ti ti-corner-down-right me-1 text-primary"></i> Verifikasi</small>
-                            <ul class="list-unstyled mb-1 mt-3">
-                                <li class="d-flex align-items-center mb-2"><strong>` + item.ket_diterima + `</strong></li>
-                                <li class="d-flex align-items-center mb-4"><sub>` + item.tgl_diterima + `</sub></li>
+                            <small class="text-muted text-uppercase fs-16"><i class="ti ti-corner-down-right me-1 text-info"></i> Diterima</small>
+                            <ul class="list-unstyled mb-5 mt-1">
+                                <li class="d-flex align-items-center mb-2 fs-18"><strong>` + item.ket_diterima + `</strong></li>
+                                <li class="d-flex align-items-center fs-17"><sub>` + item.tgl_diterima + `</sub></li>
                             </ul>
-                            <small class="text-muted text-uppercase"><i class="ti ti-corner-down-right me-1 text-primary"></i> Pengerjaan</small>
-                            <ul class="list-unstyled mb-1 mt-3">
-                                <li class="d-flex align-items-center mb-2"><strong>` + item.ket_dikerjakan + `</strong></li>
-                                <li class="d-flex align-items-center mb-4"><sub>` + item.tgl_dikerjakan + `</sub></li>
+                            <small class="text-muted text-uppercase fs-16"><i class="ti ti-corner-down-right me-1 text-warning"></i> Dikerjakan</small>
+                            <ul class="list-unstyled mb-5 mt-1">
+                                <li class="d-flex align-items-center mb-2 fs-18"><strong>` + item.ket_dikerjakan + `</strong></li>
+                                <li class="d-flex align-items-center fs-17"><sub>` + item.tgl_dikerjakan + `</sub></li>
                             </ul>
-                            <small class="text-muted text-uppercase"><i class="ti ti-corner-down-right me-1 text-primary"></i> Selesai</small>
-                            <ul class="list-unstyled mb-1 mt-3">
-                                <li class="d-flex align-items-center mb-2"><strong>` + item.ket_selesai + `</strong></li>
-                                <li class="d-flex align-items-center mb-4"><sub>` + item.tgl_selesai + `</sub></li>
+                            <small class="text-muted text-uppercase fs-16"><i class="ti ti-corner-down-right me-1 text-success"></i> Selesai</small>
+                            <ul class="list-unstyled mb-5 mt-1">
+                                <li class="d-flex align-items-center mb-2 fs-18"><strong>` + item.ket_selesai + `</strong></li>
+                                <li class="d-flex align-items-center fs-17"><sub>` + item.tgl_selesai + `</sub></li>
                             </ul>
                         </div>`;
                         })
                         content +=
-                            `<div class="col-md-4"><small class="text-muted text-uppercase"><i class="ti ti-corner-down-right me-1 text-primary"></i> Catatan Pengerjaan</small>`;
+                            `<div class="col-md-4"><small class="text-muted text-uppercase fs-16"><i class="ti ti-corner-down-right me-1 text-orange"></i> Catatan Pengerjaan</small>`;
                         res.catatan.forEach(item => {
                             content += `<ul class="list-unstyled mb-1 mt-3">
-                                <li class="d-flex align-items-center mb-2"><strong>` + item.keterangan + `</strong></li>
-                                <li class="d-flex align-items-center mb-4"><sub>` + item.updated_at + `</sub></li>
+                                <li class="d-flex align-items-center mb-2 fs-18"><strong>` + item.keterangan + `</strong></li>
+                                <li class="d-flex align-items-center mb-4 fs-17"><sub>` + item.updated_at + `</sub></li>
                             </ul>`;
                         })
                         content += `</div>`;
@@ -573,38 +603,6 @@
                             position: 'topRight'
                         });
                         window.location.reload();
-
-                        // Tampil Result setelah Selesai Laporan
-                        // $("#tampil-result").empty();
-                        // res.show.forEach(item => {
-                        //     content = `<div class="col-md-8">
-                        //   <small class="text-muted text-uppercase"><i class="fas fa-chevron-right"></i> Verifikasi</small>
-                        //   <ul class="list-unstyled mb-3 mt-3">
-                        //     <li class="d-flex align-items-center"><strong>` + item.ket_diterima + `</strong></li>
-                        //     <li class="d-flex align-items-center"><small>` + item.tgl_diterima + `</small></li>
-                        //   </ul>
-                        //   <small class="text-muted text-uppercase"><i class="fas fa-chevron-right"></i> Pengerjaan</small>
-                        //   <ul class="list-unstyled mb-3 mt-3">
-                        //     <li class="d-flex align-items-center"><strong>` + item.ket_dikerjakan + `</strong></li>
-                        //     <li class="d-flex align-items-center"><small>` + item.tgl_dikerjakan + `</small></li>
-                        //   </ul>
-                        //   <small class="text-muted text-uppercase"><i class="fas fa-chevron-right"></i> Selesai</small>
-                        //   <ul class="list-unstyled mb-3 mt-3">
-                        //     <li class="d-flex align-items-center"><strong>` + item.ket_selesai + `</strong></li>
-                        //     <li class="d-flex align-items-center"><small>` + item.tgl_selesai + `</small></li>
-                        //   </ul>
-                        // </div>`;
-                        // })
-                        // content +=
-                        //     `<div class="col-md-4"><small class="text-muted text-uppercase"><i class="fas fa-chevron-right"></i> Catatan Pengerjaan</small>`;
-                        // res.catatan.forEach(item => {
-                        //     content += `<ul class="list-unstyled mb-3 mt-3">
-                        //     <li class="d-flex align-items-center"><strong>` + item.keterangan + `</strong></li>
-                        //     <li class="d-flex align-items-center"><small>` + item.updated_at + `</small></li>
-                        //   </ul>`;
-                        // })
-                        // content += `</div>`;
-                        // $('#tampil-result').append(content);
                     }
                 });
             }

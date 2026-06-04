@@ -116,7 +116,7 @@
                             <table id="dttable" class="table dt-responsive table-hover nowrap w-100 align-middle">
                                 <thead>
                                     <tr>
-                                        <th style="width: 50px" class="text-center">#ID</th>
+                                        <th style="width: 50px"><center>#ID</center></th>
                                         <th style="width: 90px">DISAHKAN</th>
                                         <th>JUDUL - UNIT TERKAIT</th>
                                         <th class="cell-fit">UNIT PEMBUAT</th>
@@ -132,7 +132,7 @@
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <th style="width: 50px" class="text-center">#ID</th>
+                                        <th style="width: 50px"><center>#ID</center></th>
                                         <th style="width: 90px">DISAHKAN</th>
                                         <th>JUDUL - UNIT TERKAIT</th>
                                         <th class="cell-fit">UNIT PEMBUAT</th>
@@ -321,7 +321,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary" id="btn-ubah" onclick="prosesUbah()"><i class="fa-fw fas fa-upload nav-icon"></i> Upload</button>
+                    <button class="btn btn-primary" id="btn-ubah" onclick="prosesUbah()"><i class="fa-fw fas fa-upload nav-icon"></i> Submit</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
                 </div>
             </div>
@@ -539,7 +539,7 @@
         <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h6 class="modal-title" id="exampleModalCenterTitle">Regulasi <kbd>ID : <a href="javascript:void(0);" class="text-light" id="show_id_regulasi"></a></kbd></h6>
+                    <h6 class="modal-title" id="exampleModalCenterTitle">Baca Regulasi <span class="badge text-bg-success" id="show_id_regulasi"><i class="fas fa-sync fa-spin"></i></span></h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="pushregulasi"></div>
@@ -554,7 +554,7 @@
         <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h6 class="modal-title" id="dokumentasiLabel">Cetak <b class="text-primary">Regulasi</b> <kbd><a href="txIDCetak"></a></kbd></h6>
+                    <h6 class="modal-title" id="dokumentasiLabel">Cetak <b class="text-primary">Regulasi</b> <span class="badge bg-primary ms-1" id="txIDCetak"><i class="fas fa-sync fa-spin"></i></span></h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-3">
@@ -673,13 +673,13 @@
                             content = "<tr id='data"+ item.id +"'>";
                             content += `<td><center><div class='btn-group'>
                                         <a href='javascript:void(0);' class='link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</a>
-                                        <ul class='dropdown-menu dropdown-menu-right'>`
-                                    + `<li><a href='javascript:void(0);' class='dropdown-item text-success' onclick="bacaRegulasi(`+item.id+`)"><i class='fas fa-book-open scaleX-n1-rtl'></i> Baca</a></li>`
-                                    + `<li><a href='javascript:void(0);' class='dropdown-item text-info' onclick="cetak(`+item.id+`)"><i class='fas fa-print scaleX-n1-rtl'></i> Cetak</a></li>`
-                                    + `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/v4/administrasi/berkas/regulasi/`+item.id+`/download')"><i class='fas fa-download scaleX-n1-rtl'></i> Download</a></li>`;
+                                        <ul class='dropdown-menu dropdown-menu-end'>`
+                                    + `<li><a href='javascript:void(0);' class='dropdown-item text-success' onclick="bacaRegulasi(`+item.id+`)"><i class='fas fa-book-open scaleX-n1-rtl me-1'></i> Baca</a></li>`
+                                    + `<li><a href='javascript:void(0);' class='dropdown-item text-info' onclick="cetak(`+item.id+`)"><i class='fas fa-print scaleX-n1-rtl me-1'></i> Cetak PDF</a></li>`
+                                    + `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/v4/administrasi/berkas/regulasi/`+item.id+`/download')"><i class='fas fa-download scaleX-n1-rtl me-1'></i> Download</a></li>`;
                                     if (adminID == true) {
-                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-edit scaleX-n1-rtl'></i> Ubah</a></li>`
-                                                + `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-trash scaleX-n1-rtl'></i> Hapus</a></li>`;
+                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-edit scaleX-n1-rtl me-1'></i> Ubah</a></li>`
+                                                + `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-trash scaleX-n1-rtl me-1'></i> Hapus</a></li>`;
                                     }
                             content += `</div></center></td>`;
                             content += `<td>${item.sah?item.sah:'-'}</td><td style='white-space: normal !important;word-wrap: break-word;'>`
@@ -718,9 +718,6 @@
                                 // { visible: false, targets: [7] },
                             ],
                             displayLength: 20,
-                            lengthChange: true,
-                            lengthMenu: [ 20, 35, 50, 75, 100, 500, 1000, 5000, 10000],
-                            // buttons: ['copy', 'excel', 'pdf', 'colvis']
                         });
                     },
                     error: function(res) {
@@ -742,7 +739,7 @@
                 type: 'GET',
                 dataType: 'json', // added data type
                 success: function(res) {
-                    $('#show_id_regulasi').text(res.id);
+                    $('#show_id_regulasi').text("ID#" + res.id);
                     $('#pushregulasi').empty().append(`<div class="_df_book" id="fbook" source="/storage/`+res.filename.substring(7,1000)+`"></div>`);
                     // var flipbook = jQuery("#fbook").flipBook();
                     // flipbook.dispose();
@@ -765,7 +762,7 @@
                 // Buat object URL dari blob
                 const fileURL = URL.createObjectURL(blob);
 
-                $('#txIDCetak').text(id);
+                $('#txIDCetak').text("ID#" + id);
                 // Tampilkan ke iframe dalam modal
                 $('#file-cetak').empty().html(`<iframe src="${fileURL}" width="100%" height="500px" frameborder="0"></iframe>`);
                 $('#modalCetak').modal('show');
@@ -934,19 +931,12 @@
                 success: function(res) {
                     // var dt = new Date(res.show.tanggal).toJSON().slice(0,19);
                     var sah = moment(res.show.sah).format('Y-MM-DD');
-                    document.getElementById('berkas_regulasi').innerHTML = "<h6><a href='/v4/administrasi/berkas/regulasi/"+res.show.id+"/download' target='_blank'>"+res.show.title+"</a></h6>";
+                    document.getElementById('berkas_regulasi').innerHTML = "<h6><a href='/v4/administrasi/berkas/regulasi/"+res.show.id+"/download' target='_blank' class='link-success link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline'>"+res.show.title+"</a></h6>";
                     document.getElementById('upload_ulang').innerHTML = `<input type='file' id="filex_edit" name='filex_edit' class="form-control" accept="application/pdf">`;
                     $("#id_edit").val(res.show.id);
 
                     // INIT DATE EDIT
                     var a = document.querySelector("#tgl_edit");
-                    // var tgl_push = moment(res.show.sah).format('Y-MM-DD');
-                    // a.flatpickr({
-                    //     enableTime: 0,
-                    //     minuteIncrement: 1,
-                    //     defaultDate: res.show.sah,
-                    //     time_24hr: true,
-                    // })
 
                     $("#judul_edit").val(res.show.judul);
                     $("#unit_edit").val(res.show.unit);

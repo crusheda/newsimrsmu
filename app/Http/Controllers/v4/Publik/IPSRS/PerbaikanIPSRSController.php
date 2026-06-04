@@ -11,6 +11,7 @@ use App\Models\perbaikan_ipsrs_catatan;
 use App\Models\role_has_permissions;
 use App\Models\struktur_organisasi;
 use App\Models\unit;
+use App\Models\User;
 use App\Models\users;
 use App\Models\users_foto;
 // use App\Models\datalogs;
@@ -357,20 +358,24 @@ class PerbaikanIPSRSController extends Controller
 
     public function detail($id)
     {
-        $show = perbaikan_ipsrs::where('id',$id)->first();
+        $show = perbaikan_ipsrs::leftJoin('users as us','us.id','=','perbaikan_ipsrs.user_id')
+            ->select(
+                'perbaikan_ipsrs.*',
+                'us.nama as nama_user',
+                'us.no_hp as hp'
+            )
+            ->where('perbaikan_ipsrs.id', $id)
+            ->first();
 
-        // $dikerjakan = DB::table('pengaduan_ipsrs_catatan')
-        //         ->where('pengaduan_id',$id)
-        //         ->get();
+        $user = User::with('roles')->find($show->user_id);
 
         $catatan = perbaikan_ipsrs_catatan::where('pengaduan_id',$id)->orderBy('created_at','ASC')->get();
 
         $data = [
             'show' => $show,
+            'user' => $user,
             'catatan' => $catatan
         ];
-        // print_r($cari);
-        // die();
 
         return view('pages.v4.publik.ipsrs.perbaikan.detail-admin')->with('list', $data);
     }
@@ -400,7 +405,6 @@ class PerbaikanIPSRSController extends Controller
         $data->save();
 
         $arr = [
-            'name' => $name,
             'tolak' => $request->ket,
         ];
 
@@ -436,7 +440,6 @@ class PerbaikanIPSRSController extends Controller
         $dataNew = perbaikan_ipsrs::where('id',$request->id)->get();
 
         $arr = [
-            'name' => $name,
             'show' => $dataNew,
             'catatan' => $catatan
         ];
