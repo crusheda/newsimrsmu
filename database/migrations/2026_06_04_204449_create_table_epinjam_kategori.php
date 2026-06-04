@@ -11,9 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('table_perbaikan_it_kategori', function (Blueprint $table) {
+        Schema::create('epinjam_kategori', function (Blueprint $table) {
             $table->id();
+
+            $table->string('nama', 500);
+
+            $table->integer('user')->nullable();
+            $table->boolean('status')->default(true)->comment('0 = Tidak Aktif, 1 = Aktif');
+
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -22,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('table_perbaikan_it_kategori');
+        Schema::dropIfExists('epinjam_kategori');
     }
 };
