@@ -19,6 +19,10 @@ Route::group(['prefix' => 'v4', 'as' => ''], function () {
 use \App\Http\Controllers\v4\Dashboard\DashboardController;
 use \App\Http\Controllers\v4\Setting\ProfilController;
 use \App\Http\Controllers\v4\IT\TiketController;
+use \App\Http\Controllers\v4\IT\EPinjam\EPinjamController;
+use \App\Http\Controllers\v4\IT\EPinjam\EPinjamListController;
+use \App\Http\Controllers\v4\IT\EPinjam\EPinjamBarangController;
+use \App\Http\Controllers\v4\IT\EPinjam\EPinjamKategoriController;
 use \App\Http\Controllers\v4\Akun\AksesJabatanController;
 use \App\Http\Controllers\v4\Akun\StrukturOrganisasiController;
 use \App\Http\Controllers\v4\Akun\AkunPenggunaController;
@@ -54,7 +58,14 @@ use App\Http\Controllers\v4\AI\KlaimBpjsController;
 Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function () { // SIMRSMU v.4
     Route::get('dashboard', [DashboardController::class, 'index'])->name('v4.dashboard');
     Route::get('profil', [ProfilController::class, 'index'])->name('v4.profil');
-    Route::get('tiket/it', [TiketController::class, 'index'])->name('v4.tiket.it');
+
+    // IT
+        // PENGAJUAN
+            // PERBAIKAN
+                Route::get('it/pengajuan/tiket', [TiketController::class, 'index'])->name('v4.it.pengajuan.tiket');
+
+        // E-PINJAM
+            Route::get('it/epinjam', [EPinjamController::class, 'index'])->name('v4.it.epinjam');
 
     // MANAJEMEN AKUN
         // AKSES & JABATAN

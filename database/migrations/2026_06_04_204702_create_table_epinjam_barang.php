@@ -22,6 +22,9 @@ return new class extends Migration
             $table->string('kondisi', 200)->nullable();
             $table->longText('kelengkapan')->nullable();
 
+            $table->string('title', 200)->comment('Nama Lampiran')->nullable();
+            $table->string('filename', 200)->comment('Path Lampiran')->nullable();
+
             $table->integer('user');
             $table->boolean('status')->default(true)->comment('0 = Tidak Aktif, 1 = Aktif');
 

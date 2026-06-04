@@ -195,8 +195,9 @@
                         </div>`
                     );
                 });
+
                 // resetFormPengajuan();
-                $('#btn-simpan').prop('disabled', false);
+                // $('#btn-simpan').prop('disabled', false);
             }, complete: function() {
                 btn.prop('disabled', false).empty().append('Pengajuan');
             }, error: function(xhr, status, error) {
