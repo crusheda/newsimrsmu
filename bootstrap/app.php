@@ -21,9 +21,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->api(prepend: [
             EnsureFrontendRequestsAreStateful::class,
         ]);
-        $middleware->web(append: [
-            \App\Http\Middleware\HeaderDataMiddleware::class,
-        ]);
+        // $middleware->web(append: [
+        //     \App\Http\Middleware\HeaderDataMiddleware::class,
+        // ]);
         // $middleware->redirectGuestsTo(fn () => route('v4.login'));
         $middleware->redirectGuestsTo(function ($request) {
             return $request->expectsJson()
