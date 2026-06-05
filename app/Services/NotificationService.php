@@ -36,7 +36,7 @@ class NotificationService
             if (!$jabatan) {
                 return [
                     'isExistPerbaikanIpsrs' => $isExistPerbaikanIpsrs,
-                    'countLaporanBawahan' => 0,
+                    'countVerifJDBawahan' => 0,
                 ];
             }
 
