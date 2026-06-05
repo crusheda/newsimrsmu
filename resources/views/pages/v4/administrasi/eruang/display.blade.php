@@ -1,12 +1,13 @@
 <div class="row mb-3">
     <div class="col-xxl-12 mb-3">
         <div class="alert alert-light shadow-sm" role="alert">
-            <small><i class="ti ti-arrow-narrow-right me-1"></i> Pengajuan Peminjaman Ruangan dapat diverifikasi oleh Bagian Gizi Mulai dari <span class="badge bg-primary-transparent">H-1 Acara setelah Pukul 12:00 WIB</span> sampai <span class="badge bg-danger-transparent">Hari H Acara Pukul 23:59 WIB</span></small><br>
+            <small><i class="ti ti-arrow-narrow-right me-1"></i> Pengajuan Peminjaman Ruangan dapat diverifikasi oleh Bagian Gizi Mulai dari <span class="badge bg-primary-transparent">H-1 Acara setelah Pukul 12:00 WIB</span> sampai <span class="badge bg-danger-transparent">Hari H Acara</span></small><br>
             <small><i class="ti ti-arrow-narrow-right me-1"></i> Data yang ditampilkan diurutkan berdasarkan <span class="badge bg-info-transparent">Tanggal Terdekat</span> lalu berdasarkan <strong>Jam dari yang paling Awal</strong></small><br>
-            <small><i class="ti ti-arrow-narrow-right me-1"></i> Display diperbarui secara otomatis per 5 menit sekali dengan tampilan yang dibatasi (<strong>5 Antrean</strong>)</small>
+            <small><i class="ti ti-arrow-narrow-right me-1"></i> <b class="text-warning">Kosongi Tanggal</b> untuk menampilkan semua Pemesanan Gizi dengan maksimal pemesanan sampai dengan 7 Hari kedepan</small><br>
+            <small><i class="ti ti-arrow-narrow-right me-1"></i> Ketika mulai Ditampilkan, Display diperbarui secara <b class="text-danger">Otomatis Per 5 menit sekali</b> dengan tampilan yang dibatasi (<strong>5 Antrean</strong>)</small>
         </div>
     </div>
-    <div class="col-xxl-3">
+    <div class="col-xxl-3 mb-3">
         <div class="position-relative">
             <select class="select2 form-control validasiTgl" id="tampil_gizi_ruangan" style="width: 100%" data-bs-auto-close="outside" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Pilih salah satu/Kosongi untuk menampilkan semua Ruangan">
                 <option value="" selected hidden>Pilih Ruangan</option>
@@ -18,14 +19,19 @@
             </select>
         </div>
     </div>
-    <div class="col-xxl-2">
+    <div class="col-xxl-2 mb-3">
         <div class="position-relative">
-            <div id="datepicker1">
-                <input type="text" class="form-control" id="tampil_gizi_tgl" placeholder="Pilih Tanggal" data-date-format="yyyy-mm-dd" data-date-container='#datepicker1' data-date-autoclose="true" data-provide="datepicker" required>
+            <div class="input-group">
+                <input type="text" class="form-control" id="tampil_gizi_tgl" placeholder="Pilih Tanggal (yyyy-mm-dd)" data-date-format="yyyy-mm-dd"
+                    data-date-autoclose="true" data-provide="datepicker" autocomplete="off" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                    data-bs-placement="bottom" data-bs-html="true" title="Pilih Tanggal Maksimal Sampai Dengan H+7" required>
+                <button type="button" class="btn btn-secondary-transparent" id="clearTanggal" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Kosongkan Tanggal">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
         </div>
     </div>
-    <div class="col-xxl-3">
+    <div class="col-xxl-3 mb-3">
         <div class="position-relative">
             <select class="select2 form-control" id="tampil_gizi_status" style="width: 100%" data-bs-auto-close="outside" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Pilih Status Verifikasi">
                 <option value="0" hidden>Semua Data</option>
@@ -36,13 +42,13 @@
         </div>
     </div>
     <div class="col-xxl-4" id="start-display">
-        <div class="position-relative h-100 hstack gap-3">
+        <div class="position-relative hstack gap-3">
             <button type="submit" class="btn btn-primary h-100 w-100" id="btn-tampil-gizi" onclick="showDisplay()"><i class="fas fa-tv align-middle me-1"></i> Tampilkan Display</button>
         </div>
     </div>
     <div class="col-xxl-4" id="stop-display" hidden>
-        <div class="position-relative h-100 hstack gap-3">
-            <button type="submit" class="btn btn-danger h-100 w-100" id="btn-tampil-gizi" onclick="stopDisplay()"><i class="fas fa-times align-middle me-1"></i> Berhenti <span class="badge bg-light text-dark ms-1" id="detik"></span></button>
+        <div class="position-relative hstack gap-3">
+            <button type="submit" class="btn btn-danger h-100 w-100" id="btn-tampil-gizi" onclick="stopDisplay()"><i class="fas fa-times align-middle me-1"></i> Berhenti <span class="badge bg-light text-dark ms-1 fs-12" id="detik"></span></button>
         </div>
     </div>
 </div>
@@ -64,26 +70,80 @@
 <!-- END DISPLAY -->
 
 <script>
+
+    let fpg;
+    let displayInterval;
+    let countdownInterval;
+    let countdown = 300; // 5 menit
+
+    $(document).ready(function() {
+        fpg = $("#tampil_gizi_tgl").flatpickr({
+            mode: "single",
+            dateFormat: "Y-m-d",
+            allowInput: true,
+
+            // default kosong
+            defaultDate: null,
+
+            // maxDate: "today", // maksimal hari ini
+            maxDate: new Date().fp_incr(7), // maksimal H+7 Hari
+
+            locale: {
+                firstDayOfWeek: 1
+            }
+        });
+
+        $("#clearTanggal").on("click", function () {
+            document.querySelector("#tampil_gizi_tgl")._flatpickr.clear();
+        });
+    })
+
+    function startCountdown() {
+        countdown = 300;
+        updateCountdown();
+        countdownInterval = setInterval(function() {
+            countdown--;
+            if (countdown < 0) {
+                countdown = 300;
+            }
+            updateCountdown();
+        }, 1000);
+    }
+
+    function updateCountdown() {
+        let menit = Math.floor(countdown / 60);
+        let detik = countdown % 60;
+
+        $("#detik").html(
+            `Refresh ${String(menit).padStart(2,'0')}:${String(detik).padStart(2,'0')}`
+        );
+    }
+
     function showDisplay() {
         // clearInterval(interval);
         display();
-        setInterval(function() {
+
+        displayInterval = setInterval(function() {
             display();
-        }, 300000); // 1000 = 1 detik
+            countdown = 300; // reset saat refresh data
+        }, 300000);
+
+        startCountdown();
+
         $("#tampil_gizi_ruangan").prop('disabled', true);
         $("#tampil_gizi_tgl").prop('disabled', true);
         $("#tampil_gizi_status").prop('disabled', true);
         $("#btn-tampil-gizi").prop('disabled', true);
         $("#stop-display").prop('hidden', false);
         $("#start-display").prop('hidden', true);
-        // setInterval(function() {
-        //     display();
-        // }, 8000);
-        // setTimeout(display(), 10000);
+        $("#clearTanggal").prop('disabled', true);
     }
 
     function stopDisplay() {
-        clearInterval();
+
+        clearInterval(displayInterval);
+        clearInterval(countdownInterval);
+
         $('#show_tampil_display').empty();
         $('#show_tampil_display').append(`
             <div class="row justify-content-center mt-lg-5">
@@ -105,6 +165,7 @@
         $("#btn-tampil-gizi").prop('disabled', false);
         $("#stop-display").prop('hidden', true);
         $("#start-display").prop('hidden', false);
+        $("#clearTanggal").prop('disabled', false);
     }
 
     function verifGizi(id) {
@@ -131,24 +192,29 @@
     }
 
     function display() {
-        console.log(new Date().getHours());
-        $("#show_tampil_display").empty().append(
-            `<center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>`
-        );
         var getInputRuangan = $("#tampil_gizi_ruangan").val();
         var getInputTgl = $("#tampil_gizi_tgl").val();
         var getInputStatus = $("#tampil_gizi_status").val();
+
         $.ajax({
             url: "/api/v4/administrasi/eruang/display?ruangan="+getInputRuangan+"&tgl="+getInputTgl+"&status="+getInputStatus,
             type: 'GET',
             dataType: 'json',
+            beforeSend: function() {
+                $("#show_tampil_display").empty().append(
+                    `<center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>`
+                );
+            },
             success: function(res) {
                 $("#show_tampil_display").empty();
                 if (res.show == '') {
                     $('#show_tampil_display').append(`<center><h6 class='mt-3'>Data Peminjaman Ruangan Tidak Ada Pada Tanggal <b class='text-danger'>`+getInputTgl+`</b></h6></center>`);
                 } else {
                     res.show.forEach(item => {
-                        var val = item.tgl;
+                        // var val = item.tgl;
+                        var val = item.tgl_mulai;
+                        // var valMulai = item.tgl_mulai;
+                        // var valSelesai = item.tgl_selesai;
                         var date = new Date();
                         var tgl = new Date(val);
                         tgl.setDate(tgl.getDate()-1);
@@ -195,7 +261,7 @@
                                                     <div class="flex-grow-1 overflow-hidden text-dark">
                                                         <h4 class="text-truncate font-size-20"><a href="javascript: void(0);">${item.status_penolakan?'<s>'+item.nama_ruangan+'</s>':item.nama_ruangan}</a></h4>
                                                         <p class="mb-0 mt-1">
-                                                            <i class="ti ti-arrow-narrow-right text-primary me-1"></i> <b>Agenda :</b> ${item.agenda}<br>
+                                                            <i class="ti ti-arrow-narrow-right text-primary me-1"></i> <b>Agenda :</b> <b class="text-info">${item.agenda}</b><br>
                                                             <i class="ti ti-arrow-narrow-right text-primary me-1"></i> <b>User :</b> ${item.nama_user?item.nama_user:'Tidak Ada Nama'} (${item.no_hp?item.no_hp:'-'})<br>
                                                             <i class="ti ti-arrow-narrow-right text-primary me-1"></i> <b>Pesanan Gizi :</b>
                                                             <p style="white-space: pre-line">${item.gizi?item.gizi:''}</p>
@@ -204,9 +270,13 @@
                                                 </div>
                                             </div>
                                             <div class="px-3 py-2 border-top">
-                                                <ul class="list-inline mb-0 text-dark">
+                                                <ul class="list-inline mb-0 text-dark fs-16">
                                                     <li class="list-inline-item me-3 mt-1">
-                                                        <i class="ti ti-calendar-plus me-1"></i> ${item.tgl}
+                                                        <i class="ti ti-calendar-plus me-1"></i>
+                                                        ${formatTanggalIndo(item.tgl_mulai ?? item.tgl)}
+                                                        ${item.tgl_mulai != item.tgl_selesai
+                                                            ? ' <b class="text-danger"> s/d </b> ' + formatTanggalIndo(item.tgl_selesai)
+                                                            : ''}
                                                     </li>
                                                     <li class="list-inline-item me-3 mt-1">
                                                         <i class="ti ti-clock me-1"></i> ${item.jam_mulai.substring(0,5)} - ${item.jam_selesai.substring(0,5)} WIB
@@ -236,17 +306,41 @@
                                         </div>
                                     </div>`;
                         $('#show_tampil_display').append(content);
+
+                        // Showing Tooltip
+                        $('[data-bs-toggle="tooltip"]').tooltip({
+                            trigger: 'hover'
+                        })
                     })
                 }
 
-                // Showing Tooltip
-                $('[data-bs-toggle="tooltip"]').tooltip({
-                    trigger: 'hover'
-                })
-
                 // UPDATED
-                $("#detik").html('Pukul '+res.now+' (Per 5 Menit)');
+                // $("#detik").empty().html('Pukul '+res.now+' (Per 5 Menit)');
+            },
+            complete: function() {
+
+            },
+            error: function(xhr, status, error) {
+                iziToast.error({
+                    title: 'Pesan Galat!',
+                    message: xhr.responseJSON.message ?? 'Terjadi kegagalan saat memeriksa ketersediaan ruangan',
+                    position: 'topRight'
+                });
             }
         })
+    }
+
+    function formatTanggalIndo(dateStr) {
+        const bulanIndo = [
+            "Jan","Feb","Mar","Apr","Mei","Jun",
+            "Jul","Agu","Sep","Okt","Nov","Des"
+        ];
+
+        let d = new Date(dateStr);
+        let tgl  = d.getDate();
+        let bln  = bulanIndo[d.getMonth()];
+        let thn  = d.getFullYear();
+
+        return `${tgl} ${bln} ${thn}`;
     }
 </script>

@@ -439,9 +439,22 @@ class ERuangController extends Controller
                 ->leftJoin('users','users.id','=','eruang.id_user')
                 ->leftJoin('users_foto','users.id','=','users_foto.user_id')
                 ->join('eruang_ref','eruang_ref.id','=','eruang.id_ruangan')
-                ->when($input1 != null, function ($q) use ($input1) {
-                    $q->where('eruang.tgl',$input1);
+                // ->when($request->filled('tgl'), function ($q) use ($input1) {
+                //     $q->where('eruang.tgl',$input1);
+                // })
+                ->when($request->filled('tgl'), function ($q) use ($input1) {
+                    $q->where(function ($sub) use ($input1) {
+                        $sub->whereDate('tgl_mulai', '<=', $input1)
+                            ->whereDate('tgl_selesai', '>=', $input1);
+                    });
                 })
+                // ->when(!$request->filled('tgl'), function ($q) { // Dipakai jika tanggal dikosongkan, Anda ingin tampil semua data sampai H+7.
+                //     $today = now()->format('Y-m-d');
+                //     $plus7 = now()->addDays(7)->format('Y-m-d');
+
+                //     $q->whereDate('tgl_mulai', '<=', $plus7)
+                //     ->whereDate('tgl_selesai', '>=', $today);
+                // })
                 ->when($input2 != null, function ($q) use ($input2) {
                     $q->where('eruang.id_ruangan',$input2);
                 })
@@ -483,6 +496,8 @@ class ERuangController extends Controller
                 // }
                 // ->orderBy('eruang.tgl','asc')
                 // ->orderBy('eruang.jam_mulai','asc')
+                ->orderBy('eruang.tgl_mulai','asc')
+                ->orderBy('eruang.jam_mulai','asc')
                 // ->limit(9)
                 ->get();
         $now = Carbon::now()->isoFormat('HH:mm:ss');

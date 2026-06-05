@@ -112,12 +112,6 @@
                 dateFormat: "Y-m-d",
 
             });
-            $("#tampil_gizi_tgl").flatpickr({ // FILTER TANGGAL RIWAYAT
-                mode: "single",
-                defaultDate: "today",
-                dateFormat: "Y-m-d",
-
-            });
             fpTanggal = $("#tgl").flatpickr({
                 mode: "range",
                 minDate: "today",
