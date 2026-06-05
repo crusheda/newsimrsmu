@@ -274,7 +274,7 @@
                                 <table id="dttable-riwayat" class="table nowrap text-nowrap">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
+                                            <th>ID <b class="text-primary">PENGADAAN</b></th>
                                             <th>Pegawai/Unit</th>
                                             <th>Tgl Pengadaan</th>
                                             <th><b class="d-block text-end">Total</b></th>
@@ -282,6 +282,15 @@
                                         </tr>
                                     </thead>
                                     <tbody id="tampil-riwayat-pengadaan"></tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th>ID <b class="text-primary">PENGADAAN</b></th>
+                                            <th>Pegawai/Unit</th>
+                                            <th>Tgl Pengadaan</th>
+                                            <th><b class="d-block text-end">Total</b></th>
+                                            <th><center>Aksi</center></th>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -832,23 +841,61 @@
 
                 success: function (res) {
 
+                    var UserID = @json(@auth()->user()->id);
+                    var isAdmin = @json(@auth()->user()->can('admin_pengadaan'));
+                    var date = getDateTime(); // DATE ONLY
+
                     $("#tampil-riwayat-pengadaan").empty();
 
                     let data = res.data; // ✅ ambil dari data
 
                     data.forEach(item => {
 
+                        var updet = new Date(item.tgl_pengadaan).toLocaleString("sv-SE").substring(0, 10); // DATE ONLY
+
                         let unit = JSON.parse(item.unit)
                                         .map(u => u.replace(/-/g, ' '))
                                         .join(', ');
                         let tgl = new Date(item.tgl_pengadaan).toLocaleString("sv-SE");
 
+                        if (isAdmin) { // JIKA ADMIN
+                            btnHapus = `<li>
+                                            <a href="javascript:void(0)" class="dropdown-item text-danger"
+                                                onclick="hapusPengadaan(${item.id_pengadaan})">
+                                                <i class="ri-delete-bin-line me-2"></i> Hapus Pengadaan
+                                            </a>
+                                        </li>`;
+                        } else {
+                            if (UserID == item.id_user) { // JIKA USER UPLOADED
+                                if (date == updet) { // JIKA MASIH DI HARI YG SAMA
+                                    btnHapus = `<li>
+                                                    <a href="javascript:void(0)" class="dropdown-item text-danger"
+                                                        onclick="hapusPengadaan(${item.id_pengadaan})">
+                                                        <i class="ri-delete-bin-line me-2"></i> Hapus Pengadaan
+                                                    </a>
+                                                </li>`;
+                                } else {
+                                    btnHapus = `<li>
+                                                    <a href="javascript:void(0)" class="dropdown-item disabled" disabled>
+                                                        <i class="ri-delete-bin-line me-2"></i> Hapus Pengadaan
+                                                    </a>
+                                                </li>`;
+                                }
+                            } else {
+                                btnHapus = `<li>
+                                                <a href="javascript:void(0)" class="dropdown-item disabled" disabled>
+                                                    <i class="ri-delete-bin-line me-2"></i> Hapus Pengadaan
+                                                </a>
+                                            </li>`;
+                            }
+                        }
+
                         let content = `
                             <tr>
-                                <td class="text-start">${item.id}</td>
+                                <td class="text-start">${item.id_pengadaan}</td>
                                 <td class="text-nowrap nowrap">
                                     <b>${item.nama_user}</b><br>
-                                    <small class="text-muted">${unit}</small>
+                                    <small class="text-muted text-uppercase">${unit}</small>
                                 </td>
                                 <td>${tgl}</td>
                                 <td class="text-end"><b>${formatRupiah(item.total)}</b></td>
@@ -870,6 +917,7 @@
                                                     <i class="ri-file-copy-line me-2"></i> Copy Pengadaan
                                                 </a>
                                             </li>
+                                            ${btnHapus}
                                         </ul>
                                     </div>
                                 </td>
@@ -882,8 +930,13 @@
                     $('#dttable-riwayat').DataTable({
                         order: [[2, "desc"]],
                         displayLength: 15,
-                        lengthChange: true,
-                        lengthMenu: [15, 25, 50, 75, 100, 300, 500, 700, 1000, 5000, 10000],
+                        columns: [
+                            { orderable: false }, // ID PENGADAAN
+                            { orderable: true },  // Pegawai/Unit
+                            { orderable: true },  // Tgl Pengadaan
+                            { orderable: true },  // Total
+                            { orderable: false }  // Aksi
+                        ]
                     });
                 },
 
@@ -924,9 +977,14 @@
                     $('#detail-header').html(`
                         <table class="table table-sm table-borderless mb-0">
                             <tr>
-                                <td width="150"><b>ID Pengadaan</b></td>
+                                <td width="150"><b>ID Sistem</b></td>
                                 <td width="10">:</td>
                                 <td>${data.id}</td>
+                            </tr>
+                            <tr>
+                                <td width="150"><b>ID Pengadaan</b></td>
+                                <td width="10">:</td>
+                                <td>${data.id_pengadaan}</td>
                             </tr>
                             <tr>
                                 <td><b>Pegawai</b></td>
@@ -936,7 +994,7 @@
                             <tr>
                                 <td><b>Unit/Jabatan</b></td>
                                 <td>:</td>
-                                <td>${unit}</td>
+                                <td class="text-uppercase">${unit}</td>
                             </tr>
                             <tr>
                                 <td><b>Tanggal</b></td>
@@ -1445,6 +1503,51 @@
             //         });
             //     }
             // });
+        }
+
+        // Hapus Riwayat
+        function hapusPengadaan(id) {
+            Swal.fire({
+                title: 'Apakah anda yakin?',
+                text: 'Hapus Pengadaan ID : ' + id,
+                icon: 'warning',
+                reverseButtons: false,
+                showDenyButton: false,
+                showCloseButton: false,
+                showCancelButton: true,
+                focusCancel: true,
+                confirmButtonColor: '#FF4845',
+                confirmButtonText: `<i class="fa fa-trash me-1" style="font-size:13px"></i> Hapus`,
+                cancelButtonText: `<i class="fa fa-times me-1" style="font-size:13px"></i> Batal`,
+                backdrop: `rgba(26,27,41,0.8)`,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: `/api/v4/administrasi/pengadaan/riwayat/${id}/hapus`,
+                        type: 'DELETE',
+                        dataType: 'json', // added data type
+                        success: function(res) {
+                            iziToast.success({
+                                title: 'Pesan Sukses!',
+                                message: 'Hapus Riwayat berhasil pada ' + res,
+                                position: 'topRight'
+                            });
+                            // $('#riwayatPengadaan').modal('hide');
+                        }, complete: function() {
+                            bukaRiwayatPengadaan();
+                        }, error: function(xhr, status, error) {
+                            iziToast.error({
+                                title: 'Pesan Galat!',
+                                message: xhr.responseJSON.message ?? 'Proses Hapus riwayat pengadaan tidak berhasil dilakukan. Silakan ulangi sekali lagi.',
+                                position: 'topRight'
+                            });
+                        }
+                    });
+                }
+            })
         }
 
         // FUNCTION REKAP

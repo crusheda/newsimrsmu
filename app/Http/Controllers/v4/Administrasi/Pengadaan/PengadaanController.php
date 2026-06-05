@@ -220,7 +220,9 @@ class PengadaanController extends Controller
                 // })
                 ->select(
                     'pengadaan.id',
+                    'pengadaan.id_user',
                     'users.nama as nama_user',
+                    'pengadaan.id_pengadaan',
                     'pengadaan.unit',
                     'pengadaan.total',
                     'pengadaan.tgl_pengadaan',
@@ -247,7 +249,9 @@ class PengadaanController extends Controller
             $pengadaan = $result->groupBy('id')->map(function ($items) {
                 return [
                     'id' => $items->first()->id,
+                    'id_user' => $items->first()->id_user,
                     'nama_user' => $items->first()->nama_user,
+                    'id_pengadaan' => $items->first()->id_pengadaan,
                     'unit' => $items->first()->unit,
                     'total' => $items->first()->total,
                     'tgl_pengadaan' => $items->first()->tgl_pengadaan,
@@ -281,7 +285,7 @@ class PengadaanController extends Controller
         }
     }
 
-    function hapusRiwayatPengadaan($id)
+    function hapusPengadaan($id)
     {
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 

@@ -57,7 +57,7 @@
         text-align: justify;
     }
 
-/* DATATABLES */
+/* DATATABLES UTAMA */
 .dt-buttons .btn {
     margin-right: 1px;
 }
@@ -82,7 +82,31 @@
     border-radius: 6px;
 }
 
-    /* COLVIS */
+    /* DATATABLES FOR MOBILE */
+    .dataTables_wrapper .dt-search input {
+        width: 200px;
+    }
+
+    @media (max-width: 768px) {
+
+        .dataTables_wrapper .dt-search,
+        .dataTables_wrapper .dt-length,
+        .dataTables_wrapper .dt-buttons {
+            width: 100%;
+        }
+
+        .dataTables_wrapper .dt-search input {
+            width: 100%;
+        }
+
+        .dataTables_wrapper .dt-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+    }
+
+    /* DATATABLES COLVIS */
     .dt-button-collection .dt-button::before {
         content: "☐ ";
     }

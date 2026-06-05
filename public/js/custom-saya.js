@@ -1,7 +1,7 @@
 // GLOBAL SETTING DATATABLE
 $.extend(true, $.fn.dataTable.defaults, {
     dom: `
-        <"d-flex justify-content-between align-items-center mb-2"
+        <"d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2"
             <"dt-buttons"B>
             <"d-flex align-items-center gap-2"
                 <"dt-length"l>
@@ -9,7 +9,7 @@ $.extend(true, $.fn.dataTable.defaults, {
             >
         >
         rt
-        <"d-flex justify-content-between mt-2"ip>
+        <"d-flex flex-wrap justify-content-between mt-2"ip>
     `,
     buttons: [
         {

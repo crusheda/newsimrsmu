@@ -37,7 +37,7 @@
                         </div>
                         <div class="dropdown">
                             <button type="button" class="btn btn-info" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="d-none d-sm-inline-block"><i class="fas fa-caret-down me-1"></i> Filter Data</span>
+                                <i class="fas fa-caret-down me-1"></i> Filter Data
                             </button>
                             <div class="dropdown-menu dropdown-menu-end dropdown-menu-md" style="width: 300px">
                                 <div class="dropdown-item-text">

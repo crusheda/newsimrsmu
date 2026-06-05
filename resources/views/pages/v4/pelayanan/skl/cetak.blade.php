@@ -215,25 +215,25 @@
             <tr>
                 <td class="label">NIK Ibu</td>
                 <td class="separator">:</td>
-                <td class="value">{{ $list['show']->nik_ibu }}</td>
+                <td class="value">{{ $list['show']->nik_ibu == 0 ? '-' : $list['show']->nik_ibu  }}</td>
             </tr>
 
             <tr>
                 <td class="label">Nama Ibu</td>
                 <td class="separator">:</td>
-                <td class="value">{{ $list['show']->ibu }}</td>
+                <td class="value">{{ $list['show']->ibu == 'NY. ' ? '-' : $list['show']->ibu }}</td>
             </tr>
 
             <tr>
                 <td class="label">NIK Ayah</td>
                 <td class="separator">:</td>
-                <td class="value">{{ $list['show']->nik_ayah }}</td>
+                <td class="value">{{ $list['show']->nik_ayah == 0 ? '-' : $list['show']->nik_ayah }}</td>
             </tr>
 
             <tr>
                 <td class="label">Nama Ayah</td>
                 <td class="separator">:</td>
-                <td class="value">{{ $list['show']->ayah }}</td>
+                <td class="value">{{ $list['show']->ayah == 'TN. -' ? '-' : $list['show']->ayah }}</td>
             </tr>
 
             <tr>
