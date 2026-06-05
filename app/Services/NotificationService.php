@@ -30,8 +30,14 @@ class NotificationService
                         ->orderBy('updated_at','desc')
                         ->first();
 
+            // if (!$jabatan) {
+            //     return collect(); // Kosongkan hasil jika tidak ada jabatan
+            // }
             if (!$jabatan) {
-                return collect(); // Kosongkan hasil jika tidak ada jabatan
+                return [
+                    'isExistPerbaikanIpsrs' => $isExistPerbaikanIpsrs,
+                    'countLaporanBawahan' => 0,
+                ];
             }
 
             $bawahanRoles = json_decode($jabatan->bawahan); // Contoh: ["14","93","94","95","55","56"]

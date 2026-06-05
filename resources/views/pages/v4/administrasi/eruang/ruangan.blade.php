@@ -41,7 +41,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h6 class="modal-title" id="orderdetailsModalLabel">Tambah Ruangan</h6>
+                <h6 class="modal-title" id="orderdetailsModalLabel">Tambah <b class="text-primary">Ruangan</b></h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -66,20 +66,20 @@
                                     <i class="fas fa-caret-right text-primary me-1"></i> Isian Hak Akses adalah sebagai acuan untuk karyawan yang diberikan akses khusus terhadap ruangan
                                 </small>
                             </div>
-                            <label class="form-label">Hak Akses</label>
+                            <label class="form-label">Hak Akses (<b class="text-warning">Optional</b>) (<b class="text-danger">Multiple</b>)</label>
                             <select class="select2unit form-control" id="akses-ruangan" style="width: 100%" data-bs-auto-close="outside" required multiple="multiple"></select>
                         </div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <div class="form-group">
-                            <label>Deskripsi</label>
-                            <textarea rows="2" class="form-control" id="deskripsi-ruangan" placeholder="Optional"></textarea>
+                            <label class="form-label">Deskripsi (<b class="text-warning">Optional</b>)</label>
+                            <textarea rows="2" class="form-control" id="deskripsi-ruangan" placeholder="..."></textarea>
                         </div>
                     </div>
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-6">
                         <div class="form-group">
-                            <label>Fasilitas</label>
-                            <textarea rows="2" class="form-control" id="fasilitas-ruangan" placeholder="Optional"></textarea>
+                            <label class="form-label">Fasilitas (<b class="text-warning">Optional</b>)</label>
+                            <textarea rows="2" class="form-control" id="fasilitas-ruangan" placeholder="..."></textarea>
                         </div>
                     </div>
                 </div>
@@ -88,7 +88,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary-light" data-bs-dismiss="modal"><i
                         class="fa fa-times me-1"></i> Batal</button>
-                <button class="btn btn-info" onclick="simpanRuangan()" data-bs-toggle="tooltip" id="btn-simpan-ruangan"
+                <button class="btn btn-primary" onclick="simpanRuangan()" data-bs-toggle="tooltip" id="btn-simpan-ruangan"
                     data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
                     title="Simpan Data Ruangan"><i class="fas fa-save me-1"></i> Submit</button>
                 {{-- <button class="btn btn-primary" onclick="showKeranjang()" data-bs-toggle="tooltip"
