@@ -513,7 +513,7 @@
                     });
                     var table = $('#dttable').DataTable({
                         order: [
-                            [4, "desc"]
+                            [1, "desc"]
                         ],
                         bAutoWidth: false,
                         aoColumns : [
