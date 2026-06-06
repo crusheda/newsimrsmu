@@ -159,7 +159,7 @@
                                         <th><center>WAKTU</center></th>
                                         <th>ACARA</th>
                                         <th>PEGAWAI PELAKSANA</th>
-                                        <th>UPDATE</th>
+                                        <th>DITAMBAHKAN</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tampil-tbody">
@@ -175,7 +175,7 @@
                                         <th><center>WAKTU</center></th>
                                         <th>ACARA</th>
                                         <th>PEGAWAI PELAKSANA</th>
-                                        <th>UPDATE</th>
+                                        <th>DITAMBAHKAN</th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -394,14 +394,16 @@
                 success: function(res) {
                     $("#tampil-tbody").empty();
                     $('#dttable').DataTable().clear().destroy();
+
+                    var userID = @json(Auth::user()->id);
+                    var adminID = @json(Auth::user()->can(['admin_kepegawaian']));
+                    var superID = @json(Auth::user()->can(['admin_kepegawaian_kepala']));
+                    var keuID = @json(Auth::user()->can(['admin_pd_keuangan']));
+
                     res.show.forEach(item => {
                         var updet = new Date(item.updated_at).toLocaleDateString("sv-SE");
                         var paiddate = new Date(item.tgl_paid).toLocaleDateString("sv-SE");
                         var date = new Date().toLocaleDateString("sv-SE");
-                        var userID = @json(Auth::user()->id);
-                        var adminID = @json(Auth::user()->can(['admin_kepegawaian']));
-                        var superID = @json(Auth::user()->can(['admin_kepegawaian_kepala']));
-                        var keuID = @json(Auth::user()->can(['admin_pd_keuangan']));
                         if (item.paid == 0) {
                             statusPaid = `<span class="badge bg-danger ms-2">UNPAID</span>`;
                             color = 'danger';
@@ -499,7 +501,7 @@
                         content += `<td>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
-                                                <a class='mb-0 text-truncate'>` + new Date(item.updated_at).toLocaleString("sv-SE") + `</a>
+                                                <a class='mb-0 text-truncate'>` + new Date(item.created_at).toLocaleString("sv-SE") + `</a>
                                                 <small class='text-muted text-wrap'>` + item.nama_user + `</small>
                                             </div>
                                         </div>
@@ -511,9 +513,14 @@
                             trigger: 'hover'
                         })
                     });
+                    if (keuID == true) {
+                        sort = "asc";
+                    } else {
+                        sort = "desc";
+                    }
                     var table = $('#dttable').DataTable({
                         order: [
-                            [0, "asc"]
+                            [4, sort]
                         ],
                         bAutoWidth: false,
                         aoColumns : [
