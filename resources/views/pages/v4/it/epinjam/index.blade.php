@@ -20,7 +20,7 @@
         </div>
 
         <div class="row justify-content-center">
-            <div class="col-sm-12">
+            <div class="col-sm-5">
                 <div class="card custom-card">
                     <div class="card-header d-flex align-items-center justify-content-between py-3">
                         <h6 class="mb-0">Form <b class="text-secondary">Tambah</b></h6>
@@ -34,7 +34,10 @@
                     </div>
                     <div class="card-body row">
                         <div class="col-md-6">
-                            s
+                            <div class="form-group">
+                                <label class="form-label"></label>
+                                <input type="text" class="form-control" id="" placeholder="Masukkan">
+                            </div>
                         </div>
                         <div class="col-md-6">
                             sss
@@ -42,7 +45,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-7">
                 <div class="card custom-card">
                     <div class="card-header d-flex align-items-center justify-content-between py-3">
                         <h6 class="mb-0">Riwayat <b class="text-teal">Peminjaman</b></h6>
