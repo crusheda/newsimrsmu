@@ -26,28 +26,30 @@
                         <h6 class="mb-0">Form <b class="text-secondary">Tambah</b></h6>
                         <h6 class="mb-0 fs-12">Isian (<a class="text-danger">*</a>) wajib diisi</h6>
                     </div>
-                    <div class="card-body border-bottom p-0">
-                        <table class="table nowrap text-nowrap table-borderless">
+                    <div class="card-body border-bottom p-0 table-responsive">
+                        <table class="table nowrap text-nowrap table-borderless" id="table-add-row">
                             <thead>
                                 <tr>
                                     <th>Kategori (<a class="text-danger">*</a>)</th>
                                     <th>Nama Barang (<a class="text-danger">*</a>)</th>
+                                    <th>Peruntukan</th>
                                     <th>Rencana Kembali</th>
-                                    <th>Hapus</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td><select class="select2 form-control kategori" style="width: 100%" required></select></td>
-                                    <td><select class="select2 form-control barang" style="width: 100%" required></select></td>
-                                    <td><input class="form-control flatpickr" name="tgl_kembali" type="text" required></td>
-                                    <td><button class="btn btn-icon btn-danger-light"><i class="ri-delete-bin-5-line fs-23"></i></button></td>
+                                <tr class="row-barang">
+                                    <td class="py-0"><select class="select2 form-control kategori" style="width: 100%" required></select></td>
+                                    <td class="py-0"><select class="select2 form-control barang" style="width: 100%" disabled required></select></td>
+                                    <td class="py-0"><input class="form-control peruntukan" type="text" placeholder="Optional" required></td>
+                                    <td class="py-0"><input class="form-control flatpickr-back tgl_kembali" type="text" placeholder="Optional" required></td>
+                                    <td class="py-0 cell-fit"><button type="button" class="btn btn-sm btn-danger-light btnHapusBarang" onclick="hapusBarang(this)"><i class="ri-delete-bin-5-line fs-16 me-1"></i> Hapus</button></td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <a class="btn btn-primary-transparent" href="javascript:void(0);">
+                                        <button type="button" class="btn btn-primary-transparent" id="btn-tambah-barang" onclick="tambahBarang()">
                                             <i class="bi bi-plus-lg"></i> Tambah Barang
-                                        </a>
+                                        </button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -57,25 +59,25 @@
                         <div class="col-md-9 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Pilih Pegawai Peminjam (<a class="text-danger">*</a>)</label>
-                                <select class="select2 form-control" id="user" style="width: 100%" required></select>
+                                <select class="select2 form-control" id="peminjam" style="width: 100%" required></select>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Pilih Tgl. Pinjam (<a class="text-danger">*</a>)</label>
-                                <input class="form-control flatpickr" name="tgl_pinjam" type="text" required>
+                                <input class="form-control flatpickr" id="tgl_pinjam" type="text" required>
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label class="form-label">Keperluan</label>
-                                <textarea class="form-control" id="keperluan" rows="2"></textarea>
+                                <label class="form-label">Keperluan (<a class="text-warning">Optional</a>)</label>
+                                <textarea class="form-control" id="keperluan" rows="2" placeholder="Tuliskan keperluan peminjaman barang"></textarea>
                             </div>
                         </div>
                     </div>
                     <div class="card-footer d-flex align-items-center justify-content-between py-3">
                         <button class="btn btn-secondary-transparent" id="clearInp"><i class="ri-edit-line me-1"></i> Kosongkan</button>
-                        <button class="btn btn-primary" id="btn-tambah" onclick="tambah()"><i class="ri-send-plane-fill me-1"></i> Submit</button>
+                        <button class="btn btn-primary" id="btn-tambah" onclick="ajukan()"><i class="ri-send-plane-fill me-1"></i> Submit</button>
                     </div>
                 </div>
             </div>
@@ -158,6 +160,7 @@
 
     <script>
         let dataBarang = [];
+        let now = new Date();
 
         $(document).ready(function() {
             // SELECT2
@@ -166,17 +169,17 @@
                 var e = $(this);
                 e.wrap('<div class="position-relative"></div>').select2({
                     placeholder: "Pilih",
-                    dropdownParent: e.parent()
+                    // dropdownParent: e.parent()
+                    dropdownParent: e.closest('.card')
                 })
             });
 
-            // FLATPICKR
             const today = new Date();
             const tomorrow = new Date(today);
             tomorrow.setDate(tomorrow.getDate() + 1);
             const next = new Date(today);
             next.setDate(next.getDate() + 999999);
-            var now = moment().locale('id').format('Y-MM-DD HH:mm');
+            // FLATPICKR TGL PINJAM
             flatpickr(".flatpickr", {
                 enableTime: true,
                 defaultDate: now,
@@ -192,47 +195,232 @@
                     }
                 ]
             });
+            flatpickr(".flatpickr-back", {
+                enableTime: true,
+                // defaultDate: now,
+                minuteIncrement: 1,
+                time_24hr: true,
+                minDate: "today"
+            });
+
+            $('#table-add-row').on('change', '.kategori', function() {
+                let kategoriId = $(this).val();
+                let row = $(this).closest('tr');
+                let barangSelect = row.find('.barang');
+
+                barangSelect.prop('disabled',false).html(
+                    '<option value="">-- Pilih Barang --</option>'
+                );
+
+                if (!kategoriId) {
+                    return;
+                }
+
+                let kategori = null;
+                $.each(dataBarang, function(i, item) {
+                    if (item.id == kategoriId) {
+                        kategori = item;
+                        return false;
+                    }
+                });
+
+                if (!kategori) {
+                    return;
+                }
+
+                let barangOption = '<option value="">-- Pilih Barang --</option>';
+                $.each(kategori.barang, function(i, item) {
+                    barangOption += `
+                        <option value="${item.id}">
+                            ${item.nama}
+                        </option>
+                    `;
+                });
+
+                barangSelect.html(barangOption);
+                barangSelect.trigger('change');
+            });
+
+            // $(document).on('click', '.btnHapusBarang', function() {
+
+            //     if ($('.row-barang').length <= 1) {
+
+            //         iziToast.warning({
+            //             title: 'Pesan System!',
+            //             message: 'Minimal harus ada 1 barang.',
+            //             position: 'topRight'
+            //         });
+
+            //         return;
+            //     }
+
+            //     $(this).closest('tr').remove();
+
+            // });
 
             loadTambah();
         });
 
+        function getKategoriOption() {
+
+            let option = '<option value="">-- Pilih Kategori --</option>';
+
+            $.each(dataBarang, function(i, item) {
+                option += `
+                    <option value="${item.id}">
+                        ${item.nama}
+                    </option>
+                `;
+            });
+
+            return option;
+        }
+
         function loadTambah() {
             $.ajax({
                 url: "/api/v4/it/epinjam/loadtambah",
-                type: 'GET',
-                dataType: 'json', // added data type
-                beforeSend: function() {
-                    // $("#btn-refresh").prop('disabled', true);
-                    // $("#btn-refresh").find("i").addClass('fa-spin');
-                },
+                type: "GET",
+                dataType: "json",
+
                 success: function(res) {
 
+                    // SHOW KATEGORI
                     dataBarang = res.barang;
 
                     let kategoriOption = '<option value="">-- Pilih Kategori --</option>';
-
-                    $.each(res.barang, function(i, item) {
+                    $.each(dataBarang, function(i, item) {
                         kategoriOption += `
                             <option value="${item.id}">
                                 ${item.nama}
                             </option>
                         `;
                     });
+                    $('.kategori').html(kategoriOption);
 
-                    $('#kategori').html(kategoriOption).trigger('change');
+                    // SHOW PEMINJAM
+                    $("#peminjam").empty().append(`<option value="" selected hidden>-- Pilih Pegawai --</option>`);
+                    res.users.forEach(user => {
+
+                        let roles = user.roles.map(r => r.name).join(', ');
+
+                        $("#peminjam").append(`
+                            <option value="${user.id}">
+                                ${user.nama} (${roles})
+                            </option>
+                        `);
+                    });
+                    $("#peminjam").trigger('change');
                 },
-                error: function(xhr, status, error) {
+
+                error: function(xhr) {
                     iziToast.error({
                         title: 'Pesan System!',
-                        message: xhr.responseText ?? 'Terjadi kesalahan saat memuat data.',
+                        message: xhr.responseText,
                         position: 'topRight'
                     });
-                },
-                complete: function() {
-                    // $("#btn-refresh").prop('disabled', false);
-                    // $("#btn-refresh").find("i").removeClass("fa-spin");
                 }
-            })
+            });
+        }
+
+        function tambahBarang() {
+
+            // let kategoriOption = $('.kategori:first').html();
+
+            let row = `
+                <tr class="row-barang">
+                    <td class="pt-2 pb-0">
+                        <select class="select2 form-control kategori" style="width:100%">
+                            ${getKategoriOption()}
+                        </select>
+                    </td>
+
+                    <td class="pt-2 pb-0">
+                        <select class="select2 form-control barang" style="width:100%" disabled>
+                            <option value="">-- Pilih Barang --</option>
+                        </select>
+                    </td>
+
+                    <td class="pt-2 pb-0">
+                        <input class="form-control peruntukan" type="text" placeholder="Optional">
+                    </td>
+
+                    <td class="pt-2 pb-0">
+                        <input class="form-control flatpickr-back tgl_kembali" type="text">
+                    </td>
+
+                    <td class="pt-2 pb-0 cell-fit">
+                        <button type="button" class="btn btn-sm btn-danger-light btnHapusBarang" onclick="hapusBarang(this)">
+                            <i class="ri-delete-bin-5-line fs-16 me-1"></i> Hapus
+                        </button>
+                    </td>
+                </tr>
+            `;
+
+            $('#table-add-row tbody tr:last').before(row);
+
+            let newRow = $('#table-add-row tbody tr.row-barang:last');
+            // let newRow = $('table tbody tr:last').prev();
+            newRow.find('.select2').each(function() {
+
+                $(this).wrap('<div class="position-relative"></div>')
+                    .select2({
+                        placeholder: "Pilih",
+                        // dropdownParent: $(this).parent()
+                        dropdownParent: $(this).closest('.card')
+                    });
+
+            });
+
+            let inputBaru = newRow.find('.flatpickr-back')[0];
+
+            flatpickr(inputBaru, {
+                enableTime: true,
+                // defaultDate: now,
+                minuteIncrement: 1,
+                time_24hr: true,
+                minDate: "today"
+            });
+        }
+
+        function hapusBarang(btn) {
+
+            if ($('.row-barang').length <= 1) {
+
+                iziToast.warning({
+                    title: 'Pesan System!',
+                    message: 'Minimal harus ada 1 barang.',
+                    position: 'topRight'
+                });
+
+                return;
+            }
+
+            $(btn).closest('tr').remove();
+        }
+
+        function simpan() {
+
+            let detail = [];
+
+            $('.row-barang').each(function() {
+
+                detail.push({
+                    kategori_id : $(this).find('.kategori').val(),
+                    barang_id   : $(this).find('.barang').val(),
+                    tgl_kembali : $(this).find('.tgl_kembali').val()
+                });
+
+            });
+
+            let data = {
+                user_id: $('#user').val(),
+                tgl_pinjam: $('#tgl_pinjam').val(),
+                keperluan: $('#keperluan').val(),
+                detail: detail
+            };
+
+            console.log(data);
+
         }
 
         function refresh() {

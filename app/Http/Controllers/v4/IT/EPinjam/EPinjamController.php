@@ -25,9 +25,22 @@ class EPinjamController extends Controller
     function loadTambah()
     {
         $barang = epinjam_kategori::with('barang')->get();
+        $users = User::select('id', 'nama_lengkap', 'nama', 'name')
+                        ->with([
+                            'roles:id,name'
+                        ])
+                        ->whereNotNull('nik')
+                        ->whereNull('deleted_at')
+                        ->where(function ($q) {
+                            $q->where('status', '!=', 99)
+                            ->orWhereNull('status');
+                        })
+                        ->orderBy('nama', 'ASC')
+                        ->get();
 
         $data = [
             'barang' => $barang,
+            'users' => $users,
         ];
 
         return response()->json($data, 200);
