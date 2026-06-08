@@ -19,6 +19,7 @@ use \App\Http\Controllers\v4\IT\TiketController;
 use \App\Http\Controllers\v4\IT\EPinjam\EPinjamController;
 use \App\Http\Controllers\v4\IT\EPinjam\EPinjamListController;
 use \App\Http\Controllers\v4\IT\EPinjam\EPinjamBarangController;
+use \App\Http\Controllers\v4\IT\EPinjam\EPinjamAsalController;
 use \App\Http\Controllers\v4\IT\EPinjam\EPinjamKategoriController;
 use \App\Http\Controllers\Whatsapp\HelpdeskController;
 use \App\Http\Controllers\v4\Akun\AksesJabatanController;
@@ -55,8 +56,14 @@ use App\Http\Controllers\v4\AI\KlaimBpjsController;
 
 Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU v.4
 
-    // PERBAIKAN TIKET IT
-        Route::post('perbaikanit/tiket/kirim', [HelpdeskController::class, 'kirimTiket']);
+    // IT
+        // PENGAJUAN
+            // PERBAIKAN
+                Route::post('it/pengajuan/tiket/kirim', [HelpdeskController::class, 'kirimTiket']);
+
+        // E-PINJAM
+            Route::get('it/epinjam', [EPinjamController::class, 'refresh']);
+            Route::get('it/epinjam/loadtambah', [EPinjamController::class, 'loadTambah']);
 
     // WHATSAPP API
         // Route::post('whatsapp/send-message', [HelpdeskController::class, 'store']);

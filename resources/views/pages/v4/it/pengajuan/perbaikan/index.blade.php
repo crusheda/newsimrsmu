@@ -581,7 +581,7 @@
             }
 
             $.ajax({
-                url: "/api/v4/perbaikanit/tiket/kirim", // API WA Baileysid
+                url: "/api/v4/it/pengajuan/tiket/kirim", // API WA Baileysid
                 type: "POST",
                 data: formData,
                 processData:false,

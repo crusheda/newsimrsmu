@@ -17,9 +17,9 @@ return new class extends Migration
                 $table->unsignedBigInteger('id_kategori')->comment('ID from Table epinjam_kategori');
                 $table->foreign('id_kategori')->references('id')->on('epinjam_kategori');
 
+            $table->integer('id_asal')->comment('Unit Asal Tabel Epinjam Asal');
             $table->string('nama', 500);
-            $table->string('asal', 300)->nullable()->comment('Unit Asal');
-            $table->string('kondisi', 200)->nullable();
+            $table->integer('kondisi')->default(true)->comment('Referensi JENIS = 15');
             $table->longText('kelengkapan')->nullable();
 
             $table->string('title', 200)->comment('Nama Lampiran')->nullable();

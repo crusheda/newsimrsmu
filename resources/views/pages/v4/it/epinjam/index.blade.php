@@ -20,49 +20,132 @@
         </div>
 
         <div class="row justify-content-center">
-            <div class="col-sm-5">
+            <div class="col-sm-12">
                 <div class="card custom-card">
                     <div class="card-header d-flex align-items-center justify-content-between py-3">
                         <h6 class="mb-0">Form <b class="text-secondary">Tambah</b></h6>
-                        <div class="btn-group">
-                            {{-- <button class="btn btn-sm btn-primary btn-shadow" data-bs-toggle="modal" data-bs-target="#tambah">
-                                <i class="ri-git-repository-commits-line me-1"></i> Upload Berkas
-                            </button> --}}
-                            <button class="btn btn-sm btn-warning btn-shadow" onclick="refresh()" id="btn-refresh" disabled>
-                                <i class="ri-loop-left-line nav-icon"></i></button>
-                        </div>
+                        <h6 class="mb-0 fs-12">Isian (<a class="text-danger">*</a>) wajib diisi</h6>
+                    </div>
+                    <div class="card-body border-bottom p-0">
+                        <table class="table nowrap text-nowrap table-borderless">
+                            <thead>
+                                <tr>
+                                    <th>Kategori (<a class="text-danger">*</a>)</th>
+                                    <th>Nama Barang (<a class="text-danger">*</a>)</th>
+                                    <th>Rencana Kembali</th>
+                                    <th>Hapus</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><select class="select2 form-control kategori" style="width: 100%" required></select></td>
+                                    <td><select class="select2 form-control barang" style="width: 100%" required></select></td>
+                                    <td><input class="form-control flatpickr" name="tgl_kembali" type="text" required></td>
+                                    <td><button class="btn btn-icon btn-danger-light"><i class="ri-delete-bin-5-line fs-23"></i></button></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <a class="btn btn-primary-transparent" href="javascript:void(0);">
+                                            <i class="bi bi-plus-lg"></i> Tambah Barang
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                     <div class="card-body row">
-                        <div class="col-md-6">
+                        <div class="col-md-9 mb-3">
                             <div class="form-group">
-                                <label class="form-label"></label>
-                                <input type="text" class="form-control" id="" placeholder="Masukkan">
+                                <label class="form-label">Pilih Pegawai Peminjam (<a class="text-danger">*</a>)</label>
+                                <select class="select2 form-control" id="user" style="width: 100%" required></select>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            sss
+                        <div class="col-md-3 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Pilih Tgl. Pinjam (<a class="text-danger">*</a>)</label>
+                                <input class="form-control flatpickr" name="tgl_pinjam" type="text" required>
+                            </div>
                         </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="form-label">Keperluan</label>
+                                <textarea class="form-control" id="keperluan" rows="2"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer d-flex align-items-center justify-content-between py-3">
+                        <button class="btn btn-secondary-transparent" id="clearInp"><i class="ri-edit-line me-1"></i> Kosongkan</button>
+                        <button class="btn btn-primary" id="btn-tambah" onclick="tambah()"><i class="ri-send-plane-fill me-1"></i> Submit</button>
                     </div>
                 </div>
             </div>
-            <div class="col-md-7">
+            <div class="col-md-12">
                 <div class="card custom-card">
                     <div class="card-header d-flex align-items-center justify-content-between py-3">
                         <h6 class="mb-0">Riwayat <b class="text-teal">Peminjaman</b></h6>
-                        <div class="btn-group">
-                            {{-- <button class="btn btn-sm btn-primary btn-shadow" data-bs-toggle="modal" data-bs-target="#tambah">
-                                <i class="ri-git-repository-commits-line me-1"></i> Upload Berkas
-                            </button> --}}
-                            <button class="btn btn-sm btn-warning btn-shadow" onclick="refresh()" id="btn-refresh" disabled>
-                                <i class="ri-loop-left-line nav-icon"></i></button>
+                        <div class="btn-group my-1">
+                            <button type="button" class="btn btn-sm btn-warning-transparent btn-wave"><i class="ri ri-refresh-line me-1"></i> Refresh</button>
+                            <button class="btn btn-sm btn-primary-transparent btn-wave dropdown-toggle dropdown-toggle-split me-2" type="button" id="defaultDropdown"
+                                data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false"> Menu Admin </button>
+                            <ul class="dropdown-menu" aria-labelledby="defaultDropdown" style="">
+                                <li><a class="dropdown-item" href="javascript:void(0);">Ref Barang</a></li>
+                                <li><a class="dropdown-item" href="javascript:void(0);">Ref Kategori</a></li>
+                                <li><a class="dropdown-item" href="javascript:void(0);">Ref Asal</a></li>
+                            </ul>
                         </div>
                     </div>
-                    <div class="card-body row">
-                        <div class="col-md-6">
-                            s
+                    <div class="card-body">
+                        <div class="alert alert-solid-light shadow-sm">
+                            <h6>Baca <b class="text-danger">Saya</b>!</h6>
+                            <small>
+                                <ul class="mb-0">
+                                    <li>Pengubahan atau Penghapusan dokumen laporan hanya berlaku pada <strong class="text-danger">Hari saat Anda mengupload saja</strong></li>
+                                    <li>Penghapusan laporan lewat hari hanya dilakukan Oleh Admin Laporan</li>
+                                    <li>Tidak ada batasan upload per Bulan, pengguna bebas melakukan upload laporan rutin dengan ketentuan sebagai berikut :
+                                        <ul>
+                                            <li>File Upload yang disarankan berupa Dokumen PDF <b class="text-pink">(.pdf)</b> atau Word <b class="text-pink">(.doc/.docx)</b></li>
+                                            <li>Batas ukuran maksimum dokumen adalah <b class="text-primary">5 mb</b></li>
+                                        </ul>
+                                    </li>
+                                    <li>Laporan yang sudah diverifikasi <b class="text-danger">TIDAK BISA</b> diubah atau dihapus kembali</li>
+                                    <li>Catatan dan Verifikator diisi oleh Atasan atau bisa juga oleh Admin</li>
+                                </ul>
+                            </small>
                         </div>
-                        <div class="col-md-6">
-                            sss
+                        <div class="table-responsive">
+                            <table id="dttable" class="table dt-responsive table-hover nowrap w-100 align-middle">
+                                <thead>
+                                    <tr>
+                                        <th class="cell-fit">
+                                            <center>#ID</center>
+                                        </th>
+                                        <th>JUDUL LAPORAN RUTIN</th>
+                                        <th>BLN / THN</th>
+                                        <th>KETERANGAN</th>
+                                        <th>CATATAN</th>
+                                        <th>VERIFIKATOR</th>
+                                        <th>DIUPDATE</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tampil-tbody">
+                                    <tr>
+                                        <td colspan="10" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Menginisialisasi data...</center></td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th class="cell-fit">
+                                            <center>#ID</center>
+                                        </th>
+                                        <th>JUDUL LAPORAN RUTIN</th>
+                                        <th>BLN / THN</th>
+                                        <th>KETERANGAN</th>
+                                        <th>CATATAN</th>
+                                        <th>VERIFIKATOR</th>
+                                        <th>DIUPDATE</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -74,8 +157,206 @@
     </div>
 
     <script>
-        $(document).ready(function() {
+        let dataBarang = [];
 
+        $(document).ready(function() {
+            // SELECT2
+            var t = $(".select2");
+            t.length && t.each(function() {
+                var e = $(this);
+                e.wrap('<div class="position-relative"></div>').select2({
+                    placeholder: "Pilih",
+                    dropdownParent: e.parent()
+                })
+            });
+
+            // FLATPICKR
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const next = new Date(today);
+            next.setDate(next.getDate() + 999999);
+            var now = moment().locale('id').format('Y-MM-DD HH:mm');
+            flatpickr(".flatpickr", {
+                enableTime: true,
+                defaultDate: now,
+                minuteIncrement: 1,
+                time_24hr: true,
+                // disable: [{
+                //     from: tomorrow.toISOString().split("T")[0],
+                //     to: next.toISOString().split("T")[0]
+                // }]
+                disable: [
+                    function(date) {
+                        return date > today;
+                    }
+                ]
+            });
+
+            loadTambah();
         });
+
+        function loadTambah() {
+            $.ajax({
+                url: "/api/v4/it/epinjam/loadtambah",
+                type: 'GET',
+                dataType: 'json', // added data type
+                beforeSend: function() {
+                    // $("#btn-refresh").prop('disabled', true);
+                    // $("#btn-refresh").find("i").addClass('fa-spin');
+                },
+                success: function(res) {
+
+                    dataBarang = res.barang;
+
+                    let kategoriOption = '<option value="">-- Pilih Kategori --</option>';
+
+                    $.each(res.barang, function(i, item) {
+                        kategoriOption += `
+                            <option value="${item.id}">
+                                ${item.nama}
+                            </option>
+                        `;
+                    });
+
+                    $('#kategori').html(kategoriOption).trigger('change');
+                },
+                error: function(xhr, status, error) {
+                    iziToast.error({
+                        title: 'Pesan System!',
+                        message: xhr.responseText ?? 'Terjadi kesalahan saat memuat data.',
+                        position: 'topRight'
+                    });
+                },
+                complete: function() {
+                    // $("#btn-refresh").prop('disabled', false);
+                    // $("#btn-refresh").find("i").removeClass("fa-spin");
+                }
+            })
+        }
+
+        function refresh() {
+            if ($.fn.DataTable.isDataTable('#dttable')) {
+                $('#dttable').DataTable().clear().destroy();
+            }
+            $("#tampil-tbody").empty().append(`<tr><td colspan="10" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            $.ajax({
+                url: "/api/v4/it/epinjam",
+                type: 'GET',
+                dataType: 'json', // added data type
+                beforeSend: function() {
+                    $("#btn-refresh").prop('disabled', true);
+                    $("#btn-refresh").find("i").addClass('fa-spin');
+                },
+                success: function(res) {
+                    $("#tampil-tbody").empty();
+                    var date = getDateTime();
+                    res.show.forEach(item => {
+                        var updet = new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 10);
+                        if (item.has_verified) {
+                            colorBtn = 'success';
+                        } else {
+                            if (updet == date) {
+                                colorBtn = 'info';
+                            } else {
+                                colorBtn = 'secondary';
+                            }
+                        }
+                        content = `<tr id="data` + item.id + `">`;
+                        content += `<td><center>
+                              <div class='btn-group'>
+                                <a href='javascript:void(0);' class='link-${colorBtn} link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle' id="dropdown-${item.id}" data-bs-toggle='dropdown' aria-expanded='false'>${item.id}</a>
+                                <ul class='dropdown-menu dropdown-menu-end'>
+                                  <li><a href='javascript:void(0);' class='dropdown-item text-info' onclick="showWordPreview(${item.id})"><i class="fa-fw fas fa-file-archive nav-icon"></i> Preview</a></li>
+                                  <li><a href='javascript:void(0);' class='dropdown-item text-success' onclick="window.location.href='{{ url('/v4/administrasi/berkas/laporan/`+item.id+`') }}'"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>`;
+                        if (updet == date) {
+                            if (item.has_verified) {
+                                content +=
+                                    `<li><a href="javascript:void(0);" class='dropdown-item text-secondary' disabled><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</a></li>
+                                                    <li><a href='javascript:void(0);' class='dropdown-item text-secondary' disabled><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                            } else {
+                                content +=
+                                    `<li><a href="javascript:void(0);" class='dropdown-item text-warning' onclick="showUbah(` +
+                                    item.id +
+                                    `)"><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</a></li>
+                                                    <li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` +
+                                    item.id +
+                                    `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                            }
+                        }
+                        content += `</ul></div></center></td>`;
+                        content += `<td style="white-space: normal; word-wrap: break-word; word-break: break-word;">` + item.judul + ` `;
+                        if (item.has_verified) {
+                            content += `<i class="ri-verified-badge-fill text-success ms-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Laporan Terverifikasi"></i>`;
+                        }
+                        if (item.has_catatan) {
+                            content += `<i class="ri-sticky-note-fill text-warning ms-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Laporan Memiliki Catatan"></i>`;
+                        }
+                        content += `</td>`;
+                        content += `<td>` + formatBulanTahun(item.bln, item.thn) + `</td>
+                                    <td style="white-space: normal; word-wrap: break-word; word-break: break-word;">${item.ket?item.ket:''}</td>`;
+                        // LIST CATATAN
+                        content += `<td>`;
+                        if (item.catatan_list && item.catatan_list.length > 0) {
+                            content += `<ul>`;
+                            item.catatan_list.forEach(cat => {
+                                content += `<li style="white-space: normal; word-wrap: break-word; word-break: break-word;">${cat.deskripsi}<br><small><b>Ditambahkan Oleh</b> <span class="badge bg-light-warning">${cat.nama_user}</span></small></li>`;
+                            })
+                            content += `</ul>`;
+                        } else {
+                            content += `-`;
+                        }
+                        content += `</td>`;
+                        // LIST USERS VERIF
+                        content += `<td>`;
+                        if (item.verif_list && item.verif_list.length > 0) {
+                            content += `<ol>`;
+                            item.verif_list.forEach(ver => {
+                                content += `<li style="white-space: normal; word-wrap: break-word; word-break: break-word;">${ver.nama_user}</li>`;
+                            })
+                            content += `</ol>`;
+                        } else {
+                            content += `-`;
+                        }
+                        content += `</td>`;
+                        content += `<td class='text-start'>` + new Date(item.updated_at).toLocaleString("sv-SE") + `</td>`;
+                        content += `</tr>`;
+                        $('#tampil-tbody').append(content);
+
+                        // Showing Tooltip
+                        $('[data-bs-toggle="tooltip"]').tooltip({
+                            trigger : 'hover'
+                        })
+                    });
+                    var table = $('#dttable').DataTable({
+                        order: [
+                            [6, "desc"]
+                        ],
+                        bAutoWidth: false,
+                        aoColumns : [
+                            { sWidth: '5%' },
+                            { sWidth: '25%' },
+                            { sWidth: '10%' },
+                            { sWidth: '15%' },
+                            { sWidth: '20%' },
+                            { sWidth: '15%' },
+                            { sWidth: '10%' },
+                        ],
+                        displayLength: 15,
+                    });
+                },
+                error: function(xhr, status, error) {
+                    iziToast.error({
+                        title: 'Pesan System!',
+                        message: xhr.responseText ?? 'Terjadi kesalahan saat memuat data.',
+                        position: 'topRight'
+                    });
+                },
+                complete: function() {
+                    $("#btn-refresh").prop('disabled', false);
+                    $("#btn-refresh").find("i").removeClass("fa-spin");
+                }
+            });
+        }
     </script>
 @endsection

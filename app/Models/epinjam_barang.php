@@ -15,4 +15,9 @@ class epinjam_barang extends Model
     {
         return $this->belongsTo(epinjam_kategori::class, 'id_kategori', 'id');
     }
+
+    public function asal() // RELASI TABEL EPINJAM_BARANG KE EPINJAM_ASAL
+    {
+        return $this->belongsTo(epinjam_asal::class, 'id_asal', 'id');
+    }
 }
