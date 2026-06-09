@@ -19,7 +19,13 @@ class EPinjamController extends Controller
 {
     function index()
     {
-        return view('pages.v4.it.epinjam.index');
+        $user = Auth::user();
+
+        if ($user->can('epinjam') || $user->hasRole('karu-it')) {
+            return view('pages.v4.it.epinjam.index');
+        } else {
+            return redirect()->back();
+        }
     }
 
     function loadTambah()
@@ -48,6 +54,22 @@ class EPinjamController extends Controller
 
     function refresh()
     {
+        $show = epinjam::with([
+            'userPinjam:id,nama,name',
+            'userPinjam.roles:id,name',
+            'userAdminPinjam:id,nama',
+            'userKembali:id,nama',
+            'userAdminKembali:id,nama',
+
+            'list:id,id_epinjam,id_barang,jumlah,tgl_rencana_kembali,peruntukan,status',
+            'list.barang:id,id_kategori,id_asal,nama,kondisi,kelengkapan',
+            'list.barang.kategori:id,nama',
+            'list.barang.asal:id,unit'
+        ])
+        ->where('status', 1)
+        ->orderByDesc('id')
+        ->get();
+
         $data = [
             'show' => $show,
         ];
@@ -70,13 +92,15 @@ class EPinjamController extends Controller
             'detail.*.tgl_kembali' => 'nullable|date',
 
         ],[
+            'user_id.required' => 'Pegawai peminjam belum dipilih.',
             'detail.required' => 'Barang yang dipinjam belum dipilih.',
+            'detail.*.barang_id.required' => 'Masih ada barang yang belum dipilih.',
             'detail.min' => 'Minimal 1 barang harus dipilih.'
         ]);
 
         // if ($validator->fails()) {
         //     return response()->json([
-        //         'message' => $validator->errors()->first()
+        //         'message' => $validator->errors()->toArray()
         //     ], 422);
         // }
 

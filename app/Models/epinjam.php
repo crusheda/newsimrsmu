@@ -11,12 +11,33 @@ class epinjam extends Model
     public $timestamps = true;
     use SoftDeletes;
 
+    protected $guarded = [];
+
     public function list() // RELASI TABEL EPINJAM KE EPINJAM_LIST
     {
         return $this->hasMany(epinjam_list::class, 'id_epinjam', 'id');
     }
 
-    protected $guarded = [];
+    public function userPinjam()
+    {
+        return $this->belongsTo(User::class, 'user_pinjam', 'id');
+    }
+
+    public function userAdminPinjam()
+    {
+        return $this->belongsTo(User::class, 'user_admin_pinjam', 'id');
+    }
+
+    public function userKembali()
+    {
+        return $this->belongsTo(User::class, 'user_kembali', 'id');
+    }
+
+    public function userAdminKembali()
+    {
+        return $this->belongsTo(User::class, 'user_admin_kembali', 'id');
+    }
+
     // protected $fillable = [];
 }
 

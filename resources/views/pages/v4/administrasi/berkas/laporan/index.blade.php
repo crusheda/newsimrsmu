@@ -381,8 +381,8 @@
                         if (updet == date) {
                             if (item.has_verified) {
                                 content +=
-                                    `<li><a href="javascript:void(0);" class='dropdown-item text-secondary' disabled><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</a></li>
-                                                    <li><a href='javascript:void(0);' class='dropdown-item text-secondary' disabled><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                    `<li><a href="javascript:void(0);" class='dropdown-item disabled'><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</a></li>
+                                    <li><a href='javascript:void(0);' class='dropdown-item disabled'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
                             } else {
                                 content +=
                                     `<li><a href="javascript:void(0);" class='dropdown-item text-warning' onclick="showUbah(` +

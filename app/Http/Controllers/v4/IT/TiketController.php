@@ -21,11 +21,12 @@ class TiketController extends Controller
         $user = Auth::user();
         $kategori = perbaikan_it_kategori::where('status', 1)->get();
 
-        if ($user->can('tiket-perbaikan-it') || $user->hasRole('karu-it')) {
+        if ($user->can('tiket_it') || $user->hasRole('karu-it')) {
             return view('pages.v4.it.pengajuan.perbaikan.index', compact('kategori'));
+        } else {
+            return redirect()->back();
         }
-
-        abort(403);
+        // abort(403);
     }
 
     function table()

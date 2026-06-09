@@ -37,16 +37,20 @@
                     </a>
                 </li>
 
-                @hasrole('karu-it')
+                @canany(['epinjam', 'tiket_it'])
                     <li class="slide__category"><span class="category-name">Informasi & Teknologi (<b class="text-pink">IT</b>)</span></li>
+                @endcanany
 
+                @can('epinjam')
                     <li class="slide">
                         <a href="{{ route('v4.it.epinjam') }}" class="side-menu__item">
                             <i class="side-menu__icon ri-shake-hands-line"></i>
                             <span class="side-menu__label">E-Pinjam</span>
                         </a>
                     </li>
+                @endcan
 
+                @can('tiket_it')
                     <li class="slide has-sub">
                         <a href="javascript:void(0);" class="side-menu__item">
                             <i class="side-menu__icon ri-bug-line"></i>
@@ -62,7 +66,7 @@
                             </li>
                         </ul>
                     </li>
-                @endhasrole
+                @endcan
 
                 {{-- <li class="slide">
                     <a href="#" class="side-menu__item">

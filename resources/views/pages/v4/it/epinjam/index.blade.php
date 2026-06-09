@@ -76,7 +76,7 @@
                         </div>
                     </div>
                     <div class="card-footer d-flex align-items-center justify-content-between py-3">
-                        <button class="btn btn-secondary-transparent" id="clearInp"><i class="ri-edit-line me-1"></i> Kosongkan</button>
+                        <button class="btn btn-secondary-transparent" onclick="clearInput()"><i class="ri-edit-line me-1"></i> Kosongkan</button>
                         <button class="btn btn-primary" id="btn-simpan-ajukan" onclick="simpan()"><i class="ri-send-plane-fill me-1"></i> Submit</button>
                     </div>
                 </div>
@@ -86,7 +86,9 @@
                     <div class="card-header d-flex align-items-center justify-content-between py-3">
                         <h6 class="mb-0">Riwayat <b class="text-teal">Peminjaman</b></h6>
                         <div class="btn-group my-1">
-                            <button type="button" class="btn btn-sm btn-warning-transparent btn-wave"><i class="ri ri-refresh-line me-1"></i> Refresh</button>
+                            <button type="button" class="btn btn-sm btn-warning-transparent btn-wave" onclick="refresh()" id="btn-refresh">
+                                <i class="ri-refresh-line me-1"></i> Refresh
+                            </button>
                             <button class="btn btn-sm btn-primary-transparent btn-wave dropdown-toggle dropdown-toggle-split me-2" type="button" id="defaultDropdown"
                                 data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false"> Menu Admin </button>
                             <ul class="dropdown-menu" aria-labelledby="defaultDropdown" style="">
@@ -97,7 +99,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="alert alert-solid-light shadow-sm">
+                        {{-- <div class="alert alert-solid-light shadow-sm">
                             <h6>Baca <b class="text-danger">Saya</b>!</h6>
                             <small>
                                 <ul class="mb-0">
@@ -113,7 +115,7 @@
                                     <li>Catatan dan Verifikator diisi oleh Atasan atau bisa juga oleh Admin</li>
                                 </ul>
                             </small>
-                        </div>
+                        </div> --}}
                         <div class="table-responsive">
                             <table id="dttable" class="table dt-responsive table-hover nowrap w-100 align-middle">
                                 <thead>
@@ -121,12 +123,12 @@
                                         <th class="cell-fit">
                                             <center>#ID</center>
                                         </th>
-                                        <th>JUDUL LAPORAN RUTIN</th>
-                                        <th>BLN / THN</th>
-                                        <th>KETERANGAN</th>
-                                        <th>CATATAN</th>
-                                        <th>VERIFIKATOR</th>
-                                        <th>DIUPDATE</th>
+                                        <th>NAMA PEMINJAM</th>
+                                        <th>JABATAN</th>
+                                        <th>STATUS</th>
+                                        <th>WAKTU PEMINJAMAN</th>
+                                        <th>DAFTAR BARANG</th>
+                                        <th>DIPERBARUI</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tampil-tbody">
@@ -139,12 +141,12 @@
                                         <th class="cell-fit">
                                             <center>#ID</center>
                                         </th>
-                                        <th>JUDUL LAPORAN RUTIN</th>
-                                        <th>BLN / THN</th>
-                                        <th>KETERANGAN</th>
-                                        <th>CATATAN</th>
-                                        <th>VERIFIKATOR</th>
-                                        <th>DIUPDATE</th>
+                                        <th>NAMA PEMINJAM</th>
+                                        <th>JABATAN</th>
+                                        <th>STATUS</th>
+                                        <th>WAKTU PEMINJAMAN</th>
+                                        <th>DAFTAR BARANG</th>
+                                        <th>DIPERBARUI</th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -175,6 +177,7 @@
             });
 
             const today = new Date();
+            today.setHours(23, 59, 59, 999);
             const tomorrow = new Date(today);
             tomorrow.setDate(tomorrow.getDate() + 1);
             const next = new Date(today);
@@ -196,7 +199,8 @@
                 ]
             });
             flatpickr(".flatpickr-back", {
-                enableTime: true,
+                // enableTime: true,
+                allowInput: true,
                 // defaultDate: now,
                 minuteIncrement: 1,
                 time_24hr: true,
@@ -259,6 +263,7 @@
             // });
 
             loadTambah();
+            refresh();
         });
 
         function getKategoriOption() {
@@ -345,7 +350,7 @@
                     </td>
 
                     <td class="pt-2 pb-0">
-                        <input class="form-control flatpickr-back tgl_kembali" type="text">
+                        <input class="form-control flatpickr-back tgl_kembali" type="text" placeholder="Optional">
                     </td>
 
                     <td class="pt-2 pb-0 cell-fit">
@@ -374,7 +379,8 @@
             let inputBaru = newRow.find('.flatpickr-back')[0];
 
             flatpickr(inputBaru, {
-                enableTime: true,
+                // enableTime: true,
+                allowInput: true,
                 // defaultDate: now,
                 minuteIncrement: 1,
                 time_24hr: true,
@@ -436,39 +442,64 @@
                         .addClass("ri-refresh-line ri-spin");
                 },
                 success: function(res) {
-
                     refresh();
-
                     iziToast.success({
                         title: 'Pesan Sukses!',
                         message: res.message ?? res,
                         position: 'topRight'
                     });
-
                 },
                 error: function(xhr) {
-
                     iziToast.error({
                         title: 'Pesan Galat!',
-                        message: xhr.responseJSON?.message ?? 'Terjadi kesalahan',
+                        message: xhr.responseJSON.message,
                         position: 'topRight'
                     });
-
                 },
                 complete: function() {
-
                     btn.find("i")
                         .removeClass("ri-refresh-line ri-spin")
                         .addClass("ri-send-plane-fill");
-
                     btn.prop('disabled', false);
-
                 }
             });
+        }
+
+        function clearInput() {
+
+            // Form utama
+            $('#peminjam').val(null).trigger('change');
+            // $('#tgl_pinjam').val('');
+            $('#keperluan').val('');
+
+            // Flatpickr utama (jika ada)
+            const fpPinjam = $('#tgl_pinjam')[0]?._flatpickr;
+            if (fpPinjam) {
+                fpPinjam.setDate(new Date(), true);
+            }
+            // $('#tgl_pinjam')[0]?._flatpickr?.clear();
+
+            // Hapus semua row barang kecuali pertama
+            $('.row-barang').not(':first').remove();
+
+            // Reset row pertama
+            let firstRow = $('.row-barang:first');
+
+            firstRow.find('.kategori').val(null).trigger('change');
+            firstRow.find('.barang').val(null).trigger('change').prop('disabled',true);
+            firstRow.find('.peruntukan').val('');
+
+            let tglKembali = firstRow.find('.tgl_kembali')[0];
+            if (tglKembali?._flatpickr) {
+                tglKembali._flatpickr.clear();
+            } else {
+                firstRow.find('.tgl_kembali').val('');
+            }
 
         }
 
         function refresh() {
+            const btn = $('#btn-refresh');
             if ($.fn.DataTable.isDataTable('#dttable')) {
                 $('#dttable').DataTable().clear().destroy();
             }
@@ -478,81 +509,83 @@
                 type: 'GET',
                 dataType: 'json', // added data type
                 beforeSend: function() {
-                    $("#btn-refresh").prop('disabled', true);
-                    $("#btn-refresh").find("i").addClass('fa-spin');
+                    btn.prop('disabled', true);
+                    btn.find("i").addClass('ri-spin');
                 },
                 success: function(res) {
                     $("#tampil-tbody").empty();
                     var date = getDateTime();
                     res.show.forEach(item => {
+                        let barang = '';
+                        item.list.forEach(list => {
+                            barang += `
+                                <li class="list-group-item d-sm-flex justify-content-between align-items-start border-0" style="padding:0">
+                                    <div class="ms-2 me-auto text-muted">
+                                        <div class="fw-medium fs-14 text-default">${list.barang.kategori.nama} - ${list.barang.nama}</div>
+                                        ${list.peruntukan ? '<small><b class="text-orange">Peruntukan : '+list.peruntukan+'</b></small><br>' : '' }
+                                        ${list.tgl_rencana_kembali ? '<small><b class="text-danger">Renc. Kembali : '+formatTanggalOnlyIndo(list.tgl_rencana_kembali)+'</b></small>' : '' }
+                                    </div>
+                                </li>
+                            `;
+                        });
                         var updet = new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 10);
-                        if (item.has_verified) {
+                        if (item.tglKembali) {
+                            status = 'Dikembalikan';
                             colorBtn = 'success';
                         } else {
                             if (updet == date) {
+                                status = 'Mulai Dipinjam';
                                 colorBtn = 'info';
                             } else {
-                                colorBtn = 'secondary';
+                                status = 'Sedang Dipinjam';
+                                colorBtn = 'primary';
                             }
                         }
                         content = `<tr id="data` + item.id + `">`;
                         content += `<td><center>
-                              <div class='btn-group'>
-                                <a href='javascript:void(0);' class='link-${colorBtn} link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle' id="dropdown-${item.id}" data-bs-toggle='dropdown' aria-expanded='false'>${item.id}</a>
-                                <ul class='dropdown-menu dropdown-menu-end'>
-                                  <li><a href='javascript:void(0);' class='dropdown-item text-info' onclick="showWordPreview(${item.id})"><i class="fa-fw fas fa-file-archive nav-icon"></i> Preview</a></li>
-                                  <li><a href='javascript:void(0);' class='dropdown-item text-success' onclick="window.location.href='{{ url('/v4/administrasi/berkas/laporan/`+item.id+`') }}'"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>`;
-                        if (updet == date) {
-                            if (item.has_verified) {
-                                content +=
-                                    `<li><a href="javascript:void(0);" class='dropdown-item text-secondary' disabled><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</a></li>
-                                                    <li><a href='javascript:void(0);' class='dropdown-item text-secondary' disabled><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
-                            } else {
-                                content +=
-                                    `<li><a href="javascript:void(0);" class='dropdown-item text-warning' onclick="showUbah(` +
-                                    item.id +
-                                    `)"><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</a></li>
-                                                    <li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` +
-                                    item.id +
-                                    `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
-                            }
-                        }
+                                <div class='btn-group'>
+                                    <a href='javascript:void(0);' class='link-${colorBtn} link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle' id="dropdown-${item.id}" data-bs-toggle='dropdown' aria-expanded='false'>${item.id}</a>
+                                    <ul class='dropdown-menu dropdown-menu-end'>`;
+                                    if (updet == date) {
+                                        content +=
+                                            `<li><a href="javascript:void(0);" class='dropdown-item text-warning' onclick="showUbah(${item.id})"><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</a></li>
+                                            <li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(${item.id})"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                    } else {
+                                        content +=
+                                            `<li><a href="javascript:void(0);" class='dropdown-item disabled'><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</a></li>
+                                            <li><a href='javascript:void(0);' class='dropdown-item disabled'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                    }
                         content += `</ul></div></center></td>`;
-                        content += `<td style="white-space: normal; word-wrap: break-word; word-break: break-word;">` + item.judul + ` `;
-                        if (item.has_verified) {
-                            content += `<i class="ri-verified-badge-fill text-success ms-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Laporan Terverifikasi"></i>`;
-                        }
-                        if (item.has_catatan) {
-                            content += `<i class="ri-sticky-note-fill text-warning ms-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Laporan Memiliki Catatan"></i>`;
-                        }
-                        content += `</td>`;
-                        content += `<td>` + formatBulanTahun(item.bln, item.thn) + `</td>
-                                    <td style="white-space: normal; word-wrap: break-word; word-break: break-word;">${item.ket?item.ket:''}</td>`;
-                        // LIST CATATAN
-                        content += `<td>`;
-                        if (item.catatan_list && item.catatan_list.length > 0) {
-                            content += `<ul>`;
-                            item.catatan_list.forEach(cat => {
-                                content += `<li style="white-space: normal; word-wrap: break-word; word-break: break-word;">${cat.deskripsi}<br><small><b>Ditambahkan Oleh</b> <span class="badge bg-light-warning">${cat.nama_user}</span></small></li>`;
-                            })
-                            content += `</ul>`;
-                        } else {
-                            content += `-`;
-                        }
-                        content += `</td>`;
-                        // LIST USERS VERIF
-                        content += `<td>`;
-                        if (item.verif_list && item.verif_list.length > 0) {
-                            content += `<ol>`;
-                            item.verif_list.forEach(ver => {
-                                content += `<li style="white-space: normal; word-wrap: break-word; word-break: break-word;">${ver.nama_user}</li>`;
-                            })
-                            content += `</ol>`;
-                        } else {
-                            content += `-`;
-                        }
-                        content += `</td>`;
-                        content += `<td class='text-start'>` + new Date(item.updated_at).toLocaleString("sv-SE") + `</td>`;
+
+                        let nama = item.user_pinjam?.nama ?? item.user_pinjam?.name ?? '-';
+                        let role = item.user_pinjam?.roles
+                                    ?.map(r => r.name)
+                                    .join(', ') ?? '-';
+                        content += `<td>
+                                        <div class='d-flex justify-content-start align-items-center'>
+                                            <div class='d-flex flex-column'>
+                                                <a class='mb-0 text-truncate'>${nama}</a>
+                                                <small class='text-muted text-wrap'>${item.keperluan ? 'Keperluan : '+item.keperluan : ''}</small>
+                                            </div>
+                                        </div>
+                                    </td>`;
+                        content += `<td style="white-space: normal; word-wrap: break-word; word-break: break-word;" class="text-uppercase">${role}</td>`;
+                        content += `<td><span class="badge bg-${colorBtn}">${status}</span></td>`;
+                        content += `<td>${formatTanggalIndo(item.tgl_pinjam)}</td>`;
+
+                        // LIST BARANG
+                        content += `<td style="white-space: normal; word-wrap: break-word; word-break: break-word;">
+                                        <ol class="list-group list-group-numbered">${barang}</ol>
+                                    </td>`;
+
+                        content += `<td>
+                                        <div class='d-flex justify-content-start align-items-center'>
+                                            <div class='d-flex flex-column'>
+                                                <a class='mb-0 text-wrap'>` + new Date(item.updated_at).toLocaleString("sv-SE") + `</a>
+                                                <small class='text-muted text-wrap'>` + item.user_admin_pinjam?.nama ?? '' + `</small>
+                                            </div>
+                                        </div>
+                                    </td>`;
                         content += `</tr>`;
                         $('#tampil-tbody').append(content);
 
@@ -565,16 +598,16 @@
                         order: [
                             [6, "desc"]
                         ],
-                        bAutoWidth: false,
-                        aoColumns : [
-                            { sWidth: '5%' },
-                            { sWidth: '25%' },
-                            { sWidth: '10%' },
-                            { sWidth: '15%' },
-                            { sWidth: '20%' },
-                            { sWidth: '15%' },
-                            { sWidth: '10%' },
-                        ],
+                        // bAutoWidth: false,
+                        // aoColumns : [
+                        //     { sWidth: '5%' },
+                        //     { sWidth: '25%' },
+                        //     { sWidth: '10%' },
+                        //     { sWidth: '15%' },
+                        //     { sWidth: '20%' },
+                        //     { sWidth: '15%' },
+                        //     { sWidth: '10%' },
+                        // ],
                         displayLength: 15,
                     });
                 },
@@ -586,10 +619,46 @@
                     });
                 },
                 complete: function() {
-                    $("#btn-refresh").prop('disabled', false);
-                    $("#btn-refresh").find("i").removeClass("fa-spin");
+                    btn.prop('disabled', false);
+                    btn.find("i").removeClass("ri-spin");
                 }
             });
+        }
+
+        function formatTanggalIndo(datetime) {
+            if (!datetime) return '';
+
+            const bulan = [
+                'Januari','Februari','Maret','April','Mei','Juni',
+                'Juli','Agustus','September','Oktober','November','Desember'
+            ];
+
+            const d = new Date(datetime.replace(' ', 'T'));
+
+            const tgl   = d.getDate().toString().padStart(2, '0');
+            const bln   = bulan[d.getMonth()];
+            const thn   = d.getFullYear();
+            const jam   = d.getHours().toString().padStart(2, '0');
+            const menit= d.getMinutes().toString().padStart(2, '0');
+
+            return `${tgl} ${bln} ${thn} ${jam}:${menit}`;
+        }
+
+        function formatTanggalOnlyIndo(date) {
+            if (!date) return '';
+
+            const bulan = [
+                'Januari','Februari','Maret','April','Mei','Juni',
+                'Juli','Agustus','September','Oktober','November','Desember'
+            ];
+
+            const d = new Date(date.replace(' ', 'T'));
+
+            const tgl   = d.getDate().toString().padStart(2, '0');
+            const bln   = bulan[d.getMonth()];
+            const thn   = d.getFullYear();
+
+            return `${tgl} ${bln} ${thn}`;
         }
     </script>
 @endsection
