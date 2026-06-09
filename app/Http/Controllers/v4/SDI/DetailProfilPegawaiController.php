@@ -296,7 +296,7 @@ class DetailProfilPegawaiController extends Controller
         foreach (json_decode($request->jabatan) as $key => $value) {
             $model = new model_has_roles;
             $model->role_id = $value;
-            $model->model_type = 'App\User';
+            $model->model_type = 'App\Models\User';
             $model->model_id = $request->pegawai_id;
             $model->save();
         }
@@ -503,7 +503,7 @@ class DetailProfilPegawaiController extends Controller
         foreach (json_decode($data->before) as $key => $value) {
             $model = new model_has_roles;
             $model->role_id = $value;
-            $model->model_type = 'App\User';
+            $model->model_type = 'App\Models\User';
             $model->model_id = $data->pegawai_id;
             $model->save();
         }
