@@ -64,6 +64,7 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
         // E-PINJAM
             Route::get('it/epinjam', [EPinjamController::class, 'refresh']);
             Route::get('it/epinjam/loadtambah', [EPinjamController::class, 'loadTambah']);
+            Route::post('it/epinjam/simpan', [EPinjamController::class, 'simpan']);
 
     // WHATSAPP API
         // Route::post('whatsapp/send-message', [HelpdeskController::class, 'store']);

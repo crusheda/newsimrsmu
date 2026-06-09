@@ -13,7 +13,7 @@ class epinjam extends Model
 
     public function list() // RELASI TABEL EPINJAM KE EPINJAM_LIST
     {
-        return $this->belongsTo(epinjam_list::class, 'id_epinjam', 'id');
+        return $this->hasMany(epinjam_list::class, 'id_epinjam', 'id');
     }
 
     protected $guarded = [];

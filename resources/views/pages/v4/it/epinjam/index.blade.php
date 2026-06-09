@@ -77,7 +77,7 @@
                     </div>
                     <div class="card-footer d-flex align-items-center justify-content-between py-3">
                         <button class="btn btn-secondary-transparent" id="clearInp"><i class="ri-edit-line me-1"></i> Kosongkan</button>
-                        <button class="btn btn-primary" id="btn-tambah" onclick="ajukan()"><i class="ri-send-plane-fill me-1"></i> Submit</button>
+                        <button class="btn btn-primary" id="btn-simpan-ajukan" onclick="simpan()"><i class="ri-send-plane-fill me-1"></i> Submit</button>
                     </div>
                 </div>
             </div>
@@ -322,7 +322,7 @@
             });
         }
 
-        function tambahBarang() {
+        function tambahBarang() { // ADD ROW BARANG
 
             // let kategoriOption = $('.kategori:first').html();
 
@@ -400,26 +400,71 @@
 
         function simpan() {
 
+            const btn = $('#btn-simpan-ajukan');
             let detail = [];
 
             $('.row-barang').each(function() {
 
                 detail.push({
-                    kategori_id : $(this).find('.kategori').val(),
-                    barang_id   : $(this).find('.barang').val(),
-                    tgl_kembali : $(this).find('.tgl_kembali').val()
+                    kategori_id: $(this).find('.kategori').val(),
+                    barang_id: $(this).find('.barang').val(),
+                    peruntukan: $(this).find('.peruntukan').val(),
+                    tgl_kembali: $(this).find('.tgl_kembali').val()
                 });
 
             });
 
             let data = {
-                user_id: $('#user').val(),
+                user_id: $('#peminjam').val(),
                 tgl_pinjam: $('#tgl_pinjam').val(),
                 keperluan: $('#keperluan').val(),
                 detail: detail
             };
 
-            console.log(data);
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                method: 'POST',
+                url: '/api/v4/it/epinjam/simpan',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                beforeSend: function() {
+                    btn.prop('disabled', true);
+                    btn.find("i")
+                        .removeClass("ri-send-plane-fill")
+                        .addClass("ri-refresh-line ri-spin");
+                },
+                success: function(res) {
+
+                    refresh();
+
+                    iziToast.success({
+                        title: 'Pesan Sukses!',
+                        message: res.message ?? res,
+                        position: 'topRight'
+                    });
+
+                },
+                error: function(xhr) {
+
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: xhr.responseJSON?.message ?? 'Terjadi kesalahan',
+                        position: 'topRight'
+                    });
+
+                },
+                complete: function() {
+
+                    btn.find("i")
+                        .removeClass("ri-refresh-line ri-spin")
+                        .addClass("ri-send-plane-fill");
+
+                    btn.prop('disabled', false);
+
+                }
+            });
 
         }
 
