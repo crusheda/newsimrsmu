@@ -201,7 +201,7 @@ class DetailProfilPegawaiController extends Controller
 
         // CEK DATA & SAVE LOG
         $cekData = referensi::find($request->ref_id);
-        $cekPegawai = users::where('id', $request->pegawai_id)->where('status', '==', null)->where('deleted_at', null)->first();
+        $cekPegawai = users::where('id', $request->pegawai_id)->where('status', '=', null)->where('deleted_at', null)->first();
 
         if (!$cekPegawai) {
             return response()->json(['message' => 'Pegawai tidak ditemukan/telah dinonaktifkan'], 404);
@@ -273,8 +273,10 @@ class DetailProfilPegawaiController extends Controller
         $getRoleBefore = model_has_roles::select('role_id')
             ->where('model_id',$request->pegawai_id)
             ->get();
-        foreach ($getRoleBefore as $key => $value) {
-            $roleBefore[] = `"`.$value->role_id.`"`;
+
+        $roleBefore = [];
+        foreach ($getRoleBefore as $value) {
+            $roleBefore[] = (string) $value->role_id;
         }
 
         // SAVING DATA ROTASI
