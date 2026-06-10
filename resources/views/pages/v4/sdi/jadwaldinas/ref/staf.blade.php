@@ -390,19 +390,22 @@
                             var nama_user = '';
                             var foto_user = '/images/pku/user.png';
                             res.users.forEach(item => {
+                                let badgeAtasan = '';
+                                if (item.is_atasan == 1) {
+                                    badgeAtasan = `<span class="badge bg-teal-transparent">Admin Jadwal</span>`;
+                                }
                                 if (val == item.id) {
                                     if (item.nama) {
                                         nama_user = item.nama;
                                     } else {
                                         nama_user = item.name+' (Belum Melengkapi Profil)';
                                     }
+                                    if (badgeAtasan != '') {
+                                        nama_user += ` <br><a class='ms-0'>${badgeAtasan}</a>`;
+                                    }
                                     res.foto_user.forEach(lis => {
                                         if (lis.user_id == item.id) {
                                             foto_user = '/storage/'+item.filename.substr(7,10000);
-                                            // if (item.filename) {
-                                            // } else {
-                                            //     foto_user = '';
-                                            // }
                                         }
                                     })
                                 }

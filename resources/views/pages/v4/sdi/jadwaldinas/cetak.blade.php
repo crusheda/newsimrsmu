@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Jadwal Dinas</title>
+    <title>Jadwal Dinas ID#{{ $list['id'] }}</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 <body>
@@ -111,7 +111,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script>
         $.ajax({
-            url: "/api/kepegawaian/jadwaldinas/jadwal/{{ $list['id'] }}",
+            url: "/api/v4/sdi/jadwaldinas/jadwal/{{ $list['id'] }}",
             type: 'GET',
             dataType: 'json',
             success: function(res) {
@@ -130,8 +130,8 @@
                 let n = 1;
                 let content = `
                     <div id="tabelCetakContainer">
-                        <h4 class="text-center mb-2 titleCetak text-uppercase">Jadwal Dinas Unit <b class="">${res.jadwal.unit}</b></h4>
-                        <h5 class="text-center mb-4 titleCetak text-uppercase">Bulan <b class="">${res.bulan}</b> Tahun <b class="">${res.jadwal.tahun}</b></h5>
+                        <h6 class="text-center titleCetak text-uppercase" style="margin-bottom:2px;margin-top:4px;font-size:20px">Jadwal Dinas Unit <b class="">${res.jadwal.unit}</b></h5>
+                        <h6 class="text-center titleCetak text-uppercase" style="margin-bottom:3px;margin-top:0px;font-size:16px">Bulan <b class="">${res.bulan}</b> Tahun <b class="">${res.jadwal.tahun}</b></h6>
                         <div class="row" id="tabelCetak">
                             <div class="col-md-12 mb-3">
                                 <div class="table-responsive p-10 pb-0">
@@ -215,7 +215,7 @@
                         let kodeShift = pegawai[`tgl${i}`]||'';
                         let lnItem = res.ln.find(ln => ln.tgl==i);
                         let style = lnItem ? ` style="background-color: ${lnItem.color};"` : '';
-                        content += `<td class="p-2 text-center tgl${i}"${style}>${kodeShift}</td>`;
+                        content += `<td class="p-2 text-center tgl${i}"${style}><center>${kodeShift}</center></td>`;
                     }
 
                     // total jam kerja
@@ -224,15 +224,15 @@
                         let kodeShift = pegawai[`tgl${i}`];
                         if(kodeShift && shiftDurasi[kodeShift]) totalJamKerja += shiftDurasi[kodeShift];
                     }
-                    content += `<td class="p-2 text-center">${totalJamKerja}</td>`;
+                    content += `<td class="p-2 text-center"><center>${totalJamKerja}</center></td>`;
 
                     // shift counts
                     res.shift.forEach((s,index)=>{
-                        content += `<td class="p-2 text-center" ${index==0?"style='border-left: 3px solid #eaeeaf;'":""}>${pegawaiShiftCounts[s.singkat]}</td>`;
+                        content += `<td class="p-2 text-center" ${index==0?"style='border-left: 3px solid #eaeeaf;'":""}><center>${pegawaiShiftCounts[s.singkat]}</center></td>`;
                     });
                     ['L','C','CM','CU','CH','CD'].forEach(s=>{
                         let border = (s==='CD') ? "style='border-right: 3px solid #eaeeaf;'" : '';
-                        content += `<td class="p-2 text-center" ${border}>${pegawaiShiftCounts[s]}</td>`;
+                        content += `<td class="p-2 text-center" ${border}><center>${pegawaiShiftCounts[s]}</center></td>`;
                     });
 
                     content += `</tr>`;

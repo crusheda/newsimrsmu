@@ -36,7 +36,7 @@ class JadwalDinasController extends Controller
         }
     }
 
-    function cetak($id)
+    function cetak($id) // AJAX ada di BLADE (mengambil data dari function controller jadwal)
     {
         $data = [
             // 'show' => $show,
@@ -1748,10 +1748,21 @@ class JadwalDinasController extends Controller
             ->first();
 
         if ($cekUser) {
-            $users  = users::select('id','nama')
-                            ->leftJoin('users_foto','users_foto.user_id','=','users.id')
-                            ->select('users.*','users_foto.title','users_foto.filename')
-                            ->get();
+            $users  = users::leftJoin('users_foto','users_foto.user_id','=','users.id')
+                            ->select(
+                                'users.id',
+                                'users.nama',
+                                'users_foto.title',
+                                'users_foto.filename',
+                                DB::raw("
+                                    IF(
+                                        users.id = ".$cekUser->pegawai_id.",
+                                        1,
+                                        0
+                                    ) as is_atasan
+                                "),
+                                DB::raw($cekUser->pegawai_id." as atasan_id")
+                            )->get();
             $foto_user = users_foto::get();
             $jabatan = ref_jadwal_jabatan::where('pegawai_id',$cekUser->pegawai_id)->get();
             $check = ref_jadwal_users::join('users','users.id','=','referensi_jadwal_users.pegawai_id')

@@ -379,7 +379,7 @@
                     $('#show_id_dokumen').empty().text('ID#'+id);
                     $('#btn-download-preview').prop('disabled',false);
                     $('#btn-download-preview').off('click').on('click', function() {
-                        window.location.href = `{{ url('berkas/administrasi/berkas/laporan/${id}') }}`;
+                        window.location.href = `{{ url('/v4/administrasi/berkas/laporan/${id}') }}`;
                     });
                 },
                 error: function(xhr) {
