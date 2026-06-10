@@ -387,7 +387,7 @@
             const btn = $('#btn-refresh');
 
             $.ajax({
-                url: "/api/v4/tiket/it/table",
+                url: "/api/v4/it/pengajuan/tiket/table",
                 type: 'GET',
                 dataType: 'json', // added data type
                 beforeSend: function () {

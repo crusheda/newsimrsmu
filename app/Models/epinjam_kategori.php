@@ -11,6 +11,8 @@ class epinjam_kategori extends Model
     public $timestamps = true;
     use SoftDeletes;
 
+    protected $guarded = [];
+
     public function barang() // RELASI TABEL EPINJAM_KATEGORI KE EPINJAM_BARANG
     {
         return $this->hasMany(epinjam_barang::class, 'id_kategori', 'id');

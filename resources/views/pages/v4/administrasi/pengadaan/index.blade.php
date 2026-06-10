@@ -901,9 +901,9 @@
                                 <td class="text-end"><b>${formatRupiah(item.total)}</b></td>
                                 <td class="text-center">
                                     <div class="btn-group">
-                                        <button class="btn btn-sm btn-secondary-transparent dropdown-toggle" data-bs-toggle="dropdown" id="btn-menu-riwayat-${item.id}">
+                                        <a href="javascript:void(0);" class="btn btn-sm btn-secondary-transparent dropdown-toggle" data-bs-toggle="dropdown" id="btn-menu-riwayat-${item.id}" data-bs-auto-close="true" aria-expanded="false">
                                             Menu
-                                        </button>
+                                        </a>
                                         <ul class="dropdown-menu">
                                             <li>
                                                 <a href="javascript:void(0)" class="dropdown-item"

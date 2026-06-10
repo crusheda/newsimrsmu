@@ -20,7 +20,7 @@ use \App\Http\Controllers\v4\Dashboard\DashboardController;
 use \App\Http\Controllers\v4\Setting\ProfilController;
 use \App\Http\Controllers\v4\IT\TiketController;
 use \App\Http\Controllers\v4\IT\EPinjam\EPinjamController;
-use \App\Http\Controllers\v4\IT\EPinjam\EPinjamListController;
+// use \App\Http\Controllers\v4\IT\EPinjam\EPinjamListController;
 use \App\Http\Controllers\v4\IT\EPinjam\EPinjamBarangController;
 use \App\Http\Controllers\v4\IT\EPinjam\EPinjamKategoriController;
 use \App\Http\Controllers\v4\Akun\AksesJabatanController;
@@ -60,12 +60,15 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function 
     Route::get('profil', [ProfilController::class, 'index'])->name('v4.profil');
 
     // IT
-        // PENGAJUAN
+        // PENGAJUAN TIKET
             // PERBAIKAN
                 Route::get('it/pengajuan/tiket', [TiketController::class, 'index'])->name('v4.it.pengajuan.tiket');
 
         // E-PINJAM
             Route::get('it/epinjam', [EPinjamController::class, 'index'])->name('v4.it.epinjam');
+            Route::get('it/epinjam/ref/barang', [EPinjamBarangController::class, 'index'])->name('v4.it.epinjam.ref.barang');
+            Route::get('it/epinjam/ref/kategori', [EPinjamKategoriController::class, 'index'])->name('v4.it.epinjam.ref.kategori');
+            Route::get('it/epinjam/ref/asal', [EPinjamAsalController::class, 'index'])->name('v4.it.epinjam.ref.asal');
 
     // MANAJEMEN AKUN
         // AKSES & JABATAN
@@ -87,7 +90,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function 
             Route::get('administrasi/berkas/laporan', [LaporanBulananController::class, 'index'])->name('v4.administrasi.berkas.laporan');
             Route::get('administrasi/berkas/laporan/verif', [LaporanBulananController::class, 'showVerif'])->name('v4.administrasi.berkas.laporan.verif');
             Route::get('administrasi/berkas/laporan/{id}', [LaporanBulananController::class, 'show'])->name('v4.administrasi.berkas.laporan.show');
-            Route::post('administrasi/berkas/laporan/store', [LaporanBulananController::class, 'store'])->name('v4.administrasi.berkas.laporan.store');
+            // Route::post('administrasi/berkas/laporan/store', [LaporanBulananController::class, 'store'])->name('v4.administrasi.berkas.laporan.store');
 
             // RAPAT
             Route::get('administrasi/berkas/rapat', [RapatController::class, 'index'])->name('v4.administrasi.berkas.rapat');

@@ -92,9 +92,11 @@
                             <button class="btn btn-sm btn-primary-transparent btn-wave dropdown-toggle dropdown-toggle-split me-2" type="button" id="defaultDropdown"
                                 data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false"> Menu Admin </button>
                             <ul class="dropdown-menu" aria-labelledby="defaultDropdown" style="">
-                                <li><a class="dropdown-item" href="javascript:void(0);">Ref Barang</a></li>
-                                <li><a class="dropdown-item" href="javascript:void(0);">Ref Kategori</a></li>
-                                <li><a class="dropdown-item" href="javascript:void(0);">Ref Asal</a></li>
+                                <li><a class="dropdown-item" href="{{ route('v4.it.epinjam.ref.barang') }}">Ref Barang</a></li>
+                                {{-- <li><a class="dropdown-item" href="{{ route('v4.it.epinjam.ref.kategori') }}">Ref Kategori</a></li>
+                                <li><a class="dropdown-item" href="{{ route('v4.it.epinjam.ref.asal') }}">Ref Asal</a></li> --}}
+                                <li><a class="dropdown-item disabled" href="javascript:void(0);"><s>Ref Kategori</s></a></li>
+                                <li><a class="dropdown-item disabled" href="javascript:void(0);"><s>Ref Asal</s></a></li>
                             </ul>
                         </div>
                     </div>

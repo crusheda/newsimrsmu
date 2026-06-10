@@ -111,8 +111,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                 </div>
                 <div class="modal-body">
-                    <form class="form-auth-small needs-validation" name="formTambah" onsubmit="return saveData()" action="{{ route('v4.administrasi.berkas.laporan.store') }}" method="POST"
-                        enctype="multipart/form-data" novalidate>
+                    <form id="formTambah" onsubmit="return saveData(event)" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="col-md-12">
@@ -533,12 +532,15 @@
         }
 
         function tambah() {
-            $("#btn-tambah").prop('disabled', true);
-            $("#btn-tambah").find("i").toggleClass("fa-plus fa-sync fa-spin");
+            const btn = $('#btn-tambah');
             $.ajax({
                 url: "/api/v4/administrasi/berkas/laporan/formupload",
                 type: 'GET',
                 dataType: 'json', // added data type
+                beforeSend: function() {
+                    btn.prop('disabled', true);
+                    btn.find("i").toggleClass("fa-plus fa-sync fa-spin");
+                },
                 success: function(res) {
                     if (res === 1) {
                         $('#tambah').modal('show');
@@ -549,10 +551,18 @@
                             position: 'topRight'
                         });
                     }
-                    $("#btn-tambah").prop('disabled', false);
-                    $("#btn-tambah").find("i").removeClass("fa-sync fa-spin").addClass("fa-plus");
                 },
-                error: function(res) {}
+                error: function(xhr) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: xhr.responseJSON.message,
+                        position: 'topRight'
+                    });
+                },
+                complete: function() {
+                    btn.prop('disabled', false);
+                    btn.find("i").removeClass("fa-sync fa-spin").addClass("fa-plus");
+                }
             });
         }
 
@@ -598,7 +608,10 @@
             });
         }
 
-        function saveData() {
+        function saveData(e) {
+
+            e.preventDefault();
+
             let bln   = $('#bln-tambah').val();
             let thn   = $('#thn-tambah').val();
             let judul = $('input[name="judul"]').val();
@@ -640,7 +653,6 @@
                 return false;
             }
 
-            // Validasi ukuran file (5MB = 5242880 bytes)
             if (file.size > 5242880) {
                 iziToast.error({
                     title: 'Pesan Galat!',
@@ -650,10 +662,22 @@
                 return false;
             }
 
-            // Validasi tipe file
-            let allowed = ['application/pdf',
-                        'application/msword',
-                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+            let allowed = [
+                // PDF
+                'application/pdf',
+
+                // WORD
+                'application/msword', // .doc
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
+
+                // EXCEL
+                'application/vnd.ms-excel', // .xls
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
+
+                // POWERPOINT
+                'application/vnd.ms-powerpoint', // .ppt
+                'application/vnd.openxmlformats-officedocument.presentationml.presentation' // .pptx
+            ];
 
             if (!allowed.includes(file.type)) {
                 iziToast.error({
@@ -664,11 +688,86 @@
                 return false;
             }
 
-            // Kalau lolos semua
-            $("#btn-simpan").attr('disabled', true);
-            $("#btn-simpan").find("i").removeClass("fa-save").addClass("fa-spinner fa-spin");
+            let formData = new FormData($('#formTambah')[0]);
 
-            return true;
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "/api/v4/administrasi/berkas/laporan/store",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                dataType: "json",
+
+                beforeSend: function() {
+                    $("#btn-simpan").prop('disabled', true);
+                    $("#btn-simpan")
+                        .find("i")
+                        .removeClass("fa-save")
+                        .addClass("fa-spinner fa-spin");
+                },
+
+                success: function(res) {
+
+                    iziToast.success({
+                        title: 'Sukses!',
+                        message: res.message,
+                        position: 'topRight'
+                    });
+
+                    $('#tambah').modal('hide');
+
+                    $('#formTambah')[0].reset();
+
+                    $('#bln-tambah').val('').trigger('change');
+                    $('#thn-tambah').val('').trigger('change');
+
+                    refresh();
+                },
+
+                error: function(xhr) {
+
+                    let pesan = 'Terjadi kesalahan';
+
+                    if (xhr.status === 422) {
+
+                        if (xhr.responseJSON.errors) {
+
+                            pesan = '';
+
+                            $.each(xhr.responseJSON.errors, function(key, value) {
+                                pesan += value[0] + '<br>';
+                            });
+
+                        } else if (xhr.responseJSON.message) {
+
+                            pesan = xhr.responseJSON.message;
+                        }
+
+                    } else if (xhr.responseJSON?.message) {
+
+                        pesan = xhr.responseJSON.message;
+                    }
+
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: pesan,
+                        position: 'topRight'
+                    });
+                },
+
+                complete: function() {
+                    $("#btn-simpan").prop('disabled', false);
+                    $("#btn-simpan")
+                        .find("i")
+                        .removeClass("fa-spinner fa-spin")
+                        .addClass("fa-save");
+                }
+            });
+
+            return false;
         }
 
         function showUbah(id) {

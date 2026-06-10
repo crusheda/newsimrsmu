@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\v4\Setting\ProfilController;
 use \App\Http\Controllers\v4\IT\TiketController;
 use \App\Http\Controllers\v4\IT\EPinjam\EPinjamController;
-use \App\Http\Controllers\v4\IT\EPinjam\EPinjamListController;
+// use \App\Http\Controllers\v4\IT\EPinjam\EPinjamListController;
 use \App\Http\Controllers\v4\IT\EPinjam\EPinjamBarangController;
 use \App\Http\Controllers\v4\IT\EPinjam\EPinjamAsalController;
 use \App\Http\Controllers\v4\IT\EPinjam\EPinjamKategoriController;
@@ -57,14 +57,27 @@ use App\Http\Controllers\v4\AI\KlaimBpjsController;
 Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU v.4
 
     // IT
-        // PENGAJUAN
+        // PENGAJUAN TIKET
             // PERBAIKAN
+                Route::get('it/pengajuan/tiket/table', [TiketController::class, 'table']);
                 Route::post('it/pengajuan/tiket/kirim', [HelpdeskController::class, 'kirimTiket']);
 
         // E-PINJAM
             Route::get('it/epinjam', [EPinjamController::class, 'refresh']);
             Route::get('it/epinjam/loadtambah', [EPinjamController::class, 'loadTambah']);
             Route::post('it/epinjam/simpan', [EPinjamController::class, 'simpan']);
+
+            // REF BARANG
+                Route::get('it/epinjam/ref/barang', [EPinjamBarangController::class, 'table']);
+                Route::get('it/epinjam/ref/barang/loadtambah', [EPinjamBarangController::class, 'loadtambah']);
+                Route::get('it/epinjam/ref/barang/ubah/{id}', [EPinjamBarangController::class, 'getUbah']);
+                Route::put('it/epinjam/ref/barang/ubah', [EPinjamBarangController::class, 'ubah']);
+                Route::post('it/epinjam/ref/barang/simpan', [EPinjamBarangController::class, 'simpan']);
+                Route::delete('it/epinjam/ref/barang/hapus/{id}', [EPinjamBarangController::class, 'hapus']);
+            // REF KATEGORI
+                Route::get('it/epinjam/ref/kategori', [EPinjamKategoriController::class, 'table']);
+            // REF ASAL
+                Route::get('it/epinjam/ref/asal', [EPinjamAsalController::class, 'table']);
 
     // WHATSAPP API
         // Route::post('whatsapp/send-message', [HelpdeskController::class, 'store']);
@@ -87,9 +100,6 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
         Route::delete('profil/dokumen/hapus/{id}/proses', [ProfilController::class, 'hapusDokumen']);
         Route::get('profil/dokumen/ubah/{id}', [ProfilController::class, 'showUbahDokumen']);
         Route::get('profil/spkrkk/table/{id}', [ProfilController::class, 'tableSpkrkk']);
-
-    // TIKET IT
-        Route::get('tiket/it/table', [TiketController::class, 'table']);
 
     // AKSES JABATAN
         Route::get('aksesjabatan/data', [AksesJabatanController::class, 'table']);
@@ -132,6 +142,7 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
                 Route::get('administrasi/berkas/laporan/formupload', [LaporanBulananController::class, 'formUpload']);
                 Route::get('administrasi/berkas/laporan/table/{id}/verif', [LaporanBulananController::class, 'tableVerif']);
                 Route::get('administrasi/berkas/laporan/table/{id}', [LaporanBulananController::class, 'table']);
+                Route::post('administrasi/berkas/laporan/store', [LaporanBulananController::class, 'store']);
                 Route::get('administrasi/berkas/laporan/getubah/{id}',[LaporanBulananController::class, 'getUbah']);
                 Route::get('administrasi/berkas/laporan/hapus/{id}',[LaporanBulananController::class, 'hapus']);
                 Route::post('administrasi/berkas/laporan/ubah/{id}',[LaporanBulananController::class, 'ubah']);

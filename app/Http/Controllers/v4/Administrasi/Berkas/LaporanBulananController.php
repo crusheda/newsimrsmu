@@ -149,7 +149,7 @@ class LaporanBulananController extends Controller
 
         $request->validate([
             'file' => ['max:5000'],
-            ]);
+        ]);
         // $request->validate([
         //     'file' => ['max:20000','mimes:pdf'],
         //     ]);
@@ -166,7 +166,10 @@ class LaporanBulananController extends Controller
 
         foreach ($find as $key => $value) {
             if ($value->title == $uploadedFile->getClientOriginalName()) {
-                return redirect()->back()->withErrors('Maaf, Nama file '.$value->title.' sudah pernah diupload oleh seseorang. Mohon Ganti Nama File yang berbeda. Disarankan untuk menambahkan identitas Unit/Bulan/Tahun untuk membuat nama yang unik pada File Anda.');
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Maaf, Nama file '.$value->title.' sudah pernah diupload. Mohon ganti nama file.'
+                ], 422);
             }
         }
 
@@ -183,7 +186,11 @@ class LaporanBulananController extends Controller
         $data->ket = $request->ket;
 
         $data->save();
-        return Redirect::back()->with('message','Tambah Laporan Bulanan Berhasil');
+
+        return response()->json([
+            'status'  => true,
+            'message' => 'Tambah Laporan Bulanan Berhasil'
+        ]);
     }
 
     /**
@@ -620,7 +627,7 @@ class LaporanBulananController extends Controller
         $tahun = Carbon::now()->isoFormat('Y');
 
         // $sizeFile = number_format(Storage::disk('public')->size(preg_replace('/^public\//', '', $data->filename)) / 1048576,2);
-        $path = preg_replace('/^public\//', '', $data->filename);
+        $path = preg_replace('/^public\//', '', $show->filename);
         $sizeFile = 0;
         if (Storage::disk('public')->exists($path)) {
             $sizeFile = number_format(
