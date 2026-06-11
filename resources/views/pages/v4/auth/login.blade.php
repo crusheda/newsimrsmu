@@ -29,6 +29,16 @@
                             <form id="loginForm" method="POST" action="{{ route('v4.login.process') }}" class="row gy-3">
                                 @csrf
 
+                                @if(session('error'))
+                                    <div class="col-xl-12 mb-2">
+                                        <div class="alert alert-warning alert-dismissible fade show shadow-sm">
+                                            <i class="ri-error-warning-line me-2"></i>
+                                            {{ session('error') }}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                        </div>
+                                    </div>
+                                @endif
+
                                 @if ($errors->has('throttle'))
                                     <div class="col-xl-12 mb-2" id="throttleAlert">
                                         <div class="alert alert-danger shadow-sm">
@@ -155,10 +165,27 @@
                                 </div> --}}
 
                                 {{-- Submit --}}
-                                <div class="col-xl-12 d-grid">
-                                    <button type="submit" id="btnLogin" class="btn btn-primary">
-                                        <i class="ri-login-box-line fs-16 me-1"></i> Sign In
-                                    </button>
+                                <div class="col-xl-12">
+                                    <div class="btn-group w-100" role="group">
+
+                                        <button
+                                            type="button"
+                                            class="btn btn-secondary-transparent"
+                                            style="flex:1;"
+                                            onclick="window.location.href='{{ route('v4.portal') }}'">
+                                            <i class="ri-arrow-left-s-line me-1"></i>
+                                            Portal
+                                        </button>
+
+                                        <button type="submit"
+                                            id="btnLogin"
+                                            class="btn btn-primary"
+                                            style="flex:4;">
+                                            <i class="ri-login-box-line fs-16 me-1"></i>
+                                            Sign In
+                                        </button>
+
+                                    </div>
                                 </div>
 
                                 {{-- OR --}}

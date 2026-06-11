@@ -5,6 +5,7 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
+use Illuminate\Session\TokenMismatchException;
 use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
 use App\Http\Middleware\ContentSecurityPolicy;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -33,6 +34,32 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->append(ContentSecurityPolicy::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
+
+        // ✅ SESSION EXPIRED / CSRF TOKEN EXPIRED
+        // $exceptions->render(function (
+        //     TokenMismatchException $e,
+        //     Request $request
+        // ) {
+
+        //     if ($request->expectsJson()) {
+        //         return response()->json([
+        //             'message' => 'Session expired'
+        //         ], 419);
+        //     }
+
+        //     return redirect()
+        //         ->route('v4.login')
+        //         ->with('error', 'Sesi Anda telah berakhir. Silakan login kembali.');
+        // });
+        $exceptions->respond(function ($response) {
+
+            if ($response->getStatusCode() === 419) {
+                return redirect()->route('v4.login')
+                    ->with('error', 'Sesi Anda telah berakhir. Silakan login kembali.');
+            }
+
+            return $response;
+        });
 
         // ✅ HANDLE THROTTLE (429)
         // $exceptions->render(function (
