@@ -45,8 +45,8 @@ use \App\Http\Controllers\v4\SDI\SpkRkkController;
 use \App\Http\Controllers\v4\SDI\Absensi\AbsensiController;
 use \App\Http\Controllers\v4\SDI\Absensi\AbsensiDashboardController;
 use \App\Http\Controllers\v4\SDI\Absensi\AbsensiDeviceController;
-use \App\Http\Controllers\v4\SDI\Rekrutmen\PengumumanController as RekrutmenPengumumanController;
-use \App\Http\Controllers\v4\SDI\Rekrutmen\RegistrasiController as RekrutmenRegistrasiController;
+use \App\Http\Controllers\v4\SDI\Rekrutmen\PengumumanController;
+use \App\Http\Controllers\v4\SDI\Rekrutmen\RegistrasiController;
 use \App\Http\Controllers\v4\SDI\Pengajuan\SurketController;
 use \App\Http\Controllers\v4\SDI\Pengajuan\IDCardController;
 use \App\Http\Controllers\v4\Publik\IPSRS\PerbaikanIPSRSController;
@@ -397,6 +397,17 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
                 Route::get('sdi/absensi/{id}/hapus/{user}', [AbsensiController::class, 'hapus']);
 
         // REKRUTMEN PEGAWAI
+            // PENGUMUMAN
+                Route::get('sdi/rekrutmen/pengumuman/table', [PengumumanController::class, 'table']);
+                Route::get('sdi/rekrutmen/pengumuman/{id}/show', [PengumumanController::class, 'show']);
+                Route::post('sdi/rekrutmen/pengumuman/simpan', [PengumumanController::class, 'simpan']);
+                Route::post('sdi/rekrutmen/pengumuman/ubah', [PengumumanController::class, 'ubah']);
+                Route::delete('sdi/rekrutmen/pengumuman/nonaktif/{id}', [PengumumanController::class, 'nonaktif']);
+
+            // REGISTRASI/LOKER
+                Route::get('sdi/rekrutmen/registrasi/table/{id}', [RegistrasiController::class, 'table']);
+                Route::post('sdi/rekrutmen/registrasi/hasil', [RegistrasiController::class, 'hasil']);
+                // Route::get('sdi/rekrutmen/registrasi/download/{dokumen}/{peserta}', [RegistrasiController::class, 'previewPdf']);
 
         // PENGAJUAN SDI
             // SURAT KETERANGAN
