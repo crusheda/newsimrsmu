@@ -144,10 +144,12 @@
 
                                 {{-- CLOUDFLARE TURNSTILE CAPTCHA --}}
                                 <div class="col-xl-12 text-center">
-                                    {{-- <label class="form-label text-default">Verifikasi</label> --}}
 
                                     <div class="cf-turnstile"
-                                        data-sitekey="{{ config('services.turnstile.site_key') }}">
+                                        data-sitekey="{{ config('services.turnstile.site_key') }}"
+                                        data-callback="turnstileSuccess"
+                                        data-expired-callback="turnstileExpired"
+                                        data-error-callback="turnstileError">
                                     </div>
 
                                     @error('cf-turnstile-response')
@@ -180,7 +182,7 @@
                                         <button type="submit"
                                             id="btnLogin"
                                             class="btn btn-primary"
-                                            style="flex:4;">
+                                            style="flex:4;" disabled>
                                             <i class="ri-login-box-line fs-16 me-1"></i>
                                             Sign In
                                         </button>
@@ -285,6 +287,21 @@
         //         }
         //     }, 50);
         // }
+
+        /* =========================
+            TURNSTILE
+        ========================== */
+        function turnstileSuccess(token) {
+            document.getElementById('btnLogin').disabled = false;
+        }
+
+        function turnstileExpired() {
+            document.getElementById('btnLogin').disabled = true;
+        }
+
+        function turnstileError() {
+            document.getElementById('btnLogin').disabled = true;
+        }
 
         /* =========================
             INIT

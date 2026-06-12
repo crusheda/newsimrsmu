@@ -464,7 +464,7 @@
                                     <th class="text-primary">TOTAL</th>
                                 </tr>
                             </thead>
-                            <tbody id="tampil-tbody">
+                            <tbody>
                                 <tr>
                                     <th><h6>Kebijakan RS</h6></th>
                                     <td id="count_kebijakan"></td>
@@ -636,6 +636,7 @@
         });
 
         function cari() {
+            const btn = $('#btn-cari-show');
             // $("#btn-cari").append('&nbsp;&nbsp;<span class="spinner-border" role="status" aria-hidden="true"></span>');
             $("#tampil-tbody").empty();
             $("#show_iklan").prop('hidden', true);
@@ -657,6 +658,10 @@
                         waktu: waktu,
                         pembuat: pembuat,
                     },
+                    beforeSend: function() {
+                        btn.prop('disabled', true);
+                        btn.find('i').removeClass('fa-search').addClass('fa-sync fa-spin');
+                    },
                     success: function(res) {
                         var adminID = "{{ Auth::user()->can('admin_regulasi') }}";
                         iziToast.success({
@@ -672,7 +677,7 @@
                             // var updet = item.updated_at.substring(0, 10);
                             content = "<tr id='data"+ item.id +"'>";
                             content += `<td><center><div class='btn-group'>
-                                        <a href='javascript:void(0);' class='link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</a>
+                                        <a href='javascript:void(0);' id="btnDropdown${item.id}" class='link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</a>
                                         <ul class='dropdown-menu dropdown-menu-end'>`
                                     + `<li><a href='javascript:void(0);' class='dropdown-item text-success' onclick="bacaRegulasi(`+item.id+`)"><i class='fas fa-book-open scaleX-n1-rtl me-1'></i> Baca</a></li>`
                                     + `<li><a href='javascript:void(0);' class='dropdown-item text-info' onclick="cetak(`+item.id+`)"><i class='fas fa-print scaleX-n1-rtl me-1'></i> Cetak PDF</a></li>`
@@ -720,24 +725,33 @@
                             displayLength: 20,
                         });
                     },
-                    error: function(res) {
+                    error: function(xhr) {
                         iziToast.error({
                             title: 'Pesan Galat!',
-                            message: 'Data pencarian tidak ditemukan, ulangi sekali lagi.',
+                            message: xhr.responseJSON.message ?? 'Data pencarian tidak ditemukan, ulangi sekali lagi',
                             position: 'topRight'
                         });
                         $("#tampil-tbody").append(`<tr><td colspan="7" style="font-size:13px"><center>No data available in table</center></td></tr>`);
+                    },
+                    complete: function() {
+                        btn.find('i').removeClass('fa-sync fa-spin').addClass('fa-search');
+                        btn.prop('disabled', false);
                     }
                 }
             );
         }
 
         function bacaRegulasi(id) {
+            const btn = $('#btnDropdown'+id);
             $.ajax(
             {
                 url: "/api/v4/administrasi/berkas/regulasi/baca/"+id,
                 type: 'GET',
                 dataType: 'json', // added data type
+                beforeSend: function() {
+                    btn.prop('disabled', true);
+                    btn.empty().html('<i class="ri-refresh-line ri-spin"></i>');
+                },
                 success: function(res) {
                     $('#show_id_regulasi').text("ID#" + res.id);
                     $('#pushregulasi').empty().append(`<div class="_df_book" id="fbook" source="/storage/`+res.filename.substring(7,1000)+`"></div>`);
@@ -745,12 +759,30 @@
                     // flipbook.dispose();
                     flipbook = jQuery("#fbook").flipBook();
                     $('#bacaregulasi').modal('show');
+                },
+                error: function(xhr) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: xhr.responseJSON.message,
+                        position: 'topRight'
+                    });
+                },
+                complete: function() {
+                    btn.empty().html(id);
+                    btn.prop('disabled', false);
                 }
             });
         }
 
         // SHOW DOKUMENTASI E-ABSENSI
         function cetak(id) {
+            const btn = $('#btnDropdown' + id);
+            const originalHtml = btn.html();
+
+            // beforeSend
+            btn.prop('disabled', true)
+            .html('<i class="ri-refresh-line ri-spin"></i>');
+
             fetch("/api/v4/administrasi/berkas/regulasi/cetak/"+id)
             .then(response => {
                 if (!response.ok) {
@@ -774,6 +806,13 @@
                     position: 'topRight'
                 });
                 console.error(error);
+            })
+            .finally(() => {
+
+                // complete
+                btn.prop('disabled', false)
+                .html(originalHtml);
+
             });
         }
 
@@ -923,11 +962,16 @@
         }
 
         function showUbah(id) {
+            const btn = $('#btnDropdown'+id);
             $.ajax(
             {
                 url: "/api/v4/administrasi/berkas/regulasi/showubah/"+id,
                 type: 'GET',
                 dataType: 'json', // added data type
+                beforeSend: function() {
+                    btn.prop('disabled', true);
+                    btn.empty().html('<i class="ri-refresh-line ri-spin"></i>');
+                },
                 success: function(res) {
                     // var dt = new Date(res.show.tanggal).toJSON().slice(0,19);
                     var sah = moment(res.show.sah).format('Y-MM-DD');
@@ -977,6 +1021,17 @@
                         `);
                     });
                     $('#ubah').modal('show');
+                },
+                error: function(xhr) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: xhr.responseJSON.message,
+                        position: 'topRight'
+                    });
+                },
+                complete: function() {
+                    btn.empty().html(id);
+                    btn.prop('disabled', false);
                 }
             });
             $('#jns_regulasi_edit').on('change', function() {
