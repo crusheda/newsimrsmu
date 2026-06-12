@@ -426,8 +426,8 @@
   /* Choices JS */
 
   /* footer year */
-  const yearElement = document.getElementById("year");
-  yearElement.innerHTML = new Date().getFullYear();
+//   const yearElement = document.getElementById("year");
+//   yearElement.innerHTML = new Date().getFullYear();
   /* footer year */
 
   /* node waves */

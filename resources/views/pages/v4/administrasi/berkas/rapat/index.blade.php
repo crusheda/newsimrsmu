@@ -273,8 +273,8 @@
                 <div class="modal-footer d-flex align-items-center justify-content-between">
                     <div>Diupload <a id="tgl_upload"></a></div>
                     <div>
-                        <button class="btn btn-primary" id="download_btn"><i
-                                class="fa fa-download"></i> Download</button>
+                        <a type="button" class="btn btn-primary" id="download_btn"><i
+                                class="fa fa-download"></i> Download</a>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
                                 class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
                     </div>
