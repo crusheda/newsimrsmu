@@ -5,8 +5,11 @@
     <div class="container-fluid page-container main-body-container">
         <div class="page-header-breadcrumb mb-3">
             <div class="d-flex align-center justify-content-between flex-wrap">
-                <h1 class="page-title fw-medium fs-18 mb-0 pe-none">
-                    Jadwal <b class="text-primary link-underline-primary text-decoration-underline">Dinas</b>
+                <h1 class="page-title fw-medium fs-18 mb-0 pe-none d-flex align-items-center gap-2">
+                    <span class="badge bg-purple-gradient">DIGITAL</span>
+                    <span>
+                        Jadwal <b class="text-primary link-underline-primary text-decoration-underline">Dinas</b>
+                    </span>
                 </h1>
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item pe-none">

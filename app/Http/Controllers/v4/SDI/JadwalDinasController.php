@@ -796,10 +796,16 @@ class JadwalDinasController extends Controller
             'CD'
         ];
 
+        $cycleOffset = $now->day > 20 ? 0 : 1;
+
         for($i=5;$i>=0;$i--){
 
+            // $start = $now->copy()
+            //     ->subMonths($i+1)
+            //     ->day(21)
+            //     ->startOfDay();
             $start = $now->copy()
-                ->subMonths($i+1)
+                ->subMonths($i + $cycleOffset + 1)
                 ->day(21)
                 ->startOfDay();
 

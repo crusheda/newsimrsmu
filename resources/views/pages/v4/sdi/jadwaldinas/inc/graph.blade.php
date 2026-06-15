@@ -1,4 +1,4 @@
-<div class="col-xl-6 mb-3">
+{{-- <div class="col-xl-6 mb-3">
     <div class="card shadow-none border mb-0">
         <div class="card-body p-3">
             <div class="d-flex align-items-center justify-content-between">
@@ -14,8 +14,6 @@
                 aria-valuenow="0"
                 aria-valuemin="0"
                 aria-valuemax="100">
-
-                {{-- <h6 class="progress-bar-title"><i class="ri-umbrella-line"></i></h6> --}}
 
                 <div class="progress-bar" style="width: 0%">
                     <div class="progress-bar-value"><i class="ri-loader-2-line ri-spin"></i></div>
@@ -34,12 +32,187 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 <div class="col-xl-12 mb-3">
-    <div class="card shadow-none-border mb-0" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="">
-        <div class="card-body">
-            <center><h6>Total Absensi <b class="text-danger">6 Bulan Terakhir</b> Anda</h6></center>
-            <div id="area-stacked"><b class="text-dark"><center><i class="ri-refresh-line ri-spin me-1"></i> Memuat Grafik...</center></b></div>
+    <div class="row">
+        <div class="col-xl-3">
+            <div class="card custom-card mb-3">
+                <div class="card-body">
+                    <div class="d-flex gap-3 flex-wrap align-items-center">
+                        <span class="avatar avatar-md bg-success-transparent svg-success">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#5f6368">
+                                <path d="M0 0h24v24H0z" fill="none"></path>
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"></path>
+                            </svg>
+                        </span>
+                        <div>
+                            <div class="fw-medium">Cuti Tahunan <b class="text-primary">Anda</b></div>
+                            <span class="fw-semibold fs-12 text-muted">Tahun <b class="text-success">2026</b></span>
+                        </div>
+                        <div class="ms-auto text-muted fs-11 text-end">
+                            <h6 class="fw-medium mb-0 fs-25" id="showTxCuti"><i class="ri-refresh-line ri-spin"></i></h6>
+                            <small>Terpakai</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer btn-group">
+                    @can('admin_kepegawaian')
+                        <button class="btn btn-sm btn-info-transparent" onclick="totalCutiAllUnit()">Lihat Cuti Tahunan</button>
+                    @else
+                        <button class="btn btn-sm btn-success-transparent" onclick="totalCutiUnit()">Lihat Cuti Tahunan</button>
+                    @endcan
+                    <button class="btn btn-sm btn-danger-transparent">Riwayat Absensi</button>
+                </div>
+            </div>
+            {{-- colors: [
+                "#64748B", // Total Hari
+                "#5DF4F9", // Hadir
+                "#10B981", // Disiplin (baru)
+                "#3B82F6", // Ijin
+                "#EF4444", // Terlambat
+                "#F97316", // Belum Pulang
+                "#A855F7", // Cuti
+                "#94A3B8", // Libur
+                "#DC2626", // Mangkir
+                "#14B8A6"  // Sisa
+            ] --}}
+            <div class="card shadow-none-border mb-3">
+                <div class="card-body">
+                    <h6 class="fw-semibold mb-3">Keterangan <b class="text-teal">Grafik Absensi</b></h6>
+                    <div data-simplebar style="max-height: 210px;">
+                        <ul class="list-unstyled mb-0 text-dark">
+                            <li class="mb-2">
+                                <div class="d-flex align-items-start gap-2">
+                                    <div class="lh-0">
+                                        <i class="ri-circle-fill" style="color: #64748B"></i>
+                                    </div>
+                                    <div class="flex-fill">
+                                        <span class="fw-medium">Total Hari Kerja</span>
+                                        <span class="d-block text-muted fs-12">Total dari keseluruhan Jadwal Masuk Shift</span>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="mb-2">
+                                <div class="d-flex align-items-start gap-2">
+                                    <div class="lh-0">
+                                        <i class="ri-circle-fill" style="color: #5DF4F9"></i>
+                                    </div>
+                                    <div class="flex-fill">
+                                        <span class="fw-medium">Hadir</span>
+                                        <span class="d-block text-muted fs-12">Pegawai hadir sesuai jadwal kerja</span>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="mb-2">
+                                <div class="d-flex align-items-start gap-2">
+                                    <div class="lh-0">
+                                        <i class="ri-circle-fill" style="color: #10B981"></i>
+                                    </div>
+                                    <div class="flex-fill">
+                                        <span class="fw-medium">Disiplin</span>
+                                        <span class="d-block text-muted fs-12">Absensi lengkap tanpa pelanggaran waktu</span>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="mb-2">
+                                <div class="d-flex align-items-start gap-2">
+                                    <div class="lh-0">
+                                        <i class="ri-circle-fill" style="color: #3B82F6"></i>
+                                    </div>
+                                    <div class="flex-fill">
+                                        <span class="fw-medium">Ijin / Dinas Luar</span>
+                                        <span class="d-block text-muted fs-12">Pegawai tidak hadir karena tugas atau izin resmi</span>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="mb-2">
+                                <div class="d-flex align-items-start gap-2">
+                                    <div class="lh-0">
+                                        <i class="ri-circle-fill" style="color: #EF4444"></i>
+                                    </div>
+                                    <div class="flex-fill">
+                                        <span class="fw-medium">Terlambat</span>
+                                        <span class="d-block text-muted fs-12">Masuk kerja melewati jam yang ditentukan</span>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="mb-2">
+                                <div class="d-flex align-items-start gap-2">
+                                    <div class="lh-0">
+                                        <i class="ri-circle-fill" style="color: #F97316"></i>
+                                    </div>
+                                    <div class="flex-fill">
+                                        <span class="fw-medium">Belum Pulang</span>
+                                        <span class="d-block text-muted fs-12">Belum melakukan absen pulang</span>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="mb-2">
+                                <div class="d-flex align-items-start gap-2">
+                                    <div class="lh-0">
+                                        <i class="ri-circle-fill" style="color: #A855F7"></i>
+                                    </div>
+                                    <div class="flex-fill">
+                                        <span class="fw-medium">Cuti</span>
+                                        <span class="d-block text-muted fs-12">Pegawai sedang cuti resmi</span>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="mb-2">
+                                <div class="d-flex align-items-start gap-2">
+                                    <div class="lh-0">
+                                        <i class="ri-circle-fill" style="color: #94A3B8"></i>
+                                    </div>
+                                    <div class="flex-fill">
+                                        <span class="fw-medium">Libur</span>
+                                        <span class="d-block text-muted fs-12">Hari libur non kerja</span>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="mb-2">
+                                <div class="d-flex align-items-start gap-2">
+                                    <div class="lh-0">
+                                        <i class="ri-circle-fill" style="color: #DC2626"></i>
+                                    </div>
+                                    <div class="flex-fill">
+                                        <span class="fw-medium">Mangkir</span>
+                                        <span class="d-block text-muted fs-12">Tidak hadir tanpa keterangan</span>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="mb-0">
+                                <div class="d-flex align-items-start gap-2">
+                                    <div class="lh-0">
+                                        <i class="ri-circle-fill" style="color: #14B8A6"></i>
+                                    </div>
+                                    <div class="flex-fill">
+                                        <span class="fw-medium">Sisa Hari Kerja</span>
+                                        <span class="d-block text-muted fs-12">Hari kerja yang belum terisi status absensi</span>
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-9">
+            <div class="card shadow-none-border mb-0" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="">
+                <div class="card-body mb-0">
+                    <center><h6>Total Absensi <b class="text-danger">6 Bulan Terakhir</b> <b class="text-primary">Anda</b></h6></center>
+                    <div id="area-stacked"><b class="text-dark"><center><i class="ri-refresh-line ri-spin me-1"></i> Memuat Grafik...</center></b></div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -109,157 +282,180 @@
         grafikAbsensi();
     })
 
-    function graphTotalAbsensi(range) {
-        $.ajax({
-            url: "/api/v4/sdi/jadwaldinas/totalabsensi/" + range,
-            type: "GET",
-            dataType: "json",
-            success: function(res) {
+    // function graphTotalAbsensi(range) {
+    //     $.ajax({
+    //         url: "/api/v4/sdi/jadwaldinas/totalabsensi/" + range,
+    //         type: "GET",
+    //         dataType: "json",
+    //         success: function(res) {
 
-                if (range == 1) {
-                    colorGrafik = "#2563EB"; // biru
-                    colorBackGrafik = "#2563EB30"; // biru muda
-                } else {
-                    colorGrafik = "#DC2626"; // merah
-                    colorBackGrafik = "#fce9e9"; // merah muda
-                }
+    //             if (range == 1) {
+    //                 colorGrafik = "#2563EB"; // biru
+    //                 colorBackGrafik = "#2563EB30"; // biru muda
+    //             } else {
+    //                 colorGrafik = "#DC2626"; // merah
+    //                 colorBackGrafik = "#fce9e9"; // merah muda
+    //             }
 
-                let totalAbsensi = Number(res.total_absensi) || 0;
-                let totalHariKerja = Number(res.total_hari_kerja) || 0;
+    //             let totalAbsensi = Number(res.total_absensi) || 0;
+    //             let totalHariKerja = Number(res.total_hari_kerja) || 0;
 
-                let persen = totalHariKerja > 0
-                    ? Math.round((totalAbsensi / totalHariKerja) * 100)
-                    : 0;
+    //             let persen = totalHariKerja > 0
+    //                 ? Math.round((totalAbsensi / totalHariKerja) * 100)
+    //                 : 0;
 
-                let options = {
-                    series: [persen],
-                    chart: {
-                        height: 115,
-                        type: "radialBar"
-                    },
-                    plotOptions: {
-                        radialBar: {
-                            hollow: {
-                                margin: 0,
-                                size: "60%",
-                                background: "transparent"
-                            },
-                            track: {
-                                background: colorBackGrafik,
-                                strokeWidth: "100%"
-                            },
-                            dataLabels: {
-                                show: true,
-                                name: { show: false },
-                                value: {
-                                    formatter: function () {
-                                        return totalAbsensi + "x / " + totalHariKerja + "hr"; // teks tengah
-                                    },
-                                    offsetY: 7,
-                                    color: colorGrafik,
-                                    fontSize: "12px",
-                                    fontWeight: "700",
-                                    show: true
-                                }
-                            }
-                        }
-                    },
-                    colors: [colorGrafik],
-                    fill: { type: "solid" },
-                    stroke: { lineCap: "round" },
-                    tooltip: {
-                        enabled: true,
-                        y: {
-                            formatter: function () {
-                                return persen + "% (Total Absensi " + totalAbsensi + "x / Total Hari Kerja " + totalHariKerja + "hr)";
-                            }
-                        }
-                    }
-                };
+    //             let options = {
+    //                 series: [persen],
+    //                 chart: {
+    //                     height: 115,
+    //                     type: "radialBar"
+    //                 },
+    //                 plotOptions: {
+    //                     radialBar: {
+    //                         hollow: {
+    //                             margin: 0,
+    //                             size: "60%",
+    //                             background: "transparent"
+    //                         },
+    //                         track: {
+    //                             background: colorBackGrafik,
+    //                             strokeWidth: "100%"
+    //                         },
+    //                         dataLabels: {
+    //                             show: true,
+    //                             name: { show: false },
+    //                             value: {
+    //                                 formatter: function () {
+    //                                     return totalAbsensi + "x / " + totalHariKerja + "hr"; // teks tengah
+    //                                 },
+    //                                 offsetY: 7,
+    //                                 color: colorGrafik,
+    //                                 fontSize: "12px",
+    //                                 fontWeight: "700",
+    //                                 show: true
+    //                             }
+    //                         }
+    //                     }
+    //                 },
+    //                 colors: [colorGrafik],
+    //                 fill: { type: "solid" },
+    //                 stroke: { lineCap: "round" },
+    //                 tooltip: {
+    //                     enabled: true,
+    //                     y: {
+    //                         formatter: function () {
+    //                             return persen + "% (Total Absensi " + totalAbsensi + "x / Total Hari Kerja " + totalHariKerja + "hr)";
+    //                         }
+    //                     }
+    //                 }
+    //             };
 
-                new ApexCharts(
-                    document.querySelector("#grafikTotalAbsensi"+range),
-                    options
-                ).render();
+    //             new ApexCharts(
+    //                 document.querySelector("#grafikTotalAbsensi"+range),
+    //                 options
+    //             ).render();
 
-                // tampilkan bulan dan tahun
-                $('#dateGrafikTotalAbsensi'+range).text(
-                    formatTanggalIndo(res.start) + ' - ' + formatTanggalIndo(res.end)
-                );
-            },
+    //             // tampilkan bulan dan tahun
+    //             $('#dateGrafikTotalAbsensi'+range).text(
+    //                 formatTanggalIndo(res.start) + ' - ' + formatTanggalIndo(res.end)
+    //             );
+    //         },
 
-            error: function(err) {
-                console.error("Gagal load grafik absensi", err);
-            }
-        });
-    }
+    //         error: function(err) {
+    //             console.error("Gagal load grafik absensi", err);
+    //         }
+    //     });
+    // }
+
+    // function totalCuti() {
+    //     $.ajax({
+    //         url: "/api/v4/sdi/jadwaldinas/totalcuti",
+    //         type: 'GET',
+    //         dataType: 'json',
+    //         success: function(res) {
+
+    //             var totalReal = parseInt(res);
+    //             var maxCuti   = 12;
+
+    //             var progressValue = Math.min(totalReal, maxCuti);
+    //             var percent = (progressValue / maxCuti) * 100;
+
+    //             var $container = $('.cuti-progress');
+    //             var $bar       = $container.find('.progress-bar');
+    //             var $value     = $container.find('.progress-bar-value');
+    //             var $indicator = $container.find('.cuti-indicator');
+    //             var $over      = $container.find('.cuti-over');
+
+    //             // reset dulu
+    //             $bar.removeClass('bg-danger').css('width', '0%');
+    //             $value.text('0%');
+    //             // $indicator.text('0x').css('left', '0%');
+    //             $over.hide();
+
+    //             // animasi delay biar smooth
+    //             setTimeout(function() {
+
+    //                 // animasi width
+    //                 $bar.css({
+    //                     'width': percent + '%',
+    //                     'transition': 'width 1s ease'
+    //                 });
+
+    //                 // animasi angka persen (opsional naik bertahap)
+    //                 let current = 0;
+    //                 let interval = setInterval(function() {
+    //                     if (current >= totalReal) {
+    //                         clearInterval(interval);
+    //                     } else {
+    //                         current++;
+    //                         $value.text(totalReal + ' x');
+    //                     }
+    //                 }, 200);
+
+    //                 // indikator jumlah cuti REAL
+    //                 // $indicator
+    //                 //     .text(totalReal + 'x')
+    //                 //     .css({
+    //                 //         'left': percent + '%',
+    //                 //         'transition': 'left 1s ease'
+    //                 //     });
+
+    //                 // over limit
+    //                 var over = totalReal - maxCuti;
+
+    //                 if (over > 0) {
+    //                     $bar.addClass('bg-danger');
+
+    //                     $over
+    //                         .text('Over +' + over)
+    //                         .fadeIn();
+    //                 }
+
+    //             }, 100);
+
+    //         },
+    //         error: function(err) {
+    //             Swal.fire({
+    //                 title: err.statusText + " (Code " + err.status + ")",
+    //                 html: err.responseText,
+    //                 icon: "error",
+    //                 showConfirmButton: true,
+    //                 backdrop: `rgba(26,27,41,0.8)`,
+    //             });
+    //         }
+    //     });
+    // }
 
     function totalCuti() {
         $.ajax({
             url: "/api/v4/sdi/jadwaldinas/totalcuti",
             type: 'GET',
             dataType: 'json',
+            beforeSend: function() {
+                $('#showTxCuti').empty().append('<i class="ri-refresh-line ri-spin"></i>');
+            },
             success: function(res) {
-
-                var totalReal = parseInt(res);
-                var maxCuti   = 12;
-
-                var progressValue = Math.min(totalReal, maxCuti);
-                var percent = (progressValue / maxCuti) * 100;
-
-                var $container = $('.cuti-progress');
-                var $bar       = $container.find('.progress-bar');
-                var $value     = $container.find('.progress-bar-value');
-                var $indicator = $container.find('.cuti-indicator');
-                var $over      = $container.find('.cuti-over');
-
-                // reset dulu
-                $bar.removeClass('bg-danger').css('width', '0%');
-                $value.text('0%');
-                // $indicator.text('0x').css('left', '0%');
-                $over.hide();
-
-                // animasi delay biar smooth
-                setTimeout(function() {
-
-                    // animasi width
-                    $bar.css({
-                        'width': percent + '%',
-                        'transition': 'width 1s ease'
-                    });
-
-                    // animasi angka persen (opsional naik bertahap)
-                    let current = 0;
-                    let interval = setInterval(function() {
-                        if (current >= totalReal) {
-                            clearInterval(interval);
-                        } else {
-                            current++;
-                            $value.text(totalReal + ' x');
-                        }
-                    }, 200);
-
-                    // indikator jumlah cuti REAL
-                    // $indicator
-                    //     .text(totalReal + 'x')
-                    //     .css({
-                    //         'left': percent + '%',
-                    //         'transition': 'left 1s ease'
-                    //     });
-
-                    // over limit
-                    var over = totalReal - maxCuti;
-
-                    if (over > 0) {
-                        $bar.addClass('bg-danger');
-
-                        $over
-                            .text('Over +' + over)
-                            .fadeIn();
-                    }
-
-                }, 100);
-
+                $('#showTxCuti').empty().append(res+'<b class="text-orange">x</b>');
             },
             error: function(err) {
                 Swal.fire({
@@ -269,6 +465,7 @@
                     showConfirmButton: true,
                     backdrop: `rgba(26,27,41,0.8)`,
                 });
+                $('#showTxCuti').empty().append('<b class="text-danger">xx</b>');
             }
         });
     }
