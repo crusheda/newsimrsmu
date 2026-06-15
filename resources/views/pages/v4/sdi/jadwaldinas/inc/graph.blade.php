@@ -1,4 +1,3 @@
-
 <div class="col-xl-6 mb-3">
     <div class="card shadow-none border mb-0">
         <div class="card-body p-3">
@@ -36,7 +35,15 @@
         </div>
     </div>
 </div>
-<div class="col-xl-3 mb-3">
+<div class="col-xl-12 mb-3">
+    <div class="card shadow-none-border mb-0" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="">
+        <div class="card-body">
+            <center><h6>Total Absensi <b class="text-danger">6 Bulan Terakhir</b> Anda</h6></center>
+            <div id="area-stacked"><b class="text-dark"><center><i class="ri-refresh-line ri-spin me-1"></i> Memuat Grafik...</center></b></div>
+        </div>
+    </div>
+</div>
+{{-- <div class="col-xl-3 mb-3">
     <div class="card mb-0" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Jumlah Absensi Anda dalam kurun waktu 1 bulan penghitungan BULAN INI (Tidak termasuk Cuti, Libur, Ijin, dll)">
         <div class="card-body">
             <div class="d-flex align-items-center">
@@ -69,7 +76,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 
 {{-- MODAL --}}
 <div class="modal fade animate__animated animate__rubberBand" id="modalCutiUnit" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true" data-bs-backdrop="static">
@@ -94,10 +101,12 @@
 </div>
 
 <script>
+    let chartAbsensi = null;
     $(document).ready(function() {
         totalCuti();
-        graphTotalAbsensi(1); // periode aktif 21→20 (sekarang)
-        graphTotalAbsensi(0); // periode sebelumnya 21→20
+        // graphTotalAbsensi(1); // periode aktif 21→20 (sekarang)
+        // graphTotalAbsensi(0); // periode sebelumnya 21→20
+        grafikAbsensi();
     })
 
     function graphTotalAbsensi(range) {
@@ -105,7 +114,6 @@
             url: "/api/v4/sdi/jadwaldinas/totalabsensi/" + range,
             type: "GET",
             dataType: "json",
-
             success: function(res) {
 
                 if (range == 1) {
@@ -264,6 +272,174 @@
             }
         });
     }
+
+    function grafikAbsensi() {
+        $.ajax({
+            url: "/api/v4/sdi/jadwaldinas/grafikabsensi",
+            type: "GET",
+            dataType: "json",
+            beforeSend: function() {
+            },
+            success: function (res) {
+                $('#area-stacked').empty();
+
+                let categories = [];
+
+                let totalHari = [];
+                let hadir = [];
+                let disiplin = [];
+                let ijinDL = [];
+                let terlambat = [];
+                let belumPulang = [];
+                let cuti = [];
+                let libur = [];
+                let mangkir = [];
+                let sisa = [];
+
+                res.forEach((item) => {
+
+                    categories.push(item.periode);
+
+                    totalHari.push(item.total_hari_kerja);
+                    hadir.push(item.hadir);
+
+                    // DISIPLIN dari absensi_lengkap
+                    disiplin.push(item.absensi_lengkap);
+
+                    ijinDL.push((item.ijin || 0) + (item.dinas_luar || 0));
+
+                    terlambat.push(item.terlambat);
+                    belumPulang.push(item.belum_pulang);
+                    cuti.push(item.cuti);
+                    libur.push(item.libur);
+                    mangkir.push(item.mangkir);
+
+                    let sisaHari =
+                        (item.total_hari_kerja || 0)
+                        - (
+                            (item.hadir || 0)
+                            + (item.ijin || 0)
+                            + (item.dinas_luar || 0)
+                            + (item.cuti || 0)
+                            + (item.libur || 0)
+                            + (item.mangkir || 0)
+                        );
+
+                    sisa.push(sisaHari < 0 ? 0 : sisaHari);
+                });
+
+                let options = {
+                    series: [
+                        { name: "Total Hari Kerja", data: totalHari },
+                        { name: "Hadir", data: hadir },
+
+                        // DISIPLIN BARU
+                        { name: "Disiplin", data: disiplin },
+
+                        { name: "Ijin / Dinas Luar", data: ijinDL },
+                        { name: "Terlambat", data: terlambat },
+                        { name: "Belum Pulang", data: belumPulang },
+                        { name: "Cuti", data: cuti },
+                        { name: "Libur", data: libur },
+                        { name: "Mangkir", data: mangkir },
+                        { name: "Sisa Hari Kerja", data: sisa },
+                    ],
+
+                    chart: {
+                        type: "area",
+                        height: 380,
+                        stacked: true,
+                        toolbar: { show: true },
+                        // parentHeightOffset: 10,
+                        // redrawOnWindowResize: true
+                    },
+
+                    colors: [
+                        "#64748B", // Total Hari
+                        "#5DF4F9", // Hadir
+                        "#10B981", // Disiplin (baru)
+                        "#3B82F6", // Ijin
+                        "#EF4444", // Terlambat
+                        "#F97316", // Belum Pulang
+                        "#A855F7", // Cuti
+                        "#94A3B8", // Libur
+                        "#DC2626", // Mangkir
+                        "#14B8A6"  // Sisa
+                    ],
+
+                    stroke: {
+                        curve: "smooth"
+                    },
+
+                    fill: {
+                        type: "gradient",
+                        gradient: {
+                            shade: "light",
+                            opacityFrom: 0.8,
+                            opacityTo: 0.2
+                        }
+                    },
+
+                    dataLabels: {
+                        enabled: false
+                    },
+
+                    legend: {
+                        position: "top",
+                        horizontalAlign: "left"
+                    },
+
+                    // xaxis: {
+                    //     categories: categories
+                    // },
+                    xaxis: {
+                        categories: categories,
+                        labels: {
+                            rotate: 0,
+                            trim: false,
+                            hideOverlappingLabels: false,
+                            style: {
+                                fontSize: "10px",
+                                fontStyle: "italic"
+                            },
+                            formatter: function (value) {
+                                if (!value) return value;
+
+                                let parts = value.split(" - ");
+
+                                // return array -> ApexCharts akan convert ke <tspan>
+                                return parts;
+                            }
+                        }
+                    },
+
+                    tooltip: {
+                        shared: true
+                    }
+                };
+
+                if (chartAbsensi) {
+                    chartAbsensi.destroy();
+                }
+
+                chartAbsensi = new ApexCharts(
+                    document.querySelector("#area-stacked"),
+                    options
+                );
+
+                chartAbsensi.render();
+            },
+
+            error: function (xhr) {
+                iziToast.error({
+                    title: "Pesan Galat!",
+                    message: xhr.responseJSON?.message ?? "Terjadi kesalahan",
+                    position: "topRight"
+                });
+            }
+        });
+    }
+
 
     // FOR USER
     function totalCutiUnit() {

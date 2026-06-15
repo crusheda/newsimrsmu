@@ -783,6 +783,287 @@ class JadwalDinasController extends Controller
         ], 200);
     }
 
+    public function grafikAbsensi()
+    {
+        $pegawaiId = Auth::id();
+        $now = Carbon::now();
+        $periode = [];
+        $kodeCuti = [
+            'C',
+            'CM',
+            'CU',
+            'CH',
+            'CD'
+        ];
+
+        for($i=5;$i>=0;$i--){
+
+            $start = $now->copy()
+                ->subMonths($i+1)
+                ->day(21)
+                ->startOfDay();
+
+            $end = $start->copy()
+                ->addMonthNoOverflow()
+                ->day(20)
+                ->endOfDay();
+
+            /*
+            |--------------------------------------------------------------------------
+            | ABSENSI
+            |--------------------------------------------------------------------------
+            */
+            $absensi = DB::table('kepegawaian_absensi')
+                        ->where('pegawai_id',$pegawaiId)
+                        ->whereNull('deleted_at')
+                        ->whereBetween('tgl_in',[
+                            $start,
+                            $end
+                        ])
+                        ->get()
+                        ->keyBy(function($item){
+
+                            return Carbon::parse($item->tgl_in)
+                                ->format('Y-m-d');
+
+                        });
+
+            /*
+            |--------------------------------------------------------------------------
+            | LOAD JADWAL SEMUA BULAN
+            |--------------------------------------------------------------------------
+            */
+            $jadwalData = [];
+            $loopBulan = $start->copy();
+
+            while(
+                $loopBulan->format('Y-m')
+                <=
+                $end->format('Y-m')
+            ){
+                $jadwal = DB::table('kepegawaian_jadwal_detail as jd')
+                            ->join(
+                                'kepegawaian_jadwal as j',
+                                'j.id',
+                                '=',
+                                'jd.id_jadwal'
+                            )
+                            ->where('jd.pegawai_id',$pegawaiId)
+                            ->whereNull('jd.deleted_at')
+                            ->where('j.bulan',
+                                $loopBulan->month
+                            )
+                            ->where('j.tahun',
+                                $loopBulan->year
+                            )
+                            ->first();
+
+                if($jadwal){
+                    $jadwalData[
+                        $loopBulan->format('Y-m')
+                    ] = $jadwal;
+                }
+
+                $loopBulan->addMonth();
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | COUNTER
+            |--------------------------------------------------------------------------
+            */
+            $totalHariKerja = 0;
+            $hadir = 0;
+            $absensiLengkap = 0;
+            $terlambat = 0;
+            $belumPulang = 0;
+            $ijin = 0;
+            $dinasLuar = 0;
+            $mangkir = 0;
+            $cuti = 0;
+            $libur = 0;
+
+            /*
+            |--------------------------------------------------------------------------
+            | LOOP TANGGAL
+            |--------------------------------------------------------------------------
+            */
+            $tgl = $start->copy();
+
+            while($tgl->lte($end)){
+
+                $bulanKey = $tgl->format('Y-m');
+                $kode = null;
+
+                if(isset($jadwalData[$bulanKey])){
+                    $kolom = 'tgl'.$tgl->day;
+                    $kode = $jadwalData[$bulanKey]->$kolom ?? null;
+                }
+
+                $tanggal = $tgl->format('Y-m-d');
+                $abs = $absensi[$tanggal] ?? null;
+
+                /*
+                |--------------------------------------------------------------------------
+                | LIBUR
+                |--------------------------------------------------------------------------
+                */
+                if($kode == 'L'){
+                    $libur++;
+                    $tgl->addDay();
+                    continue;
+                }
+
+                /*
+                |--------------------------------------------------------------------------
+                | CUTI
+                |--------------------------------------------------------------------------
+                */
+                if(in_array($kode,$kodeCuti)){
+                    $cuti++;
+                    $tgl->addDay();
+                    continue;
+                }
+
+                /*
+                |--------------------------------------------------------------------------
+                | HARI KERJA
+                |--------------------------------------------------------------------------
+                */
+                if($kode){
+
+                    $totalHariKerja++;
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | TIDAK ADA ABSENSI
+                    |--------------------------------------------------------------------------
+                    */
+                    if(!$abs){
+
+                        $mangkir++;
+
+                    } else {
+                        /*
+                        |--------------------------------------------------------------------------
+                        | IJIN
+                        |--------------------------------------------------------------------------
+                        */
+                        if($abs->jenis == 3){
+                            $ijin++;
+                        }
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | DINAS LUAR
+                        |--------------------------------------------------------------------------
+                        */
+                        elseif($abs->jenis == 4){
+                            $dinasLuar++;
+                        }
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | HADIR
+                        |--------------------------------------------------------------------------
+                        */
+                        elseif($abs->jenis == 1){
+                            /*
+                            |--------------------------------------------------------------------------
+                            | HADIR
+                            |--------------------------------------------------------------------------
+                            */
+                            $hadir++;
+
+                            /*
+                            |--------------------------------------------------------------------------
+                            | BELUM PULANG
+                            |--------------------------------------------------------------------------
+                            */
+                            if(
+                                !empty($abs->tgl_in)
+                                &&
+                                empty($abs->tgl_out)
+                            ){
+                                $belumPulang++;
+                            }
+
+                            /*
+                            |--------------------------------------------------------------------------
+                            | TERLAMBAT
+                            |--------------------------------------------------------------------------
+                            */
+                            elseif(
+                                $abs->terlambat == 1
+                            ){
+                                $terlambat++;
+                            }
+
+                            /*
+                            |--------------------------------------------------------------------------
+                            | ABSENSI LENGKAP
+                            |--------------------------------------------------------------------------
+                            */
+                            elseif(
+                                !empty($abs->tgl_in)
+                                &&
+                                !empty($abs->tgl_out)
+                                &&
+                                $abs->terlambat == 0
+                            ){
+                                $absensiLengkap++;
+                            }
+                        }
+                    }
+                }
+                $tgl->addDay();
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | SISA
+            |--------------------------------------------------------------------------
+            */
+            $sisa = $totalHariKerja
+                    -
+                    (
+                        $hadir
+                        +
+                        $ijin
+                        +
+                        $dinasLuar
+                        +
+                        $mangkir
+                    );
+
+            if($sisa < 0){
+                $sisa = 0;
+            }
+
+            $periode[] = [
+                'periode' =>
+                    $start->translatedFormat('d M Y')
+                    .
+                    ' - '
+                    .
+                    $end->translatedFormat('d M Y'),
+                'total_hari_kerja'=>$totalHariKerja,
+                'absensi_lengkap'=>$absensiLengkap,
+                'hadir'=>$hadir,
+                'terlambat'=>$terlambat,
+                'belum_pulang'=>$belumPulang,
+                'ijin'=>$ijin,
+                'dinas_luar'=>$dinasLuar,
+                'mangkir'=>$mangkir,
+                'cuti'=>$cuti,
+                'libur'=>$libur,
+                'sisa'=>$sisa
+            ];
+        }
+
+        return response()->json($periode);
+    }
+
     function totalCuti()
     {
         // $ref_users = DB::table('referensi_jadwal_users')
