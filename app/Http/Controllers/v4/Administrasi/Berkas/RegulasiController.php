@@ -5,6 +5,7 @@ namespace App\Http\Controllers\v4\Administrasi\Berkas;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 // use App\Models\regulasi\spo;
 // use App\Models\regulasi\pedoman;
@@ -84,22 +85,35 @@ class RegulasiController extends Controller
     {
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
-        if (
-            $request->jns_regulasi == 7 ||
-            $request->jns_regulasi == 8 ||
-            $request->jns_regulasi == 9 ||
-            $request->jns_regulasi == 10 ||
-            $request->jns_regulasi == 11 ||
-            $request->jns_regulasi == 12 ||
-            $request->jns_regulasi == 13
-            ) {
-            $request->validate([
-                'file' => ['max:10000','mimes:pdf'],
-            ]);
-        } else {
-            $request->validate([
-                'file' => ['max:2000','mimes:pdf'],
-            ]);
+        $rules = [];
+
+        if ($request->hasFile('file')) {
+
+            $maxSize = in_array($request->jns_regulasi, [
+                7,8,9,10,11,12,13
+            ]) ? 10000 : 5000;
+
+            $rules['file'] = [
+                'max:' . $maxSize,
+                'mimes:pdf'
+            ];
+        }
+
+        $validator = Validator::make(
+            $request->all(),
+            $rules,
+            [
+                'file.max' => 'Ukuran file maksimal ' . ($maxSize / 1000) . ' MB',
+                'file.mimes' => 'File harus berformat PDF',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validasi gagal',
+                'errors' => $validator->errors()
+            ], 422);
         }
 
         // tampung berkas yang sudah diunggah ke variabel baru
@@ -173,27 +187,33 @@ class RegulasiController extends Controller
     public function ubah(Request $request)
     {
         $tgl = Carbon::now()->isoFormat('YYYY-MM-DD HH:mm:ss');
-        $uploadedFile = $request->file('file');
 
-        if (
-            $request->jns_regulasi == 7 ||
-            $request->jns_regulasi == 8 ||
-            $request->jns_regulasi == 9 ||
-            $request->jns_regulasi == 10 ||
-            $request->jns_regulasi == 11 ||
-            $request->jns_regulasi == 12 ||
-            $request->jns_regulasi == 13
-            ) {
-            if ($uploadedFile != null) {
-                $request->validate([
-                    'file' => ['max:10000','mimes:pdf'],
-                ]);
-            }
-        } else {
-            if ($uploadedFile != null) {
-                $request->validate([
-                    'file' => ['max:2000','mimes:pdf'],
-                ]);
+        if ($request->hasFile('file')) {
+
+            $maxSize = in_array($request->jns_regulasi, [
+                7,8,9,10,11,12,13
+            ]) ? 10000 : 5000;
+
+            $validator = Validator::make(
+                $request->all(),
+                [
+                    'file' => [
+                        'max:' . $maxSize,
+                        'mimes:pdf'
+                    ],
+                ],
+                [
+                    'file.max' => 'Ukuran file maksimal ' . ($maxSize / 1000) . ' MB',
+                    'file.mimes' => 'File harus berformat PDF',
+                ]
+            );
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'File tidak valid',
+                    'errors' => $validator->errors()
+                ], 422);
             }
         }
 

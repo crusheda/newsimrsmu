@@ -234,11 +234,7 @@
                         <input type="file" class="form-control mb-2" id="filex" name="filex" accept="application/pdf">
                         <div class="alert alert-light shadow-sm">
                             <small>
-                                @if (Auth::user()->can('admin_regulasi_humas'))
-                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>10 mb</strong><br>
-                                @else
-                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>2 mb</strong><br>
-                                @endif
+                                <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <span class='badge text-bg-danger p-1 maxSize'>5 mb</span><br>
                                 <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berupa Dokumen Scan (PDF)
                             </small>
                         </div>
@@ -306,11 +302,7 @@
                             <small>
                                 <i class="fa-fw fas fa-caret-right nav-icon"></i> Apabila terdapat kesalahan File Upload, Anda dapat melakukan <b>Input Dokumen Ulang</b> di bawah ini<br>
                                 <i class="fa-fw fas fa-caret-right nav-icon"></i> Hubungi Admin untuk melakukan penghapusan berkas<br>
-                                @if (Auth::user()->can('admin_regulasi_humas'))
-                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>10 mb</strong><br>
-                                @else
-                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>2 mb</strong><br>
-                                @endif
+                                <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <span class='badge text-bg-danger p-1 maxSize'>5 mb</span><br>
                                 <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berupa Dokumen Scan (<b>PDF</b>)
                             </small>
                         </div>
@@ -624,10 +616,12 @@
                     $('#tgl').val('');
                     $('#pembuat').val('').change();
                     $('#unit').val('');
+                    $('.maxSize').text('10 mb');
                 } else {
                     $('#tgl').prop('disabled',false);
                     $('#pembuat').prop('disabled',false);
                     $('#unit').prop('disabled',false);
+                    $('.maxSize').text('5 mb');
                 }
             });
 
@@ -840,10 +834,10 @@
         }
 
         function prosesTambah() {
-            $("#btn-upload").prop('disabled', true);
-            $("#btn-upload").find("i").toggleClass("fa-save fa-sync fa-spin");
 
-            var user_id         = "{{ Auth::user()->id }}";
+            const btn = $("#btn-upload");
+
+            var user_id         = @json(Auth::user()->id);
             var jns_regulasi    = $("#jns_regulasi").val();
             var tgl             = $("#tgl").val();
             var pembuat         = $("#pembuat").val();
@@ -880,6 +874,10 @@
                         contentType: false,
                         processData: false,
                         dataType: 'json',
+                        beforeSend: function(){
+                            btn.prop('disabled', true);
+                            btn.find("i").toggleClass("fa-upload fa-sync fa-spin");
+                        },
                         success: function(res){
                             iziToast.success({
                                 title: 'Pesan Sukses!',
@@ -892,12 +890,26 @@
                             }
                         },
                         error: function(res){
-                            console.log("error : " + JSON.stringify(res) );
+                            console.log(res.responseJSON);
+
+                            let message = '';
+
+                            if (res.status == 422) {
+                                $.each(res.responseJSON.errors, function(key, value) {
+                                    message += value[0] + '<br>';
+                                });
+                            } else {
+                                message = res.responseJSON.message ?? 'Terjadi kesalahan';
+                            }
+
                             iziToast.error({
                                 title: 'Error '+res.status+' - '+res.statusText+'!',
-                                message: res.responseJSON,
+                                message: message,
                                 position: 'topRight'
                             });
+                        }, complete: function() {
+                            btn.find("i").removeClass("fa-sync fa-spin").addClass("fa-upload");
+                            btn.prop('disabled', false);
                         }
                     });
                 } else {
@@ -933,6 +945,10 @@
                             contentType: false,
                             processData: false,
                             dataType: 'json',
+                            beforeSend: function(){
+                                btn.prop('disabled', true);
+                                btn.find("i").toggleClass("fa-upload fa-sync fa-spin");
+                            },
                             success: function(res){
                                 iziToast.success({
                                     title: 'Pesan Sukses!',
@@ -945,20 +961,31 @@
                                 }
                             },
                             error: function(res){
-                                console.log("error : " + JSON.stringify(res) );
+                                console.log(res.responseJSON);
+
+                                let message = '';
+
+                                if (res.status == 422) {
+                                    $.each(res.responseJSON.errors, function(key, value) {
+                                        message += value[0] + '<br>';
+                                    });
+                                } else {
+                                    message = res.responseJSON.message ?? 'Terjadi kesalahan';
+                                }
+
                                 iziToast.error({
                                     title: 'Error '+res.status+' - '+res.statusText+'!',
-                                    message: res.responseJSON,
+                                    message: message,
                                     position: 'topRight'
                                 });
+                            }, complete: function() {
+                                btn.find("i").removeClass("fa-sync fa-spin").addClass("fa-upload");
+                                btn.prop('disabled', false);
                             }
                         });
                     }
                 }
             }
-
-            $("#btn-upload").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
-            $("#btn-upload").prop('disabled', false);
         }
 
         function showUbah(id) {
