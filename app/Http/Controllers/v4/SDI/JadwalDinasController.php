@@ -118,6 +118,32 @@ class JadwalDinasController extends Controller
         // return view('pages.v4.sdi.jadwaldinas.ref.staf')->with('list', $data);
     }
 
+    function riwayatAbsensi()
+    {
+        $show = absensi::select('id','jenis','kd_shift','nm_shift','tgl_in','tgl_out','ref_jam_masuk','ref_jam_pulang','terlambat','lewat_hari')
+                        ->where('pegawai_id', Auth::user()->id)
+                        ->whereNull('deleted_at')
+                        ->where('trashed_status', 0)
+                        ->get();
+
+        $data = [
+            'show' => $show,
+        ];
+
+        return response()->json($data);
+    }
+
+    function riwayatAbsensiDetail($id)
+    {
+        $show = absensi::where('id', $id)->whereNull('deleted_at')->where('trashed_status', 0)->get();
+
+        $data = [
+            'show' => $show,
+        ];
+
+        return response()->json($data);
+    }
+
     function jokiAdmin()
     {
         $users  = ref_jadwal_users::leftJoin('users','users.id','=','referensi_jadwal_users.pegawai_id')

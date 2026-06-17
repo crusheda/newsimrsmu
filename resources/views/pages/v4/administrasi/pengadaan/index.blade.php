@@ -160,7 +160,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div id="product-table" class="grid-card-table"><center><i class="fas fa-sync fa-spin nav-icon me-1"></i> Memuat Tabel Pengadaan</center></div>
+                        <div id="product-table" class="grid-card-table"><center><i class="fas fa-sync fa-spin nav-icon me-1"></i> Memuat Barang Pengadaan</center></div>
                     </div>
                 </div>
             </div>
@@ -420,6 +420,45 @@
         }
 
         $(document).ready(function() {
+            if (moment().format('DD') > 15) {
+                Swal.fire({
+                    title: "Mohon Perhatian!",
+                    html: "Pengadaan <strong class='text-danger'>TELAH DITUTUP</strong> untuk bulan ini! Silakan melakukan pengadaan pada bulan selanjutnya. Popup akan tertutup dalam <b></b> ms.",
+                    icon: "danger",
+                    timer: 5000,
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        const timer = Swal.getPopup().querySelector("b");
+                        if (timer) {
+                            timerInterval = setInterval(() => {
+                                timer.textContent = `${Swal.getTimerLeft()}`;
+                            }, 100);
+                        }
+                    },
+                    willClose: () => {
+                        clearInterval(timerInterval);
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: "Mohon Perhatian!",
+                    html: "Batas maksimal Pengajuan Pengadaan hanya sampai <strong class='text-primary'>TANGGAL 15</strong> setiap bulannya! Popup akan tertutup dalam <b></b> ms.",
+                    icon: "warning",
+                    timer: 5000,
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        // Swal.showLoading();
+                        const timer = Swal.getPopup().querySelector("b");
+                        timerInterval = setInterval(() => {
+                        timer.textContent = `${Swal.getTimerLeft()}`;
+                        }, 100);
+                    },
+                    willClose: () => {
+                        clearInterval(timerInterval);
+                    }
+                });
+            }
+
             initGrid();
 
             $('#search-input').on('keyup', debounce(function(){
@@ -1408,9 +1447,16 @@
                     btn.prop('disabled', false);
                     btn.find("i").removeClass("ri-loop-right-line ri-spin").addClass('ri-loop-left-line');
                 }, error: function(xhr, status, error) {
+
+                    let message = 'Terjadi kesalahan';
+
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        message = xhr.responseJSON.message;
+                    }
+
                     iziToast.error({
                         title: 'Pesan Galat!',
-                        message: xhr.responseJSON.message,
+                        message: message,
                         position: 'topRight'
                     });
                 }

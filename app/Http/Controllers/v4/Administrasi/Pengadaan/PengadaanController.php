@@ -438,7 +438,7 @@ class PengadaanController extends Controller
 
     function checkoutKeranjang(Request $request)
     {
-        $tutupPengadaan = 20;
+        $tutupPengadaan = 15;
 
         DB::beginTransaction();
 

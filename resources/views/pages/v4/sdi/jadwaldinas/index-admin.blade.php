@@ -26,6 +26,8 @@
 
             @include('pages.v4.sdi.jadwaldinas.inc.graph')
 
+            @include('pages.v4.sdi.jadwaldinas.inc.riwayat-absensi')
+
             <div class="col-xl-12">
                 <div class="card custom-card mb-3">
                     <div class="card-header d-flex align-items-center justify-content-between py-3">

@@ -306,6 +306,9 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
             Route::delete('sdi/spkrkk/hapus/{id}/proses', [SpkRkkController::class, 'hapusSpkRkk']);
 
         // JADWAL DINAS
+            Route::get('sdi/jadwaldinas/absensi/riwayat', [JadwalDinasController::class, 'riwayatAbsensi']);
+            Route::get('sdi/jadwaldinas/absensi/riwayat/{id}', [JadwalDinasController::class, 'riwayatAbsensiDetail']);
+
             // ADMIN
                 Route::get('sdi/jadwaldinas/table/admin', [JadwalDinasController::class, 'tableAll']);
                 Route::get('sdi/jadwaldinas/tambah/admin', [JadwalDinasController::class, 'jokiAdmin']);

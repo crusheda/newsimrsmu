@@ -46,8 +46,8 @@
                             </svg>
                         </span>
                         <div>
-                            <div class="fw-medium">Cuti Tahunan <b class="text-primary">Anda</b></div>
-                            <span class="fw-semibold fs-12 text-muted">Tahun <b class="text-success">2026</b></span>
+                            <div class="fw-medium">Cuti Tahunan <b class="text-orange">Anda</b></div>
+                            <span class="fw-semibold fs-12 text-muted">Tahun <b class="text-success">{{ \Carbon\Carbon::now()->isoFormat('YYYY') }}</b></span>
                         </div>
                         <div class="ms-auto text-muted fs-11 text-end">
                             <h6 class="fw-medium mb-0 fs-25" id="showTxCuti"><i class="ri-refresh-line ri-spin"></i></h6>
@@ -57,11 +57,11 @@
                 </div>
                 <div class="card-footer btn-group">
                     @can('admin_kepegawaian')
-                        <button class="btn btn-sm btn-info-transparent" onclick="totalCutiAllUnit()">Lihat Cuti Tahunan</button>
+                        <button class="btn btn-sm btn-info-transparent" onclick="totalCutiAllUnit()"><i class="ri-umbrella-line me-1"></i> Lihat Cuti Tahunan</button>
                     @else
-                        <button class="btn btn-sm btn-success-transparent" onclick="totalCutiUnit()">Lihat Cuti Tahunan</button>
+                        <button class="btn btn-sm btn-success-transparent" onclick="totalCutiUnit()"><i class="ri-umbrella-line me-1"></i> Lihat Cuti Tahunan</button>
                     @endcan
-                    <button class="btn btn-sm btn-danger-transparent">Riwayat Absensi</button>
+                    <button class="btn btn-sm btn-danger-transparent" onclick="showRiwayatAbsensi()" id="btn-riwayat-absensi"><i class="ri-history-line me-1"></i> Riwayat Absensi</button>
                 </div>
             </div>
             {{-- colors: [
@@ -80,7 +80,7 @@
                 <div class="card-body">
                     <h6 class="fw-semibold mb-3">Keterangan <b class="text-teal">Grafik Absensi</b></h6>
                     <div data-simplebar style="max-height: 210px;">
-                        <ul class="list-unstyled mb-0 text-dark">
+                        <ul class="list-unstyled mb-0 text-dark" id="showKeteranganGrafik" hidden>
                             <li class="mb-2">
                                 <div class="d-flex align-items-start gap-2">
                                     <div class="lh-0">
@@ -147,8 +147,8 @@
                                         <i class="ri-circle-fill" style="color: #F97316"></i>
                                     </div>
                                     <div class="flex-fill">
-                                        <span class="fw-medium">Belum Pulang</span>
-                                        <span class="d-block text-muted fs-12">Belum melakukan absen pulang</span>
+                                        <span class="fw-medium">Absen 1x</span>
+                                        <span class="d-block text-muted fs-12">Belum melakukan absensi pulang</span>
                                     </div>
                                 </div>
                             </li>
@@ -184,7 +184,7 @@
                                     </div>
                                     <div class="flex-fill">
                                         <span class="fw-medium">Mangkir</span>
-                                        <span class="d-block text-muted fs-12">Tidak hadir tanpa keterangan</span>
+                                        <span class="d-block text-muted fs-12">Tidak hadir / tidak melakukan absensi tanpa keterangan</span>
                                     </div>
                                 </div>
                             </li>
@@ -196,12 +196,13 @@
                                     </div>
                                     <div class="flex-fill">
                                         <span class="fw-medium">Sisa Hari Kerja</span>
-                                        <span class="d-block text-muted fs-12">Hari kerja yang belum terisi status absensi</span>
+                                        <span class="d-block text-muted fs-12">Hari kerja yang belum terisi status absensi / belum melakukan absensi</span>
                                     </div>
                                 </div>
                             </li>
 
                         </ul>
+                        <div id="loadingKeteranganGrafik" class="text-dark"><center><i class="ri-refresh-line ri-spin me-1"></i> Memuat Data</center></div>
                     </div>
                 </div>
             </div>
@@ -476,6 +477,8 @@
             type: "GET",
             dataType: "json",
             beforeSend: function() {
+                $('#showKeteranganGrafik').prop('hidden',true);
+                $('#loadingKeteranganGrafik').prop('hidden',false);
             },
             success: function (res) {
                 $('#area-stacked').empty();
@@ -545,7 +548,7 @@
                     chart: {
                         type: "area",
                         height: 380,
-                        stacked: true,
+                        stacked: false,
                         toolbar: { show: true },
                         // parentHeightOffset: 10,
                         // redrawOnWindowResize: true
@@ -633,6 +636,9 @@
                     message: xhr.responseJSON?.message ?? "Terjadi kesalahan",
                     position: "topRight"
                 });
+            }, complete: function() {
+                $('#showKeteranganGrafik').prop('hidden',false);
+                $('#loadingKeteranganGrafik').prop('hidden',true);
             }
         });
     }
