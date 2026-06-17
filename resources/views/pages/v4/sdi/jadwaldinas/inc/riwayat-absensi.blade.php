@@ -80,21 +80,26 @@
                     var kdShift = '';
                     var jenis = '';
 
-                    if (!item.tgl_out && item.terlambat == 1) {
-                        statusLengkap = `<span class="badge fs-14 bg-warning-transparent">Absensi Tidak Lengkap</span>`;
-                        status = `<span class="badge fs-14 bg-danger-transparent">Terlambat</span>`;
-                    } else if (!item.tgl_out && item.terlambat == 0) {
-                        statusLengkap = `<span class="badge fs-14 bg-warning-transparent">Absensi Tidak Lengkap</span>`;
-                        status = `<span class="badge fs-14 bg-success-transparent">Disiplin</span>`;
-                    } else if (item.tgl_out && item.terlambat == 1) {
-                        statusLengkap = `<span class="badge fs-14 bg-success-transparent">Absensi Lengkap</span>`;
-                        status = `<span class="badge fs-14 bg-danger-transparent">Terlambat</span>`;
-                    } else if (item.tgl_out && item.terlambat == 0) {
-                        statusLengkap = `<span class="badge fs-14 bg-success-transparent">Absensi Lengkap</span>`;
-                        status = `<span class="badge fs-14 bg-success-transparent">Disiplin</span>`;
-                    } else { // TIDAK VALID
-                        statusLengkap = `<span class="badge fs-14 bg-dark-transparent">Tidak Valid</span>`;
-                        status = `<span class="badge fs-14 bg-dark-transparent">Tidak Valid</span>`;
+                    if (item.jenis == 1) {
+                        if (!item.tgl_out && item.terlambat == 1) {
+                            statusLengkap = `<span class="badge fs-14 bg-warning-transparent">Absensi Tidak Lengkap</span>`;
+                            status = `<span class="badge fs-14 bg-danger-transparent">Terlambat</span>`;
+                        } else if (!item.tgl_out && item.terlambat == 0) {
+                            statusLengkap = `<span class="badge fs-14 bg-warning-transparent">Absensi Tidak Lengkap</span>`;
+                            status = `<span class="badge fs-14 bg-success-transparent">Disiplin</span>`;
+                        } else if (item.tgl_out && item.terlambat == 1) {
+                            statusLengkap = `<span class="badge fs-14 bg-success-transparent">Absensi Lengkap</span>`;
+                            status = `<span class="badge fs-14 bg-danger-transparent">Terlambat</span>`;
+                        } else if (item.tgl_out && item.terlambat == 0) {
+                            statusLengkap = `<span class="badge fs-14 bg-success-transparent">Absensi Lengkap</span>`;
+                            status = `<span class="badge fs-14 bg-success-transparent">Disiplin</span>`;
+                        } else { // TIDAK VALID
+                            statusLengkap = `<span class="badge fs-14 bg-dark-transparent">Tidak Valid</span>`;
+                            status = `<span class="badge fs-14 bg-dark-transparent">Tidak Valid</span>`;
+                        }
+                    } else {
+                        statusLengkap = `<span class="badge fs-14 bg-success-transparent">Absensi lengkap</span>`;
+                        status = `<span class="badge fs-14 bg-info-transparent">Toleransi</span>`;
                     }
 
                     if (item.lewat_hari == 1) {
