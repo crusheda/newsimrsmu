@@ -107,7 +107,7 @@
                         jenis = `<b class="text-primary">SHIFT</b>`;
                     } else if (item.jenis == 3) {
                         jenis = `<b class="text-warning">IJIN</b>`;
-                    } else if (item.jenis == 3) {
+                    } else if (item.jenis == 4) {
                         jenis = `<b class="text-success">DINAS LUAR</b>`;
                     } else { // TIDAK VALID
                         jenis = `<b class="text-dark">TIDAK VALID</b>`;
