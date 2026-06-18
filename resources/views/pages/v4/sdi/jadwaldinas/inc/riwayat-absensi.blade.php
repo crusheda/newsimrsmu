@@ -15,7 +15,7 @@
                                 <th><center>#ID</center></th>
                                 <th>ABSEN BERANGKAT</th>
                                 <th>ABSEN PULANG</th>
-                                <th>SHIFT & JAM</th>
+                                <th>JENIS & SHIFT & JAM</th>
                                 <th>KELENGKAPAN</th>
                                 <th>STATUS</th>
                             </tr>
@@ -30,9 +30,9 @@
                         <tfoot>
                             <tr>
                                 <th><center>#ID</center></th>
-                                <th>TGL BERANGKAT</th>
-                                <th>TGL PULANG</th>
-                                <th>SHIFT</th>
+                                <th>ABSEN BERANGKAT</th>
+                                <th>ABSEN PULANG</th>
+                                <th>JENIS & SHIFT & JAM</th>
                                 <th>KELENGKAPAN</th>
                                 <th>STATUS</th>
                             </tr>
@@ -51,7 +51,8 @@
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h6 class="modal-title fw-medium fs-18 mb-0 pe-none d-flex align-items-center gap-2">
+                <h6 class="modal-title fw-medium fs-18 mb-0 d-flex align-items-center gap-2">
+                    <button class="btn btn-sm btn-secondary-transparent me-1" onclick="kembaliRiwayatAbsensi()"><i class="ri-arrow-left-s-fill"></i></button>
                     <span>
                         Detail <b class="text-primary link-underline-primary text-decoration-underline">Absensi</b>
                     </span>
@@ -59,105 +60,7 @@
                 </h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <div class="d-flex align-items-center mb-4 gap-2 flex-wrap">
-                    <div class="lh-1"> <span class="avatar avatar-lg me-1 bg-primary"><i class="ri-stack-line fs-24 lh-1"></i></span>
-                    </div>
-                    <div>
-                        <h6 class="fw-medium mb-2"> E-commerce Platform </h6> <span class="badge bg-success-transparent"> In
-                            progress</span> <span class="text-muted fs-12"><i class="ri-circle-fill text-success mx-2 fs-9"></i>Last
-                            Updated 1 Day Ago</span>
-                    </div>
-                    <div class="ms-auto align-self-start">
-                        <div class="dropdown"> <a aria-label="anchor" href="javascript:void(0);"
-                                class="btn btn-icon btn-sm btn-primary-light" data-bs-toggle="dropdown" aria-expanded="false"> <i
-                                    class="fe fe-more-vertical"></i> </a>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="javascript:void(0);"><i
-                                            class="ri-eye-line align-middle me-1 d-inline-block"></i>View</a></li>
-                                <li><a class="dropdown-item" href="javascript:void(0);"><i
-                                            class="ri-edit-line align-middle me-1 d-inline-block"></i>Edit</a></li>
-                                <li><a class="dropdown-item" href="javascript:void(0);"><i
-                                            class="ri-delete-bin-line me-1 align-middle d-inline-block"></i>Delete</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="fs-15 fw-medium mb-2">Project Description :</div>
-                <p class="text-muted mb-4">The Customer Feedback Dashboard Development project aims to create a comprehensive
-                    dashboard that aggregates and visualizes customer feedback data. This will enable our team to gain actionable
-                    insights and improve customer satisfaction.</p>
-                <div class="d-flex gap-5 mb-4 flex-wrap">
-                    <div class="d-flex align-items-center gap-2 me-3"> <span
-                            class="avatar avatar-md avatar-rounded me-1 bg-success"><i
-                                class="ri-calendar-event-line fs-18 lh-1 align-middle"></i></span>
-                        <div>
-                            <div class="fw-medium mb-0"> Start Date </div> <span class="fs-12 text-muted">March 1, 2025</span>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center gap-2 me-3">
-                        <span class="avatar avatar-md avatar-rounded me-1 bg-info">
-                            <i class="ri-time-line fs-18 lh-1 align-middle"></i>
-                        </span>
-                        <div>
-                            <div class="fw-medium mb-0"> End Date </div> <span class="fs-12 text-muted">July 15, 2025</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="mb-4">
-                    <div class="row gy-3">
-                        <div class="col-xl-12">
-                            <div class="fs-15 fw-medium mb-2">Key tasks :</div>
-                            <ul class="task-details-key-tasks mb-0">
-                                <li>Initial planning phase of the project including scoping and goal setting.</li>
-                                <li>Designing the product layout, wireframes, and UI elements.</li>
-                                <li>Coding and development of the website interface, functionality, and integration.</li>
-                                <li>Testing the product and website for bugs and quality assurance checks.</li>
-                                <li>Deploy the final product to the live server.</li>
-                                <li>Perform usability testing and iterate based on feedback.</li>
-                            </ul>
-                        </div>
-                        <div class="col-xl-12">
-                            <div class="d-flex align-items-center justify-content-between mb-2">
-                                <div class="fs-15 fw-medium">Sub Tasks :</div> <a href="javascript:void(0);"
-                                    class="btn btn-primary-light btn-wave btn-sm waves-effect waves-light">See More</a>
-                            </div>
-                            <ul class="list-group">
-                                <li class="list-group-item">
-                                    <div class="d-flex align-items-center">
-                                        <div class="me-2"><i
-                                                class="ri-link fs-15 lh-1 p-1 bg-primary-transparent rounded-circle"></i></div>
-                                        <div class="fw-medium">Create wireframes for homepage</div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="d-flex align-items-center">
-                                        <div class="me-2"><i
-                                                class="ri-link fs-15 lh-1 p-1 bg-primary-transparent rounded-circle"></i></div>
-                                        <div class="fw-medium">Design product pages (UI)</div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="d-flex align-items-center">
-                                        <div class="me-2"><i
-                                                class="ri-link fs-15 lh-1 p-1 bg-primary-transparent rounded-circle"></i></div>
-                                        <div class="fw-medium">Design product pages (UI)</div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="fs-15 fw-medium mb-2">Skills :</div>
-                <div class="d-flex gap-2 flex-wrap">
-                    <span class="badge bg-primary-transparent">UI/UX Design</span>
-                    <span class="badge bg-secondary-transparent">Front-End Development</span>
-                    <span class="badge bg-warning-transparent">Back-End Development</span>
-                    <span class="badge bg-info-transparent">Quality Assurance</span>
-                    <span class="badge bg-success-transparent">Project Management</span>
-                    <span class="badge bg-danger-transparent">SEO Optimization</span>
-                </div>
-            </div>
+            <div class="modal-body overflow-hidden" id="tampil-detail-absensi"></div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary-transparent me-1" data-bs-dismiss="modal"><i class="ri-close-line me-1"></i> Tutup</button>
                 <button type="button" class="btn btn-danger-transparent" onclick="kembaliRiwayatAbsensi()" id="btn-back-riwayat-absensi"><i class="ri-arrow-left-s-fill me-1"></i> Kembali ke Riwayat</button>
@@ -240,8 +143,8 @@
                     content += `<td><center><div class='btn-group' data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Lihat Detail Absensi ID#${item.id}">
                                     <button type='button' class='btn btn-sm btn-teal-light' id='btn-detail-${item.id}' onclick='showRiwayatAbsensiDetail(${item.id})'>${item.id} <i class="ri-arrow-right-s-line ms-1"></i></button>`;
                     content += "</div></center></td>";
-                    content += `<td>${item.tgl_in}</td>`;
-                    content += `<td>${item.tgl_out ? item.tgl_out : '-'}</td>`;
+                    content += `<td data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="${moment(item.tgl_in).format('dddd, DD MMM YYYY HH:mm:ss [WIB]')}">${item.tgl_in}</td>`;
+                    content += `<td data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="${item.tgl_out?moment(item.tgl_out).format('dddd, DD MMM YYYY HH:mm:ss [WIB]'):'...'}">${item.tgl_out ? item.tgl_out : '-'}</td>`;
                     content += `<td style='white-space: normal !important; word-wrap: break-word;'>
                                     <div class='d-flex justify-content-start align-items-center'>
                                         <div class='d-flex flex-column'>
@@ -307,6 +210,193 @@
             },
             success: function(res) {
                 $('#showTxIdRiwayat').text("ID # "+id);
+
+                // JENIS ABSENSI
+                let jenisAbsensi = '';
+                if (res.show.jenis == 1) {
+                    jenisAbsensi = `<span class="nft-details-auction-time">Shift Jaga (${res.show.kd_shift})</span>`;
+                } else if (res.show.jenis == 3) {
+                    jenisAbsensi = `<span class="nft-details-auction-time bg-warning">Ijin / Tidak Masuk</span>`;
+                } else if (res.show.jenis == 4) {
+                    jenisAbsensi = `<span class="nft-details-auction-time bg-info">Dinas Luar</span>`;
+                } else {
+                    jenisAbsensi = `<span class="nft-details-auction-time bg-secondary">Tidak Diketahui</span>`;
+                }
+
+                // ROLES / JABATAN PEGAWAI
+                let jabatan = '';
+                let roles = res.show?.pegawai?.roles ?? [];
+                if (roles.length > 0) {
+                    jabatan = `<span class="badge bg-primary-transparent me-1">`;
+                    roles.forEach(r => {
+                        jabatan += `${r.deskripsi ?? r.name ?? '??'} `;
+                    });
+                    jabatan += `</span>`;
+                } else {
+                    jabatan = `<span class="badge bg-secondary-transparent">Tidak ada jabatan</span>`;
+                }
+
+                // FOTO PROFIL
+                let foto = "{{ asset('images/no-image-person.png') }}";
+
+                if(res.show.foto_pegawai){
+                    foto = "{{ url('storage') }}/" + res.show.foto_pegawai.replace('public/','');
+                }
+
+                let keterlambatan = '-';
+                if (res.show.keterlambatan) {
+                    if (res.show.keterlambatan == '00:00:00') {
+                        keterlambatan = '<b class="text-success">Disiplin</b>';
+                    } else {
+                        keterlambatan = '<b class="text-danger">'+getTimeDescription(res.show.keterlambatan)+'</b>';
+                    }
+                }
+
+                content = ``;
+                content += `${jenisAbsensi}
+                            <div class="d-flex align-items-center mb-4 gap-2 flex-wrap">
+                                <div class="lh-1">
+                                    <span class="avatar avatar-lg me-1 avatar-rounded" id="rFoto">
+                                        <img src="${foto}" alt="foto_profil">
+                                    </span>
+                                </div>
+                                <div>
+                                    <h6 class="fw-medium mb-2"> ${res.show.nama_pegawai} </h6>
+                                    ${jabatan}
+                                    <span class="text-muted fs-12"><i class="ri-circle-fill text-success mx-2 fs-9"></i>Last Updated 1 Day Ago</span>
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <div class="row gy-3">
+                                    <div class="col-xl-4 mb-3">
+                                        <div class="fs-15 fw-medium mb-2 text-center">Foto Absensi</div>
+                                        <div class="swiper pagination-absensi">
+                                            <div class="swiper-wrapper">
+                                                <div class="swiper-slide d-flex justify-content-center align-items-center">
+                                                    <img src="https://absensi.simrsmu.com/api/kepegawaian/detail/foto/${res.show.id}/1"
+                                                        class="img-fluid rounded"
+                                                        alt="Berangkat"
+                                                        style="width:300px;height:300px;object-fit:cover">
+                                                </div>
+                                                <div class="swiper-slide d-flex justify-content-center align-items-center ${res.show.jenis != 1 ? 'invisible' : ''}">
+                                                    <img src="https://absensi.simrsmu.com/api/kepegawaian/detail/foto/${res.show.id}/0"
+                                                        class="img-fluid rounded"
+                                                        alt="Pulang"
+                                                        style="width:300px;height:300px;object-fit:cover">
+                                                </div>
+                                            </div>
+                                            <div class="swiper-pagination absensi-pagination"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-8">
+                                        <div class="fs-15 fw-medium mb-3">Detail Absensi :</div>
+                                        <div class="d-flex gap-10 flex-wrap">
+                                            <div class="d-flex align-items-center gap-2 me-3 mb-4">
+                                                <span class="avatar avatar-md avatar-rounded me-1 bg-success">
+                                                    <i class="ri-flight-takeoff-line fs-18 lh-1 align-middle"></i>
+                                                </span>
+                                                <div>
+                                                    <div class="fw-medium mb-0"> Berangkat </div>
+                                                    <span class="fs-12 text-muted">${moment(res.show.tgl_in).format('dddd, DD MMM YYYY HH:mm:ss [WIB]')}</span>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex align-items-center gap-2 me-3 mb-4 ${res.show.jenis != 1 ? 'invisible' : ''}">
+                                                <span class="avatar avatar-md avatar-rounded me-1 bg-danger">
+                                                    <i class="ri-flight-land-line fs-18 lh-1 align-middle"></i>
+                                                </span>
+                                                <div>
+                                                    <div class="fw-medium mb-0"> Pulang </div>
+                                                    <span class="fs-12 text-muted">${res.show.tgl_out ? moment(res.show.tgl_out).format('dddd, DD MMM YYYY HH:mm:ss [WIB]') : '-'}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <ul class="list-unstyled job-highlights-list">
+                                            <li>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <div class="lh-1">
+                                                        <span class="avatar avatar-sm border lh-1 avatar-rounded me-2 bg-light text-default">
+                                                            <i class="ri-calendar-check-line fs-15"></i>
+                                                        </span> <b class="text-muted">Shift :</b>
+                                                    </div>
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <span class="badge bg-info-transparent">${res.show.kd_shift}</span> ${res.show.nm_shift}&nbsp;&nbsp;(<b class="text-orange">${moment(res.show.ref_jam_masuk).format("HH:mm")}</b> - <b class="text-orange">${moment(res.show.ref_jam_pulang).format("HH:mm")}</b>)
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <div class="lh-1"> <span class="avatar avatar-sm border lh-1 avatar-rounded me-2 bg-light text-default"> <i
+                                                                class="ri-time-line fs-15"></i> </span> <b class="text-muted">Keterlambatan :</b></div>
+                                                    <div>${keterlambatan}</div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <div class="lh-1"> <span class="avatar avatar-sm border lh-1 avatar-rounded me-2 bg-light text-default">
+                                                            <i class="ri-calendar-schedule-fill fs-15"></i> </span> <b class="text-muted">Lembur :</b></div>
+                                                    <div>${res.show.lembur ? getTimeDescription(res.show.lembur) : '-'}</div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <div class="lh-1"> <span class="avatar avatar-sm border lh-1 avatar-rounded me-2 bg-light text-default">
+                                                            <i class="ri-hourglass-fill fs-15"></i> </span> <b class="text-muted">Total Waktu Bekerja :</b></div>
+                                                    <div>${res.show.selisih_jam ? getTimeDescription(res.show.selisih_jam) : '-'}</div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="d-flex align-items-center gap-2 ${res.show.jenis == 1 ? 'invisible' : ''}">
+                                                    <div class="lh-1"> <span class="avatar avatar-sm border lh-1 avatar-rounded me-2 bg-light text-default">
+                                                            <i class="ri-sticky-note-add-line fs-15"></i> </span> <b class="text-muted">Keterangan :</b></div>
+                                                    <p class="mb-0">${res.show.keterangan??'-'}</p>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>`;
+
+                $('#tampil-detail-absensi').empty().append(content);
+
+                // swiper with pagination
+                if(window.swiperAbsensi){
+                    window.swiperAbsensi.destroy(true,true);
+                }
+
+                window.swiperAbsensi = new Swiper(".pagination-absensi", {
+
+                    slidesPerView: 1,
+                    centeredSlides: true,
+
+                    autoplay: {
+                        delay: 3000,
+                        disableOnInteraction: false
+                    },
+
+                    observer: true,
+                    observeParents: true,
+
+                    pagination: {
+
+                        el: ".absensi-pagination",
+
+                        clickable: true,
+
+                        renderBullet: function(index, className) {
+
+                            let text = index === 0 ? "<i class='text-success ri-flight-takeoff-line mt-2'></i>" : "<i class='text-danger ri-flight-land-line mt-2'></i>";
+
+                            return `
+                                <button type="button" class="${className}">
+                                    ${text}
+                                </button>
+                            `;
+                        }
+                    },
+
+                });
+
+                window.swiperAbsensi.autoplay.start();
             },
             error: function(xhr, status, error) {
                 iziToast.error({
@@ -343,4 +433,35 @@
     //         backdrop: `rgba(26,27,41,0.8)`,
     //     });
     // }
+
+    function getTimeDescription(waktu) {
+
+        let durasi = moment.duration(waktu);
+
+        let jam = durasi.hours();
+        let menit = durasi.minutes();
+        let detik = durasi.seconds();
+
+        let hasil = [];
+
+        if (jam > 0) {
+            hasil.push(
+                String(jam).padStart(2,'0') + " jam"
+            );
+        }
+
+        if (menit > 0) {
+            hasil.push(
+                String(menit).padStart(2,'0') + " menit"
+            );
+        }
+
+        if (detik > 0) {
+            hasil.push(
+                String(detik).padStart(2,'0') + " detik"
+            );
+        }
+
+        return hasil.join(" ");
+    }
 </script>

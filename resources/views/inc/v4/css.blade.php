@@ -66,6 +66,9 @@
 <!-- Auto Complete CSS -->
 <link rel="stylesheet" href="{{ asset('libs/@tarekraafat/autocomplete.js/css/autoComplete.css') }}">
 
+<!-- Swiper CSS -->
+<link rel="stylesheet" href="{{ asset('libs/swiper/swiper-bundle.min.css') }}">
+
 <!-- Notifier CSS -->
 <link rel="stylesheet" href="{{ asset('libs/notifier/notifier.css') }}">
 

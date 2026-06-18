@@ -538,7 +538,7 @@
 
                         { name: "Ijin / Dinas Luar", data: ijinDL },
                         { name: "Terlambat", data: terlambat },
-                        { name: "Belum Pulang", data: belumPulang },
+                        { name: "Absen 1x", data: belumPulang },
                         { name: "Cuti", data: cuti },
                         { name: "Libur", data: libur },
                         { name: "Mangkir", data: mangkir },

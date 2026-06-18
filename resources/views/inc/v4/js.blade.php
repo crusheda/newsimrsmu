@@ -78,6 +78,9 @@
 <!-- Custom-Switcher JS -->
 <script src="{{ asset('js/custom-switcher.min.js') }}"></script>
 
+<!-- Swiper JS -->
+<script src="{{ asset('libs/swiper/swiper-bundle.min.js') }}"></script>
+
 <!-- Grid JS -->
 <script src="{{ asset('libs/gridjs/gridjs.umd.js') }}"></script>
 
