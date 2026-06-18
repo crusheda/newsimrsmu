@@ -135,7 +135,21 @@ class JadwalDinasController extends Controller
 
     function riwayatAbsensiDetail($id)
     {
-        $show = absensi::where('id', $id)->whereNull('deleted_at')->where('trashed_status', 0)->get();
+        $show = absensi::leftJoin('users','users.id','=','kepegawaian_absensi.pegawai_id')
+                        ->leftJoin('users_foto', function($join) {
+                            $join->on('users_foto.user_id', '=', 'kepegawaian_absensi.pegawai_id')
+                                ->whereRaw('users_foto.updated_at = (
+                                    SELECT MAX(uf.created_at)
+                                    FROM users_foto uf
+                                    WHERE uf.user_id = kepegawaian_absensi.pegawai_id
+                                    AND uf.deleted_at IS NULL
+                                )');
+                        })
+                        ->select('users.nama as nama_pegawai','users_foto.filename as foto_pegawai','kepegawaian_absensi.*')
+                        ->where('kepegawaian_absensi.id', $id)
+                        ->whereNull('kepegawaian_absensi.deleted_at')
+                        ->where('kepegawaian_absensi.trashed_status', 0)
+                        ->get();
 
         $data = [
             'show' => $show,

@@ -47,6 +47,124 @@
         </div>
     </div>
 </div>
+<div class="modal fade animate__animated animate__rubberBand" id="riwayatAbsensiDetail" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title fw-medium fs-18 mb-0 pe-none d-flex align-items-center gap-2">
+                    <span>
+                        Detail <b class="text-primary link-underline-primary text-decoration-underline">Absensi</b>
+                    </span>
+                    <span class="badge bg-purple-gradient" id="showTxIdRiwayat">ID # <i class="ri-refresh-line ri-spin"></i></span>
+                </h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex align-items-center mb-4 gap-2 flex-wrap">
+                    <div class="lh-1"> <span class="avatar avatar-lg me-1 bg-primary"><i class="ri-stack-line fs-24 lh-1"></i></span>
+                    </div>
+                    <div>
+                        <h6 class="fw-medium mb-2"> E-commerce Platform </h6> <span class="badge bg-success-transparent"> In
+                            progress</span> <span class="text-muted fs-12"><i class="ri-circle-fill text-success mx-2 fs-9"></i>Last
+                            Updated 1 Day Ago</span>
+                    </div>
+                    <div class="ms-auto align-self-start">
+                        <div class="dropdown"> <a aria-label="anchor" href="javascript:void(0);"
+                                class="btn btn-icon btn-sm btn-primary-light" data-bs-toggle="dropdown" aria-expanded="false"> <i
+                                    class="fe fe-more-vertical"></i> </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="javascript:void(0);"><i
+                                            class="ri-eye-line align-middle me-1 d-inline-block"></i>View</a></li>
+                                <li><a class="dropdown-item" href="javascript:void(0);"><i
+                                            class="ri-edit-line align-middle me-1 d-inline-block"></i>Edit</a></li>
+                                <li><a class="dropdown-item" href="javascript:void(0);"><i
+                                            class="ri-delete-bin-line me-1 align-middle d-inline-block"></i>Delete</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="fs-15 fw-medium mb-2">Project Description :</div>
+                <p class="text-muted mb-4">The Customer Feedback Dashboard Development project aims to create a comprehensive
+                    dashboard that aggregates and visualizes customer feedback data. This will enable our team to gain actionable
+                    insights and improve customer satisfaction.</p>
+                <div class="d-flex gap-5 mb-4 flex-wrap">
+                    <div class="d-flex align-items-center gap-2 me-3"> <span
+                            class="avatar avatar-md avatar-rounded me-1 bg-success"><i
+                                class="ri-calendar-event-line fs-18 lh-1 align-middle"></i></span>
+                        <div>
+                            <div class="fw-medium mb-0"> Start Date </div> <span class="fs-12 text-muted">March 1, 2025</span>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 me-3">
+                        <span class="avatar avatar-md avatar-rounded me-1 bg-info">
+                            <i class="ri-time-line fs-18 lh-1 align-middle"></i>
+                        </span>
+                        <div>
+                            <div class="fw-medium mb-0"> End Date </div> <span class="fs-12 text-muted">July 15, 2025</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <div class="row gy-3">
+                        <div class="col-xl-12">
+                            <div class="fs-15 fw-medium mb-2">Key tasks :</div>
+                            <ul class="task-details-key-tasks mb-0">
+                                <li>Initial planning phase of the project including scoping and goal setting.</li>
+                                <li>Designing the product layout, wireframes, and UI elements.</li>
+                                <li>Coding and development of the website interface, functionality, and integration.</li>
+                                <li>Testing the product and website for bugs and quality assurance checks.</li>
+                                <li>Deploy the final product to the live server.</li>
+                                <li>Perform usability testing and iterate based on feedback.</li>
+                            </ul>
+                        </div>
+                        <div class="col-xl-12">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <div class="fs-15 fw-medium">Sub Tasks :</div> <a href="javascript:void(0);"
+                                    class="btn btn-primary-light btn-wave btn-sm waves-effect waves-light">See More</a>
+                            </div>
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <div class="d-flex align-items-center">
+                                        <div class="me-2"><i
+                                                class="ri-link fs-15 lh-1 p-1 bg-primary-transparent rounded-circle"></i></div>
+                                        <div class="fw-medium">Create wireframes for homepage</div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="d-flex align-items-center">
+                                        <div class="me-2"><i
+                                                class="ri-link fs-15 lh-1 p-1 bg-primary-transparent rounded-circle"></i></div>
+                                        <div class="fw-medium">Design product pages (UI)</div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="d-flex align-items-center">
+                                        <div class="me-2"><i
+                                                class="ri-link fs-15 lh-1 p-1 bg-primary-transparent rounded-circle"></i></div>
+                                        <div class="fw-medium">Design product pages (UI)</div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="fs-15 fw-medium mb-2">Skills :</div>
+                <div class="d-flex gap-2 flex-wrap">
+                    <span class="badge bg-primary-transparent">UI/UX Design</span>
+                    <span class="badge bg-secondary-transparent">Front-End Development</span>
+                    <span class="badge bg-warning-transparent">Back-End Development</span>
+                    <span class="badge bg-info-transparent">Quality Assurance</span>
+                    <span class="badge bg-success-transparent">Project Management</span>
+                    <span class="badge bg-danger-transparent">SEO Optimization</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary-transparent me-1" data-bs-dismiss="modal"><i class="ri-close-line me-1"></i> Tutup</button>
+                <button type="button" class="btn btn-danger-transparent" onclick="kembaliRiwayatAbsensi()" id="btn-back-riwayat-absensi"><i class="ri-arrow-left-s-fill me-1"></i> Kembali ke Riwayat</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     $(document).ready(function() {
@@ -177,21 +295,52 @@
     }
 
     function showRiwayatAbsensiDetail(id) {
-        runDevlMessage();
+        const btn = $("#btn-detail-"+id);
+        const btn_temp = btn.html();
+        $.ajax({
+            url: `/api/v4/sdi/jadwaldinas/absensi/riwayat/${id}`,
+            type: 'GET',
+            dataType: 'json',
+            beforeSend: function() {
+                btn.prop('disabled', true);
+                btn.html('<i class="ri-refresh-line ri-spin"></i>');
+            },
+            success: function(res) {
+                $('#showTxIdRiwayat').text("ID # "+id);
+            },
+            error: function(xhr, status, error) {
+                iziToast.error({
+                    title: 'Pesan Galat!',
+                    message: xhr.responseJSON.message ?? 'Detail Absensi gagal dimuat, silakan coba beberapa saat lagi',
+                    position: 'topRight'
+                });
+            },
+            complete: function() {
+                $('#riwayatAbsensi').modal('hide');
+                btn.html(btn_temp);
+                btn.prop('disabled', false);
+                $('#riwayatAbsensiDetail').modal('show');
+            }
+        })
     }
 
-    function runDevlMessage() {
-        Swal.fire({
-            title: `Ahh Maaf!`,
-            text: `Fitur ini masih dalam tahap pengembangan! Informasi lebih lanjut silahkan hubungi Pengembang.`,
-            icon: `warning`,
-            showConfirmButton: false,
-            showCancelButton: false,
-            allowOutsideClick: true,
-            allowEscapeKey: true,
-            timer: 4000,
-            timerProgressBar: true,
-            backdrop: `rgba(26,27,41,0.8)`,
-        });
+    function kembaliRiwayatAbsensi() {
+        $('#riwayatAbsensiDetail').modal('hide');
+        $('#riwayatAbsensi').modal('show');
     }
+
+    // function runDevlMessage() {
+    //     Swal.fire({
+    //         title: `Ahh Maaf!`,
+    //         text: `Fitur ini masih dalam tahap pengembangan! Informasi lebih lanjut silahkan hubungi Pengembang.`,
+    //         icon: `warning`,
+    //         showConfirmButton: false,
+    //         showCancelButton: false,
+    //         allowOutsideClick: true,
+    //         allowEscapeKey: true,
+    //         timer: 4000,
+    //         timerProgressBar: true,
+    //         backdrop: `rgba(26,27,41,0.8)`,
+    //     });
+    // }
 </script>
