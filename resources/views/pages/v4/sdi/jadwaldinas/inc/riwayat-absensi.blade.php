@@ -263,7 +263,6 @@
                                 <div>
                                     <h6 class="fw-medium mb-2"> ${res.show.nama_pegawai} </h6>
                                     ${jabatan}
-                                    <span class="text-muted fs-12"><i class="ri-circle-fill text-success mx-2 fs-9"></i>Last Updated 1 Day Ago</span>
                                 </div>
                             </div>
                             <div class="mb-4">
