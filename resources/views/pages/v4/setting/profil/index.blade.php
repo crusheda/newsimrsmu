@@ -81,10 +81,10 @@
                                             Password
                                         </button>
                                     </li>
-                                    <li class="nav-item" role="presentation" hidden>
+                                    <li class="nav-item" role="presentation">
                                         <button class="nav-link" id="" data-bs-toggle="tab"
                                             data-bs-target="#dokumen-tab" type="button" role="tab"
-                                            aria-controls="dokumen-tab" aria-selected="false">
+                                            aria-controls="dokumen-tab" aria-selected="false" onclick="loadDokumen()">
                                             Dokumen
                                         </button>
                                     </li>

@@ -6,7 +6,7 @@
         <div class="page-header-breadcrumb mb-3">
             <div class="d-flex align-center justify-content-between flex-wrap">
                 <h1 class="page-title fw-medium fs-18 mb-0 pe-none">
-                    <b class="text-secondary">E</b>-<b class="text-teal">Pinjam</b> - <b class="text-info link-underline-secondary text-decoration-underline">Referensi</b> <b class="text-teal link-underline-teal text-decoration-underline">Barang</b>
+                    <b class="text-secondary">E</b>-<b class="text-teal">Pinjam</b> - <b class="text-info link-underline-secondary text-decoration-underline">Referensi</b> <b class="text-orange link-underline-orange text-decoration-underline">Kategori</b>
                 </h1>
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item pe-none">
@@ -16,7 +16,7 @@
                         <a href="{{ route('v4.it.epinjam') }}">E-Pinjam</a>
                     </li>
                     <li class="breadcrumb-item pe-none active" aria-current="page">
-                        Ref Barang
+                        Ref Kategori
                     </li>
                 </ol>
             </div>
@@ -30,9 +30,9 @@
                             <a class="btn btn-secondary-transparent" href="{{ route('v4.it.epinjam') }}" data-bs-toggle="tooltip"
                             data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                             title="Kembali ke Halaman E-Pinjam"><i class="ri-arrow-left-s-line me-1"></i> Kembali</a>
-                            <button class="btn btn-success-transparent" onclick="tambah()" data-bs-toggle="tooltip"
+                            <button class="btn btn-orange-light" onclick="tambah()" data-bs-toggle="tooltip"
                             data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                            title="Form Tambah Referensi" id="btn-tambah"><i class='ri-add-box-line me-1'></i> Tambah Barang</button>
+                            title="Form Tambah Referensi" id="btn-tambah"><i class='ri-add-box-line me-1'></i> Tambah Kategori</button>
                         </div>
                         <button class="btn btn-warning-transparent" onclick="refresh()" data-bs-toggle="tooltip"
                         data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" id="btn-refresh"
@@ -44,8 +44,8 @@
                                 <thead>
                                     <tr>
                                         <th class="cell-fit"><center>Aksi</center></th>
-                                        <th class="cell-fit">Referensi Barang</th>
-                                        <th class="cell-fit">Kelengkapan</th>
+                                        <th class="cell-fit">Referensi Kategori</th>
+                                        <th class="cell-fit">Barang <b class="text-success">Terkait</b></th>
                                         <th class="cell-fit">Diperbarui</th>
                                     </tr>
                                 </thead>
@@ -59,8 +59,8 @@
                                 <tfoot>
                                     <tr>
                                         <th class="cell-fit"><center>Aksi</center></th>
-                                        <th class="cell-fit">Referensi Barang</th>
-                                        <th class="cell-fit">Kelengkapan</th>
+                                        <th class="cell-fit">Referensi Kategori</th>
+                                        <th class="cell-fit">Barang <b class="text-success">Terkait</b></th>
                                         <th class="cell-fit">Diperbarui</th>
                                     </tr>
                                 </tfoot>
@@ -78,41 +78,13 @@
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h6 class="modal-title">Tambah <b class="text-info">Referensi</b> <b class="text-success">Barang</b></h6>
+                    <h6 class="modal-title">Tambah <b class="text-info">Referensi</b> <b class="text-orange">Kategori</b></h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Kategori <a class="text-danger">*</a></label>
-                                <select class="select2 form-control" id="kategori" style="width: 100%" required></select>
-                            </div>
-                        </div>
-                        <div class="col-md-5 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Unit <b class="text-primary">Asal</b> <a class="text-danger">*</a></label>
-                                <select class="select2 form-control" id="asal" style="width: 100%" required></select>
-                            </div>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Kondisi (<b class="text-warning">OPTIONAL</b>)</label>
-                                <select class="select2 form-control" id="kondisi" style="width: 100%" required></select>
-                            </div>
-                        </div>
-                        <div class="col-md-12 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Nama Barang <a class="text-danger">*</a></label>
-                                <input type="text" class="form-control" id="nama" placeholder="Tuliskan Nama Barang" required></input>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="form-label">Kelengkapan (<b class="text-warning">OPTIONAL</b>)</label>
-                                <textarea rows="2" class="form-control" id="kelengkapan" placeholder="Optional"></textarea>
-                            </div>
-                        </div>
+                    <div class="form-group">
+                        <label class="form-label">Nama Kategori <a class="text-danger">*</a></label>
+                        <input type="text" class="form-control" id="kategori" placeholder="Tuliskan Penamaan Kategori" required></input>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -138,39 +110,10 @@
                 </div>
                 <div class="modal-body">
                     <input type="text" id="id_edit" hidden>
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Kategori <a class="text-danger">*</a></label>
-                                <select class="select2 form-control" id="kategori_edit" style="width: 100%" required></select>
-                            </div>
-                        </div>
-                        <div class="col-md-5 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Unit <b class="text-primary">Asal</b> <a class="text-danger">*</a></label>
-                                <select class="select2 form-control" id="asal_edit" style="width: 100%" required></select>
-                            </div>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Kondisi (<b class="text-warning">OPTIONAL</b>)</label>
-                                <select class="select2 form-control" id="kondisi_edit" style="width: 100%" required></select>
-                            </div>
-                        </div>
-                        <div class="col-md-12 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Nama Barang <a class="text-danger">*</a></label>
-                                <input type="text" class="form-control" id="nama_edit" placeholder="Tuliskan Nama Barang" required></input>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="form-label">Kelengkapan (<b class="text-warning">OPTIONAL</b>)</label>
-                                <textarea rows="2" class="form-control" id="kelengkapan_edit" placeholder="Optional"></textarea>
-                            </div>
-                        </div>
+                    <div class="form-group">
+                        <label class="form-label">Nama Kategori <a class="text-danger">*</a></label>
+                        <input type="text" class="form-control" id="kategori_edit" placeholder="Tuliskan Penamaan Kategori" required></input>
                     </div>
-
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary" id="btn-ubah" onclick="prosesUbah()"><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</button>
@@ -188,12 +131,12 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">
-                        Hapus <b class="text-info">Referensi</b> <b class="text-success">Barang</b>&nbsp;<span class="badge text-bg-danger badge-sm"><a id="show_id_hapus"></a></span>
+                        Hapus <b class="text-info">Referensi</b> <b class="text-orange">Kategori</b>&nbsp;<span class="badge text-bg-danger badge-sm"><a id="show_id_hapus"></a></span>
                     </h5>
                 </div>
                 <div class="modal-body">
                     <input type="text" id="id_hapus" hidden>
-                    <p style="text-align: justify;">Anda akan menghapus Referensi Barang tersebut, lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan penghapusan.</p>
+                    <p style="text-align: justify;">Anda akan menghapus Referensi Kateogir tersebut, lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan penghapusan.</p>
                     <label class="switch">
                         <input type="checkbox" class="switch-input" id="setujuhapus">
                         <span class="switch-toggle-slider">
@@ -226,7 +169,7 @@
                 `<tr style='font-size:13px'><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
             );
             $.ajax({
-                url: "/api/v4/it/epinjam/ref/barang",
+                url: "/api/v4/it/epinjam/ref/kategori",
                 type: 'GET',
                 dataType: 'json', // added data type
                 beforeSend: function() {
@@ -248,20 +191,15 @@
                                             </div>
                                         </center>
                                     </td>`;
+                        content += `<td style="white-space: normal; word-wrap: break-word; word-break: break-word;" class="text-uppercase">${item.nama}</td>`;
+
+                        let daftarBarang = item.barang?.map(val => val.nama).join(", ") ?? "-";
+                        content += `<td style="white-space: normal; word-wrap: break-word; word-break: break-word;" class="text-uppercase">${daftarBarang}</td>`;
+
                         content += `<td>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
-                                                <a class='mb-0 text-truncate'>${item.kategori?.nama ? `[<b class="text-teal">${item.kategori?.nama}</b>] ` : ''}${item.nama ? `<b class="text-info">${item.nama}</b>` : ''}</a>
-                                                <small class='text-muted text-wrap'>Asal : ${item.asal?.unit ?? '-'}</small>
-                                                <small class='text-muted text-wrap'>Kondisi : ${item.kondisi?.deskripsi ?? '-'}</small>
-                                            </div>
-                                        </div>
-                                    </td>`;
-                        content += `<td style="white-space: normal; word-wrap: break-word; word-break: break-word;" class="text-uppercase">${item.kelengkapan ?? '-'}</td>`;
-                        content += `<td>
-                                        <div class='d-flex justify-content-start align-items-center'>
-                                            <div class='d-flex flex-column'>
-                                                <a class='mb-0 text-wrap'>${new Date(item.updated_at).toLocaleString("sv-SE")}</a>
+                                                <a class='mb-0 text-wrap'>${item.updated_at ? new Date(item.updated_at).toLocaleString("sv-SE") : ''}</a>
                                                 <small class='text-muted text-wrap'>${item.user?.nama ?? ''}</small>
                                             </div>
                                         </div>
@@ -281,8 +219,8 @@
                         bAutoWidth: false,
                         aoColumns : [
                             { sWidth: '10%' },
-                            { sWidth: '40%' },
-                            { sWidth: '30%' },
+                            { sWidth: '45%' },
+                            { sWidth: '25%' },
                             { sWidth: '20%' },
                         ],
                         displayLength: 20,
@@ -291,11 +229,11 @@
                 error: function (res) {
                     iziToast.error({
                         title: 'Pesan Galat!',
-                        message: 'Tidak ada data Barang ditemukan',
+                        message: 'Tidak ada data Kategori ditemukan',
                         position: 'topRight'
                     });
                     $("#tampil-tbody").empty().append(
-                        `<tr style='font-size:13px'><td colspan="9"><center>Tidak ada Data Barang</center></td></tr>`
+                        `<tr style='font-size:13px'><td colspan="9"><center>Tidak ada Data Kategori</center></td></tr>`
                     );
                 },
                 complete: function() {
@@ -313,77 +251,15 @@
         }
 
         function tambah() {
-            const btn = $('#btn-tambah');
-            $.ajax({
-                url: "/api/v4/it/epinjam/ref/barang/loadtambah",
-                type: 'GET',
-                dataType: 'json', // added data type
-                beforeSend: function() {
-                    $("#kategori").val("").trigger('change');
-                    $("#asal").val("").trigger('change');
-                    $("#kondisi").val("").trigger('change');
-                    $("#nama").val("");
-                    $("#kelengkapan").val("");
-                    btn.prop('disabled', true);
-                    btn.find("i")
-                        .removeClass("ri-add-box-line")
-                        .addClass("ri-refresh-line ri-spin");
-                },
-                success: function(res) {
-                    $("#kategori").find('option').remove();
-                    $("#kategori").append(`<option value="" selected>Pilih</option>`);
-                    res.kategori.forEach(item => {
-                        $("#kategori").append(`
-                            <option value="${item.id}">${item.nama}</option>
-                        `);
-                    });
-                    $("#asal").find('option').remove();
-                    $("#asal").append(`<option value="" selected>Pilih</option>`);
-                    res.asal.forEach(item => {
-                        $("#asal").append(`
-                            <option value="${item.id}">${item.unit}</option>
-                        `);
-                    });
-                    $("#kondisi").find('option').remove();
-                    // $("#kondisi").append(`<option value="" selected>Pilih</option>`);
-                    res.kondisi.forEach(item => {
-                        $("#kondisi").append(`
-                            <option value="${item.queue}">${item.deskripsi}</option>
-                        `);
-                    });
-
-                    var t = $(".select2");
-                    t.length && t.each(function() {
-                        var e = $(this);
-                        e.wrap('<div class="position-relative"></div>').select2({
-                            placeholder: "Pilih",
-                            dropdownParent: e.parent()
-                        })
-                    });
-
-                    $('#modalTambah').modal('show');
-                },
-                error: function(xhr) {
-                    iziToast.error({
-                        title: 'Pesan Galat!',
-                        message: xhr.responseJSON.message,
-                        position: 'topRight'
-                    });
-                },
-                complete: function() {
-                    btn.find("i")
-                        .removeClass("ri-refresh-line ri-spin")
-                        .addClass("ri-add-box-line");
-                    btn.prop('disabled', false);
-                }
-            })
+            $("#kategori").val("");
+            $('#modalTambah').modal('show');
         }
 
         function ubah(id) {
             const btn = $('#dropdown-' + id);
 
             $.ajax({
-                url: '/api/v4/it/epinjam/ref/barang/ubah/' + id,
+                url: '/api/v4/it/epinjam/ref/kategori/ubah/' + id,
                 type: 'GET',
                 dataType: 'json',
                 beforeSend: function() {
@@ -391,58 +267,10 @@
                     btn.empty().html('<i class="ri-refresh-line ri-spin"></i>');
                 },
                 success: function(res) {
-                    $('#id_edit').val(res.barang.id);
+                    $('#id_edit').val(res.id);
                     $('#show_id_ubah').text('ID#'+id);
 
-                    // KATEGORI
-                    $('#kategori_edit').empty();
-                    $('#kategori_edit').append('<option value="">Pilih</option>');
-
-                    res.kategori.forEach(item => {
-                        $('#kategori_edit').append(`
-                            <option value="${item.id}">
-                                ${item.nama}
-                            </option>
-                        `);
-                    });
-
-                    // ASAL
-                    $('#asal_edit').empty();
-                    $('#asal_edit').append('<option value="">Pilih</option>');
-
-                    res.asal.forEach(item => {
-                        $('#asal_edit').append(`
-                            <option value="${item.id}">
-                                ${item.unit}
-                            </option>
-                        `);
-                    });
-
-                    // KONDISI
-                    $('#kondisi_edit').empty();
-                    $('#kondisi_edit').append('<option value="">Pilih</option>');
-                    res.kondisi.forEach(item => {
-                        $('#kondisi_edit').append(`
-                            <option value="${item.queue}">
-                                ${item.deskripsi}
-                            </option>
-                        `);
-                    });
-
-                    $('#kategori_edit').val(res.barang.id_kategori).trigger('change');
-                    $('#asal_edit').val(res.barang.id_asal).trigger('change');
-                    $('#kondisi_edit').val(res.barang.kondisi).trigger('change');
-                    $('#nama_edit').val(res.barang.nama);
-                    $('#kelengkapan_edit').val(res.barang.kelengkapan);
-
-                    var t = $(".select2");
-                    t.length && t.each(function() {
-                        var e = $(this);
-                        e.wrap('<div class="position-relative"></div>').select2({
-                            placeholder: "Pilih",
-                            dropdownParent: e.parent()
-                        })
-                    });
+                    $('#kategori_edit').val(res.nama);
 
                     $('#modalUbah').modal('show');
                 },
@@ -466,16 +294,12 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: '/api/v4/it/epinjam/ref/barang/ubah',
+                url: '/api/v4/it/epinjam/ref/kategori/ubah',
                 type: 'PUT',
                 dataType: 'json',
                 data: {
                     id: $('#id_edit').val(),
-                    id_kategori: $('#kategori_edit').val(),
-                    id_asal: $('#asal_edit').val(),
-                    kondisi: $('#kondisi_edit').val(),
-                    nama: $('#nama_edit').val(),
-                    kelengkapan: $('#kelengkapan_edit').val()
+                    kategori: $('#kategori_edit').val(),
                 },
                 beforeSend: function() {
                     btn.prop('disabled', true);
@@ -510,33 +334,11 @@
 
         function simpan() {
             let kategori = $("#kategori").val();
-            let asal = $("#asal").val();
-            let kondisi = $("#kondisi").val();
-            let nama = $("#nama").val();
-            let kelengkapan = $("#kelengkapan").val();
 
             if (!kategori) {
                 iziToast.warning({
                     title: 'Pesan System!',
-                    message: 'Kategori wajib dipilih.',
-                    position: 'topRight'
-                });
-                return;
-            }
-
-            if (!asal) {
-                iziToast.warning({
-                    title: 'Pesan System!',
-                    message: 'Unit asal wajib dipilih.',
-                    position: 'topRight'
-                });
-                return;
-            }
-
-            if (!nama) {
-                iziToast.warning({
-                    title: 'Pesan System!',
-                    message: 'Nama barang wajib diisi.',
+                    message: 'Kategori wajib diisi.',
                     position: 'topRight'
                 });
                 return;
@@ -548,15 +350,11 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: "/api/v4/it/epinjam/ref/barang/simpan",
+                url: "/api/v4/it/epinjam/ref/kategori/simpan",
                 type: "POST",
                 dataType: "json",
                 data: {
                     kategori: kategori,
-                    asal: asal,
-                    kondisi: kondisi,
-                    nama: nama,
-                    kelengkapan: kelengkapan
                 },
                 beforeSend: function() {
                     btn.prop('disabled', true);
@@ -571,7 +369,6 @@
                         position: 'topRight'
                     });
                     $('#modalTambah').modal('hide');
-                    refresh();
                 },
                 error: function(xhr) {
                     let message = 'Terjadi kesalahan sistem';
@@ -589,6 +386,7 @@
                         .removeClass("fa-spinner fa-spin")
                         .addClass("fa-save");
                     btn.prop('disabled', false);
+                    refresh();
                 }
             });
         }
@@ -618,7 +416,7 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: `/api/v4/it/epinjam/ref/barang/hapus/${id}`,
+                    url: `/api/v4/it/epinjam/ref/kategori/hapus/${id}`,
                     type: 'DELETE',
                     beforeSend: function() {
                         btn.prop('disabled', true);
@@ -629,7 +427,7 @@
                     success: function(res) {
                         iziToast.success({
                             title: 'Pesan Sukses!',
-                            message: 'Penghapusan data barang telah berhasil dilakukan pada '+res,
+                            message: 'Penghapusan data kategori telah berhasil dilakukan pada '+res,
                             position: 'topRight'
                         });
                         $('#modalHapus').modal('hide');

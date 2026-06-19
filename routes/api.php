@@ -66,6 +66,10 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
             Route::get('it/epinjam', [EPinjamController::class, 'refresh']);
             Route::get('it/epinjam/loadtambah', [EPinjamController::class, 'loadTambah']);
             Route::post('it/epinjam/simpan', [EPinjamController::class, 'simpan']);
+            Route::post('it/epinjam/updatestatus', [EPinjamController::class, 'updateStatus']);
+            Route::get('it/epinjam/ubah/{id}', [EPinjamController::class, 'ubah']);
+            Route::put('it/epinjam/ubah/{id}/proses', [EPinjamController::class, 'prosesUbah']);
+            Route::delete('it/epinjam/hapus/{id}', [EPinjamController::class, 'hapus']);
 
             // REF BARANG
                 Route::get('it/epinjam/ref/barang', [EPinjamBarangController::class, 'table']);
@@ -76,6 +80,10 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
                 Route::delete('it/epinjam/ref/barang/hapus/{id}', [EPinjamBarangController::class, 'hapus']);
             // REF KATEGORI
                 Route::get('it/epinjam/ref/kategori', [EPinjamKategoriController::class, 'table']);
+                Route::get('it/epinjam/ref/kategori/ubah/{id}', [EPinjamKategoriController::class, 'getUbah']);
+                Route::put('it/epinjam/ref/kategori/ubah', [EPinjamKategoriController::class, 'ubah']);
+                Route::post('it/epinjam/ref/kategori/simpan', [EPinjamKategoriController::class, 'simpan']);
+                Route::delete('it/epinjam/ref/kategori/hapus/{id}', [EPinjamKategoriController::class, 'hapus']);
             // REF ASAL
                 Route::get('it/epinjam/ref/asal', [EPinjamAsalController::class, 'table']);
 

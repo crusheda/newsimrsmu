@@ -646,9 +646,11 @@ class ProfilController extends Controller
                 // ->where('users_doc.status',true)
                 ->select('referensi.deskripsi as nama_ref','referensi.color','users_doc.*')
                 ->get();
+        $ref_dokumen = referensi::where('ref_jenis',8)->get(); // 8 is Jenis Dokumen User
 
         $data = [
             'show' => $show,
+            'ref_dokumen' => $ref_dokumen,
         ];
 
         return response()->json($data, 200);

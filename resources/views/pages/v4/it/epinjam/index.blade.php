@@ -58,8 +58,20 @@
                     <div class="card-body row">
                         <div class="col-md-9 mb-3">
                             <div class="form-group">
-                                <label class="form-label">Pilih Pegawai Peminjam (<a class="text-danger">*</a>)</label>
-                                <select class="select2 form-control" id="peminjam" style="width: 100%" required></select>
+                                <div class="d-flex justify-content-between align-item-center">
+                                    <label class="form-label">Pilih Pegawai Peminjam (<a class="text-danger">*</a>)</label>
+
+                                    <div class="form-check">
+                                        <input class="form-check-input form-checked-secondary" type="checkbox" id="tulis_manual" onchange="togglePeminjam(this)">
+                                        <label class="form-check-label text-warning fw-bold" for="tulis_manual">
+                                            Tulis Manual?
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div id="peminjam-wrapper">
+                                    <select class="select2 form-control" id="peminjam" style="width: 100%" required></select>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
@@ -77,7 +89,7 @@
                     </div>
                     <div class="card-footer d-flex align-items-center justify-content-between py-3">
                         <button class="btn btn-secondary-transparent" onclick="clearInput()"><i class="ri-edit-line me-1"></i> Kosongkan</button>
-                        <button class="btn btn-primary" id="btn-simpan-ajukan" onclick="simpan()"><i class="ri-send-plane-fill me-1"></i> Submit</button>
+                        <button class="btn btn-primary" id="btn-simpan-ajukan" onclick="simpan()" disabled><i class="ri-send-plane-fill me-1"></i> Submit</button>
                     </div>
                 </div>
             </div>
@@ -95,7 +107,7 @@
                                 <li><a class="dropdown-item" href="{{ route('v4.it.epinjam.ref.barang') }}">Ref Barang</a></li>
                                 {{-- <li><a class="dropdown-item" href="{{ route('v4.it.epinjam.ref.kategori') }}">Ref Kategori</a></li>
                                 <li><a class="dropdown-item" href="{{ route('v4.it.epinjam.ref.asal') }}">Ref Asal</a></li> --}}
-                                <li><a class="dropdown-item disabled" href="javascript:void(0);"><s>Ref Kategori</s></a></li>
+                                <li><a class="dropdown-item" href="{{ route('v4.it.epinjam.ref.kategori') }}">Ref Kategori</a></li>
                                 <li><a class="dropdown-item disabled" href="javascript:void(0);"><s>Ref Asal</s></a></li>
                             </ul>
                         </div>
@@ -128,7 +140,7 @@
                                         <th>NAMA PEMINJAM</th>
                                         <th>JABATAN</th>
                                         <th>STATUS</th>
-                                        <th>WAKTU PEMINJAMAN</th>
+                                        <th>MULAI PEMINJAMAN</th>
                                         <th>DAFTAR BARANG</th>
                                         <th>DIPERBARUI</th>
                                     </tr>
@@ -146,7 +158,7 @@
                                         <th>NAMA PEMINJAM</th>
                                         <th>JABATAN</th>
                                         <th>STATUS</th>
-                                        <th>WAKTU PEMINJAMAN</th>
+                                        <th>MULAI PEMINJAMAN</th>
                                         <th>DAFTAR BARANG</th>
                                         <th>DIPERBARUI</th>
                                     </tr>
@@ -162,9 +174,71 @@
         </div>
     </div>
 
+    <div class="modal fade" id="modalUbah" tabindex="-1">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Peminjaman</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <input type="hidden" id="edit_id">
+
+                    <!-- PEMINJAM -->
+                    <div class="form-group mb-3">
+                        <label>Peminjam</label>
+
+                        <div id="edit-peminjam-wrapper">
+                            <select class="form-control select2" id="edit_peminjam" style="width:100%"></select>
+                        </div>
+                    </div>
+
+                    <!-- TGL -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label>Tanggal Pinjam</label>
+                            <input type="text" id="edit_tgl_pinjam" class="form-control flatpickr">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label>Keperluan</label>
+                            <textarea id="edit_keperluan" class="form-control"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- DETAIL -->
+                    <table class="table nowrap table-borderless" id="edit-table-row">
+                        <thead>
+                            <tr>
+                                <th>Kategori</th>
+                                <th>Barang</th>
+                                <th>Peruntukan</th>
+                                <th>Rencana Kembali</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="edit-body-barang"></tbody>
+                    </table>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button class="btn btn-primary" onclick="prosesUbah()">Ubah</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     <script>
         let dataBarang = [];
+        let dataUsers = [];
         let now = new Date();
+        let isInitEdit = true;
 
         $(document).ready(function() {
             // SELECT2
@@ -209,6 +283,7 @@
                 minDate: "today"
             });
 
+            // FORM TAMBAH
             $('#table-add-row').on('change', '.kategori', function() {
                 let kategoriId = $(this).val();
                 let row = $(this).closest('tr');
@@ -247,6 +322,47 @@
                 barangSelect.trigger('change');
             });
 
+            // FORM UBAH
+            $('#edit-table-row').on('change', '.edit-kategori', function () {
+
+                if (isInitEdit) return;
+
+                let kategoriId = $(this).val();
+                let row = $(this).closest('tr');
+                let barangSelect = row.find('.edit-barang');
+
+                barangSelect.prop('disabled', !kategoriId);
+                barangSelect.html(
+                    '<option value="">-- Pilih Barang --</option>'
+                );
+
+                if (!kategoriId) return;
+
+                let kategori = null;
+
+                $.each(dataBarang, function (i, item) {
+                    if (item.id == kategoriId) {
+                        kategori = item;
+                        return false;
+                    }
+                });
+
+                if (!kategori) return;
+
+                let barangOption = '<option value="">-- Pilih Barang --</option>';
+
+                $.each(kategori.barang, function (i, item) {
+                    barangOption += `
+                        <option value="${item.id}">
+                            ${item.nama}
+                        </option>
+                    `;
+                });
+
+                barangSelect.html(barangOption);
+                barangSelect.trigger('change');
+            });
+
             // $(document).on('click', '.btnHapusBarang', function() {
 
             //     if ($('.row-barang').length <= 1) {
@@ -266,6 +382,8 @@
 
             loadTambah();
             refresh();
+
+            $('#btn-simpan-ajukan').prop('disabled',false);
         });
 
         function getKategoriOption() {
@@ -291,6 +409,9 @@
 
                 success: function(res) {
 
+                    // simpan ke global variable
+                    dataUsers = res.users;
+
                     // SHOW KATEGORI
                     dataBarang = res.barang;
 
@@ -304,19 +425,31 @@
                     });
                     $('.kategori').html(kategoriOption);
 
-                    // SHOW PEMINJAM
-                    $("#peminjam").empty().append(`<option value="" selected hidden>-- Pilih Pegawai --</option>`);
-                    res.users.forEach(user => {
+                    // SHOW PEMINJAM (SELECT)
+                    let peminjamSelect = `
+                        <select class="select2 form-control" id="peminjam" style="width: 100%">
+                            <option value="" selected hidden>Pilih Pegawai</option>
+                        </select>
+                    `;
 
+                    $("#peminjam-wrapper").html(peminjamSelect);
+
+                    let peminjamOptions = '';
+
+                    dataUsers.forEach(user => {
                         let roles = user.roles.map(r => r.name).join(', ');
-
-                        $("#peminjam").append(`
+                        peminjamOptions += `
                             <option value="${user.id}">
                                 ${user.nama} (${roles})
                             </option>
-                        `);
+                        `;
                     });
-                    $("#peminjam").trigger('change');
+                    $("#peminjam").append(peminjamOptions);
+
+                    $("#peminjam").select2({
+                        // placeholder: "Pilih",
+                        width: '100%'
+                    });
                 },
 
                 error: function(xhr) {
@@ -327,6 +460,64 @@
                     });
                 }
             });
+        }
+
+        function renderKategori(selected = null) {
+
+            let html = '<option value="">-- Pilih --</option>';
+
+            dataBarang.forEach(k => {
+                html += `
+                    <option value="${k.id}" ${k.id == selected ? 'selected' : ''}>
+                        ${k.nama}
+                    </option>
+                `;
+            });
+
+            return html;
+        }
+
+        function togglePeminjam(el) {
+
+            let wrapper = $('#peminjam-wrapper');
+
+            if ($(el).is(':checked')) {
+
+                // kalau select2 aktif, destroy dulu
+                if ($('#peminjam').hasClass("select2-hidden-accessible")) {
+                    $('#peminjam').select2('destroy');
+                }
+
+                wrapper.html(`
+                    <input type="text" id="peminjam" class="form-control" placeholder="Masukkan nama pegawai">
+                `);
+
+            } else {
+
+                wrapper.html(`
+                    <select class="select2 form-control" id="peminjam" style="width: 100%">
+                        <option value="" selected hidden>Pilih Pegawai</option>
+                    </select>
+                `);
+
+                // isi ulang data (kalau sudah disimpan global lebih bagus)
+                if (typeof dataUsers !== 'undefined') {
+                    let opt = '';
+
+                    dataUsers.forEach(user => {
+                        let roles = user.roles.map(r => r.name).join(', ');
+                        opt += `<option value="${user.id}">
+                                    ${user.nama} (${roles})
+                                </option>`;
+                    });
+
+                    $('#peminjam').append(opt);
+                }
+
+                $('#peminjam').select2({
+                    width: '100%'
+                });
+            }
         }
 
         function tambahBarang() { // ADD ROW BARANG
@@ -422,12 +613,38 @@
 
             });
 
+            // cek mode manual
+            let isManual = $('#tulis_manual').is(':checked');
+
+            let peminjamValue = $('#peminjam').val();
+
             let data = {
-                user_id: $('#peminjam').val(),
+                peminjam_type: isManual ? 'manual' : 'user',
+                peminjam_nama: isManual ? peminjamValue : null,
+                user_id: isManual ? null : peminjamValue,
                 tgl_pinjam: $('#tgl_pinjam').val(),
                 keperluan: $('#keperluan').val(),
                 detail: detail
             };
+
+            // VALIDASI FRONTEND
+            if (!peminjamValue || peminjamValue.trim() === '') {
+                iziToast.warning({
+                    title: 'Peringatan!',
+                    message: 'Peminjam wajib diisi',
+                    position: 'topRight'
+                });
+                return;
+            }
+
+            if (detail.length === 0) {
+                iziToast.warning({
+                    title: 'Peringatan!',
+                    message: 'Detail barang masih kosong',
+                    position: 'topRight'
+                });
+                return;
+            }
 
             $.ajax({
                 headers: {
@@ -465,6 +682,265 @@
                     btn.prop('disabled', false);
                 }
             });
+        }
+
+        function ubah(id) {
+            $.ajax({
+                url: `/api/v4/it/epinjam/ubah/${id}`,
+                type: "GET",
+                beforeSend: function() {
+                    isInitEdit = true;
+                },
+                success: function(res) {
+
+                    const data = res.show;
+
+                    $('#edit_id').val(data.id);
+
+                    // =========================
+                    // 1. PEMINJAM
+                    // =========================
+                    if (data.user_pinjam) {
+
+                        let html = `
+                            <select class="form-control select2" id="edit_peminjam" style="width:100%">
+                                <option value="">Pilih Pegawai</option>
+                            </select>
+                        `;
+
+                        $('#edit_peminjam_wrapper').empty().html(html);
+
+                        res.users.forEach(u => {
+                            $('#edit_peminjam').append(`
+                                <option value="${u.id}" ${u.id == data.user_pinjam.id ? 'selected' : ''}>
+                                    ${u.nama}
+                                </option>
+                            `);
+                        });
+
+                        $('#edit_peminjam').select2({ width: '100%' });
+
+                    } else {
+
+                        $('#edit_peminjam_wrapper').empty().html(`
+                            <input type="text" class="form-control" id="edit_peminjam_manual"
+                                value="${data.nama_user_pinjam ?? ''}">
+                        `);
+                    }
+
+                    // =========================
+                    // 2. FIELD UTAMA
+                    // =========================
+                    $('#edit_tgl_pinjam').val(data.tgl_pinjam);
+                    $('#edit_keperluan').val(data.keperluan);
+
+                    // =========================
+                    // 3. FLATTEN SEMUA BARANG
+                    // =========================
+                    let allBarang = [];
+
+                    res.barang.forEach(k => {
+                        k.barang.forEach(b => {
+                            allBarang.push({
+                                id: b.id,
+                                nama: b.nama,
+                                kategori_id: k.id
+                            });
+                        });
+                    });
+
+                    // =========================
+                    // 4. RESET TABLE
+                    // =========================
+                    $('#edit-body-barang').empty();
+
+                    // =========================
+                    // 5. RENDER LIST PINJAM
+                    // =========================
+                    data.list.forEach(item => {
+
+                        let kategoriOption = '<option value="">-- Pilih Kategori --</option>';
+
+                        $.each(res.barang, function (i, k) {
+                            kategoriOption += `
+                                <option value="${k.id}"
+                                    ${k.id == item.barang?.id_kategori ? 'selected' : ''}>
+                                    ${k.nama}
+                                </option>
+                            `;
+                        });
+
+                        let barangOption = '<option value="">-- Pilih Barang --</option>';
+
+                        let selectedKategori = res.barang.find(k =>
+                            k.id == item.barang?.kategori?.id
+                        );
+
+                        if (selectedKategori) {
+
+                            $.each(selectedKategori.barang, function (i, b) {
+
+                                barangOption += `
+                                    <option value="${b.id}"
+                                        ${Number(b.id) === Number(item.id_barang) ? 'selected' : ''}>
+                                        ${b.nama}
+                                    </option>
+                                `;
+                            });
+
+                        } else {
+
+                            // fallback kalau kategori tidak ketemu
+                            barangOption = `
+                                <option value="${item.id_barang}" selected>
+                                    ${item.barang?.nama ?? '-'}
+                                </option>
+                            `;
+                        }
+
+                        let row = `
+                            <tr class="edit-row">
+
+                                <td>
+                                    <select class="form-control edit-kategori">
+                                        ${kategoriOption}
+                                    </select>
+                                </td>
+
+                                <td>
+                                    <select class="form-control edit-barang">
+                                        ${barangOption}
+                                    </select>
+                                </td>
+
+                                <td>
+                                    <input class="form-control edit-peruntukan"
+                                        value="${item.peruntukan ?? ''}">
+                                </td>
+
+                                <td>
+                                    <input class="form-control edit-tgl"
+                                        value="${item.tgl_rencana_kembali ?? ''}">
+                                </td>
+
+                                <td>
+                                    <button type="button"
+                                        class="btn btn-danger btn-sm"
+                                        onclick="$(this).closest('tr').remove()">
+                                        Hapus
+                                    </button>
+                                </td>
+
+                            </tr>
+                        `;
+
+                        $('#edit-body-barang').append(row);
+                    });
+                    $('#edit-table-row .edit-kategori').trigger('change');
+
+                    // =========================
+                    // 6. SHOW MODAL
+                    // =========================
+                    $('#modalUbah').modal('show');
+                },
+                error: function(xhr) {
+                    let message = 'Terjadi kesalahan sistem';
+                    if (xhr.responseJSON?.message) {
+                        message = xhr.responseJSON.message;
+                    }
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: message,
+                        position: 'topRight'
+                    });
+                },
+                complete: function() {
+                    isInitEdit = false;
+                }
+            });
+        }
+
+        function prosesUbah() {
+
+            let id = $('#edit_id').val();
+
+            let detail = [];
+
+            $('#edit-body-barang tr').each(function () {
+
+                detail.push({
+                    barang_id: $(this).find('.edit-barang').val(),
+                    peruntukan: $(this).find('.edit-peruntukan').val(),
+                    tgl_kembali: $(this).find('.edit-tgl').val()
+                });
+            });
+
+            let peminjam = $('#edit_peminjam').length
+                ? $('#edit_peminjam').val()
+                : $('#edit_peminjam_manual').val();
+
+            let peminjamType = $('#edit_peminjam').length ? 'user' : 'manual';
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: `/api/v4/it/epinjam/ubah/${id}/proses`,
+                type: "PUT",
+                contentType: "application/json",
+
+                data: JSON.stringify({
+                    peminjam_type: peminjamType,
+                    user_id: peminjamType === 'user' ? peminjam : null,
+                    peminjam_nama: peminjamType === 'manual' ? peminjam : null,
+                    tgl_pinjam: $('#edit_tgl_pinjam').val(),
+                    keperluan: $('#edit_keperluan').val(),
+                    detail: detail
+                }),
+
+                success: function(res) {
+
+                    $('#modalEdit').modal('hide');
+                    refresh();
+
+                    iziToast.success({
+                        title: 'Sukses',
+                        message: res.message
+                    });
+                },
+
+                error: function(err) {
+                    iziToast.error({
+                        message: err.responseJSON.message
+                    });
+                }
+            });
+        }
+
+        function hapus(id) {
+
+            if (!confirm('Yakin ingin menghapus data ini?')) return;
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: `/api/v4/it/epinjam/hapus/${id}`,
+                type: "DELETE",
+                success: function(res) {
+                    refresh();
+                    iziToast.success({
+                        title: 'Sukses',
+                        message: res.message
+                    });
+                },
+                error: function(err) {
+                    iziToast.error({
+                        message: err.responseJSON.message
+                    });
+                }
+            });
+
         }
 
         function clearInput() {
@@ -550,7 +1026,7 @@
                                     <ul class='dropdown-menu dropdown-menu-end'>`;
                                     if (updet == date) {
                                         content +=
-                                            `<li><a href="javascript:void(0);" class='dropdown-item text-warning' onclick="showUbah(${item.id})"><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</a></li>
+                                            `<li><a href="javascript:void(0);" class='dropdown-item text-warning' onclick="ubah(${item.id})"><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</a></li>
                                             <li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(${item.id})"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
                                     } else {
                                         content +=
@@ -559,14 +1035,20 @@
                                     }
                         content += `</ul></div></center></td>`;
 
-                        let nama = item.user_pinjam?.nama ?? item.user_pinjam?.name ?? '-';
+                        let nama = item.nama_user_pinjam
+                                ?? item.user_pinjam?.nama
+                                ?? item.user_pinjam?.name
+                                ?? '-';
                         let role = item.user_pinjam?.roles
-                                    ?.map(r => r.name)
-                                    .join(', ') ?? '-';
+                                ? item.user_pinjam.roles.map(r => r.name).join(', ')
+                                : '-';
+                        let tipePeminjam = item.user_pinjam
+                                ? `<span class="badge bg-primary-transparent p-1">Internal RS</span>`
+                                : `<span class="badge bg-warning-transparent p-1">Luar RS</span>`;
                         content += `<td>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
-                                                <a class='mb-0 text-truncate'>${nama}</a>
+                                                <a class='mb-0 text-truncate'>${nama}&nbsp;${tipePeminjam}</a>
                                                 <small class='text-muted text-wrap'>${item.keperluan ? 'Keperluan : '+item.keperluan : ''}</small>
                                             </div>
                                         </div>
@@ -580,11 +1062,12 @@
                                         <ol class="list-group list-group-numbered">${barang}</ol>
                                     </td>`;
 
+                        let adminNama = item.user_admin_pinjam?.nama ?? '-';
                         content += `<td>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
                                                 <a class='mb-0 text-wrap'>` + new Date(item.updated_at).toLocaleString("sv-SE") + `</a>
-                                                <small class='text-muted text-wrap'>` + item.user_admin_pinjam?.nama ?? '' + `</small>
+                                                <small class='text-muted text-wrap'>${adminNama}</small>
                                             </div>
                                         </div>
                                     </td>`;

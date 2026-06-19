@@ -57,9 +57,9 @@
                 </div>
                 <div class="card-footer btn-group">
                     @can('admin_kepegawaian')
-                        <button class="btn btn-sm btn-info-transparent" onclick="totalCutiAllUnit()"><i class="ri-umbrella-line me-1"></i> Lihat Cuti Tahunan</button>
+                        <button class="btn btn-sm btn-info-transparent" onclick="totalCutiAllUnit()"><i class="ri-umbrella-line me-1"></i> Lihat Cuti Tahunan Semua Unit</button>
                     @else
-                        <button class="btn btn-sm btn-success-transparent" onclick="totalCutiUnit()"><i class="ri-umbrella-line me-1"></i> Lihat Cuti Tahunan</button>
+                        <button class="btn btn-sm btn-success-transparent" onclick="totalCutiUnit()"><i class="ri-umbrella-line me-1"></i> Lihat Cuti Tahunan Unit</button>
                     @endcan
                     <button class="btn btn-sm btn-danger-transparent" onclick="showRiwayatAbsensi()" id="btn-riwayat-absensi"><i class="ri-history-line me-1"></i> Riwayat Absensi</button>
                 </div>
@@ -210,7 +210,7 @@
         <div class="col-xl-9">
             <div class="card shadow-none-border mb-0" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="">
                 <div class="card-body mb-0">
-                    <center><h6>Total Absensi <b class="text-danger">6 Bulan Terakhir</b> <b class="text-primary">Anda</b></h6></center>
+                    <center><h6>Grafik Absensi <b class="text-danger">6 Bulan Terakhir</b></h6></center>
                     <div id="area-stacked"><b class="text-dark"><center><i class="ri-refresh-line ri-spin me-1"></i> Memuat Grafik...</center></b></div>
                 </div>
             </div>

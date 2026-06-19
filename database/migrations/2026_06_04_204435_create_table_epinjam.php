@@ -14,11 +14,13 @@ return new class extends Migration
         Schema::create('epinjam', function (Blueprint $table) {
             $table->id();
 
-            $table->integer('user_pinjam');
+            $table->integer('user_pinjam')->nullable();
+            $table->string('nama_user_pinjam', 255)->nullable();
             $table->integer('user_admin_pinjam');
             $table->dateTime('tgl_pinjam');
 
             $table->integer('user_kembali')->nullable();
+            $table->string('nama_user_kembali', 255)->nullable();
             $table->integer('user_admin_kembali')->nullable();
             $table->dateTime('tgl_kembali')->nullable();
 

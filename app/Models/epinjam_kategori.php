@@ -15,6 +15,11 @@ class epinjam_kategori extends Model
 
     public function barang() // RELASI TABEL EPINJAM_KATEGORI KE EPINJAM_BARANG
     {
-        return $this->hasMany(epinjam_barang::class, 'id_kategori', 'id');
+        return $this->hasMany(epinjam_barang::class, 'id_kategori', 'id')->where('status', 1);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user', 'id');
     }
 }
