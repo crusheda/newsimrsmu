@@ -47,7 +47,7 @@ class NotificationService
             // }
             if (!$jabatan) {
                 return [
-                    'isExistEpinjam' => 0,
+                    'isExistEpinjam' => $isExistEpinjam,
                     'isExistPerbaikanIpsrs' => $isExistPerbaikanIpsrs,
                     'countVerifJDBawahan' => 0,
                 ];
