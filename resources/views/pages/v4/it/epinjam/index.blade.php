@@ -141,6 +141,7 @@
                                         <th>JABATAN</th>
                                         <th>STATUS</th>
                                         <th>MULAI PEMINJAMAN</th>
+                                        <th>TGL. DIKEMBALIKAN</th>
                                         <th>DAFTAR BARANG</th>
                                         <th>DIPERBARUI</th>
                                     </tr>
@@ -159,6 +160,7 @@
                                         <th>JABATAN</th>
                                         <th>STATUS</th>
                                         <th>MULAI PEMINJAMAN</th>
+                                        <th>TGL. DIKEMBALIKAN</th>
                                         <th>DAFTAR BARANG</th>
                                         <th>DIPERBARUI</th>
                                     </tr>
@@ -1059,7 +1061,7 @@
                             `;
                         });
                         var updet = new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 10);
-                        if (item.tglKembali) {
+                        if (item.tgl_kembali) {
                             status = 'Dikembalikan';
                             colorBtn = 'success';
                         } else {
@@ -1078,17 +1080,19 @@
                                     <ul class='dropdown-menu dropdown-menu-end'>`;
                                     if (item.status == 1) {
                                         content += `<li><a href="javascript:void(0);" class='dropdown-item text-info' onclick="ubahStatusBarang(${item.id},${item.status})"><i class="ri-supabase-line me-1"></i> Perbarui Status</a></li>`;
+                                        if (updet == date) {
+                                            content +=
+                                                `<li><a href="javascript:void(0);" class='dropdown-item text-warning' onclick="ubah(${item.id})"><i class="ri-edit-line me-1"></i> Ubah</a></li>`;
+                                        } else {
+                                            content +=
+                                                `<li><a href="javascript:void(0);" class='dropdown-item disabled'><i class="ri-edit-line me-1"></i> Ubah</a></li>`;
+                                        }
+                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(${item.id})"><i class="ri-delete-bin-line me-1"></i> Hapus</a></li>`;
                                     } else {
-                                        content += `<li><a href="javascript:void(0);" class='dropdown-item disabled'><i class="ri-supabase-line me-1"></i> Perbarui Status</a></li>`;
+                                        content += `<li><a href="javascript:void(0);" class='dropdown-item disabled'><i class="ri-supabase-line me-1"></i> Perbarui Status</a></li>
+                                                    <li><a href="javascript:void(0);" class='dropdown-item disabled'><i class="ri-edit-line me-1"></i> Ubah</a></li>
+                                                    <li><a href='javascript:void(0);' class='dropdown-item disabled'><i class="ri-delete-bin-line me-1"></i> Hapus</a></li>`;
                                     }
-                                    if (updet == date) {
-                                        content +=
-                                            `<li><a href="javascript:void(0);" class='dropdown-item text-warning' onclick="ubah(${item.id})"><i class="ri-edit-line me-1"></i> Ubah</a></li>`;
-                                    } else {
-                                        content +=
-                                            `<li><a href="javascript:void(0);" class='dropdown-item disabled'><i class="ri-edit-line me-1"></i> Ubah</a></li>`;
-                                    }
-                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(${item.id})"><i class="ri-delete-bin-line me-1"></i> Hapus</a></li>`;
                         content += `</ul></div></center></td>`;
 
                         let nama = item.nama_user_pinjam
@@ -1113,6 +1117,9 @@
                         content += `<td><span class="badge bg-${colorBtn}">${status}</span></td>`;
                         content += `<td>${formatTanggalIndo(item.tgl_pinjam)}</td>`;
 
+                        let adminNamaKembali = item.user_admin_kembali?.nama ?? '';
+                        content += `<td>${item.tgl_kembali? formatTanggalIndo(item.tgl_kembali) + `<br><small class='text-muted text-wrap'>Dikembalikan Kpd. ${adminNamaKembali}</small>` : '-'}</td>`;
+
                         // LIST BARANG
                         content += `<td style="white-space: normal; word-wrap: break-word; word-break: break-word;">
                                         <ol class="list-group list-group-numbered">${barang}</ol>
@@ -1123,7 +1130,7 @@
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
                                                 <a class='mb-0 text-wrap'>` + new Date(item.updated_at).toLocaleString("sv-SE") + `</a>
-                                                <small class='text-muted text-wrap'>${adminNama}</small>
+                                                <small class='text-muted text-wrap'>Ditambahkan Oleh ${adminNama}</small>
                                             </div>
                                         </div>
                                     </td>`;
@@ -1137,7 +1144,7 @@
                     });
                     var table = $('#dttable').DataTable({
                         order: [
-                            [6, "desc"]
+                            [7, "desc"]
                         ],
                         // bAutoWidth: false,
                         // aoColumns : [
@@ -1186,7 +1193,7 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: "/api/v4/it/epinjam/updateStatus",
+                url: "/api/v4/it/epinjam/updatestatus",
                 type: "POST",
                 data: {
                     id: id,

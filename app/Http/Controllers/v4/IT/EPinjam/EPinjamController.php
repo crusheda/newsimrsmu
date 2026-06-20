@@ -66,7 +66,7 @@ class EPinjamController extends Controller
             'list.barang.kategori:id,nama',
             'list.barang.asal:id,unit'
         ])
-        ->where('status', 1)
+        ->whereIn('status', ['0','1'])
         ->orderByDesc('id')
         ->get();
 
@@ -347,6 +347,8 @@ class EPinjamController extends Controller
 
             // update status epinjam
             $pinjam->update([
+                'user_admin_kembali' => Auth::user()->id,
+                'tgl_kembali' => now(),
                 'status' => $hasActive ? 1 : 0
             ]);
 
