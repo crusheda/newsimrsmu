@@ -102,7 +102,8 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
         Route::delete('profil/foto/hapus', [ProfilController::class, 'hapusFotoProfil']);
         Route::post('profil/password',[ProfilController::class,'ubahPassword']);
 
-        Route::get('profil/dokumen/table/{id}', [ProfilController::class, 'tableDokumen']);
+        Route::get('profil/dokumen/table', [ProfilController::class, 'tableDokumenAll']); // MENU SDI - PROFIL PEGAWAI
+        Route::get('profil/dokumen/table/{id}', [ProfilController::class, 'tableDokumen']); // MENU PROFIL AKUN
         Route::post('profil/dokumen/add', [ProfilController::class, 'tambahDokumen']);
         Route::post('profil/dokumen/ubah/{id}/proses', [ProfilController::class, 'ubahDokumen']);
         Route::delete('profil/dokumen/hapus/{id}/proses', [ProfilController::class, 'hapusDokumen']);

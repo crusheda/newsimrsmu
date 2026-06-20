@@ -68,6 +68,8 @@
                                 <i class="fa-fw fas fa-infinity nav-icon me-1"></i> Tabel Lengkap</button>
                             <button class="btn btn-info-transparent" onclick="showGrafikStatusKawin()" id="btn-show-grafik" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Menampilkan Grafik Profil Pegawai">
                                 <i class="fas fa-chart-pie me-1"></i> Grafik Interaktif</button>
+                            <button class="btn btn-teal-transparent" onclick="showDokumen()" id="btn-show-dokumen" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Menampilkan Semua Dokumen Upload Pegawai">
+                                <i class="ri-file-copy-2-line me-1"></i> Daftar Dokumen Pegawai</button>
                         </div>
                         <div class="btn-group">
                             <a href="javascript:void(0);" class="btn btn-secondary-transparent dropdown-toggle arrow-none" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti ti-dots-vertical f-18 me-1"></i> Menu &nbsp;</a>
@@ -363,6 +365,80 @@
                 <div class="col-12 text-center mb-4">
                     <button type="submit" id="btn-aktif-karyawan" class="btn btn-danger me-sm-3 me-1" onclick="batalNonAktif()"><i class="ti ti-checkbox me-1" style="font-size:13px"></i> Submit</button>
                     <button type="reset" class="btn btn-link text-dark" data-bs-dismiss="modal" aria-label="Close" onclick="hideAktifKaryawan()"><i class="fa fa-times me-1" style="font-size:13px"></i> Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade animate__animated animate__rubberBand" id="modalDokumen" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-xxl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title">
+                        Daftar <b class="text-teal">Dokumen Pegawai</b>
+                    </h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table mb-0 table-hover text-nowrap w-100 dataTable no-footer" id="dttable-dokumen">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <center>
+                                            AKSI
+                                        </center>
+                                    </th>
+                                    <th>NAMA PEGAWAI</th>
+                                    <th>DOKUMEN SURAT</th>
+                                    <th>DESKRIPSI</th>
+                                    <th>
+                                        <center>
+                                            STATUS
+                                        </center>
+                                    </th>
+                                    <th class="text-end">
+                                        TERAKHIR DIPERBARUI
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="tampil-tbody-dokumen">
+                                <tr>
+                                    <td colSpan="9" style="font-size: 13px">
+                                        <center>
+                                            <i class="fa fa-spinner fa-spin fa-fw"></i>
+                                            Memproses
+                                            data...
+                                        </center>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>
+                                        <center>
+                                            AKSI
+                                        </center>
+                                    </th>
+                                    <th>NAMA PEGAWAI</th>
+                                    <th>DOKUMEN SURAT</th>
+                                    <th>DESKRIPSI</th>
+                                    <th>
+                                        <center>
+                                            STATUS
+                                        </center>
+                                    </th>
+                                    <th class="text-end">
+                                        TERAKHIR DIPERBARUI
+                                    </th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-warning-transparent" id="btn-refresh-dokumen" onclick="showDokumen()"><i class="ri-restart-line me-1"></i> Refresh</button>
+                    <button type="button" class="btn btn-link text-dark" data-bs-dismiss="modal"><i class="ri-close-line me-1"></i> Tutup</button>
                 </div>
             </div>
         </div>
@@ -1209,6 +1285,118 @@
         function hideGrafik() {
             $('#show-card-grafik').prop('hidden', true);
             $('#btn-show-grafik').prop('disabled', false);
+        }
+
+        function showDokumen() {
+            const btnShow = $('#btn-show-dokumen');
+            const btnRefresh = $('#btn-refresh-dokumen');
+            $.ajax(
+                {
+                    url: `/api/v4/profil/dokumen/table`,
+                    type: 'GET',
+                    dataType: 'json', // added data type
+                    beforeSend: function() {
+                        btnShow.prop('disabled', true);
+                        btnShow.find('i').removeClass('ri-file-copy-2-line').addClass('ri-restart-line ri-spin');
+                        btnRefresh.prop('disabled', true);
+                        btnRefresh.find('i').addClass('ri-spin');
+                        $("#tampil-tbody-dokumen").empty();
+                        $("#tampil-tbody-dokumen").empty().append(`<tr><td colspan="9" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+                    },
+                    success: function(res) {
+                        var adminID = @json(Auth::user()->can(['admin_kepegawaian','admin_kepegawaian_kepala']));
+                        $("#tampil-tbody-dokumen").empty();
+                        $('#dttable-dokumen').DataTable().clear().destroy();
+                        res.show.forEach(item => {
+                            content = "<tr id='data"+ item.id +"'>";
+                            content += `<td><center><div class='dropend'><a id="btn-dropdown-${item.id}" href='javascript:void(0);' class='btn btn-light btn-sm text-muted font-size-16 rounded' data-bs-toggle='dropdown' aria-haspopup="true"><i class="ti ti-dots"></i></a><div class='dropdown-menu dropdown-menu-end'>`;
+                                if (item.title) {
+                                    content += `<a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/v4/sdi/profilpegawai/dokumen/download/`+item.id+`')"><i class='fas fa-download me-1'></i> Download</a>`;
+                                } else {
+                                    content += `<a href='javascript:void(0);' class='dropdown-item disabled' disabled><i class='fas fa-download me-1'></i> Download</a>`;
+                                }
+                            content += `</div></center></td>`;
+                            content += `<td style="white-space: normal; word-wrap: break-word; word-break: break-word;" class="text-uppercase">${item.nama_pegawai ?? item.name_pegawai}</td>`;
+                            content += `<td>
+                                            <h6 class="mb-0"><span class="badge me-1" style="font-size: 14px;${item.color?'background-color:'+item.color:''}">${item.nama_ref}</span> ${item.status?item.no_surat:'<s>'+item.no_surat+'</s>'}</h6>`;
+                                if (item.tgl_akhir == '' || item.tgl_akhir == null) {
+                                    if (item.ref_id == 139) {
+                                        content += `<p class="text-muted fs-12 mb-0 mt-1">Masa Berlaku <a class="text-primary">Seumur Hidup</a></p>`;
+                                    }
+                                } else {
+                                    if (item.tgl_mulai == '' || item.tgl_mulai == null) {
+                                        content += `<p class="text-muted fs-12 mb-0 mt-1">${item.tgl_akhir}</p>`;
+                                    } else {
+                                        content += `<p class="text-muted fs-12 mb-0 mt-1">${item.tgl_mulai}&nbsp;<i class="ti ti-arrow-narrow-right text-primary"></i>&nbsp;${item.tgl_akhir}</p>`;
+                                    }
+                                }
+
+                                // PENENTUAN STATUS
+                                var stt = '';
+                                if (item.status) {
+                                    if (item.tgl_akhir) {
+                                        let tanggalAkhir = new Date(item.tgl_akhir);
+                                        let hariIni = new Date();
+
+                                        // buang jam agar perbandingan hanya tanggal
+                                        hariIni.setHours(0,0,0,0);
+                                        tanggalAkhir.setHours(0,0,0,0);
+
+                                        if (hariIni > tanggalAkhir) {
+                                            stt = '<span class="badge bg-danger fs-16">Kadaluarsa</span>';
+                                        } else {
+                                            stt = '<span class="badge bg-success fs-16">Aktif</span>';
+                                        }
+                                    } else {
+                                        // tidak ada masa berlaku
+                                        stt = '<span class="badge bg-success fs-16">Aktif</span>';
+                                    }
+                                } else {
+                                    stt = '<span class="badge bg-danger fs-16">Nonaktif</span>';
+                                }
+
+                            content += `</td>
+                                        <td style='white-space: normal !important;word-wrap: break-word;'>${item.deskripsi?item.deskripsi:'-'}</td>
+                                        <td><center>${stt}</center></td>`;
+                            content += "<td>" + new Date(item.updated_at).toLocaleString("sv-SE") + "</td></tr>";
+                            $('#tampil-tbody-dokumen').append(content);
+                        });
+                        var table = $('#dttable-dokumen').DataTable({
+                            order: [
+                                [5, "desc"]
+                            ],
+                            bAutoWidth: false,
+                            aoColumns : [
+                                { sWidth: '5%' },
+                                { sWidth: '20%' },
+                                { sWidth: '30%' },
+                                { sWidth: '40%' },
+                                { sWidth: '10%' },
+                                { sWidth: '15%' },
+                            ],
+                            displayLength: 20,
+                        });
+                    },
+                    error: function(xhr) {
+                        let message = 'Terjadi kesalahan sistem';
+                        if (xhr.responseJSON?.message) {
+                            message = xhr.responseJSON.message;
+                        }
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: message,
+                            position: 'topRight'
+                        });
+                    },
+                    complete: function() {
+                        $('#modalDokumen').modal('show');
+                        btnShow.prop('disabled', false);
+                        btnShow.find('i').removeClass('ri-restart-line ri-spin').addClass('ri-file-copy-2-line');
+                        btnRefresh.prop('disabled', false);
+                        btnRefresh.find('i').removeClass('ri-spin');
+                    }
+                }
+            );
         }
     </script>
 @endsection

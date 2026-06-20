@@ -163,13 +163,71 @@
     </div>
 </div>
 
+<div class="modal fade animate__animated animate__rubberBand" id="ubahDokumen" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title">
+                    Form Ubah Dokumen - <b class="text-warning" id="show_id_edit_dokumen"></b>
+                </h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="id_edit_dokumen" hidden>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group mb-3">
+                            <label class="form-label">Jenis Surat <span class="text-danger">*</span></label>
+                            <select class="form-control" id="jenis_dokumen_edit"></select>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group mb-3">
+                            <label class="form-label">Nomor Surat <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="no_surat_dokumen_edit">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label class="form-label">Tgl. Mulai Berlaku <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="tgl_mulai_dokumen_edit">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label class="form-label">Tgl. Berakhir Surat <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="tgl_akhir_dokumen_edit">
+                        </div>
+                    </div>
+                    <div class="col-md-7">
+                        <div class="form-group mb-3">
+                            <label class="form-label">Deskripsi</label>
+                            <textarea id="deskripsi_dokumen_edit" class="form-control" placeholder="" rows="1"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <label class="form-label">Nama File Dokumen</label>
+                        <div class="alert alert-secondary">
+                            <a id="lampiran_edit"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-warning-transparent" id="btn-ubah-dokumen" onclick="prosesUbahDokumen()"><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</button>
+                <button type="button" class="btn btn-link text-dark" data-bs-dismiss="modal"><i class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal animate__animated animate__rubberBand fade" id="hapusDokumen" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">
+                <h6 class="modal-title">
                     Form Hapus Dokumen
-                </h4>
+                </h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -186,8 +244,8 @@
                 </label>
             </div>
             <div class="col-12 text-center mb-4">
-                <button type="submit" id="btn-hapus-dokumen" class="btn btn-danger me-sm-3 me-1" onclick="prosesHapusDokumen()"><i class="fa fa-trash me-1" style="font-size:13px"></i> Hapus</button>
-                <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
+                <button type="submit" id="btn-hapus-dokumen" class="btn btn-danger-transparent me-sm-3 me-1" onclick="prosesHapusDokumen()"><i class="fa fa-trash me-1" style="font-size:13px"></i> Hapus</button>
+                <button type="reset" class="btn btn-link text-dark" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
             </div>
         </div>
     </div>
@@ -288,9 +346,9 @@
                     $('#dttable-dokumen').DataTable().clear().destroy();
                     res.show.forEach(item => {
                         content = "<tr id='data"+ item.id +"'>";
-                        content += `<td><center><div class='dropend'><a href='javascript:void(0);' class='btn btn-light btn-sm text-muted font-size-16 rounded' data-bs-toggle='dropdown' aria-haspopup="true"><i class="ti ti-dots"></i></a><div class='dropdown-menu'>`;
+                        content += `<td><center><div class='dropend'><a id="btn-dropdown-${item.id}" href='javascript:void(0);' class='btn btn-light btn-sm text-muted font-size-16 rounded' data-bs-toggle='dropdown' aria-haspopup="true"><i class="ti ti-dots"></i></a><div class='dropdown-menu dropdown-menu-end'>`;
                             if (item.title) {
-                                content += `<a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/v4/profil/dokumen/download/`+item.id+`')"><i class='fas fa-download me-1'></i> Download</a>`;
+                                content += `<a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/v4/sdi/profilpegawai/dokumen/download/`+item.id+`')"><i class='fas fa-download me-1'></i> Download</a>`;
                             } else {
                                 content += `<a href='javascript:void(0);' class='dropdown-item disabled' disabled><i class='fas fa-download me-1'></i> Download</a>`;
                             }
@@ -313,16 +371,16 @@
                             }
                         content += `</div></center></td>`;
                         content += `<td>
-                                        <h6 class="mb-0"><span class="badge me-1" style="font-size: 10px;${item.color?'background-color:'+item.color:''}">${item.nama_ref}</span> ${item.status?item.no_surat:'<s>'+item.no_surat+'</s>'}</h6>`;
+                                        <h6 class="mb-0"><span class="badge me-1" style="font-size: 14px;${item.color?'background-color:'+item.color:''}">${item.nama_ref}</span> ${item.status?item.no_surat:'<s>'+item.no_surat+'</s>'}</h6>`;
                             if (item.tgl_akhir == '' || item.tgl_akhir == null) {
                                 if (item.ref_id == 139) {
-                                    content += `<p class="text-muted f-10 mb-0">Masa Berlaku <a class="text-primary">Seumur Hidup</a></p>`;
+                                    content += `<p class="text-muted fs-12 mb-0 mt-1">Masa Berlaku <a class="text-primary">Seumur Hidup</a></p>`;
                                 }
                             } else {
                                 if (item.tgl_mulai == '' || item.tgl_mulai == null) {
-                                    content += `<p class="text-muted f-10 mb-0">${item.tgl_akhir}</p>`;
+                                    content += `<p class="text-muted fs-12 mb-0 mt-1">${item.tgl_akhir}</p>`;
                                 } else {
-                                    content += `<p class="text-muted f-10 mb-0">${item.tgl_mulai}&nbsp;<i class="ti ti-arrow-narrow-right text-primary"></i>&nbsp;${item.tgl_akhir}</p>`;
+                                    content += `<p class="text-muted fs-12 mb-0 mt-1">${item.tgl_mulai}&nbsp;<i class="ti ti-arrow-narrow-right text-primary"></i>&nbsp;${item.tgl_akhir}</p>`;
                                 }
                             }
                         content += `</td>
@@ -358,9 +416,6 @@
     }
 
     function prosesTambahDokumen() {
-        $("#btn-upload-dokumen").prop('disabled', true);
-        $("#btn-upload-dokumen").find("i").toggleClass("fa-upload fa-sync fa-spin");
-
         var user_id         = @json(Auth::user()->id);
         var jenis           = $("#jenis_dokumen").val();
         var tgl_mulai       = $("#tgl_mulai_dokumen").val();
@@ -448,6 +503,10 @@
                 contentType: false,
                 processData: false,
                 dataType: 'json',
+                beforeSend: function(){
+                    $("#btn-upload-dokumen").prop('disabled', true);
+                    $("#btn-upload-dokumen").find("i").removeClass("fa-upload").addClass('fa-sync fa-spin');
+                },
                 success: function(res){
                     iziToast.success({
                         title: 'Pesan Sukses!',
@@ -458,28 +517,39 @@
                         loadDokumen();
                     }
                 },
-                error: function(res){
-                    console.log("error : " + JSON.stringify(res) );
+                error: function(xhr) {
+                    let message = 'Terjadi kesalahan sistem';
+                    if (xhr.responseJSON?.message) {
+                        message = xhr.responseJSON.message;
+                    }
                     iziToast.error({
                         title: 'Pesan Galat!',
-                        message: res.responseJSON,
+                        message: message,
                         position: 'topRight'
                     });
+                },
+                complete: function() {
+                    $("#btn-upload-dokumen").find("i").removeClass("fa-sync fa-spin").addClass("fa-upload");
+                    $("#btn-upload-dokumen").prop('disabled', false);
                 }
             });
         }
-
-        $("#btn-upload-dokumen").find("i").removeClass("fa-sync fa-spin").addClass("fa-upload");
-        $("#btn-upload-dokumen").prop('disabled', false);
     }
 
     function showUbahDokumen(id) {
+        const btn = $("#btn-dropdown-"+id);
+        const tempBtn = btn.html();
         $.ajax(
         {
             url: "/api/v4/profil/dokumen/ubah/"+id,
             type: 'GET',
             dataType: 'json', // added data type
+            beforeSend: function(){
+                btn.prop('disabled', true);
+                btn.html('<i class="fas fa-sync fa-spin"></i>');
+            },
             success: function(res) {
+                $("#show_id_edit_dokumen").text("ID#"+id);
                 $("#id_edit_dokumen").val(id);
                 $("#jenis_dokumen_edit").find('option').remove();
                 res.ref_dokumen.forEach(item => {
@@ -493,15 +563,27 @@
                 $('#deskripsi_dokumen_edit').val(res.show.deskripsi);
                 $('#lampiran_edit').text(res.show.title);
                 $('#ubahDokumen').modal('show');
+            },
+            error: function(xhr) {
+                let message = 'Terjadi kesalahan sistem';
+                if (xhr.responseJSON?.message) {
+                    message = xhr.responseJSON.message;
+                }
+                iziToast.error({
+                    title: 'Pesan Galat!',
+                    message: message,
+                    position: 'topRight'
+                });
+            },
+            complete: function() {
+                btn.prop('disabled', false);
+                btn.html(tempBtn);
             }
         })
     }
 
     function prosesUbahDokumen()
     {
-        $("#btn-ubah-dokumen").prop('disabled', true);
-        $("#btn-ubah-dokumen").find("i").toggleClass("fa-edit fa-sync fa-spin");
-
         var jenis       = $("#jenis_dokumen_edit").val();
         var tgl_mulai   = $("#tgl_mulai_dokumen_edit").val();
         var tgl_akhir   = $("#tgl_akhir_dokumen_edit").val();
@@ -542,25 +624,36 @@
                 contentType: false,
                 processData: false,
                 dataType: 'json',
+                beforeSend: function(){
+                    $("#btn-ubah-dokumen").prop('disabled', true);
+                    $("#btn-ubah-dokumen").find("i").removeClass("fa-edit").addClass("fa-sync fa-spin");
+                },
                 success: function(res){
                     iziToast.success({
                         title: 'Pesan Sukses!',
                         message: 'Dokumen berhasil diperbarui pada '+res,
                         position: 'topRight'
                     });
-                    if (res) {
-                        $('#ubahDokumen').modal('hide');
-                        loadDokumen();
-                    }
+                    $('#ubahDokumen').modal('hide');
+                    loadDokumen();
                 },
-                error: function(res){
-                    console.log("error : " + JSON.stringify(res) );
+                error: function(xhr) {
+                    let message = 'Terjadi kesalahan sistem';
+                    if (xhr.responseJSON?.message) {
+                        message = xhr.responseJSON.message;
+                    }
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: message,
+                        position: 'topRight'
+                    });
+                },
+                complete: function() {
+                    $("#btn-ubah-dokumen").find("i").removeClass("fa-sync fa-spin").addClass("fa-edit");
+                    $("#btn-ubah-dokumen").prop('disabled', false);
                 }
             });
         }
-
-        $("#btn-ubah-dokumen").find("i").removeClass("fa-sync fa-spin").addClass("fa-edit");
-        $("#btn-ubah-dokumen").prop('disabled', false);
     }
 
     function showHapusDokumen(id) {
@@ -598,13 +691,17 @@
                     $('#hapusDokumen').modal('hide');
                     loadDokumen();
                 },
-                error: function(res) {
+                error: function(xhr) {
+                    let message = 'Terjadi kesalahan sistem';
+                    if (xhr.responseJSON?.message) {
+                        message = xhr.responseJSON.message;
+                    }
                     iziToast.error({
                         title: 'Pesan Galat!',
-                        message: 'Berkas gagal dihapus',
+                        message: message,
                         position: 'topRight'
                     });
-                }
+                },
             });
         }
     }

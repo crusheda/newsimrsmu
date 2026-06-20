@@ -637,7 +637,26 @@ class ProfilController extends Controller
     }
 
     // DOKUMEN
-    function tableDokumen($id)
+    function tableDokumenAll() // MENU SDI - PROFIL PEGAWAI
+    {
+        $show  = DB::table('users_doc')
+                ->leftJoin('users','users.id','=','users_doc.user_id')
+                ->leftJoin('referensi','referensi.id','=','users_doc.ref_id')
+                ->where('users_doc.deleted_at',null)
+                ->select('referensi.deskripsi as nama_ref','users.name as name_pegawai','users.nama as nama_pegawai','referensi.color','users_doc.*')
+                ->get();
+
+        $ref_dokumen = referensi::where('ref_jenis',8)->get(); // 8 is Jenis Dokumen User
+
+        $data = [
+            'show' => $show,
+            'ref_dokumen' => $ref_dokumen,
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    function tableDokumen($id) // MENU PROFIL AKUN
     {
         $show  = DB::table('users_doc')
                 ->join('referensi','referensi.id','=','users_doc.ref_id')
