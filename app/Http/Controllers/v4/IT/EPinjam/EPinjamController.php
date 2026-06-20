@@ -327,6 +327,12 @@ class EPinjamController extends Controller
 
             $item = epinjam_list::findOrFail($request->id);
 
+            if($item->pinjam->status == 0 && $request->status == 1){
+                return response()->json([
+                    'message'=>'Peminjaman sudah selesai, barang tidak dapat diaktifkan kembali.'
+                ],422);
+            }
+
             $item->update([
                 'status' => $request->status
             ]);

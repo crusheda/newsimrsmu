@@ -234,6 +234,58 @@
         </div>
     </div>
 
+    <div class="modal fade" id="modalStatusBarang" tabindex="-1">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h6 class="modal-title">
+                        Ubah <b class="text-info">Status Barang</b>
+                    </h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <input type="hidden" id="status_list_id">
+
+                    <label class="form-label">
+                        Status Barang
+                    </label>
+
+                    <select class="form-control" id="status_barang">
+                        <option value="1">
+                            Aktif / Dipinjam
+                        </option>
+
+                        <option value="0">
+                            Tidak Aktif / Dikembalikan
+                        </option>
+                    </select>
+
+                </div>
+
+
+                <div class="modal-footer">
+
+                    <button type="button"
+                        class="btn btn-secondary-transparent"
+                        data-bs-dismiss="modal">
+                        <i class="ri-close-line me-1"></i> Batal
+                    </button>
+
+                    <button type="button"
+                        class="btn btn-info-transparent"
+                        onclick="simpanStatusBarang()">
+                        <i class="ri-supabase-line me-1"></i> Simpan
+                    </button>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     <script>
         let dataBarang = [];
         let dataUsers = [];
@@ -1024,15 +1076,19 @@
                                 <div class='btn-group'>
                                     <a href='javascript:void(0);' class='link-${colorBtn} link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle' id="dropdown-${item.id}" data-bs-toggle='dropdown' aria-expanded='false'>${item.id}</a>
                                     <ul class='dropdown-menu dropdown-menu-end'>`;
+                                    if (item.status == 1) {
+                                        content += `<li><a href="javascript:void(0);" class='dropdown-item text-info' onclick="ubahStatusBarang(${item.id},${item.status})"><i class="ri-supabase-line me-1"></i> Perbarui Status</a></li>`;
+                                    } else {
+                                        content += `<li><a href="javascript:void(0);" class='dropdown-item disabled'><i class="ri-supabase-line me-1"></i> Perbarui Status</a></li>`;
+                                    }
                                     if (updet == date) {
                                         content +=
-                                            `<li><a href="javascript:void(0);" class='dropdown-item text-warning' onclick="ubah(${item.id})"><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</a></li>
-                                            <li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(${item.id})"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                            `<li><a href="javascript:void(0);" class='dropdown-item text-warning' onclick="ubah(${item.id})"><i class="ri-edit-line me-1"></i> Ubah</a></li>`;
                                     } else {
                                         content +=
-                                            `<li><a href="javascript:void(0);" class='dropdown-item disabled'><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</a></li>
-                                            <li><a href='javascript:void(0);' class='dropdown-item disabled'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                            `<li><a href="javascript:void(0);" class='dropdown-item disabled'><i class="ri-edit-line me-1"></i> Ubah</a></li>`;
                                     }
+                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(${item.id})"><i class="ri-delete-bin-line me-1"></i> Hapus</a></li>`;
                         content += `</ul></div></center></td>`;
 
                         let nama = item.nama_user_pinjam
@@ -1106,6 +1162,59 @@
                 complete: function() {
                     btn.prop('disabled', false);
                     btn.find("i").removeClass("ri-spin");
+                }
+            });
+        }
+
+        function ubahStatusBarang(id, status)
+        {
+            $('#status_list_id').val(id);
+
+            $('#status_barang')
+                .val(status)
+                .trigger('change');
+
+            $('#modalStatusBarang').modal('show');
+        }
+
+        function simpanStatusBarang()
+        {
+            let id = $('#status_list_id').val();
+            let status = $('#status_barang').val();
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "/api/v4/it/epinjam/updateStatus",
+                type: "POST",
+                data: {
+                    id: id,
+                    status: status
+                },
+                beforeSend:function(){
+                    $('#modalStatusBarang button')
+                        .prop('disabled',true);
+                },
+                success:function(res){
+                    $('#modalStatusBarang').modal('hide');
+                    iziToast.success({
+                        title:'Berhasil',
+                        message:res.message,
+                        position:'topRight'
+                    });
+                    refresh();
+                },
+                error:function(xhr){
+                    iziToast.error({
+                        title:'Gagal',
+                        message:xhr.responseJSON.message,
+                        position:'topRight'
+                    });
+                },
+                complete:function(){
+                    $('#modalStatusBarang button')
+                        .prop('disabled',false);
                 }
             });
         }
