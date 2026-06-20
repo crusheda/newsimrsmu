@@ -78,14 +78,20 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU 
                 Route::put('it/epinjam/ref/barang/ubah', [EPinjamBarangController::class, 'ubah']);
                 Route::post('it/epinjam/ref/barang/simpan', [EPinjamBarangController::class, 'simpan']);
                 Route::delete('it/epinjam/ref/barang/hapus/{id}', [EPinjamBarangController::class, 'hapus']);
+
             // REF KATEGORI
                 Route::get('it/epinjam/ref/kategori', [EPinjamKategoriController::class, 'table']);
                 Route::get('it/epinjam/ref/kategori/ubah/{id}', [EPinjamKategoriController::class, 'getUbah']);
                 Route::put('it/epinjam/ref/kategori/ubah', [EPinjamKategoriController::class, 'ubah']);
                 Route::post('it/epinjam/ref/kategori/simpan', [EPinjamKategoriController::class, 'simpan']);
                 Route::delete('it/epinjam/ref/kategori/hapus/{id}', [EPinjamKategoriController::class, 'hapus']);
+
             // REF ASAL
                 Route::get('it/epinjam/ref/asal', [EPinjamAsalController::class, 'table']);
+                Route::get('it/epinjam/ref/asal/ubah/{id}', [EPinjamAsalController::class, 'getUbah']);
+                Route::put('it/epinjam/ref/asal/ubah', [EPinjamAsalController::class, 'ubah']);
+                Route::post('it/epinjam/ref/asal/simpan', [EPinjamAsalController::class, 'simpan']);
+                Route::delete('it/epinjam/ref/asal/hapus/{id}', [EPinjamAsalController::class, 'hapus']);
 
     // WHATSAPP API
         // Route::post('whatsapp/send-message', [HelpdeskController::class, 'store']);

@@ -22,6 +22,7 @@ use \App\Http\Controllers\v4\IT\TiketController;
 use \App\Http\Controllers\v4\IT\EPinjam\EPinjamController;
 // use \App\Http\Controllers\v4\IT\EPinjam\EPinjamListController;
 use \App\Http\Controllers\v4\IT\EPinjam\EPinjamBarangController;
+use \App\Http\Controllers\v4\IT\EPinjam\EPinjamAsalController;
 use \App\Http\Controllers\v4\IT\EPinjam\EPinjamKategoriController;
 use \App\Http\Controllers\v4\Akun\AksesJabatanController;
 use \App\Http\Controllers\v4\Akun\StrukturOrganisasiController;

@@ -158,10 +158,6 @@ class EPinjamKategoriController extends Controller
             ], 404);
         }
 
-        if ($data->filename != null) {
-            Storage::delete($data->filename);
-        }
-
         $data->status = 0;
         $data->save();
 

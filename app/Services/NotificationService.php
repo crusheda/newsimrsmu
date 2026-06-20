@@ -6,6 +6,7 @@ use App\Models\perbaikan_ipsrs;
 use App\Models\kepegawaian\jadwal;
 use App\Models\kepegawaian\ref_jadwal_users;
 use App\Models\struktur_organisasi;
+use App\Models\epinjam;
 use App\Models\model_has_roles;
 
 class NotificationService
@@ -18,13 +19,24 @@ class NotificationService
             return [];
         }
 
+        // START NOTIFIKASI E-PINJAM FOR - ADMIN
+            $isExistEpinjam = 0;
+            if ($user->can('epinjam')) {
+                $isExistEpinjam = epinjam::where('status',1)->whereNull('deleted_at')->count();
+            }
+        // END NOTIFIKASI E-PINJAM FOR - ADMIN
+
+        // ------------------------------------------------------------------------------------------------------------------
+
         // START NOTIFIKASI PERBAIKAN IPSRS FOR - ADMIN
             $isExistPerbaikanIpsrs = 0;
             if ($user->can('admin_perbaikan_ipsrs')) {
                 $isExistPerbaikanIpsrs = perbaikan_ipsrs::whereNull('tgl_diterima')->whereNull('tgl_selesai')->whereNull('deleted_at')->count();
             }
         // END NOTIFIKASI PERBAIKAN IPSRS FOR - ADMIN
+
         // ------------------------------------------------------------------------------------------------------------------
+
         // START NOTIFIKASI VERIF JADWAL DINAS BAWAHAN
             $jabatan = struktur_organisasi::where('id_user', $user->id)
                         ->orderBy('updated_at','desc')
@@ -35,6 +47,7 @@ class NotificationService
             // }
             if (!$jabatan) {
                 return [
+                    'isExistEpinjam' => 0,
                     'isExistPerbaikanIpsrs' => $isExistPerbaikanIpsrs,
                     'countVerifJDBawahan' => 0,
                 ];
@@ -70,6 +83,7 @@ class NotificationService
         // ------------------------------------------------------------------------------------------------------------------
 
         return [
+            'isExistEpinjam' => $isExistEpinjam,
             'isExistPerbaikanIpsrs' => $isExistPerbaikanIpsrs,
             'countVerifJDBawahan' => $countVerifJDBawahan,
         ];

@@ -105,7 +105,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h6 class="modal-title">Ubah <b class="text-info">Referensi</b> <b class="text-success">Barang</b></h6>&nbsp;<span class="badge text-bg-warning badge-sm"><a id="show_id_ubah"></a></span>
+                    <h6 class="modal-title">Ubah <b class="text-info">Referensi</b> <b class="text-orange">Kategori</b></h6>&nbsp;&nbsp;<span class="badge text-bg-warning badge-sm p-1"><a id="show_id_ubah"></a></span>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -131,12 +131,12 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">
-                        Hapus <b class="text-info">Referensi</b> <b class="text-orange">Kategori</b>&nbsp;<span class="badge text-bg-danger badge-sm"><a id="show_id_hapus"></a></span>
+                        Hapus <b class="text-info">Referensi</b> <b class="text-orange">Kategori</b>&nbsp;&nbsp;<span class="badge text-bg-danger badge-sm p-1"><a id="show_id_hapus"></a></span>
                     </h5>
                 </div>
                 <div class="modal-body">
                     <input type="text" id="id_hapus" hidden>
-                    <p style="text-align: justify;">Anda akan menghapus Referensi Kateogir tersebut, lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan penghapusan.</p>
+                    <p style="text-align: justify;">Anda akan menghapus Referensi Kategori tersebut, lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan penghapusan.</p>
                     <label class="switch">
                         <input type="checkbox" class="switch-input" id="setujuhapus">
                         <span class="switch-toggle-slider">

@@ -45,7 +45,11 @@
                     <li class="slide">
                         <a href="{{ route('v4.it.epinjam') }}" class="side-menu__item">
                             <i class="side-menu__icon ri-shake-hands-line"></i>
-                            <span class="side-menu__label">E-Pinjam</span>
+                            <span class="side-menu__label">E-Pinjam
+                                @if ($notifications['isExistEpinjam'] > 0)
+                                    <span class="badge bg-orange-transparent ms-2">+{{ $notifications['isExistEpinjam'] }}</span>
+                                @endif
+                            </span>
                         </a>
                     </li>
                 @endcan
@@ -209,7 +213,7 @@
                         <i class="side-menu__icon ri-calendar-schedule-line"></i>
                         <span class="side-menu__label">Jadwal Dinas
                             @if ($notifications['countVerifJDBawahan'] > 0)
-                                <span class="badge bg-orange ms-2">+{{ $notifications['countVerifJDBawahan'] }}</span>
+                                <span class="badge bg-orange-transparent ms-2">+{{ $notifications['countVerifJDBawahan'] }}</span>
                             @endif
                         </span>
                     </a>

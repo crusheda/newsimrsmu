@@ -17,4 +17,9 @@ class epinjam_asal extends Model
     {
         return $this->hasMany(epinjam_barang::class, 'id_asal', 'id');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user', 'id');
+    }
 }
