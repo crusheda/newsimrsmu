@@ -87,6 +87,9 @@
 <!-- Date & Time Picker JS -->
 <script src="{{ asset('libs/flatpickr/flatpickr.min.js') }}"></script>
 
+<!-- Date & Time Picker JS -->
+<script src="{{ asset('libs/fullcalendar/index.global.min.js') }}"></script>
+
 <!-- Custom Charts JS -->
 <script src="{{ asset('libs/prismjs/prism.js') }}"></script>
 <script src="{{ asset('js/prism-custom.js') }}"></script>

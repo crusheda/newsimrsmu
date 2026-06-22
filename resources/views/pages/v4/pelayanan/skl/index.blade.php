@@ -26,18 +26,18 @@
                     <div class="card-header d-flex align-items-center justify-content-between py-3">
                         <div class="btn-group">
                             <button type="button" class="btn btn-primary" onclick="tambah()" value="animate__jackInTheBox">
-                                <i class="fa-fw fas fa-upload nav-icon me-1"></i> Tambah Data SKL
+                                <i class="fa-fw fas fa-upload nav-icon me-1"></i> Tambah <span class="d-none d-md-inline">Data SKL</span>
                             </button>
                             <button type="button" class="btn btn-outline-warning" data-bs-toggle="tooltip" data-bs-offset="0,4" id="btn-refresh"
                                 data-bs-placement="bottom" data-bs-html="true" title="Tampilkan 30 Data SKL Terbaru" onclick="refresh()">
-                                <i class="fa-fw fas fa-sync nav-icon me-1"></i> 30 Data Terakhir</button>
+                                <i class="fa-fw fas fa-sync nav-icon"></i> <span class="d-none d-md-inline ms-1">30 Data Terakhir</span></button>
                             <button type="button" class="btn btn-outline-danger" data-bs-toggle="tooltip" data-bs-offset="0,4" id="btn-refresh-all"
                                 data-bs-placement="bottom" data-bs-html="true" title="Tampilkan Semua Data SKL" onclick="showAll()">
-                                <i class="fa-fw fas fa-history me-1"></i> Seluruh Data</button>
+                                <i class="fa-fw fas fa-history"></i> <span class="d-none d-md-inline ms-1">Seluruh Data</span></button>
                         </div>
                         <div class="dropdown">
                             <button type="button" class="btn btn-info" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-caret-down me-1"></i> Filter Data
+                                <i class="fas fa-filter me-1"></i> Filter <span class="d-none d-md-inline">Data</span>
                             </button>
                             <div class="dropdown-menu dropdown-menu-end dropdown-menu-md" style="width: 300px">
                                 <div class="dropdown-item-text">

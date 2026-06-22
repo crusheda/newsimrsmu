@@ -36,6 +36,12 @@
                         <span class="side-menu__label">Dashboard</span>
                     </a>
                 </li>
+                <li class="slide">
+                    <a href="{{ route('v4.kalender') }}" class="side-menu__item">
+                        <i class="side-menu__icon ri-calendar-todo-fill"></i>
+                        <span class="side-menu__label">Kalender Digital</span>
+                    </a>
+                </li>
 
                 @canany(['epinjam', 'tiket_it'])
                     <li class="slide__category"><span class="category-name">Informasi & Teknologi (<b class="text-pink">IT</b>)</span></li>

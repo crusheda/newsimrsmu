@@ -60,16 +60,55 @@
                 <div class="card custom-card">
                     <div class="card-header d-flex align-items-center justify-content-between py-3">
                         <div class="btn-group shadow">
-                            <button class="btn btn-primary-transparent" onclick="window.location.href='{{ route('v4.akun.akunpengguna.index') }}'" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Pengaturan Akun Pengguna (Tambah/Ubah/Hapus Akun Pegawai)">
-                                <i class="fas fa-users-cog me-1"></i> Pengaturan Akun</button>
-                            <button class="btn btn-warning-transparent" id="btn-tabel-simpel" onclick="refresh()" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Menampilkan Data Simpel Profil Pegawai">
-                                <i class="fas fa-sync me-1"></i> Tabel Simpel</button>
-                            <button type="button" class="btn btn-danger-transparent" id="btn-tabel-lengkap" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Menampilkan Seluruh Data Profil Pegawai" onclick="showAll()">
-                                <i class="fa-fw fas fa-infinity nav-icon me-1"></i> Tabel Lengkap</button>
-                            <button class="btn btn-info-transparent" onclick="showGrafikStatusKawin()" id="btn-show-grafik" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Menampilkan Grafik Profil Pegawai">
-                                <i class="fas fa-chart-pie me-1"></i> Grafik Interaktif</button>
-                            <button class="btn btn-teal-transparent" onclick="showDokumen()" id="btn-show-dokumen" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Menampilkan Semua Dokumen Upload Pegawai">
-                                <i class="ri-file-copy-2-line me-1"></i> Daftar Dokumen Pegawai</button>
+                            <button class="btn btn-primary-transparent"
+                                onclick="window.location.href='{{ route('v4.akun.akunpengguna.index') }}'"
+                                data-bs-toggle="tooltip"
+                                title="Pengaturan Akun Pengguna (Tambah/Ubah/Hapus Akun Pegawai)">
+
+                                <i class="fas fa-users-cog"></i>
+                                <span class="d-none d-md-inline ms-1">Pengaturan Akun</span>
+                            </button>
+
+                            <button class="btn btn-warning-transparent"
+                                id="btn-tabel-simpel"
+                                onclick="refresh()"
+                                data-bs-toggle="tooltip"
+                                title="Menampilkan Data Simpel Profil Pegawai">
+
+                                <i class="fas fa-sync"></i>
+                                <span class="d-none d-md-inline ms-1">Tabel Simpel</span>
+                            </button>
+
+                            <button type="button"
+                                class="btn btn-danger-transparent"
+                                id="btn-tabel-lengkap"
+                                onclick="showAll()"
+                                data-bs-toggle="tooltip"
+                                title="Menampilkan Seluruh Data Profil Pegawai">
+
+                                <i class="fa-fw fas fa-infinity"></i>
+                                <span class="d-none d-md-inline ms-1">Tabel Lengkap</span>
+                            </button>
+
+                            <button class="btn btn-info-transparent"
+                                onclick="showGrafikStatusKawin()"
+                                id="btn-show-grafik"
+                                data-bs-toggle="tooltip"
+                                title="Menampilkan Grafik Profil Pegawai">
+
+                                <i class="fas fa-chart-pie"></i>
+                                <span class="d-none d-md-inline ms-1">Grafik Interaktif</span>
+                            </button>
+
+                            <button class="btn btn-teal-transparent"
+                                onclick="showDokumen()"
+                                id="btn-show-dokumen"
+                                data-bs-toggle="tooltip"
+                                title="Menampilkan Semua Dokumen Upload Pegawai">
+
+                                <i class="ri-file-copy-2-line"></i>
+                                <span class="d-none d-md-inline ms-1">Daftar Dokumen Pegawai</span>
+                            </button>
                         </div>
                         <div class="btn-group">
                             <a href="javascript:void(0);" class="btn btn-secondary-transparent dropdown-toggle arrow-none" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti ti-dots-vertical f-18 me-1"></i> Menu &nbsp;</a>

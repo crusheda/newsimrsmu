@@ -63,7 +63,7 @@
                         </div>
                         <div class="flex-shrink-0">
                             <div class="btn-group">
-                                <button type="button" class="btn btn-info-transparent dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Menu Grafik</button>
+                                <button type="button" class="btn btn-info-transparent dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><span class="d-none d-md-inline">Menu</span> Grafik</button>
                                 <ul class="dropdown-menu p-2">
                                     <li><a class="dropdown-item" href="javascript:void(0);" onclick="grafikPengadaan(1)">Grafik Anda</a></li>
                                     <li><a class="dropdown-item" href="javascript:void(0);" onclick="grafikPengadaan(0)">Grafik Internal RS</a></li>
@@ -101,7 +101,7 @@
                         <div class="btn-group">
                             <button class="btn btn-secondary btn-shadow" onclick="bukaRiwayatPengadaan()" data-bs-toggle="tooltip"
                                 data-bs-placement="bottom" data-bs-html="true" title="Lihat Riwayat Pengadaan" id="btn-riwayat-pengadaan">
-                                <i class="ri-shopping-bag-line me-1"></i> Riwayat
+                                <i class="ri-shopping-bag-line"></i> <span class="d-none d-md-inline ms-1">Riwayat</span>
                             </button>
                             <button class="btn btn-warning-transparent btn-shadow" id="btn-refresh" onclick="applyFilters()" data-bs-toggle="tooltip"
                                 data-bs-placement="bottom" data-bs-html="true" title="Refresh Tabel Pengadaan">
@@ -109,7 +109,7 @@
                             </button>
                             @can('admin_pengadaan')
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-danger-transparent dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-spy-line me-1"></i> Menu Admin</button>
+                                    <button type="button" class="btn btn-danger-transparent dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-spy-line"></i> <span class="d-none d-md-inline ms-1">Menu Admin</span></button>
                                     <ul class="dropdown-menu p-2">
                                         <li><a class="dropdown-item" href="javascript:void(0);" onclick="window.location.href='{{ route('v4.administrasi.pengadaan.barang') }}'">Daftar Barang</a></li>
                                         <li><a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#rekap">Rekapitulasi</a></li>
@@ -119,7 +119,7 @@
                         </div>
                         <button class="btn btn-primary btn-shadow" onclick="bukaKeranjang()" data-bs-toggle="tooltip"
                             data-bs-placement="bottom" data-bs-html="true" title="Buka Keranjang Pengadaan">
-                            <i class="ri-shopping-cart-2-line me-1"></i> Keranjang
+                            <i class="ri-shopping-cart-2-line me-1"></i> <span class="d-none d-md-inline">Buka</span> Keranjang
                         </button>
                     </div>
                     <div class="card-header justify-content-between border-bottom-0">

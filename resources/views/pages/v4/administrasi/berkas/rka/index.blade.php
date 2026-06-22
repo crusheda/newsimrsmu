@@ -31,8 +31,8 @@
                         </button>
                         <div class="btn-group">
                             <button class="btn btn-warning btn-shadow" id="refreshBtn" onclick="refresh()"><i class="fas fa-sync"></i></button>
-                            <button class="btn btn-danger" onclick="window.open('/doc/rka_2025.xlsx')">
-                                <i class="fa-fw fas fa-download me-1"></i> Download RKA 2025 FINAL
+                            <button class="btn btn-danger disabled pe-none d-none d-md-inline" onclick="window.open('/doc/rka_2025.xlsx')">
+                                <i class="fa-fw fas fa-download me-1"></i> Lihat RKA FINAL Th.{{ \Carbon\Carbon::now()->isoFormat("YYYY") }}
                             </button>
                         </div>
                     </div>

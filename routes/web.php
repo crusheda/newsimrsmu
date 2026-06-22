@@ -17,6 +17,7 @@ Route::group(['prefix' => 'v4', 'as' => ''], function () {
 
 // PROTECTED ROUTES
 use \App\Http\Controllers\v4\Dashboard\DashboardController;
+use \App\Http\Controllers\v4\Kalender\KalenderController;
 use \App\Http\Controllers\v4\Setting\ProfilController;
 use \App\Http\Controllers\v4\IT\TiketController;
 use \App\Http\Controllers\v4\IT\EPinjam\EPinjamController;
@@ -58,6 +59,7 @@ use App\Http\Controllers\v4\AI\KlaimBpjsController;
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function () { // SIMRSMU v.4
     Route::get('dashboard', [DashboardController::class, 'index'])->name('v4.dashboard');
+    Route::get('kalender', [KalenderController::class, 'index'])->name('v4.kalender');
     Route::get('profil', [ProfilController::class, 'index'])->name('v4.profil');
 
     // IT

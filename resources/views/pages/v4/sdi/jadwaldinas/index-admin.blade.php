@@ -44,7 +44,7 @@
                                     data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                                     title="Tampilkan Seluruh Jadwal Dinas"><i class="fas fa-sync"></i></button>
                                 <button class="btn btn-outline-info dropdown-toggle" id="tombolMenu" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fas fa-sync fa-spin me-2"></i>
+                                    <i class="fas fa-sync fa-spin"></i>
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="tombolMenu">
                                     <li>
@@ -406,7 +406,7 @@
                     if (res.jabatan) {
                         if (res.show) {
                             $('#tombolMenu').empty().html(`
-                                Pilihan Menu
+                                <span class="d-none d-md-inline">Pilihan Menu</span>
                                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-bg-danger">
                                     ${res.show} Data<span class="visually-hidden">unread messages</span>
                                 </span>
@@ -414,7 +414,7 @@
                             $('#count-bawahan').text(res.show+" Data");
                         } else {
                             $('#tombolMenu').empty().html(`
-                                Pilihan Menu
+                                <span class="d-none d-md-inline">Pilihan Menu</span>
                                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-bg-danger">
                                     0 Data<span class="visually-hidden">unread messages</span>
                                 </span>
@@ -422,7 +422,7 @@
                             $('#count-bawahan').text('0 Data');
                         }
                     } else {
-                        $('#tombolMenu').empty().html(`Pilihan Menu`);
+                        $('#tombolMenu').empty().html(`<span class="d-none d-md-inline">Pilihan Menu</span>`);
                         $('#count-bawahan').text('0 Data').prop('hidden',true);
                         $('#tombol-verif-bawahan').attr('href', 'javascript:void(0);').html('Verifikasi Bawahan').addClass('disabled'); // .removeAttr('href')
                     }

@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+use \App\Http\Controllers\v4\Kalender\KalenderController;
 use \App\Http\Controllers\v4\Setting\ProfilController;
 use \App\Http\Controllers\v4\IT\TiketController;
 use \App\Http\Controllers\v4\IT\EPinjam\EPinjamController;
@@ -55,6 +56,10 @@ use \App\Http\Controllers\v4\Akreditasi\KecelakaanKerjaController;
 use App\Http\Controllers\v4\AI\KlaimBpjsController;
 
 Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU v.4
+
+    // KALENDER
+    Route::get('kalender/data', [KalenderController::class, 'dataKalender']);
+    Route::post('kalender/store', [KalenderController::class, 'tambahKalender']);
 
     // IT
         // PENGAJUAN TIKET
