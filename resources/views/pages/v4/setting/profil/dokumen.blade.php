@@ -40,12 +40,20 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="form-group mb-3">
-                    <label class="form-label">
-                        Jenis Surat
-                        <span class="text-danger">
-                            *
-                        </span>
-                    </label>
+                    <div class="d-flex justify-content-between">
+                        <label class="form-label">
+                            Jenis Surat
+                            <span class="text-danger">
+                                *
+                            </span>
+                        </label>
+                        <div class="flex-shrink-0" id="switch-str" hidden>
+                            <div class="form-check form-switch custom-switch-v1 switch-sm">
+                                <input type="checkbox" class="form-check-input input-primary" id="checkboxseumurhidup">
+                                <label class="form-check-label" for="checkboxseumurhidup"><b class="text-warning">Seumur Hidup</b> <b>?</b></label>
+                            </div>
+                        </div>
+                    </div>
                     <select class="form-control" id="jenis_dokumen">
                         <option value="" hidden>
                             Pilih Jenis Surat

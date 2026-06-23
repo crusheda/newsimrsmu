@@ -12,9 +12,12 @@
             /* padding: 10px; */
             box-shadow: 0 2px 6px rgba(0,0,0,0.1);
         }
+        #calendar .fc-scrollgrid-section-sticky > * {
+            background: transparent !important;
+        }
     </style>
 
-    <div class="container-fluid page-container main-body-container">
+    <div class="container-fluid page-container main-body-container shadow-sm">
         <div class="page-header-breadcrumb mb-3">
             <div class="d-flex align-center justify-content-between flex-wrap">
                 <h1 class="page-title fw-medium fs-18 mb-0 pe-none">
@@ -33,7 +36,7 @@
 
         <div class="row justify-content-center">
             <div class="col-sm-12">
-                <div class="card custom-card">
+                <div class="card custom-card mb-3">
                     <div class="card-header d-flex align-items-center justify-content-between py-3">
                         <div class="btn-group">
                             <button type="button" class="btn btn-info-transparent rounded" onclick="window.location='{{ route('v4.administrasi.eruang') }}'"
@@ -43,13 +46,14 @@
                         </div>
                         <h6 class="ms-2 mb-0 fs-13">Klik <span class="badge text-bg-primary">BARIS KALENDER</span> untuk melihat <span class="text-orange fw-bold"><i>Detail Acara</i></span></h6>
                     </div>
-                    <div class="card-body">
-                        <div id="calendar" class="calendar"><center><i class="fa-fw fas fa-spinner fa-spin nav-icon me-1"></i> Memuat Kalender...</center></div>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    {{-- <div class="container-fluid page-container main-body-container"> --}}
+        <div id="calendar" class="main-body-container calendar mt-3 p-4"><center><i class="fa-fw fas fa-spinner fa-spin nav-icon me-1"></i> Memuat Kalender...</center></div>
+    {{-- </div> --}}
 
     <div class="modal fade" id="calendar-modal" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
@@ -65,8 +69,8 @@
                             <div class="avtar avtar-xs bg-light-secondary"><i class="ti ti-heading f-20"></i></div>
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <h5 class="mb-1"><b>Agenda / Kegiatan</b></h5>
-                            <p class="pc-event-title text-muted"></p>
+                            <h6 class="mb-1"><b class="text-orange">Agenda</b> / <b class="text-orange">Kegiatan</b></h6>
+                            <p class="pc-event-title text-muted fs-20"></p>
                         </div>
                     </div>
                     <div class="d-flex mb-2">
@@ -74,7 +78,7 @@
                             <div class="avtar avtar-xs bg-light-warning"><i class="ti ti-map-pin f-20"></i></div>
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <h5 class="mb-1"><b>Ruangan</b></h5>
+                            <h6 class="mb-1"><b>Ruangan</b></h6>
                             <p class="pc-event-venue text-muted"></p>
                         </div>
                     </div>
@@ -83,7 +87,7 @@
                             <div class="avtar avtar-xs bg-light-danger"><i class="ti ti-calendar-event f-20"></i></div>
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <h5 class="mb-1"><b>Waktu</b></h5>
+                            <h6 class="mb-1"><b>Waktu</b></h6>
                             <p class="pc-event-date text-muted"></p>
                         </div>
                     </div>
@@ -92,7 +96,7 @@
                             <div class="avtar avtar-xs bg-light-primary"><i class="ti ti-file-text f-20"></i></div>
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <h5 class="mb-1"><b>Keterangan</b></h5>
+                            <h6 class="mb-1"><b>Keterangan</b></h6>
                             <p class="pc-event-description text-muted"></p>
                         </div>
                     </div>
@@ -101,7 +105,7 @@
                             <div class="avtar avtar-xs bg-light-info"><i class="ti ti-user-check f-20"></i></div>
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <h5 class="mb-1"><b>Ditambahkan Oleh</b></h5>
+                            <h6 class="mb-1"><b>Ditambahkan Oleh</b></h6>
                             <p class="pc-event-user text-muted"></p>
                         </div>
                     </div>
@@ -116,7 +120,7 @@
                                 class="avtar avtar-s btn-link-success btn-pc-default" data-bs-toggle="tooltip"
                                 title="Edit"><i class="ti ti-edit-circle f-18"></i></a></li>
                     </ul> --}}
-                    <div class="flex-grow-1 text-end"><button type="button" class="btn btn-secondary"
+                    <div class="flex-grow-1 text-end"><button type="button" class="btn btn-secondary-transparent"
                             data-bs-dismiss="modal">Tutup</button></div>
                 </div>
             </div>
@@ -205,8 +209,8 @@
                     let finalDateText = `${tglText} Pukul ${jamMulai} - ${jamSelesai} WIB`;
 
                     // Isi modal
-                    $('.calendar-modal-title').html('<span class="badge text-bg-dark me-1">Detail Acara</span> '+ev.title);
-                    $('.pc-event-title').text(ev.title);
+                    $('.calendar-modal-title').html('<span class="badge bg-purple-gradient me-1">Detail Acara</span> '+ev.title);
+                    $('.pc-event-title').empty().html("<b class='text-uppercase'>"+ev.title+"</b>");
                     $('.pc-event-venue').text(ruangan);
                     $('.pc-event-date').text(finalDateText);
                     $('.pc-event-description').text(ket);
@@ -219,6 +223,23 @@
             });
 
             calendar.render();
+
+            // FOR DARK MODE
+            new MutationObserver(() => {
+                // 1. day number
+                document.querySelectorAll('.fc-daygrid-day-number[style]').forEach(el => {
+                    el.removeAttribute('style');
+                });
+
+                // 2. header day (Min, Sen, dll)
+                document.querySelectorAll('.fc-col-header-cell-cushion[style]').forEach(el => {
+                    el.removeAttribute('style');
+                });
+
+            }).observe(calendarEl, {
+                subtree: true,
+                attributes: true
+            });
         }
     </script>
 @endsection

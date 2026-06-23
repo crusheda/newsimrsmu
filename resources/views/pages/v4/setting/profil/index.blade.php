@@ -126,6 +126,7 @@
     <script>
         $(document).ready(function() {
             loadDataDiri();
+            loadDokumen();
         });
     </script>
 @endsection
