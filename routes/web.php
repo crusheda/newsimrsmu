@@ -9,10 +9,29 @@ Route::get('/', function () {
 // AUTHENTICATION ROUTES
 use App\Http\Controllers\Auth\v4\AuthController;
 use \App\Http\Controllers\Auth\v4\LoginController;
+use App\Http\Controllers\Auth\v4\ForgotPasswordController;
+use App\Http\Controllers\Auth\v4\ResetPasswordController;
 
 Route::group(['prefix' => 'v4', 'as' => ''], function () {
     Route::get('login', [LoginController::class, 'index'])->name('v4.login');
     Route::post('login', [AuthController::class, 'login'])->name('v4.login.process');
+
+    // LUPA PASSWORD & RESET
+    Route::get('lupa-password',
+        [ForgotPasswordController::class,'index']
+    )->name('v4.password.request');
+
+    Route::post('lupa-password',
+        [ForgotPasswordController::class,'send']
+    )->name('v4.password.email');
+
+    Route::get('reset-password/{token}',
+        [ResetPasswordController::class,'index']
+    )->name('v4.password.reset');
+
+    Route::post('reset-password',
+        [ResetPasswordController::class,'reset']
+    )->name('v4.password.update');
 });
 
 // PROTECTED ROUTES

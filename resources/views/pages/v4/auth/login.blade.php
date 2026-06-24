@@ -106,7 +106,7 @@
                                                 Ingat Saya
                                             </label>
                                         </div>
-                                        <a role="button" class="link-danger fw-medium fs-12">
+                                        <a role="button" class="link-danger fw-medium fs-12" href="{{ route('v4.password.request') }}">
                                             Lupa Password?
                                         </a>
                                     </div>
