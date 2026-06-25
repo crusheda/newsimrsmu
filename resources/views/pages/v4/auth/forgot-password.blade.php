@@ -25,6 +25,12 @@
                                 />
                             </div>
 
+                            @if (session('status'))
+                                <div class="alert alert-success mt-3 mb-3">
+                                    {{ session('status') }}
+                                </div>
+                            @endif
+
                             <form method="POST" action="{{ route('v4.password.email') }}">
                                 @csrf
 
@@ -43,18 +49,13 @@
                                         <i class="ri-arrow-left-s-line me-1"></i>
                                         Sign In
                                     </button>
-                                    <button class="btn btn-danger">
-                                        <i class="ri-mail-send-line me-1"></i> Kirim Link Reset Password
+                                    <button class="btn btn-danger" id="btnReset">
+                                        <span id="btnText"><i class="ri-mail-send-line me-1"></i> Kirim Link Reset Password</span>
+                                        <span id="btnLoading" class="spinner-border spinner-border-sm d-none"></span>
                                     </button>
                                 </div>
 
                             </form>
-
-                            @if (session('status'))
-                                <div class="alert alert-success mt-3">
-                                    {{ session('status') }}
-                                </div>
-                            @endif
 
                         </div>
                     </div>
@@ -74,9 +75,9 @@
                 </div>
                 <div class="authentication-cover-content">
                     <div class="p-5">
-                        <h3 class="fw-semibold lh-base">Hi, Selamat Datang 👋</h3>
+                        <h3 class="fw-semibold lh-base">Lupa Password Akun??</h3>
                         <p class="mb-0 text-muted fw-medium">
-                            Silakan masuk menggunakan Akun Simrsmu Anda untuk melanjutkan Peluncuran Dashboard.
+                            Silakan klik tombol <b class="text-danger">Kirim Link Reset Password</b> untuk melakukan reset password akun dengan Email Aktif Anda. Selanjutnya silakan Cek pada <b class="text-primary">Email Masuk</b> untuk melanjutkan proses Reset Password.
                         </p>
                     </div>
                     <div>
@@ -86,4 +87,25 @@
             </div>
         </div>
     </div>
+
+    <script>
+
+    document
+    .querySelector('form')
+    .addEventListener('submit', function(){
+
+        let btn = document.getElementById('btnReset');
+        let text = document.getElementById('btnText');
+        let loading = document.getElementById('btnLoading');
+
+
+        btn.disabled = true;
+
+        text.innerHTML = 'Mengirim...';
+
+        loading.classList.remove('d-none');
+
+    });
+
+    </script>
 @endsection

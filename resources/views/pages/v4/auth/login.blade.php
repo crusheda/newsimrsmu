@@ -106,7 +106,7 @@
                                                 Ingat Saya
                                             </label>
                                         </div>
-                                        <a role="button" class="link-danger fw-medium fs-12" href="{{ route('v4.password.request') }}">
+                                        <a role="button" class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline fw-medium fs-12" href="{{ route('v4.password.request') }}">
                                             Lupa Password?
                                         </a>
                                     </div>
@@ -198,7 +198,7 @@
                                 {{-- Register --}}
                                 <div class="col-xl-12 text-center fw-medium mt-0">
                                     Belum memiliki Akun?
-                                    <a role="button" class="text-primary">
+                                    <a role="button" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline" onclick="hubungiSdi()">
                                         Hubungi SDI
                                     </a>
                                 </div>
@@ -231,6 +231,30 @@
                     <div>
                         <img src="{{ asset('images/media/media-72.png') }}" alt="" class="img-fluid">
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="hubsdi" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="catatanLabel">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header p-3">
+                    <h6 class="modal-title" id="catatanLabel">✆&nbsp;&nbsp;Daftar Nomor Yang Bisa Dihubungi</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-3 pb-0">
+                    <h6 class="mb-3 fs-14">Masalah <b>Terkait Akun</b> silakan Hubungi No.Telp Bagian SDI : <b class="text-primary">188</b> (<b class="text-danger">Jam Kerja Kantor</b>)</h6>
+                    <h6 class="fs-14">Nomor Bagian SDI :</h6>
+                    <ul>
+                        <li>Novita Yuliani, S.KM, M.Kes (<b class="text-success">Whatsapp</b> : <b class="text-danger">089689514960</b>)</li>
+                        <li>Kholid Hidayat Al-Khoiri, S.Psi (<b class="text-success">Whatsapp</b> : <b class="text-danger">0882003805027</b>)</li>
+                        <li>Sri Suryani, SM (<b class="text-success">Whatsapp</b> : <b class="text-danger">081330795309</b>)</li>
+                    </ul>
+                    <h6 class="mb-3 fs-14">Masalah <b>Teknis Sistem</b> silakan Hubungi No.Telp IT : <b class="text-primary">193</b> / <b class="text-primary">102</b></h6>
+                </div>
+                <div class="modal-footer p-2">
+                    <button type="button" class="btn btn-secondary-transparent" data-bs-dismiss="modal">Tutup</button>
                 </div>
             </div>
         </div>
@@ -370,6 +394,10 @@
                 }, 1000);
             }
         })
+
+        function hubungiSdi() {
+            $('#hubsdi').modal('show');
+        }
     </script>
 
 @endsection

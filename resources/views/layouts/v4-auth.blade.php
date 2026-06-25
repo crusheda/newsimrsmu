@@ -64,6 +64,12 @@
     <!-- Prism CSS -->
     <link rel="stylesheet" href="{{ asset('libs/prismjs/themes/prism-coy.min.css') }}">
 
+    <!-- iziToast-->
+    <link rel="stylesheet" href="{{ asset('libs/iziToast/iziToast.css') }}" />
+
+    <!-- Sweet Alert-->
+    <link href="{{ asset('libs/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
+
     <!-- CLOUDFLARE TURNSTILE CAPTCHA -->
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
@@ -81,6 +87,12 @@
 
     <script src="{{ asset('libs/prismjs/prism.js') }}"></script>
     <script src="{{ asset('js/prism-custom.js') }}"></script>
+
+    <!-- iziToast JS -->
+    <script src="{{ asset('libs/iziToast/iziToast.js') }}"></script>
+
+    <!-- sweetalert2 JS -->
+    <script src="{{ asset('libs/sweetalert2/sweetalert2.min.js') }}"></script>
 
     <script>
         function toggleTheme(){

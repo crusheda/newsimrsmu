@@ -36,13 +36,24 @@ class ResetPasswordNotification extends Notification
             ),
         );
 
-        return new MailMessage()
-
+        return (new MailMessage())
             ->subject('Reset Password SIMRS MU')
-
-            ->view('pages.v4.auth.email-reset-password', [
-                'url' => $url,
-                'user' => $notifiable,
-            ]);
+            ->view(
+                'pages.v4.auth.email-reset-password',
+                [
+                    'url' => $url,
+                    'user' => $notifiable,
+                ]
+            );
+            // ->withSymfonyMessage(function ($message) {
+            //     $message->embed(
+            //         public_path('images/logo/logo_full_text_light.png'),
+            //         'logo_simrsmu'
+            //     );
+            //     $message->embed(
+            //         public_path('images/logo/full-horizontal-hd-white.png'),
+            //         'logo_footer'
+            //     );
+            // });
     }
 }

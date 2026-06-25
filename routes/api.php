@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+use App\Http\Controllers\Auth\v4\ResetPasswordController;
 use \App\Http\Controllers\v4\Kalender\KalenderController;
 use \App\Http\Controllers\v4\Setting\ProfilController;
 use \App\Http\Controllers\v4\IT\TiketController;
@@ -55,7 +56,14 @@ use \App\Http\Controllers\v4\Pelayanan\Kebidanan\SKLController;
 use \App\Http\Controllers\v4\Akreditasi\KecelakaanKerjaController;
 use App\Http\Controllers\v4\AI\KlaimBpjsController;
 
-Route::prefix('v4')->middleware(['web','auth'])->group(function () { // SIMRSMU v.4
+Route::prefix('v4')->group(function () { // PUBLIC API SIMRSMU v.4
+
+    // API RESET PASSWORD AFTER LUPA PASSWORD
+    Route::post('reset-password', [ResetPasswordController::class,'reset']);
+
+});
+
+Route::prefix('v4')->middleware(['web','auth'])->group(function () { // PRIVATE AUTH SIMRSMU v.4
 
     // KALENDER
     Route::get('kalender/data', [KalenderController::class, 'dataKalender']);
