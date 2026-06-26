@@ -56,7 +56,7 @@
                                 Login
                             </li>
                             <li class="mb-2">Password Baru harus memenuhi kriteria yang sudah tertera di bawah</li>
-                            <li>Tombol Perbarui Password akan <mark>Aktif</mark> apabila <b class="text-info fw-bold">Password Baru</b> dan <b class="text-info fw-bold">Konfirmasi Password Baru</b> sudah sesuai kriteria</li>
+                            <li>Tombol Perbarui Password akan <b class="text-success">Aktif</b> apabila <b class="text-info fw-bold">Password Baru</b> dan <b class="text-info fw-bold">Konfirmasi Password Baru</b> sudah sesuai kriteria</li>
                         </ul>
                     </div>
                 </div>

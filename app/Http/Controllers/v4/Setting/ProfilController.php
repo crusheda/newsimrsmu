@@ -584,6 +584,10 @@ class ProfilController extends Controller
             ],422);
         }
 
+        // print_r($request->current_password.'---------');
+        // print_r($user->password);
+        // die();
+
         // cek password lama
         if(!Hash::check($request->current_password, $user->password)){
             return response()->json([
