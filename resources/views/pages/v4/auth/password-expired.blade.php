@@ -4,7 +4,7 @@
     <div class="row authentication authentication-cover-main mx-0">
         <div class="col-xxl-9 col-xl-9">
             <div class="row justify-content-center align-items-center h-100">
-                <div class="col-xxl-5 col-xl-5 col-lg-6 col-md-6 col-sm-8 col-12">
+                <div class="col-xxl-7 col-xl-7 col-lg-8 col-md-8 col-sm-10 col-12">
                     <div class="card custom-card border-0 shadow-none my-4">
                         <div class="card-body p-5">
 
@@ -57,8 +57,8 @@
                                             <div class="fs-16 fw-medium d-flex justify-content-between">Pencegahan Risiko !!
                                                 {{-- <button type="button" class="btn-close p-0" data-bs-dismiss="alert" aria-label="Close"><i class="bi bi-x"></i></button> --}}
                                             </div>
-                                            <div class="fs-12 op-8 mt-1">
-                                                <ol class="mb-1 ps-3">
+                                            <div class="fs-12 op-8 mt-1 text-justify">
+                                                <ol class="mb-1 ps-3 pe-2">
                                                     <li>
                                                         Password memiliki masa berlaku selama <strong>90 hari</strong> sebagai bagian dari kebijakan keamanan sistem.
                                                     </li>
