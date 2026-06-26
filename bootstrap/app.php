@@ -7,6 +7,7 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
 use Illuminate\Session\TokenMismatchException;
 use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
+use App\Http\Middleware\CheckPasswordAge;
 use App\Http\Middleware\ContentSecurityPolicy;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 // use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
@@ -21,6 +22,11 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->api(prepend: [
             EnsureFrontendRequestsAreStateful::class,
+        ]);
+        $middleware->alias([
+            'password.age'
+            =>
+            CheckPasswordAge::class
         ]);
         // $middleware->web(append: [
         //     \App\Http\Middleware\HeaderDataMiddleware::class,

@@ -113,3 +113,18 @@
 <script src="{{ asset('libs/select2/js/select2.min.js') }}"></script>
 {{-- <script src="{{ asset('libs/select2/js/select2.min.js') }}"></script> --}}
 {{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> --}}
+
+{{-- @if(session('password_expired'))
+    <script>
+        Swal.fire({
+            icon:'warning',
+            title:'Password Expired',
+            text:'Password anda sudah lebih dari 90 hari. Silakan update password.',
+            confirmButtonText:'Update Sekarang',
+            allowOutsideClick:false
+        }).then(()=>{
+            window.location.href =
+            "{{ route('v4.password.expired') }}";
+        });
+    </script>
+@endif --}}

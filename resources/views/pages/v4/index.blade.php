@@ -75,6 +75,11 @@
 
 <body class="landing-body">
 
+    <!-- Logout Form -->
+    <form id="logoutform" action="{{ route('v4.logout') }}" method="POST" style="display: none;">
+        {{ csrf_field() }}
+    </form>
+
     <!-- Start Switcher -->
     {{-- <div class="offcanvas offcanvas-end" tabindex="-1" id="switcher-canvas" aria-labelledby="offcanvasRightLabel">
         <div class="offcanvas-header border-bottom">
@@ -265,7 +270,7 @@
                                     <ul class="dropdown-menu dropdown-menu-end">
                                         <li><a class="dropdown-item text-primary" href="{{ route('v4.dashboard') }}">Dashboard</a></li>
                                         <li><a class="dropdown-item text-warning" href="{{ route('v4.profil') }}">Profil Saya</a></li>
-                                        <li><a class="dropdown-item text-danger" href="{{ route('v4.logout') }}">Logout</a></li>
+                                        <li><a class="dropdown-item text-danger" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">Logout</a></li>
                                     </ul>
                                 @else
                                     <a href="{{ route('v4.login') }}" class="btn btn-wave btn-primary border">

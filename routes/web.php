@@ -11,15 +11,22 @@ use App\Http\Controllers\Auth\v4\AuthController;
 use \App\Http\Controllers\Auth\v4\LoginController;
 use App\Http\Controllers\Auth\v4\ForgotPasswordController;
 use App\Http\Controllers\Auth\v4\ResetPasswordController;
+use App\Http\Controllers\Auth\v4\PasswordController;
 
 Route::group(['prefix' => 'v4', 'as' => ''], function () {
-    Route::get('login', [LoginController::class, 'index'])->name('v4.login');
-    Route::post('login', [AuthController::class, 'login'])->name('v4.login.process');
+
+    // ROUTE LOGIN
+        Route::get('login', [LoginController::class, 'index'])->name('v4.login');
+        Route::post('login', [AuthController::class, 'login'])->name('v4.login.process');
 
     // LUPA PASSWORD & RESET
-    Route::get('lupa-password', [ForgotPasswordController::class,'index'])->name('v4.password.request');
-    Route::post('lupa-password', [ForgotPasswordController::class,'send'])->name('v4.password.email');
-    Route::get('reset-password/{token}', [ResetPasswordController::class,'index'])->name('v4.password.reset');
+        Route::get('lupa-password', [ForgotPasswordController::class,'index'])->name('v4.password.request');
+        Route::post('lupa-password', [ForgotPasswordController::class,'send'])->name('v4.password.email');
+        Route::get('reset-password/{token}', [ResetPasswordController::class,'index'])->name('v4.password.reset');
+
+    // EXPIRED PASSWORD
+        Route::get('password-expired', [PasswordController::class, 'expired'])->name('v4.password.expired');
+        Route::post('password-expired', [PasswordController::class, 'updatePassword'])->name('v4.password.updatePassword');
 
     // Route::post('reset-password',
     //     [ResetPasswordController::class,'reset']
@@ -68,7 +75,9 @@ use \App\Http\Controllers\v4\Pelayanan\Kebidanan\SKLController;
 use \App\Http\Controllers\v4\Akreditasi\KecelakaanKerjaController;
 use App\Http\Controllers\v4\AI\KlaimBpjsController;
 
-Route::group(['middleware' => ['auth'], 'prefix' => 'v4', 'as' => ''], function () { // SIMRSMU v.4
+Route::group(['middleware' => ['auth','password.age'], 'prefix' => 'v4', 'as' => ''], function () { // SIMRSMU v.4
+
+    // PUBLIK
     Route::get('dashboard', [DashboardController::class, 'index'])->name('v4.dashboard');
     Route::get('kalender', [KalenderController::class, 'index'])->name('v4.kalender');
     Route::get('profil', [ProfilController::class, 'index'])->name('v4.profil');

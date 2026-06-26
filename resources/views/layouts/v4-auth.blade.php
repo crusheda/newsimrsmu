@@ -77,6 +77,11 @@
 
 <body class="bg-white">
 
+    <!-- Logout Form -->
+    <form id="logoutform" action="{{ route('v4.logout') }}" method="POST" style="display: none;">
+        {{ csrf_field() }}
+    </form>
+
     @yield('content')
 
     <!-- Bootstrap JS -->
