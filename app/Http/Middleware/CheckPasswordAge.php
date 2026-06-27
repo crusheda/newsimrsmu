@@ -40,8 +40,7 @@ class CheckPasswordAge
         }
 
         if($expired){
-            return redirect()
-                ->route('v4.password.expired');
+            return redirect()->route('v4.password.expired');
         }
 
         return $next($request);

@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="row pt-1">
-        <div class="col-xl-12">
+        <div class="col-xl-12 mb-3">
             <div class="card custom-card podcast-banner-card border-0 shadow-none">
                 <div class="card-body">
                     <div class="podcast-banner-card-background"> <img src="{{ asset('/images/media/backgrounds/6.png') }}" alt=""> </div>
@@ -45,4 +45,63 @@
             </div>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function() {
+            warnAgePassword();
+        });
+
+        function warnAgePassword() {
+            let expired = @json($list['expired']);
+            let expiredDate = @json($list['expiredDate']);
+
+            if (expired == true) {
+                Swal.fire({
+                    title: 'Mohon Perhatian!!',
+                    html: `
+                        Password Anda telah berusia <b class='text-danger fs-18'>${expiredDate} hari</b><br>
+                        Segera Perbarui Password Anda. Usia Passowrd Maks. <b>90 Hari</b>
+                    `,
+                    icon: 'warning',
+
+                    showCloseButton: false,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+
+                    showCancelButton: true,
+                    focusConfirm: true,
+
+                    timer: undefined,
+                    timerProgressBar: false,
+
+                    confirmButtonText: `
+                        <i class="ri-lock-line me-1"></i> Ubah Password
+                    `,
+                    cancelButtonText: `
+                        <i class="ri-close-line me-1"></i> Tutup
+                    `,
+
+                    customClass: {
+                        confirmButton: 'btn btn-danger',
+                        cancelButton: 'btn btn-secondary-transparent'
+                    },
+
+                    buttonsStyling: false,
+                    backdrop: `
+                        rgb(54 22 22 / 40%)
+                        url("/images/nyan-cat.gif")
+                        left top
+                        no-repeat
+                    `
+
+                }).then((result) => {
+
+                    if (result.isConfirmed) {
+                        window.location.href = "{{ route('v4.profil') }}";
+                    }
+
+                });
+            }
+        }
+    </script>
 @endsection
