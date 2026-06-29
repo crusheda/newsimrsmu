@@ -30,7 +30,32 @@ class EPinjamController extends Controller
 
     function loadTambah()
     {
-        $barang = epinjam_kategori::with('barang')->get();
+        $barang = epinjam_kategori::with([
+            'barang' => function ($q) {
+
+                $q->where('status', 1)
+                ->whereNull('deleted_at')
+                ->whereNotExists(function ($sub) {
+
+                        $sub->select(DB::raw(1))
+                            ->from('epinjam_list')
+                            ->whereColumn(
+                                'epinjam_list.id_barang',
+                                'epinjam_barang.id'
+                            )
+                            ->where('epinjam_list.status', 1)
+                            ->whereNull('epinjam_list.deleted_at');
+
+                });
+
+            }
+        ])->get();
+
+
+        $barang = $barang->filter(function($kategori){
+            return $kategori->barang->count() > 0;
+        })->values();
+
         $users = User::select('id', 'nama_lengkap', 'nama', 'name')
                         ->with([
                             'roles:id,name'
@@ -56,7 +81,7 @@ class EPinjamController extends Controller
     {
         $show = epinjam::with([
             'userPinjam:id,nama,name',
-            'userPinjam.roles:id,name',
+            'userPinjam.roles:id,name,deskripsi',
             'userAdminPinjam:id,nama',
             'userKembali:id,nama',
             'userAdminKembali:id,nama',

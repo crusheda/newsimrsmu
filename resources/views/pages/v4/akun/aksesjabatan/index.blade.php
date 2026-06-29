@@ -31,9 +31,9 @@
                                     {{-- <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#formSync"><i
                                             class="bx bxs-magnet"></i>&nbsp;&nbsp;Sinkronisasi <span class="badge bg-light">Jabatan x Akses</span></button> --}}
                                     <button class="btn btn-primary" onclick="syncJabatanAkses(true)" id="btn-tampil-sync"><i
-                                            class="bx bxs-magnet"></i>&nbsp;&nbsp;Sinkronisasi <span class="badge bg-light text-dark">Jabatan x Akses</span></button>
+                                            class="bx bxs-magnet"></i>&nbsp;&nbsp;Sinkronisasi <span class="badge bg-light text-dark d-none d-md-inline">Jabatan x Akses</span></button>
                                     <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#info" disabled><i
-                                            class="bx bxs-info-circle"></i>&nbsp;&nbsp;Kamus Akses</button>
+                                            class="bx bxs-info-circle"></i> <span class="d-none d-md-inline ms-1">Kamus Akses</span></button>
                                     <button type="button" class="btn btn-warning-light btn-wave" data-bs-toggle="tooltip" data-bs-offset="0,4"
                                         data-bs-placement="bottom" data-bs-html="true"
                                         title="<i class='fa-fw fas fa-sync nav-icon'></i> <span>Segarkan</span>" onclick="refresh()">
@@ -572,7 +572,7 @@
                         destroy: true,
                         order: [[5,"desc"]],
                         displayLength: 15,
-                        lengthMenu: [15,25,50,100,300,500],
+                        // lengthMenu: [15,25,50,100,300,500],
                     });
                 }, error: function(xhr, status, error) {
                     iziToast.error({
@@ -614,7 +614,7 @@
                         ],
                         displayLength: 15,
                         lengthChange: true,
-                        lengthMenu: [15, 25, 50, 75, 100, 300, 700, 1000]
+                        // lengthMenu: [15, 25, 50, 75, 100, 300, 700, 1000]
                     });
 
                     // Showing Tooltip
@@ -659,7 +659,7 @@
                         order: [[3, "desc"]],
                         displayLength: 15,
                         lengthChange: true,
-                        lengthMenu: [15, 25, 50, 75, 100, 300, 700, 1000]
+                        // lengthMenu: [15, 25, 50, 75, 100, 300, 700, 1000]
                     });
 
                     // Showing Tooltip

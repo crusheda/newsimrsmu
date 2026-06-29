@@ -88,7 +88,10 @@
                         </div>
                     </div>
                     <div class="card-footer d-flex align-items-center justify-content-between py-3">
-                        <button class="btn btn-secondary-transparent" onclick="clearInput()"><i class="ri-edit-line me-1"></i> Kosongkan</button>
+                        <div class="btn-group">
+                            <button class="btn btn-secondary-transparent" onclick="clearInput()"><i class="ri-edit-line"></i> <span class="d-none d-md-inline ms-1">Kosongkan</span></button>
+                            <button class="btn btn-orange-light" onclick="clearInput()"><i class="ri-refresh-line"></i> <span class="d-none d-md-inline ms-1">Refresh Input</span></button>
+                        </div>
                         <button class="btn btn-primary" id="btn-simpan-ajukan" onclick="simpan()" disabled><i class="ri-send-plane-fill me-1"></i> Submit</button>
                     </div>
                 </div>
@@ -99,7 +102,7 @@
                         <h6 class="mb-0">Riwayat <b class="text-teal">Peminjaman</b></h6>
                         <div class="btn-group my-1">
                             <button type="button" class="btn btn-sm btn-warning-transparent btn-wave" onclick="refresh()" id="btn-refresh">
-                                <i class="ri-refresh-line me-1"></i> Refresh
+                                <i class="ri-refresh-line"></i> <span class="d-none d-md-inline ms-1">Refresh</span>
                             </button>
                             <button class="btn btn-sm btn-primary-transparent btn-wave dropdown-toggle dropdown-toggle-split me-2" type="button" id="defaultDropdown"
                                 data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false"> Menu Admin </button>
@@ -345,29 +348,40 @@
                     '<option value="">-- Pilih Barang --</option>'
                 );
 
-                if (!kategoriId) {
-                    return;
-                }
+                if (!kategoriId) return;
 
-                let kategori = null;
-                $.each(dataBarang, function(i, item) {
-                    if (item.id == kategoriId) {
-                        kategori = item;
-                        return false;
+
+                let barangTerpilih = [];
+
+                $('.barang').each(function(){
+                    let val = $(this).val();
+
+                    if(val){
+                        barangTerpilih.push(val);
                     }
                 });
 
-                if (!kategori) {
-                    return;
-                }
+
+                let kategori = dataBarang.find(x => x.id == kategoriId);
+
+
+                if(!kategori) return;
+
 
                 let barangOption = '<option value="">-- Pilih Barang --</option>';
-                $.each(kategori.barang, function(i, item) {
-                    barangOption += `
-                        <option value="${item.id}">
-                            ${item.nama}
-                        </option>
-                    `;
+
+
+                $.each(kategori.barang, function(i,item){
+
+                    // skip barang yang sudah dipakai di row lain
+                    if(!barangTerpilih.includes(String(item.id))){
+                        barangOption += `
+                            <option value="${item.id}">
+                                ${item.nama}
+                            </option>
+                        `;
+                    }
+
                 });
 
                 barangSelect.html(barangOption);
@@ -574,6 +588,31 @@
 
         function tambahBarang() { // ADD ROW BARANG
 
+            let valid = true;
+
+            $('.row-barang').each(function(){
+
+                let kategori = $(this).find('.kategori').val();
+                let barang   = $(this).find('.barang').val();
+
+                if(!kategori || !barang){
+                    valid = false;
+                    return false; // stop loop
+                }
+
+            });
+
+            if(!valid){
+
+                iziToast.warning({
+                    title: 'Pesan System!',
+                    message: 'Silahkan pilih kategori dan barang terlebih dahulu.',
+                    position: 'topRight'
+                });
+
+                return;
+            }
+
             // let kategoriOption = $('.kategori:first').html();
 
             let row = `
@@ -713,7 +752,9 @@
                         .addClass("ri-refresh-line ri-spin");
                 },
                 success: function(res) {
+                    loadTambah();
                     refresh();
+                    clearInput();
                     iziToast.success({
                         title: 'Pesan Sukses!',
                         message: res.message ?? res,
@@ -953,7 +994,9 @@
                 success: function(res) {
 
                     $('#modalEdit').modal('hide');
+                    loadTambah();
                     refresh();
+                    clearInput();
 
                     iziToast.success({
                         title: 'Sukses',
@@ -980,7 +1023,9 @@
                 url: `/api/v4/it/epinjam/hapus/${id}`,
                 type: "DELETE",
                 success: function(res) {
+                    loadTambah();
                     refresh();
+                    clearInput();
                     iziToast.success({
                         title: 'Sukses',
                         message: res.message
@@ -1079,11 +1124,10 @@
                                     if (item.status == 1) {
                                         content += `<li><a href="javascript:void(0);" class='dropdown-item text-info' onclick="ubahStatusBarang(${item.id},${item.status})"><i class="ri-supabase-line me-1"></i> Perbarui Status</a></li>`;
                                         if (updet == date) {
-                                            content +=
-                                                `<li><a href="javascript:void(0);" class='dropdown-item text-warning' onclick="ubah(${item.id})"><i class="ri-edit-line me-1"></i> Ubah</a></li>`;
+                                            // content += `<li><a href="javascript:void(0);" class='dropdown-item text-warning' onclick="ubah(${item.id})"><i class="ri-edit-line me-1"></i> Ubah</a></li>`;
+                                            content += `<li><a href="javascript:void(0);" class='dropdown-item disabled'><i class="ri-edit-line me-1"></i> Ubah</a></li>`;
                                         } else {
-                                            content +=
-                                                `<li><a href="javascript:void(0);" class='dropdown-item disabled'><i class="ri-edit-line me-1"></i> Ubah</a></li>`;
+                                            content += `<li><a href="javascript:void(0);" class='dropdown-item disabled'><i class="ri-edit-line me-1"></i> Ubah</a></li>`;
                                         }
                                         content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(${item.id})"><i class="ri-delete-bin-line me-1"></i> Hapus</a></li>`;
                                     } else {
@@ -1097,8 +1141,10 @@
                                 ?? item.user_pinjam?.nama
                                 ?? item.user_pinjam?.name
                                 ?? '-';
-                        let role = item.user_pinjam?.roles
-                                ? item.user_pinjam.roles.map(r => r.name).join(', ')
+                        let role = item.user_pinjam?.roles?.length
+                                ? item.user_pinjam.roles
+                                    .map(r => r.deskripsi ?? r.name)
+                                    .join(', ')
                                 : '-';
                         let tipePeminjam = item.user_pinjam
                                 ? `<span class="badge bg-primary-transparent p-1">Internal RS</span>`
@@ -1208,7 +1254,9 @@
                         message:res.message,
                         position:'topRight'
                     });
+                    loadTambah();
                     refresh();
+                    clearInput();
                 },
                 error:function(xhr){
                     iziToast.error({

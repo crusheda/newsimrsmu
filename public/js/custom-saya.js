@@ -47,6 +47,33 @@ $.extend(true, $.fn.dataTable.defaults, {
     lengthMenu: [5, 10, 15, 20, 30, 35, 50, 75, 100, 500, 1000, 3000, 5000, 7000, 10000],
     displayLength: 20
 });
+
+$.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+
+    let keyword = $('.dataTables_filter input')
+        .val()
+        .toLowerCase()
+        .trim();
+
+    if (!keyword) {
+        return true;
+    }
+
+    let rowText = data.join(' ')
+        .toLowerCase()
+        .trim();
+
+    let keywords = keyword.split(/\s+/);
+
+    return keywords.every(function(word) {
+
+        // partial match per kata
+        return rowText.includes(word);
+
+    });
+
+});
+
 $.extend(true, $.fn.dataTable.defaults, {
     initComplete: function () {
         $('.dataTables_wrapper').addClass('text-dark');
