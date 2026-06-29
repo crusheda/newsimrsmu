@@ -5,7 +5,7 @@
     <div class="row authentication authentication-cover-main mx-0">
         <div class="col-xxl-9 col-xl-9">
             <div class="row justify-content-center align-items-center h-100">
-                <div class="col-xxl-5 col-xl-5 col-lg-6 col-md-6 col-sm-8 col-12">
+                <div class="col-xxl-5 col-xl-7 col-lg-7 col-md-7 col-sm-10 col-12">
                     <div class="card custom-card border-0 shadow-none my-4">
                         <div class="card-body p-5">
 
@@ -175,16 +175,16 @@
                                             class="btn btn-secondary-transparent"
                                             style="flex:1;"
                                             onclick="window.location.href='{{ route('v4.portal') }}'">
-                                            <i class="ri-arrow-left-s-line me-1"></i>
-                                            Portal
+                                            <i class="ri-arrow-left-s-line"></i>
+                                            <span class="d-none d-md-inline ms-1">Portal</span>
                                         </button>
 
                                         <button type="submit"
                                             id="btnLogin"
                                             class="btn btn-primary"
                                             style="flex:4;" disabled>
-                                            <i class="ri-login-box-line fs-16 me-1"></i>
-                                            Sign In
+                                            <i class="ri-loader-4-line ri-spin-slow fs-16 me-1"></i>
+                                            Menunggu Verifikasi
                                         </button>
 
                                     </div>
@@ -316,15 +316,37 @@
             TURNSTILE
         ========================== */
         function turnstileSuccess(token) {
-            document.getElementById('btnLogin').disabled = false;
+            let btn = document.getElementById('btnLogin');
+
+            btn.disabled = false;
+
+            btn.innerHTML = `
+                <i class="ri-login-box-line fs-16 me-1"></i>
+                Sign In
+            `;
         }
 
         function turnstileExpired() {
-            document.getElementById('btnLogin').disabled = true;
+            let btn = document.getElementById('btnLogin');
+
+            btn.disabled = true;
+
+            btn.innerHTML = `
+                <i class="ri-loader-4-line ri-spin-slow fs-16 me-1"></i>
+                Menunggu Verifikasi
+            `;
         }
 
+
         function turnstileError() {
-            document.getElementById('btnLogin').disabled = true;
+            let btn = document.getElementById('btnLogin');
+
+            btn.disabled = true;
+
+            btn.innerHTML = `
+                <i class="ri-loader-4-line ri-spin-slow fs-16 me-1"></i>
+                Menunggu Verifikasi
+            `;
         }
 
         /* =========================

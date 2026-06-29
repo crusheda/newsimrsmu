@@ -77,6 +77,8 @@
 
 <body class="bg-white">
 
+    <div id="particles-js"></div>
+
     <!-- Logout Form -->
     <form id="logoutform" action="{{ route('v4.logout') }}" method="POST" style="display: none;">
         {{ csrf_field() }}
@@ -86,6 +88,10 @@
 
     <!-- Bootstrap JS -->
     <script src="{{ asset('libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+    <!-- Particles JS -->
+    <script src="{{ asset('libs/particles.js/particles.js') }}"></script>
+    <script src="{{ asset('js/coming-soon.js') }}"></script>
 
     <!-- Show Password JS -->
     <script src="{{ asset('js/show-password.js') }}"></script>
