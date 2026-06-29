@@ -71,10 +71,9 @@ class PasswordController extends Controller
         }
 
         $user->update([
-            'password'=>Hash::make(
-                $request->password
-            ),
-            'last_update_password'=>now()
+            // 'password'              => Hash::make($request->password),
+            'password'              => $request->password,
+            'last_update_password'  => now()
         ]);
 
         session()->forget('password_expired');

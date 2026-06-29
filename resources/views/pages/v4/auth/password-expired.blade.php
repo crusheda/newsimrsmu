@@ -223,7 +223,7 @@
                         </p>
                     </div>
                     <div>
-                        <img src="{{ asset('images/media/media-72.png') }}" alt="" class="img-fluid">
+                        <img src="{{ asset('images/pku/go-reset-password.png') }}" alt="" class="img-fluid">
                     </div>
                 </div>
             </div>

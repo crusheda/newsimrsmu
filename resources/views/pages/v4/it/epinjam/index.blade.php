@@ -90,7 +90,7 @@
                     <div class="card-footer d-flex align-items-center justify-content-between py-3">
                         <div class="btn-group">
                             <button class="btn btn-secondary-transparent" onclick="clearInput()"><i class="ri-edit-line"></i> <span class="d-none d-md-inline ms-1">Kosongkan</span></button>
-                            <button class="btn btn-orange-light" onclick="clearInput()"><i class="ri-refresh-line"></i> <span class="d-none d-md-inline ms-1">Refresh Input</span></button>
+                            <button class="btn btn-orange-light" onclick="loadTambah()" id="refresh-input"><i class="ri-refresh-line"></i> <span class="d-none d-md-inline ms-1">Refresh Input</span></button>
                         </div>
                         <button class="btn btn-primary" id="btn-simpan-ajukan" onclick="simpan()" disabled><i class="ri-send-plane-fill me-1"></i> Submit</button>
                     </div>
@@ -468,11 +468,16 @@
         }
 
         function loadTambah() {
+            let btn = $('#refresh-input');
+
             $.ajax({
                 url: "/api/v4/it/epinjam/loadtambah",
                 type: "GET",
                 dataType: "json",
-
+                beforeSend: function() {
+                    btn.prop('disabled', true);
+                    btn.find("i").addClass("ri-spin-slow");
+                },
                 success: function(res) {
 
                     // simpan ke global variable
@@ -517,11 +522,19 @@
                         width: '100%'
                     });
                 },
-
                 error: function(xhr) {
                     iziToast.error({
                         title: 'Pesan System!',
                         message: xhr.responseText,
+                        position: 'topRight'
+                    });
+                },
+                complete: function() {
+                    btn.find("i").removeClass("ri-spin-slow");
+                    btn.prop('disabled', false);
+                    iziToast.success({
+                        title: 'Pesan System!',
+                        message: 'Input Form Tambah berhasil diperbarui',
                         position: 'topRight'
                     });
                 }
@@ -722,7 +735,7 @@
             if (!peminjamValue || peminjamValue.trim() === '') {
                 iziToast.warning({
                     title: 'Peringatan!',
-                    message: 'Peminjam wajib diisi',
+                    message: 'Nama Peminjam wajib diisi',
                     position: 'topRight'
                 });
                 return;

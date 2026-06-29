@@ -96,7 +96,7 @@
                 </div>
             </div>
             <div class="col-sm-12">
-                <div class="card custom-card" id="show_table" hidden>
+                <div class="card custom-card mb-3" id="show_table" hidden>
                     {{-- <div class="card-header d-flex align-items-center justify-content-between py-3">
                         <div class="btn-group">
                             <button class="btn btn-primary btn-shadow" data-bs-toggle="modal" data-bs-target="#tambah">
@@ -145,20 +145,21 @@
                 </div>
             </div>
             <div class="col-sm-12">
-                <div class="card custom-card" id="show_iklan">
+                <div class="card custom-card mb-3" id="show_iklan">
                     <div class="card-body">
                         <div class="text-center">
                             <div class="row justify-content-center">
                                 <div class="col-lg-10">
-                                    <h4 class="mt-4 fw-semibold">Berkas Regulasi</h4>
+                                    <h4 class="mt-4 fw-semibold">Digital <b class="text-primary">Regulasi</b></h4>
                                     <p class="text-muted mt-3">Akses Regulasi dimanapun dan kapanpun Anda butuhkan.</p>
                                 </div>
                             </div>
 
                             <div class="row justify-content-center mt-5 mb-2">
-                                <div class="col-sm-6 col-8">
+                                <div class="col-sm-8 col-8">
                                     <div>
-                                        <img src="{{ asset('images/verification-img.png') }}" alt="" class="img-fluid">
+                                        {{-- <img src="{{ asset('images/verification-img.png') }}" alt="" class="img-fluid"> --}}
+                                        <img src="{{ asset('images/pku/all-group-users-regulasi.png') }}" alt="" class="img-fluid">
                                     </div>
                                 </div>
                             </div>

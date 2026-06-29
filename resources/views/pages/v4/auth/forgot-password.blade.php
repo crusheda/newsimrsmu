@@ -31,7 +31,7 @@
                                 </div>
                             @endif
 
-                            <form method="POST" action="{{ route('v4.password.email') }}">
+                            <form id="formResetPassword" method="POST" action="{{ route('v4.password.email') }}">
                                 @csrf
 
                                 <div class="mb-3">
@@ -49,7 +49,7 @@
                                         <i class="ri-arrow-left-s-line me-1"></i>
                                         Sign In
                                     </button>
-                                    <button class="btn btn-danger" id="btnReset">
+                                    <button type="submit" class="btn btn-danger" id="btnReset" style="flex:4;">
                                         <span id="btnText"><i class="ri-mail-send-line me-1"></i> Kirim Link Reset Password</span>
                                         <span id="btnLoading" class="spinner-border spinner-border-sm d-none"></span>
                                     </button>
@@ -91,17 +91,19 @@
     <script>
 
     document
-    .querySelector('form')
-    .addEventListener('submit', function(){
+    .getElementById('formResetPassword')
+    .addEventListener('submit', function(e){
 
         let btn = document.getElementById('btnReset');
         let text = document.getElementById('btnText');
         let loading = document.getElementById('btnLoading');
 
+        console.log('submit jalan');
 
         btn.disabled = true;
+        btn.style.pointerEvents = 'none';
 
-        text.innerHTML = 'Mengirim...';
+        text.innerHTML = 'Memproses Pengiriman Email Reset...';
 
         loading.classList.remove('d-none');
 

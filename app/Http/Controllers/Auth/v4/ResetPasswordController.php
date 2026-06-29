@@ -73,7 +73,9 @@ class ResetPasswordController extends Controller
                 'token'
             ),
             function($user,$password){
-                $user->password = Hash::make($password);
+                // $user->password = Hash::make($password);
+                $user->password = $password;
+                $user->last_update_password = now();
                 $user->save();
             }
         );
