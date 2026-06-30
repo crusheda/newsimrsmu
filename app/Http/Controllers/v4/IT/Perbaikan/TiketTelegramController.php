@@ -156,6 +156,8 @@ class TiketTelegramController extends Controller
                 $this->kerjakanTelegram(
                     $id,
                     $nama,
+                    $chatId,
+                    $messageId,
                     $telegram
                 );
 
