@@ -38,7 +38,11 @@ class TelegramService
         ]);
     }
 
-    public function sendGroupWithButton($message, $tiketId)
+    public function sendGroupWithButton(
+        $message,
+        $tiketId,
+        $buttons = []
+    )
     {
         return $this->telegram->sendMessage([
 
@@ -53,18 +57,7 @@ class TelegramService
             'reply_markup'=>json_encode([
 
                 'inline_keyboard'=>[
-
-                    [
-                        [
-                            'text'=>'✅ Terima',
-                            'callback_data'=>"terima_{$tiketId}"
-                        ],
-                        [
-                            'text'=>'❌ Tolak',
-                            'callback_data'=>"tolak_{$tiketId}"
-                        ]
-                    ]
-
+                    $buttons
                 ]
 
             ])

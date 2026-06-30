@@ -162,55 +162,125 @@ class TiketController extends Controller
         return response()->json($data, 200);
     }
 
-    public function telegramWebhook(Request $request, TelegramService $telegram)
+    public function telegramWebhook(
+    Request $request,
+    TelegramService $telegram
+    )
     {
-        $callback = $request->input('callback_query');
+
+        $callback=$request->input('callback_query');
+
 
         if(!$callback){
-            return response()->json([
-                'ok'=>true
-            ]);
+            return response()->json(['ok'=>true]);
         }
 
-        $data = $callback['data'];
 
-        $chatId =
-        $callback['message']['chat']['id'];
+
+        $data=$callback['data'];
+
+
+        $nama =
+            ($callback['from']['first_name'] ?? '').
+            ' '.
+            ($callback['from']['last_name'] ?? '');
+
+
 
         if(str_starts_with($data,'terima_')){
 
-            $id =
-            str_replace('terima_','',$data);
 
-            // panggil fungsi terima
-            $this->terima(
-                new Request([
-                    'ket_terima'=>'Diterima melalui Telegram'
-                ]),
+            $id=str_replace(
+                'terima_',
+                '',
+                $data
+            );
+
+
+            $this->terimaTelegram(
                 $id,
+                $nama,
                 $telegram
             );
+
         }
+
+
+
+        if(str_starts_with($data,'kerjakan_')){
+
+
+            $id=str_replace(
+                'kerjakan_',
+                '',
+                $data
+            );
+
+
+            $this->kerjakanTelegram(
+                $id,
+                $nama,
+                $telegram
+            );
+
+        }
+
+
+
+        if(str_starts_with($data,'selesai_')){
+
+
+            $id=str_replace(
+                'selesai_',
+                '',
+                $data
+            );
+
+
+            $this->selesaiTelegram(
+                $id,
+                $nama,
+                $telegram
+            );
+
+        }
+
+
 
         if(str_starts_with($data,'tolak_')){
 
-            $id =
-            str_replace('tolak_','',$data);
+
+            $id=str_replace(
+                'tolak_',
+                '',
+                $data
+            );
 
 
-            $this->tolak(
-                new Request([
-                    'ket_tolak'=>'Ditolak melalui Telegram'
-                ]),
+            $this->tolakTelegram(
                 $id,
+                $nama,
                 $telegram
             );
 
         }
+
+
+
+        $telegram->answerCallbackQuery([
+
+            'callback_query_id'=>$callback['id'],
+
+            'text'=>'Status tiket diperbarui'
+
+        ]);
+
+
 
         return response()->json([
             'ok'=>true
         ]);
+
     }
 
     /**
@@ -294,7 +364,21 @@ class TiketController extends Controller
                 // $response = $telegram->sendGroup($pesan);
                 $response = $telegram->sendGroupWithButton(
                     $pesan,
-                    $tiket->id
+                    $tiket->id,
+                    [
+
+                        [
+                            [
+                                'text'=>'✅ Terima',
+                                'callback_data'=>"terima_{$tiket->id}"
+                            ],
+                            [
+                                'text'=>'❌ Tolak',
+                                'callback_data'=>"tolak_{$tiket->id}"
+                            ]
+                        ]
+
+                    ]
                 );
 
                 $tiket->update([
@@ -477,5 +561,183 @@ class TiketController extends Controller
             'percent' => round($percent, 2),
             'is_up' => $percent >= 0
         ];
+    }
+
+    // VIA TELEGRAM
+    private function terimaTelegram(
+        $id,
+        $petugas,
+        TelegramService $telegram
+    )
+    {
+
+        $tiket = perbaikan_it::findOrFail($id);
+
+
+        $tiket->update([
+
+            'tgl_terima'=>now(),
+
+            'nama_user_terima'=>$petugas,
+
+            'ket_terima'=>'Diterima melalui Telegram',
+
+        ]);
+
+
+
+        $telegram->sendGroupWithButton(
+
+            "✅ <b>TIKET DITERIMA</b>\n\n".
+            "🎫 <b>Tiket :</b>\n".
+            "{$tiket->tiket_id}\n\n".
+            "👨‍💻 <b>Petugas :</b>\n".
+            "{$petugas}\n\n".
+            "⏳ <b>Status :</b>\n".
+            "DITERIMA",
+
+
+            $tiket->id,
+
+
+            [
+
+                [
+                    [
+                        'text'=>'🔧 Kerjakan',
+                        'callback_data'=>"kerjakan_{$tiket->id}"
+                    ]
+                ]
+
+            ]
+
+        );
+
+    }
+
+    private function kerjakanTelegram(
+        $id,
+        $petugas,
+        TelegramService $telegram
+    )
+    {
+
+        $tiket = perbaikan_it::findOrFail($id);
+
+
+
+        $tiket->update([
+
+            'tgl_kerjakan'=>now(),
+
+            'nama_user_kerjakan'=>$petugas,
+
+            'ket_kerjakan'=>'Dikerjakan melalui Telegram',
+
+        ]);
+
+
+
+        $telegram->sendGroupWithButton(
+
+            "🔧 <b>TIKET DIKERJAKAN</b>\n\n".
+            "🎫 <b>Tiket :</b>\n".
+            "{$tiket->tiket_id}\n\n".
+            "👨‍💻 <b>Teknisi :</b>\n".
+            "{$petugas}\n\n".
+            "⏳ <b>Status :</b>\n".
+            "PROSES",
+
+
+            $tiket->id,
+
+
+            [
+
+                [
+                    [
+                        'text'=>'🎉 Selesai',
+                        'callback_data'=>"selesai_{$tiket->id}"
+                    ]
+                ]
+
+            ]
+
+        );
+
+    }
+
+    private function selesaiTelegram(
+        $id,
+        $petugas,
+        TelegramService $telegram
+    )
+    {
+
+        $tiket = perbaikan_it::findOrFail($id);
+
+
+
+        $tiket->update([
+
+            'tgl_selesai'=>now(),
+
+            'nama_user_selesai'=>$petugas,
+
+            'ket_selesai'=>'Diselesaikan melalui Telegram',
+
+        ]);
+
+
+
+        $telegram->sendGroup(
+
+            "🎉 <b>TIKET SELESAI</b>\n\n".
+            "🎫 <b>Tiket :</b>\n".
+            "{$tiket->tiket_id}\n\n".
+            "👨‍💻 <b>Teknisi :</b>\n".
+            "{$petugas}\n\n".
+            "⏳ <b>Status :</b>\n".
+            "SELESAI"
+
+        );
+
+    }
+
+    private function tolakTelegram(
+        $id,
+        $petugas,
+        TelegramService $telegram
+    )
+    {
+        $tiket = perbaikan_it::findOrFail($id);
+
+
+        $tiket->update([
+
+            'tgl_tolak'=>now(),
+
+            'nama_user_tolak'=>$petugas,
+
+            'ket_tolak'=>'Ditolak melalui Telegram',
+
+        ]);
+
+
+
+        $telegram->sendGroup(
+
+            "❌ <b>TIKET DITOLAK</b>\n\n".
+            "🎫 <b>Tiket :</b>\n".
+            "{$tiket->tiket_id}\n\n".
+            "👨‍💻 <b>Petugas :</b>\n".
+            "{$petugas}\n\n".
+            "📝 <b>Alasan :</b>\n".
+            "{$tiket->ket_tolak}\n\n".
+            "⏳ <b>Status :</b>\n".
+            "DITOLAK"
+
+        );
+
     }
 }
