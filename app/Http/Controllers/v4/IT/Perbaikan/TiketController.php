@@ -327,7 +327,7 @@ class TiketController extends Controller
         }
     }
 
-    private function formatPesanTelegram($tiket, $status, $tambahan = '')
+    private function formatPesanTelegram($tiket, $status, $selesai = null)
     {
         $pesan =
             "🚨 <b>TIKET</b> {$tiket->tiket_id}\n".
@@ -341,7 +341,7 @@ class TiketController extends Controller
             "{$tiket->title}\n\n".
 
             "📋 <b>Kategori :</b>\n".
-            "{$tiket->kategori->nama}\n\n".
+            "{$tiket->kategori->nama ?? '-'}\n\n".
 
             "📝 <b>Keluhan :</b>\n".
             "{$tiket->ket_pengaduan}\n\n".
@@ -350,8 +350,30 @@ class TiketController extends Controller
             "⏳ <b>Status :</b>\n".
             "{$status}\n";
 
-        if($tambahan){
-            $pesan .= "\n".$tambahan;
+        if($selesai){
+            $pesan .=
+                "📌 <b>RESUME PENANGANAN IT</b>\n\n".
+
+                "✅ Diterima\n".
+                ($tiket->tgl_terima
+                    ? $tiket->tgl_terima->format('d/m/Y H:i')
+                    : '-') . " WIB\n".
+
+                "👨‍💻 Oleh : {$tiket->nama_user_terima}\n\n".
+
+                "🔧 Dikerjakan\n".
+                ($tiket->tgl_kerjakan
+                    ? $tiket->tgl_kerjakan->format('d/m/Y H:i')
+                    : '-') . " WIB\n".
+
+                "👨‍💻 Oleh : {$tiket->nama_user_kerjakan}\n\n".
+
+                "🎉 Selesai\n".
+                ($tiket->tgl_selesai
+                    ? $tiket->tgl_selesai->format('d/m/Y H:i')
+                    : '-') . " WIB\n\n".
+
+                "👨‍💻 Oleh : {$tiket->nama_user_selesai}";
         }
 
         return $pesan;
@@ -734,38 +756,13 @@ class TiketController extends Controller
 
         $tiket->refresh();
 
-        $resume =
-            "📌 <b>RESUME PENANGANAN IT</b>\n\n".
-
-            "✅ Diterima\n".
-            ($tiket->tgl_terima
-                ? $tiket->tgl_terima->format('d/m/Y H:i')
-                : '-') . " WIB\n".
-
-            "👨‍💻 Oleh : {$tiket->nama_user_terima}\n\n".
-
-            "🔧 Dikerjakan\n".
-            ($tiket->tgl_kerjakan
-                ? $tiket->tgl_kerjakan->format('d/m/Y H:i')
-                : '-') . " WIB\n".
-
-            "👨‍💻 Oleh : {$tiket->nama_user_kerjakan}\n\n".
-
-            "🎉 Selesai\n".
-            ($tiket->tgl_selesai
-                ? $tiket->tgl_selesai->format('d/m/Y H:i')
-                : '-') . " WIB\n\n".
-
-            "👨‍💻 Oleh : {$tiket->nama_user_selesai}";
-
         $pesan = $this->formatPesanTelegram(
             $tiket,
             'SELESAI',
-            $resume
+            true
         );
 
         $telegram->editMessageButton(
-
             $chatId,
             $messageId,
             $pesan,
