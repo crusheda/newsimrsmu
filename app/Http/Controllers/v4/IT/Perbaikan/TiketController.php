@@ -341,7 +341,7 @@ class TiketController extends Controller
             "{$tiket->title}\n\n".
 
             "📋 <b>Kategori :</b>\n".
-            "{$tiket->kategori->nama ?? '-'}\n\n".
+            "{$tiket->kategori->nama}\n\n".
 
             "📝 <b>Keluhan :</b>\n".
             "{$tiket->ket_pengaduan}\n\n".
