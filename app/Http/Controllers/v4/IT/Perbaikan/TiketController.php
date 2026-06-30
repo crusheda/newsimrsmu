@@ -163,143 +163,156 @@ class TiketController extends Controller
     }
 
     public function telegramWebhook(
-    Request $request,
-    TelegramService $telegram
+        Request $request,
+        TelegramService $telegram
     )
     {
         try {
 
             \Log::info('TELEGRAM UPDATE', $request->all());
 
-            // kode Anda
 
-        } catch(\Throwable $e){
+            $callback = $request->input('callback_query');
 
-            \Log::error('TELEGRAM WEBHOOK ERROR',[
-                'message'=>$e->getMessage(),
-                'file'=>$e->getFile(),
-                'line'=>$e->getLine(),
-                'trace'=>$e->getTraceAsString()
-            ]);
+
+            if(!$callback){
+                return response()->json([
+                    'ok'=>true
+                ]);
+            }
+
+
+            $data = $callback['data'] ?? null;
+
+
+            if(!$data){
+                return response()->json([
+                    'ok'=>true
+                ]);
+            }
+
+
+
+            $nama =
+                ($callback['from']['first_name'] ?? '').
+                ' '.
+                ($callback['from']['last_name'] ?? '');
+
+
+
+            if(str_starts_with($data,'terima_')){
+
+                $id = str_replace(
+                    'terima_',
+                    '',
+                    $data
+                );
+
+
+                $this->terimaTelegram(
+                    $id,
+                    $nama,
+                    $telegram
+                );
+
+            }
+
+
+            elseif(str_starts_with($data,'kerjakan_')){
+
+
+                $id = str_replace(
+                    'kerjakan_',
+                    '',
+                    $data
+                );
+
+
+                $this->kerjakanTelegram(
+                    $id,
+                    $nama,
+                    $telegram
+                );
+
+            }
+
+
+            elseif(str_starts_with($data,'selesai_')){
+
+
+                $id = str_replace(
+                    'selesai_',
+                    '',
+                    $data
+                );
+
+
+                $this->selesaiTelegram(
+                    $id,
+                    $nama,
+                    $telegram
+                );
+
+            }
+
+
+            elseif(str_starts_with($data,'tolak_')){
+
+
+                $id = str_replace(
+                    'tolak_',
+                    '',
+                    $data
+                );
+
+
+                $this->tolakTelegram(
+                    $id,
+                    $nama,
+                    $telegram
+                );
+
+            }
+
+
+
+            try {
+
+                $telegram->answerCallbackQuery([
+                    'callback_query_id'=>$callback['id'],
+                    'text'=>'Status tiket diperbarui'
+                ]);
+
+            } catch(\Throwable $e){
+
+                \Log::error($e->getMessage());
+
+            }
+
+
 
             return response()->json([
                 'ok'=>true
+            ],200);
+
+
+
+        } catch(\Throwable $e){
+
+
+            \Log::error('TELEGRAM ERROR',[
+                'message'=>$e->getMessage(),
+                'line'=>$e->getLine(),
+                'file'=>$e->getFile(),
             ]);
-        }
-
-        $callback=$request->input('callback_query');
 
 
-        if(!$callback){
-            return response()->json(['ok'=>true]);
-        }
-
-
-
-        $data=$callback['data'];
-
-
-        $nama =
-            ($callback['from']['first_name'] ?? '').
-            ' '.
-            ($callback['from']['last_name'] ?? '');
-
-
-
-        if(str_starts_with($data,'terima_')){
-
-
-            $id=str_replace(
-                'terima_',
-                '',
-                $data
-            );
-
-
-            $this->terimaTelegram(
-                $id,
-                $nama,
-                $telegram
-            );
+            // WAJIB 200 supaya Telegram tidak retry
+            return response()->json([
+                'ok'=>true
+            ],200);
 
         }
-
-
-
-        if(str_starts_with($data,'kerjakan_')){
-
-
-            $id=str_replace(
-                'kerjakan_',
-                '',
-                $data
-            );
-
-
-            $this->kerjakanTelegram(
-                $id,
-                $nama,
-                $telegram
-            );
-
-        }
-
-
-
-        if(str_starts_with($data,'selesai_')){
-
-
-            $id=str_replace(
-                'selesai_',
-                '',
-                $data
-            );
-
-
-            $this->selesaiTelegram(
-                $id,
-                $nama,
-                $telegram
-            );
-
-        }
-
-
-
-        if(str_starts_with($data,'tolak_')){
-
-
-            $id=str_replace(
-                'tolak_',
-                '',
-                $data
-            );
-
-
-            $this->tolakTelegram(
-                $id,
-                $nama,
-                $telegram
-            );
-
-        }
-
-
-
-        $telegram->answerCallbackQuery([
-
-            'callback_query_id'=>$callback['id'],
-
-            'text'=>'Status tiket diperbarui'
-
-        ]);
-
-
-
-        return response()->json([
-            'ok'=>true
-        ]);
-
     }
 
     /**
@@ -387,13 +400,15 @@ class TiketController extends Controller
                     [
 
                         [
-                            'text'=>'✅ Terima',
-                            'callback_data'=>"terima_{$tiket->id}"
-                        ],
+                            [
+                                'text'=>'✅ Terima',
+                                'callback_data'=>"terima_{$tiket->id}"
+                            ],
 
-                        [
-                            'text'=>'❌ Tolak',
-                            'callback_data'=>"tolak_{$tiket->id}"
+                            [
+                                'text'=>'❌ Tolak',
+                                'callback_data'=>"tolak_{$tiket->id}"
+                            ]
                         ]
 
                     ]
@@ -618,8 +633,10 @@ class TiketController extends Controller
 
                 [
                     [
-                        'text'=>'🔧 Kerjakan',
-                        'callback_data'=>"kerjakan_{$tiket->id}"
+                        [
+                            'text'=>'🔧 Kerjakan',
+                            'callback_data'=>"kerjakan_{$tiket->id}"
+                        ]
                     ]
                 ]
 
