@@ -37,4 +37,38 @@ class TelegramService
             'parse_mode'=>'HTML'
         ]);
     }
+
+    public function sendGroupWithButton($message, $tiketId)
+    {
+        return $this->telegram->sendMessage([
+
+            'chat_id'=>env('TELEGRAM_GROUP_ID'),
+
+            'message_thread_id'=>551,
+
+            'text'=>$message,
+
+            'parse_mode'=>'HTML',
+
+            'reply_markup'=>json_encode([
+
+                'inline_keyboard'=>[
+
+                    [
+                        [
+                            'text'=>'✅ Terima',
+                            'callback_data'=>"terima_{$tiketId}"
+                        ],
+                        [
+                            'text'=>'❌ Tolak',
+                            'callback_data'=>"tolak_{$tiketId}"
+                        ]
+                    ]
+
+                ]
+
+            ])
+
+        ]);
+    }
 }

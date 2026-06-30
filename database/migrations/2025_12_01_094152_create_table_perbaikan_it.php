@@ -19,6 +19,7 @@ class CreateTablePerbaikanIt extends Migration
             $table->integer('kategori_id')->comment('ID Kategori Tiket')->nullable();
 
             $table->string('telegram_chat_id',300)->nullable();
+            $table->bigInteger('telegram_message_id')->nullable();
             $table->string('telegram_username',300)->nullable();
 
                 $table->unsignedInteger('pegawai_id')->comment('ID from Table Users');

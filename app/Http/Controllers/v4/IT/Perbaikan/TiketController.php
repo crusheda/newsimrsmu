@@ -162,6 +162,57 @@ class TiketController extends Controller
         return response()->json($data, 200);
     }
 
+    public function telegramWebhook(Request $request, TelegramService $telegram)
+    {
+        $callback = $request->input('callback_query');
+
+        if(!$callback){
+            return response()->json([
+                'ok'=>true
+            ]);
+        }
+
+        $data = $callback['data'];
+
+        $chatId =
+        $callback['message']['chat']['id'];
+
+        if(str_starts_with($data,'terima_')){
+
+            $id =
+            str_replace('terima_','',$data);
+
+            // panggil fungsi terima
+            $this->terima(
+                new Request([
+                    'ket_terima'=>'Diterima melalui Telegram'
+                ]),
+                $id,
+                $telegram
+            );
+        }
+
+        if(str_starts_with($data,'tolak_')){
+
+            $id =
+            str_replace('tolak_','',$data);
+
+
+            $this->tolak(
+                new Request([
+                    'ket_tolak'=>'Ditolak melalui Telegram'
+                ]),
+                $id,
+                $telegram
+            );
+
+        }
+
+        return response()->json([
+            'ok'=>true
+        ]);
+    }
+
     /**
      * Buat tiket baru
      */
@@ -213,6 +264,8 @@ class TiketController extends Controller
 
             $nama = $user->nama_lengkap ?? ($user->nama ?? $user->name);
 
+            $waktu = now();
+
             $tiket = perbaikan_it::create([
                 'tiket_id' => $kode,
                 'pegawai_id' => $user->id,
@@ -220,35 +273,36 @@ class TiketController extends Controller
                 'title' => $request->title,
                 'nama' => $nama,
                 'unit' => $unit,
-                'tgl_pengaduan' => now(),
+                'tgl_pengaduan' => $waktu,
                 'ket_pengaduan' => $request->ket_pengaduan,
             ]);
 
             $pesan =
-                    "🚨 <b>TIKET PERBAIKAN IT BARU</b>\n\n".
-                    "🎫 <b>Tiket :</b>\n".
-                    "{$kode}\n\n".
-                    "📌 <b>Judul :</b>\n".
-                    "{$request->title}\n\n".
-                    "📋 <b>Kategori :</b>\n".
-                    "{$kategori->nama}\n\n".
+                    "🚨 <b>TIKET</b> {$kode}\n".
+                    "🕒 ".$waktu->format('d/m/Y H:i')." WIB\n\n".
                     "👤 <b>Pelapor :</b>\n".
-                    "{$nama}\n\n".
-                    "🏥 <b>Unit :</b>\n".
+                    "{$nama}\n".
                     "{$unit}\n\n".
-                    "🕒 <b>Waktu :</b>\n".
-                    now()->format('d/m/Y H:i')." WIB\n\n".
-                    "📝 <b>Keluhan :</b>\n\n".
+                    "📌 <b>Judul</b> : {$request->title}\n".
+                    "📋 <b>Kategori</b> : {$kategori->nama}\n".
+                    "📝 <b>Keluhan :</b>\n".
                     "{$request->ket_pengaduan}\n\n".
                     "⏳ <b>Status:</b>\n".
-                    "MENUNGGU";
+                    "Pending - Belum Diterima";
 
             try {
-                $response = $telegram->sendGroup($pesan);
+                // $response = $telegram->sendGroup($pesan);
+                $response = $telegram->sendGroupWithButton(
+                    $pesan,
+                    $tiket->id
+                );
 
                 $tiket->update([
                     'telegram_sent' => true,
                     'telegram_error' => null,
+
+                    'telegram_chat_id' => $response->getChat()->getId(),
+                    'telegram_message_id' => $response->getMessageId(),
                 ]);
             } catch (\Exception $e) {
                 $tiket->update([

@@ -35,6 +35,7 @@ class perbaikan_it extends Model
         'tiket_id',
         'kategori_id',
         'telegram_chat_id',
+        'telegram_message_id',
         'telegram_username',
         'title',
         'filename',
