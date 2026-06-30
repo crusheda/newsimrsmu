@@ -81,4 +81,12 @@ class TelegramService
 
         return $this->telegram->editMessageText($payload);
     }
+
+    public function deleteMessage($chatId, $messageId)
+    {
+        return $this->telegram->deleteMessage([
+            'chat_id' => $chatId,
+            'message_id' => $messageId
+        ]);
+    }
 }
