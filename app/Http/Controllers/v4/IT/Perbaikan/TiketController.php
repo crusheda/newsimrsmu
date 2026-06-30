@@ -167,6 +167,15 @@ class TiketController extends Controller
     TelegramService $telegram
     )
     {
+        \Log::info('TELEGRAM CALLBACK', $request->all());
+
+        $callback = $request->input('callback_query');
+
+        if(!$callback){
+            return response()->json([
+                'ok'=>true
+            ]);
+        }
 
         $callback=$request->input('callback_query');
 

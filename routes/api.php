@@ -64,6 +64,9 @@ Route::prefix('v4')->group(function () { // PUBLIC API SIMRSMU v.4
 
 });
 
+// TELEGRAM BOT WEBHOOK (nanti untuk tombol Telegram)
+Route::post('v4/it/pengajuan/tiket/webhook', [TiketController::class,'telegramWebhook']);
+
 Route::prefix('v4')->middleware(['web','auth'])->group(function () { // PRIVATE AUTH SIMRSMU v.4
 
     // KALENDER
@@ -75,9 +78,6 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // PRIVATE 
             // PERBAIKAN
                 Route::get('it/pengajuan/tiket/table', [TiketController::class, 'table']);
                 // Route::post('it/pengajuan/tiket/kirim', [HelpdeskController::class, 'kirimTiket']);
-
-                // TELEGRAM BOT WEBHOOK (nanti untuk tombol Telegram)
-                Route::post('it/pengajuan/tiket/webhook', [TiketController::class,'telegramWebhook']);
 
                 // KIRIM TIKET
                 Route::post('it/pengajuan/tiket/kirim', [TiketController::class,'kirimTiket']);

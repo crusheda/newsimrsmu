@@ -17,6 +17,10 @@ class TelegramService
         );
     }
 
+    public function answerCallbackQuery($data)
+    {
+        return $this->telegram->answerCallbackQuery($data);
+    }
 
     public function sendGroup($message)
     {
@@ -27,7 +31,6 @@ class TelegramService
             'parse_mode'=>'HTML'
         ]);
     }
-
 
     public function sendUser($chatId,$message)
     {
