@@ -734,6 +734,8 @@ class TiketController extends Controller
             'ket_selesai'=>'Diselesaikan melalui Telegram',
         ]);
 
+        $tiket->refresh();
+
         $resume =
             "📌 <b>RESUME PENANGANAN IT</b>\n\n".
 

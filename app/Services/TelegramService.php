@@ -65,14 +65,20 @@ class TelegramService
         $buttons = []
     )
     {
-        return $this->telegram->editMessageText([
-            'chat_id'=>$chatId,
-            'message_id'=>$messageId,
-            'text'=>$text,
-            'parse_mode'=>'HTML',
-            'reply_markup'=>json_encode([
-                'inline_keyboard'=>$buttons
-            ])
-        ]);
+        $payload = [
+            'chat_id' => $chatId,
+            'message_id' => $messageId,
+            'text' => $text,
+            'parse_mode' => 'HTML',
+        ];
+
+        // hanya tambahkan reply_markup kalau ada tombol
+        if (!empty($buttons)) {
+            $payload['reply_markup'] = json_encode([
+                'inline_keyboard' => $buttons
+            ]);
+        }
+
+        return $this->telegram->editMessageText($payload);
     }
 }

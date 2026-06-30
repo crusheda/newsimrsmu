@@ -435,13 +435,13 @@
                         }
 
                         let status = '';
-                        if (item.tgl_ditolak) {
+                        if (item.tgl_tolak) {
                             status = '<span class="badge bg-danger-transparent fs-16">Ditolak</span>';
                         } else if (item.tgl_selesai) {
                             status = '<span class="badge bg-success-transparent fs-16">Selesai</span>';
-                        } else if (item.tgl_dikerjakan) {
+                        } else if (item.tgl_kerjakan) {
                             status = '<span class="badge bg-warning-transparent fs-16">Diproses</span>';
-                        } else if (item.tgl_diterima) {
+                        } else if (item.tgl_terima) {
                             status = '<span class="badge bg-info-transparent fs-16">Diterima</span>';
                         } else {
                             status = '<span class="badge bg-secondary-transparent fs-16">Pending</span>';
