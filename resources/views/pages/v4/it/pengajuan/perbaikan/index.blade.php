@@ -183,7 +183,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group mb-3">
                                             <label for="kategoriTiket" class="form-label">Kategori <b class="text-danger">*</b></label>
-                                            <select id="kategori" class="form-control form-control-sm" disabled>
+                                            <select id="kategori" class="form-control form-control-sm select2" disabled>
                                                 <option value="" selected disabled>Pilih kategori...</option>
                                                 @if ($kategori->isNotEmpty())
                                                     @foreach ($kategori as $k)
@@ -283,6 +283,17 @@
 
     <script>
         $(document).ready(function() {
+            // SELECT2
+            var t = $(".select2");
+            t.length && t.each(function() {
+                var e = $(this);
+                e.wrap('<div class="position-relative"></div>').select2({
+                    placeholder: "Pilih",
+                    allowClear: true,
+                    dropdownParent: e.parent()
+                })
+            });
+
             refresh();
         });
 
@@ -437,14 +448,14 @@
                         }
 
                         let kategori = '';
-                        let nama_kategori = item.nama_kategori ? item.nama_kategori : '-';
-                        if (item.kategori_id == 1) {
+                        let nama_kategori = item.kategori.nama ?? '-';
+                        if (item.kategori.id == 1) {
                             kategori = '<span class="badge bg-primary ms-1">' + nama_kategori + '</span>';
-                        } else if (item.kategori_id == 2) {
+                        } else if (item.kategori.id == 2) {
                             kategori = '<span class="badge bg-secondary ms-1">' + nama_kategori + '</span>';
-                        } else if (item.kategori_id == 3) {
+                        } else if (item.kategori.id == 3) {
                             kategori = '<span class="badge bg-success ms-1">' + nama_kategori + '</span>';
-                        } else if (item.kategori_id == 4) {
+                        } else if (item.kategori.id == 4) {
                             kategori = '<span class="badge bg-warning ms-1">' + nama_kategori + '</span>';
                         } else {
                             kategori = '<span class="badge bg-secondary ms-1">' + nama_kategori + '</span>';
@@ -590,7 +601,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function (response) {
-                    if(response.wa_sent === false){
+                    if(response.telegram_sent === false){
                         iziToast.warning({
                             title: 'Tiket berhasil dibuat',
                             message: 'Notifikasi Whatsapp gagal dikirim, silakan hubungi IT untuk memastikan tiket Anda diproses.',

@@ -16,4 +16,12 @@ class perbaikan_it_kategori extends Model
         'deskripsi',
         'status'
     ];
+
+    public function tiket()
+    {
+        return $this->hasMany(
+            perbaikan_it::class,
+            'kategori_id'
+        );
+    }
 }

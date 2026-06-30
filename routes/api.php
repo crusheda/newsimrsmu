@@ -17,7 +17,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\v4\ResetPasswordController;
 use \App\Http\Controllers\v4\Kalender\KalenderController;
 use \App\Http\Controllers\v4\Setting\ProfilController;
-use \App\Http\Controllers\v4\IT\TiketController;
+// use \App\Http\Controllers\v4\IT\TiketController; // WHATSAPP BAILEYS
+use App\Http\Controllers\v4\IT\Perbaikan\TiketController; // TELEGRAM
 use \App\Http\Controllers\v4\IT\EPinjam\EPinjamController;
 // use \App\Http\Controllers\v4\IT\EPinjam\EPinjamListController;
 use \App\Http\Controllers\v4\IT\EPinjam\EPinjamBarangController;
@@ -73,7 +74,19 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // PRIVATE 
         // PENGAJUAN TIKET
             // PERBAIKAN
                 Route::get('it/pengajuan/tiket/table', [TiketController::class, 'table']);
-                Route::post('it/pengajuan/tiket/kirim', [HelpdeskController::class, 'kirimTiket']);
+                // Route::post('it/pengajuan/tiket/kirim', [HelpdeskController::class, 'kirimTiket']);
+
+                // TELEGRAM BOT WEBHOOK (nanti untuk tombol Telegram)
+                Route::post('it/pengajuan/tiket/webhook', [TiketController::class,'telegramWebhook']);
+
+                // KIRIM TIKET
+                Route::post('it/pengajuan/tiket/kirim', [TiketController::class,'kirimTiket']);
+
+                // UPDATE STATUS TIKET
+                Route::post('it/pengajuan/tiket/{id}/terima', [TiketController::class,'terima']);
+                Route::post('it/pengajuan/tiket/{id}/kerjakan', [TiketController::class,'kerjakan']);
+                Route::post('it/pengajuan/tiket/{id}/selesai', [TiketController::class,'selesai']);
+                Route::post('it/pengajuan/tiket/{id}/tolak', [TiketController::class,'tolak']);
 
         // E-PINJAM
             Route::get('it/epinjam', [EPinjamController::class, 'refresh']);
@@ -538,13 +551,13 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // PRIVATE 
 });
 
 // WHATSAPP API WEBHOOK
-    Route::get('perbaikanit/tiket/webhook', [HelpdeskController::class, 'verify']);
-    Route::post('perbaikanit/tiket/webhook', [HelpdeskController::class, 'handle']);
+    // Route::get('perbaikanit/tiket/webhook', [HelpdeskController::class, 'verify']);
+    // Route::post('perbaikanit/tiket/webhook', [HelpdeskController::class, 'handle']);
 
 // WHATSAPP API BAILEYS
-    // Route::post('perbaikanit/tiket/kirimgroup', [HelpdeskController::class, 'kirimTiketGroup']);
-    Route::post('perbaikanit/tiket/callback', [HelpdeskController::class, 'callback']);
-    Route::post('perbaikanit/tiket/{id}/terima', [HelpdeskController::class, 'kirimTerimaTiket']);
-    Route::post('perbaikanit/tiket/{id}/kerjakan', [HelpdeskController::class, 'kirimKerjakanTiket']);
-    Route::post('perbaikanit/tiket/{id}/selesai', [HelpdeskController::class, 'kirimSelesaiTiket']);
-    Route::post('perbaikanit/tiket/{id}/tolak', [HelpdeskController::class, 'kirimTolakTiket']);
+    // Route::post('perbaikanit/tiket/callback', [HelpdeskController::class, 'callback']);
+    // Route::post('perbaikanit/tiket/{id}/terima', [HelpdeskController::class, 'kirimTerimaTiket']);
+    // Route::post('perbaikanit/tiket/{id}/kerjakan', [HelpdeskController::class, 'kirimKerjakanTiket']);
+    // Route::post('perbaikanit/tiket/{id}/selesai', [HelpdeskController::class, 'kirimSelesaiTiket']);
+    // Route::post('perbaikanit/tiket/{id}/tolak', [HelpdeskController::class, 'kirimTolakTiket']);
+

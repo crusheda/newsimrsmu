@@ -15,7 +15,7 @@ class CreateTablePerbaikanItLampiran extends Migration
     {
         Schema::create('perbaikan_it_lampiran', function (Blueprint $table) {
             $table->id();
-            $table->integer('id_jadwal');
+            $table->integer('tiket_id');
 
                 $table->unsignedInteger('pegawai_id')->comment('ID from Table Users');
                 $table->foreign('pegawai_id')->references('id')->on('users');

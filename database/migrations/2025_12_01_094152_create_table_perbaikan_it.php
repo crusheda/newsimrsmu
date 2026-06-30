@@ -18,6 +18,9 @@ class CreateTablePerbaikanIt extends Migration
             $table->string('tiket_id', 300)->comment('ID Tiket Whatsapp')->nullable();
             $table->integer('kategori_id')->comment('ID Kategori Tiket')->nullable();
 
+            $table->string('telegram_chat_id',300)->nullable();
+            $table->string('telegram_username',300)->nullable();
+
                 $table->unsignedInteger('pegawai_id')->comment('ID from Table Users');
                 $table->foreign('pegawai_id')->references('id')->on('users');
 
@@ -52,8 +55,11 @@ class CreateTablePerbaikanIt extends Migration
             $table->string('nama_user_selesai',300)->nullable();
             $table->string('nama_user_tolak',300)->nullable();
 
-            $table->boolean('wa_sent')->default(false);
-            $table->text('wa_error')->nullable();
+            // $table->boolean('wa_sent')->default(false);
+            // $table->text('wa_error')->nullable();
+
+            $table->boolean('telegram_sent')->default(false);
+            $table->text('telegram_error')->nullable();
 
             $table->softDeletes();
             $table->timestamps();

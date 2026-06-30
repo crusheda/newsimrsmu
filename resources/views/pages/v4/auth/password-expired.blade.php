@@ -107,7 +107,7 @@
                                 {{-- PASSWORD --}}
                                 <div class="col-xl-12 mb-2">
                                     <label class="form-label text-default">
-                                        Buat Password Baru
+                                        Buat <b class="text-teal">Password Baru</b>
                                     </label>
 
                                     <div class="position-relative">
@@ -124,11 +124,11 @@
                                 {{-- KONFIRMASI --}}
                                 <div class="col-xl-12 mb-1">
                                     <label class="form-label text-default">
-                                        Konfirmasi Password Baru
+                                        Konfirmasi <b class="text-teal">Password Baru</b>
                                     </label>
                                     <div class="position-relative">
                                         <input type="password" name="password_confirmation" id="password_confirmation"
-                                            class="form-control" placeholder="Konfirmasi Password" required>
+                                            class="form-control" placeholder="Konfirmasi Password Baru" required>
                                         <button type="button"
                                             class="show-password-button text-muted position-absolute end-0 top-0 h-100 border-0 bg-transparent"
                                             onclick="togglePassword('password_confirmation',this)">
@@ -185,7 +185,7 @@
                                 {{-- Register --}}
                                 <div class="col-xl-12 text-center fw-medium mt-0">
                                     Lupa Password Akun?
-                                    <a role="button" class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline fw-medium" href="{{ route('v4.password.request') }}">
+                                    <a role="button" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline fw-medium" href="{{ route('v4.password.request') }}">
                                         Reset Password
                                     </a>
                                 </div>
@@ -223,7 +223,7 @@
                         </p>
                     </div>
                     <div>
-                        <img src="{{ asset('images/pku/go-reset-password.png') }}" alt="" class="img-fluid">
+                        <img src="{{ asset('images/pku/go-reset-password.png') }}" alt="" class="img-fluid" style="width:70%">
                     </div>
                 </div>
             </div>

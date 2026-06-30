@@ -34,6 +34,8 @@ class perbaikan_it extends Model
         'pegawai_id',
         'tiket_id',
         'kategori_id',
+        'telegram_chat_id',
+        'telegram_username',
         'title',
         'filename',
         'nama',
@@ -58,10 +60,21 @@ class perbaikan_it extends Model
         'user_kerjakan',
         'user_selesai',
         'user_tolak',
+        'telegram_sent',
+        'telegram_error',
     ];
 
     public function kategori()
     {
         return $this->belongsTo(perbaikan_it_kategori::class, 'kategori_id');
+    }
+
+    public function lampiran()
+    {
+        return $this->hasMany(
+            perbaikan_it_lampiran::class,
+            'tiket_id',
+            'tiket_id'
+        );
     }
 }
