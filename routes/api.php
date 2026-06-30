@@ -78,7 +78,7 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // PRIVATE 
         // PENGAJUAN TIKET
             // PERBAIKAN
                 Route::get('it/pengajuan/tiket/table', [TiketController::class, 'table']);
-                Route::get('it/pengajuan/tiket/{id}/hapus', [TiketController::class, 'hapus']);
+                Route::delete('it/pengajuan/tiket/{id}/hapus', [TiketController::class, 'hapus']);
                 // Route::post('it/pengajuan/tiket/kirim', [HelpdeskController::class, 'kirimTiket']);
 
                 // KIRIM TIKET

@@ -50,6 +50,22 @@ class TelegramService
         ]);
     }
 
+    public function sendUserWithButton(
+        $chatId,
+        $message,
+        $buttons = []
+    )
+    {
+        return $this->telegram->sendMessage([
+            'chat_id'=>$chatId,
+            'text'=>$message,
+            'parse_mode'=>'HTML',
+            'reply_markup'=>json_encode([
+                'inline_keyboard'=>$buttons
+            ])
+        ]);
+    }
+
     public function sendGroupWithButton($message, $tiketId, $buttons = [])
     {
         return $this->telegram->sendMessage([

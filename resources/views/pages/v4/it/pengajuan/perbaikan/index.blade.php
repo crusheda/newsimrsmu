@@ -37,13 +37,13 @@
                                                 <h4 class="fw-medium mb-0">
                                                     <span class="count-up" data-count="0">0</span>
                                                 </h4>
-                                                <span class="badge bg-info badge-month">Bulan ini</span>
+                                                <span class="badge bg-info badge-month">Diterima</span>
                                             </div>
                                             <p class="text-muted fs-11 mb-0 lh-1">
                                                 <span class="percent text-info me-1 fw-medium">
                                                     <i class="ri-subtract-line me-1 align-middle"></i>0%
                                                 </span>
-                                                <span>this month</span>
+                                                <span>Bulan Ini</span>
                                             </p>
                                         </div>
                                     </div>
@@ -67,13 +67,13 @@
                                                 <h4 class="fw-medium mb-0">
                                                     <span class="count-up" data-count="0">0</span>
                                                 </h4>
-                                                <span class="badge bg-warning badge-month">Bulan ini</span>
+                                                <span class="badge bg-warning badge-month">Dikerjakan</span>
                                             </div>
                                             <p class="text-muted fs-11 mb-0 lh-1">
                                                 <span class="percent text-warning me-1 fw-medium">
                                                     <i class="ri-subtract-line me-1 align-middle"></i>0%
                                                 </span>
-                                                <span>this month</span>
+                                                <span>Bulan Ini</span>
                                             </p>
                                         </div>
                                     </div>
@@ -97,13 +97,13 @@
                                                 <h4 class="fw-medium mb-0">
                                                     <span class="count-up" data-count="0">0</span>
                                                 </h4>
-                                                <span class="badge bg-success border badge-month">Bulan ini</span>
+                                                <span class="badge bg-success border badge-month">Selesai</span>
                                             </div>
                                             <p class="text-muted fs-11 mb-0 lh-1">
                                                 <span class="percent text-success me-1 fw-medium">
                                                     <i class="ri-subtract-line me-1 align-middle"></i>0%
                                                 </span>
-                                                <span>this month</span>
+                                                <span>Bulan Ini</span>
                                             </p>
                                         </div>
                                     </div>
@@ -127,13 +127,13 @@
                                                 <h4 class="fw-medium mb-0">
                                                     <span class="count-up" data-count="0">0</span>
                                                 </h4>
-                                                <span class="badge bg-danger badge-month">Bulan ini</span>
+                                                <span class="badge bg-danger badge-month">Ditolak</span>
                                             </div>
                                             <p class="text-muted fs-11 mb-0 lh-1">
                                                 <span class="percent text-danger me-1 fw-medium">
                                                     <i class="ri-subtract-line me-1 align-middle"></i>0%
                                                 </span>
-                                                <span>this month</span>
+                                                <span>Bulan Ini</span>
                                             </p>
                                         </div>
                                     </div>
@@ -488,8 +488,8 @@
                                         data-bs-toggle='dropdown' aria-expanded='false'>${item.tiket_id}
                                     </a>
                                     <ul class='dropdown-menu dropdown-menu-end'>
-                                        <li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="ubah(${item.id})">
-                                            <i class="fa-fw fas fa-edit nav-icon me-1"></i> Ubah</a></li>
+                                        <li><a href='javascript:void(0);' class='dropdown-item text-info' onclick="perbaruiStatus(${item.id})">
+                                            <i class="fa-fw fas fa-edit nav-icon me-1"></i> Perbarui Status</a></li>
                                         <li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(${item.id})">
                                             <i class="fa-fw fas fa-trash nav-icon me-1"></i> Hapus</a></li>
                                     </ul>
@@ -604,7 +604,7 @@
                     if(response.telegram_sent === false){
                         iziToast.warning({
                             title: 'Tiket berhasil dibuat',
-                            message: 'Notifikasi Whatsapp gagal dikirim, silakan hubungi IT untuk memastikan tiket Anda diproses.',
+                            message: 'Notifikasi Telegram gagal dikirim, silakan hubungi IT untuk memastikan tiket Anda diproses.',
                         });
                         return;
                     }

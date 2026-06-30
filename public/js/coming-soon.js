@@ -14,12 +14,12 @@ function updateTimer() {
     m = mins - hours * 60;
     s = secs - mins * 60;
 
-    document.getElementById("timer")
-        .innerHTML =
-        '<div class="text-center"><div class=""><p class="mb-1 fs-13 fw-medium">Days</p><h4 class="mb-0 fw-semibold">' + d + '</h4></div></div>' +
-        '<div class="text-center"><div class=""><p class="mb-1 fs-13 fw-medium">Hours</p><h4 class="mb-0 fw-semibold">' + h + '</h4></div></div>' +
-        '<div class="text-center"><div class=""><p class="mb-1 fs-13 fw-medium">Minutes</p><h4 class="mb-0 fw-semibold">' + m + '</h4></div></div>' +
-        '<div class="text-center"><div class=""><p class="mb-1 fs-13 fw-medium">Seconds</p><h4 class="mb-0 fw-semibold">' + s + '</h4></div></div>'
+    // document.getElementById("timer")
+    //     .innerHTML =
+    //     '<div class="text-center"><div class=""><p class="mb-1 fs-13 fw-medium">Days</p><h4 class="mb-0 fw-semibold">' + d + '</h4></div></div>' +
+    //     '<div class="text-center"><div class=""><p class="mb-1 fs-13 fw-medium">Hours</p><h4 class="mb-0 fw-semibold">' + h + '</h4></div></div>' +
+    //     '<div class="text-center"><div class=""><p class="mb-1 fs-13 fw-medium">Minutes</p><h4 class="mb-0 fw-semibold">' + m + '</h4></div></div>' +
+    //     '<div class="text-center"><div class=""><p class="mb-1 fs-13 fw-medium">Seconds</p><h4 class="mb-0 fw-semibold">' + s + '</h4></div></div>'
 }
 setInterval('updateTimer()', 1000);
 

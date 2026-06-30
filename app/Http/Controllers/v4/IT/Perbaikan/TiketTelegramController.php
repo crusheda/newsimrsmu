@@ -25,11 +25,165 @@ class TiketTelegramController extends Controller
 
             /*
             |--------------------------------------------------------------------------
-            | HANDLE PESAN BIASA
+            | HANDLE PRIVATE CHAT
             |--------------------------------------------------------------------------
             */
 
             $message = $request->input('message');
+
+            if($message){
+
+                // hanya private chat
+                if(($message['chat']['type'] ?? null) == 'private'){
+                    $chatId = $message['chat']['id'];
+                    $text = trim($message['text'] ?? '');
+                    /*
+
+                    |--------------------------------------------------------------------------
+                    | USER SEDANG CEK TIKET
+                    |--------------------------------------------------------------------------
+                    */
+                    if(cache()->has("telegram_check_ticket_".$chatId)){
+                        if(!preg_match('/^IT-\d+$/i', $text)){
+                            $telegram->sendUser(
+                                $chatId,
+                                "❌ Format tiket tidak sesuai.\n\n".
+                                "Gunakan format:\n".
+                                "<b>IT-xxxxxxxxxxxx</b>"
+                            );
+
+                            return response()->json([
+                                'ok'=>true
+                            ]);
+                        }
+
+                        $tiket = perbaikan_it::where(
+                            'tiket_id',
+                            strtoupper($text)
+                        )->first();
+
+                        if(!$tiket){
+                            $telegram->sendUser(
+                                $chatId,
+                                "❌ Tiket <b>{$text}</b> tidak ditemukan."
+                            );
+
+                            return response()->json([
+                                'ok'=>true
+                            ]);
+                        }
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | STATUS TIKET
+                        |--------------------------------------------------------------------------
+                        */
+                        if($tiket->tgl_tolak){
+                            $status = "❌ DITOLAK";
+                        }
+                        elseif($tiket->tgl_selesai){
+                            $status = "🎉 SELESAI";
+                        }
+                        elseif($tiket->tgl_kerjakan){
+                            $status = "🔧 DIPROSES";
+                        }
+                        elseif($tiket->tgl_terima){
+                            $status = "✅ DITERIMA";
+                        }
+                        else {
+                            $status = "⏳ MENUNGGU";
+                        }
+
+                        $pesan =
+                            "🚨 <b>STATUS TIKET IT</b>\n\n".
+                            "🎫 Tiket:\n".
+                            "<b>{$tiket->tiket_id}</b>\n\n".
+                            "📌 Judul:\n".
+                            "{$tiket->title}\n\n".
+                            "📝 Keluhan:\n".
+                            "{$tiket->ket_pengaduan}\n\n".
+                            "━━━━━━━━━━━━━━\n".
+                            "⏳ Status:\n".
+                            "<b>{$status}</b>\n\n";
+
+                        if($tiket->tgl_terima){
+                            $pesan .=
+                                "✅ Diterima:\n".
+                                $tiket->tgl_terima->format('d/m/Y H:i').
+                                " WIB\n".
+                                "👨‍💻 {$tiket->nama_user_terima}\n\n";
+                        }
+
+                        if($tiket->tgl_kerjakan){
+                            $pesan .=
+                                "🔧 Dikerjakan:\n".
+                                $tiket->tgl_kerjakan->format('d/m/Y H:i').
+                                " WIB\n".
+                                "👨‍💻 {$tiket->nama_user_kerjakan}\n\n";
+                        }
+
+                        if($tiket->tgl_selesai){
+                            $pesan .=
+                                "🎉 Selesai:\n".
+                                $tiket->tgl_selesai->format('d/m/Y H:i').
+                                " WIB\n".
+                                "👨‍💻 {$tiket->nama_user_selesai}\n\n";
+                        }
+
+                        if($tiket->tgl_tolak){
+                            $pesan .=
+                                "❌ Ditolak:\n".
+                                $tiket->tgl_tolak->format('d/m/Y H:i').
+                                " WIB\n".
+                                "👨‍💻 {$tiket->nama_user_tolak}\n\n";
+                        }
+
+                        $telegram->sendUser(
+                            $chatId,
+                            $pesan
+                        );
+
+                        // hapus mode cek
+                        cache()->forget(
+                            "telegram_check_ticket_".$chatId
+                        );
+
+                        return response()->json([
+                            'ok'=>true
+                        ]);
+                    }
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | START / MENU
+                    |--------------------------------------------------------------------------
+                    */
+                    if($text == '/start'){
+                        $telegram->sendUserWithButton(
+                            $chatId,
+                            "👋 <b>Selamat Datang</b>\n\n".
+                            "Bot IT RS PKU Sukoharjo",
+                            [
+                                [
+                                    [
+                                        'text'=>'🎫 Cek Status Tiket',
+                                        'callback_data'=>'cek_status'
+                                    ]
+                                ]
+                            ]
+                        );
+                    }
+                    return response()->json([
+                        'ok'=>true
+                    ]);
+                }
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | HANDLE PESAN BIASA
+            |--------------------------------------------------------------------------
+            */
 
             if($message){
 
@@ -108,7 +262,40 @@ class TiketTelegramController extends Controller
 
             /*
             |--------------------------------------------------------------------------
-            | FILTER TOPIC
+            | CALLBACK PRIVATE CHAT
+            |--------------------------------------------------------------------------
+            */
+
+            if(($message['chat']['type'] ?? null) == 'private'){
+
+                if($data == 'cek_status'){
+
+                    $telegram->sendUser(
+                        $chatId,
+                        "🎫 <b>CEK STATUS TIKET</b>\n\n".
+                        "Silahkan masukkan ID Tiket Anda.\n\n".
+                        "Format:\n".
+                        "<b>IT-xxxxxxxxxxxx</b>\n\n".
+                        "Contoh:\n".
+                        "<b>IT-260630194453</b>"
+                    );
+
+                    cache()->put(
+                        "telegram_check_ticket_".$chatId,
+                        true,
+                        now()->addMinutes(5)
+                    );
+
+                    return response()->json([
+                        'ok'=>true
+                    ]);
+                }
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | FILTER TOPIC GROUP
             |--------------------------------------------------------------------------
             */
 
@@ -192,6 +379,7 @@ class TiketTelegramController extends Controller
                     $messageId,
                     $telegram
                 );
+
             }
 
             /*
