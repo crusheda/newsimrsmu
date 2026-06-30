@@ -48,21 +48,31 @@ class TelegramService
     )
     {
         return $this->telegram->sendMessage([
-
             'chat_id'=>env('TELEGRAM_GROUP_ID'),
-
             'message_thread_id'=>551,
-
             'text'=>$message,
-
             'parse_mode'=>'HTML',
-
             'reply_markup'=>json_encode([
-
                 'inline_keyboard'=>$buttons
-
             ])
+        ]);
+    }
 
+    public function editMessageButton(
+        $chatId,
+        $messageId,
+        $text,
+        $buttons = []
+    )
+    {
+        return $this->telegram->editMessageText([
+            'chat_id'=>$chatId,
+            'message_id'=>$messageId,
+            'text'=>$text,
+            'parse_mode'=>'HTML',
+            'reply_markup'=>json_encode([
+                'inline_keyboard'=>$buttons
+            ])
         ]);
     }
 }

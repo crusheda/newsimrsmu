@@ -191,7 +191,11 @@ class TiketController extends Controller
                 ]);
             }
 
+            $message = $callback['message'];
 
+            $chatId = $message['chat']['id'];
+
+            $messageId = $message['message_id'];
 
             $nama =
                 ($callback['from']['first_name'] ?? '').
@@ -212,6 +216,8 @@ class TiketController extends Controller
                 $this->terimaTelegram(
                     $id,
                     $nama,
+                    $chatId,
+                    $messageId,
                     $telegram
                 );
 
@@ -231,6 +237,8 @@ class TiketController extends Controller
                 $this->kerjakanTelegram(
                     $id,
                     $nama,
+                    $chatId,
+                    $messageId,
                     $telegram
                 );
 
@@ -250,6 +258,8 @@ class TiketController extends Controller
                 $this->selesaiTelegram(
                     $id,
                     $nama,
+                    $chatId,
+                    $messageId,
                     $telegram
                 );
 
@@ -269,6 +279,8 @@ class TiketController extends Controller
                 $this->tolakTelegram(
                     $id,
                     $nama,
+                    $chatId,
+                    $messageId,
                     $telegram
                 );
 
@@ -313,6 +325,38 @@ class TiketController extends Controller
             ],200);
 
         }
+    }
+
+    private function formatPesanTelegram($tiket, $status, $tambahan = '')
+    {
+        $pesan =
+        "🚨 <b>TIKET</b> {$tiket->tiket_id}\n".
+        "🕒 ".$tiket->created_at->format('d/m/Y H:i')." WIB\n\n".
+
+        "👤 <b>Pelapor :</b>\n".
+        "{$tiket->nama}\n".
+        "{$tiket->unit}\n\n".
+
+        "📌 <b>Judul :</b>\n".
+        "{$tiket->title}\n\n".
+
+        "📋 <b>Kategori :</b>\n".
+        "{$tiket->kategori->nama}\n\n".
+
+        "📝 <b>Keluhan :</b>\n".
+        "{$tiket->ket_pengaduan}\n\n".
+
+        "━━━━━━━━━━━━━━\n".
+        "⏳ <b>Status :</b>\n".
+        "{$status}\n";
+
+
+        if($tambahan){
+            $pesan .= "\n".$tambahan;
+        }
+
+
+        return $pesan;
     }
 
     /**
@@ -598,137 +642,135 @@ class TiketController extends Controller
 
     // VIA TELEGRAM
     private function terimaTelegram(
-            $id,
-            $petugas,
-            TelegramService $telegram
-        )
-        {
-            $tiket = perbaikan_it::findOrFail($id);
+        $id,
+        $petugas,
+        $chatId,
+        $messageId,
+        TelegramService $telegram
+    )
+    {
+        $tiket = perbaikan_it::findOrFail($id);
 
+        $tiket->update([
+            'tgl_terima'=>now(),
+            'nama_user_terima'=>$petugas,
+            'ket_terima'=>'Diterima melalui Telegram',
+        ]);
 
-            $tiket->update([
+        $pesan = $this->formatPesanTelegram(
+            $tiket,
+            'DITERIMA'
+        );
 
-                'tgl_terima'=>now(),
+        $telegram->editMessageButton(
 
-                'nama_user_terima'=>$petugas,
+            $chatId,
+            $messageId,
+            $pesan,
 
-                'ket_terima'=>'Diterima melalui Telegram',
-
-            ]);
-
-
-            $telegram->sendGroupWithButton(
-
-                "✅ <b>TIKET DITERIMA</b>\n\n".
-                "🎫 <b>Tiket :</b>\n".
-                "{$tiket->tiket_id}\n\n".
-                "👨‍💻 <b>Petugas :</b>\n".
-                "{$petugas}\n\n".
-                "⏳ <b>Status :</b>\n".
-                "DITERIMA",
-
-
-                $tiket->id,
-
-
+            [
                 [
                     [
-                        [
-                            'text'=>'🔧 Kerjakan',
-                            'callback_data'=>"kerjakan_{$tiket->id}"
-                        ]
+                        'text'=>'🔧 Kerjakan',
+                        'callback_data'=>"kerjakan_{$tiket->id}"
                     ]
                 ]
-
-            );
-
-        }
+            ]
+        );
+    }
 
     private function kerjakanTelegram(
         $id,
         $petugas,
+        $chatId,
+        $messageId,
         TelegramService $telegram
     )
     {
-
         $tiket = perbaikan_it::findOrFail($id);
 
-
-
         $tiket->update([
-
             'tgl_kerjakan'=>now(),
-
             'nama_user_kerjakan'=>$petugas,
-
             'ket_kerjakan'=>'Dikerjakan melalui Telegram',
-
         ]);
 
+        $pesan = $this->formatPesanTelegram(
+            $tiket,
+            'DIKERJAKAN'
+        );
 
+        $telegram->editMessageButton(
 
-        $telegram->sendGroupWithButton(
-
-            "🔧 <b>TIKET DIKERJAKAN</b>\n\n".
-            "🎫 <b>Tiket :</b>\n".
-            "{$tiket->tiket_id}\n\n".
-            "👨‍💻 <b>Teknisi :</b>\n".
-            "{$petugas}\n\n".
-            "⏳ <b>Status :</b>\n".
-            "PROSES",
-
-
-            $tiket->id,
-
+            $chatId,
+            $messageId,
+            $pesan,
 
             [
-
                 [
                     [
                         'text'=>'🎉 Selesai',
                         'callback_data'=>"selesai_{$tiket->id}"
                     ]
                 ]
-
             ]
 
         );
-
     }
 
     private function selesaiTelegram(
         $id,
         $petugas,
+        $chatId,
+        $messageId,
         TelegramService $telegram
     )
     {
-
         $tiket = perbaikan_it::findOrFail($id);
 
-
-
         $tiket->update([
-
             'tgl_selesai'=>now(),
-
             'nama_user_selesai'=>$petugas,
-
             'ket_selesai'=>'Diselesaikan melalui Telegram',
-
         ]);
 
+        $resume =
+            "📌 <b>RESUME PENANGANAN IT</b>\n\n".
 
+            "✅ Diterima\n".
+            ($tiket->tgl_terima
+                ? $tiket->tgl_terima->format('d/m/Y H:i')
+                : '-') .
+            " WIB\n".
 
-        $telegram->sendGroup(
+            "👨‍💻 Oleh : {$tiket->nama_user_terima}\n\n".
 
-            "🎉 <b>TIKET SELESAI</b>\n\n".
-            "🎫 <b>Tiket :</b>\n".
-            "{$tiket->tiket_id}\n\n".
-            "👨‍💻 <b>Teknisi :</b>\n".
-            "{$petugas}\n\n".
-            "⏳ <b>Status :</b>\n".
-            "SELESAI"
+            "🔧 Dikerjakan\n".
+            ($tiket->tgl_kerjakan
+                ? $tiket->tgl_kerjakan->format('d/m/Y H:i')
+                : '-') .
+            " WIB\n".
 
+            "👨‍💻 Oleh : {$tiket->nama_user_kerjakan}\n\n".
+
+            "🎉 Selesai\n".
+            $tiket->tgl_selesai->format('d/m/Y H:i').
+            " WIB\n\n".
+
+            "👨‍💻 Oleh : {$tiket->nama_user_selesai}";
+
+        $pesan = $this->formatPesanTelegram(
+            $tiket,
+            'SELESAI',
+            $resume
+        );
+
+        $telegram->editMessageButton(
+
+            $chatId,
+            $messageId,
+            $pesan,
+            []
         );
 
     }
@@ -736,36 +778,41 @@ class TiketController extends Controller
     private function tolakTelegram(
         $id,
         $petugas,
+        $chatId,
+        $messageId,
         TelegramService $telegram
     )
     {
         $tiket = perbaikan_it::findOrFail($id);
 
-
         $tiket->update([
-
             'tgl_tolak'=>now(),
-
             'nama_user_tolak'=>$petugas,
-
             'ket_tolak'=>'Ditolak melalui Telegram',
-
         ]);
 
-
-
-        $telegram->sendGroup(
-
-            "❌ <b>TIKET DITOLAK</b>\n\n".
-            "🎫 <b>Tiket :</b>\n".
-            "{$tiket->tiket_id}\n\n".
-            "👨‍💻 <b>Petugas :</b>\n".
-            "{$petugas}\n\n".
-            "📝 <b>Alasan :</b>\n".
+        $tambahan =
+            "❌ <b>ALASAN DITOLAK</b>\n".
             "{$tiket->ket_tolak}\n\n".
-            "⏳ <b>Status :</b>\n".
-            "DITOLAK"
 
+            "👨‍💻 <b>Ditolak Oleh :</b>\n".
+            "{$petugas}\n\n".
+
+            "🕒 <b>Waktu Tolak :</b>\n".
+            $tiket->tgl_tolak->format('d/m/Y H:i').
+            " WIB";
+
+        $pesan = $this->formatPesanTelegram(
+            $tiket,
+            'DITOLAK',
+            $tambahan
+        );
+
+        $telegram->editMessageButton(
+            $chatId,
+            $messageId,
+            $pesan,
+            [] // hapus semua tombol
         );
 
     }
