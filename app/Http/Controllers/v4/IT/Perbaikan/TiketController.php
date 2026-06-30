@@ -724,52 +724,74 @@ class TiketController extends Controller
         TelegramService $telegram
     )
     {
+
         \Log::info('SELESAI CALLBACK', [
-            'id' => $id,
-            'chatId' => $chatId,
-            'messageId' => $messageId,
+            'id'=>$id,
+            'chatId'=>$chatId,
+            'messageId'=>$messageId,
         ]);
 
-        $tiket = perbaikan_it::findOrFail($id);
+
+        $tiket = perbaikan_it::with('kategori')
+            ->findOrFail($id);
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Update status selesai
+        |--------------------------------------------------------------------------
+        */
 
         $tiket->update([
+
             'tgl_selesai'=>now(),
+
             'nama_user_selesai'=>$petugas,
+
             'ket_selesai'=>'Diselesaikan melalui Telegram',
+
         ]);
 
+
+        // reload data terbaru
         $tiket->refresh();
 
-        \Log::info('SELESAI STEP 1');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Resume
+        |--------------------------------------------------------------------------
+        */
 
         $resume =
-            "📌 <b>RESUME PENANGANAN IT</b>\n\n".
 
-            "✅ Diterima\n".
-            ($tiket->tgl_terima
-                ? $tiket->tgl_terima->format('d/m/Y H:i')
-                : '-') .
-            " WIB\n".
-            "👨‍💻 Oleh : {$tiket->nama_user_terima}\n\n".
+        "📌 <b>RESUME PENANGANAN IT</b>\n\n".
 
-            "🔧 Dikerjakan\n".
-            ($tiket->tgl_kerjakan
-                ? $tiket->tgl_kerjakan->format('d/m/Y H:i')
-                : '-') .
-            " WIB\n".
-            "👨‍💻 Oleh : {$tiket->nama_user_kerjakan}\n\n".
+        "✅ Diterima\n".
+        ($tiket->tgl_terima
+            ? $tiket->tgl_terima->format('d/m/Y H:i')
+            : '-') .
+        " WIB\n".
+        "👨‍💻 Oleh : ".($tiket->nama_user_terima ?? '-')."\n\n".
 
-            "🎉 Selesai\n".
-            ($tiket->tgl_selesai
-                ? $tiket->tgl_selesai->format('d/m/Y H:i')
-                : '-') .
-            " WIB\n\n".
+        "🔧 Dikerjakan\n".
+        ($tiket->tgl_kerjakan
+            ? $tiket->tgl_kerjakan->format('d/m/Y H:i')
+            : '-') .
+        " WIB\n".
+        "👨‍💻 Oleh : ".($tiket->nama_user_kerjakan ?? '-')."\n\n".
 
-            "👨‍💻 Oleh : {$tiket->nama_user_selesai}";
+        "🎉 Selesai\n".
+        ($tiket->tgl_selesai
+            ? $tiket->tgl_selesai->format('d/m/Y H:i')
+            : '-') .
+        " WIB\n\n".
 
-        \Log::info('SELESAI STEP 2', [
-            'pesan'=>$pesan
-        ]);
+        "👨‍💻 Oleh : ".($tiket->nama_user_selesai ?? '-');
+
+
 
         $pesan = $this->formatPesanTelegram(
             $tiket,
@@ -777,11 +799,14 @@ class TiketController extends Controller
             $resume
         );
 
+
+
         /*
         |--------------------------------------------------------------------------
-        | Hapus pesan lama (KERJAKAN)
+        | Hapus pesan lama (status DIKERJAKAN)
         |--------------------------------------------------------------------------
         */
+
         try {
 
             $telegram->deleteMessage(
@@ -789,38 +814,60 @@ class TiketController extends Controller
                 $messageId
             );
 
+
         } catch(\Throwable $e){
 
-            \Log::warning('DELETE TELEGRAM MESSAGE GAGAL',[
-                'error'=>$e->getMessage()
-            ]);
+
+            \Log::warning(
+                'DELETE TELEGRAM GAGAL',
+                [
+                    'error'=>$e->getMessage()
+                ]
+            );
 
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | Kirim pesan FINAL RESUME
-        |--------------------------------------------------------------------------
-        */
 
-        \Log::info('SELESAI KIRIM TELEGRAM');
-        $response = $telegram->sendGroup(
-            $pesan
-        );
 
         /*
         |--------------------------------------------------------------------------
-        | Simpan message id baru
+        | Kirim pesan final
         |--------------------------------------------------------------------------
         */
 
-        if($response){
+        try {
 
-            $tiket->update([
-                'telegram_message_id'=>$response->getMessageId()
-            ]);
+
+            $response = $telegram->sendGroup(
+                $pesan
+            );
+
+
+            if($response){
+
+                $tiket->update([
+
+                    'telegram_message_id'
+                        =>
+                    $response->getMessageId()
+
+                ]);
+
+            }
+
+
+        } catch(\Throwable $e){
+
+
+            \Log::error(
+                'KIRIM RESUME TELEGRAM GAGAL',
+                [
+                    'error'=>$e->getMessage()
+                ]
+            );
 
         }
+
 
     }
 

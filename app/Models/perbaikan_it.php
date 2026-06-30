@@ -16,6 +16,12 @@ class perbaikan_it extends Model
 
     protected $casts = [
         'unit' => 'array',
+
+        'tgl_pengaduan' => 'datetime',
+        'tgl_terima' => 'datetime',
+        'tgl_kerjakan' => 'datetime',
+        'tgl_selesai' => 'datetime',
+        'tgl_tolak' => 'datetime',
     ];
 
     // protected $fillable = [
