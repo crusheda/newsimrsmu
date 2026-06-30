@@ -740,6 +740,8 @@ class TiketController extends Controller
 
         $tiket->refresh();
 
+        \Log::info('SELESAI STEP 1');
+
         $resume =
             "📌 <b>RESUME PENANGANAN IT</b>\n\n".
 
@@ -765,6 +767,9 @@ class TiketController extends Controller
 
             "👨‍💻 Oleh : {$tiket->nama_user_selesai}";
 
+        \Log::info('SELESAI STEP 2', [
+            'pesan'=>$pesan
+        ]);
 
         $pesan = $this->formatPesanTelegram(
             $tiket,
@@ -798,6 +803,7 @@ class TiketController extends Controller
         |--------------------------------------------------------------------------
         */
 
+        \Log::info('SELESAI KIRIM TELEGRAM');
         $response = $telegram->sendGroup(
             $pesan
         );
