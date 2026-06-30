@@ -167,11 +167,21 @@ class TiketController extends Controller
     TelegramService $telegram
     )
     {
-        \Log::info('TELEGRAM CALLBACK', $request->all());
+        try {
 
-        $callback = $request->input('callback_query');
+            \Log::info('TELEGRAM UPDATE', $request->all());
 
-        if(!$callback){
+            // kode Anda
+
+        } catch(\Throwable $e){
+
+            \Log::error('TELEGRAM WEBHOOK ERROR',[
+                'message'=>$e->getMessage(),
+                'file'=>$e->getFile(),
+                'line'=>$e->getLine(),
+                'trace'=>$e->getTraceAsString()
+            ]);
+
             return response()->json([
                 'ok'=>true
             ]);
@@ -377,14 +387,13 @@ class TiketController extends Controller
                     [
 
                         [
-                            [
-                                'text'=>'✅ Terima',
-                                'callback_data'=>"terima_{$tiket->id}"
-                            ],
-                            [
-                                'text'=>'❌ Tolak',
-                                'callback_data'=>"tolak_{$tiket->id}"
-                            ]
+                            'text'=>'✅ Terima',
+                            'callback_data'=>"terima_{$tiket->id}"
+                        ],
+
+                        [
+                            'text'=>'❌ Tolak',
+                            'callback_data'=>"tolak_{$tiket->id}"
                         ]
 
                     ]
@@ -574,42 +583,38 @@ class TiketController extends Controller
 
     // VIA TELEGRAM
     private function terimaTelegram(
-        $id,
-        $petugas,
-        TelegramService $telegram
-    )
-    {
-
-        $tiket = perbaikan_it::findOrFail($id);
-
-
-        $tiket->update([
-
-            'tgl_terima'=>now(),
-
-            'nama_user_terima'=>$petugas,
-
-            'ket_terima'=>'Diterima melalui Telegram',
-
-        ]);
+            $id,
+            $petugas,
+            TelegramService $telegram
+        )
+        {
+            $tiket = perbaikan_it::findOrFail($id);
 
 
+            $tiket->update([
 
-        $telegram->sendGroupWithButton(
+                'tgl_terima'=>now(),
 
-            "✅ <b>TIKET DITERIMA</b>\n\n".
-            "🎫 <b>Tiket :</b>\n".
-            "{$tiket->tiket_id}\n\n".
-            "👨‍💻 <b>Petugas :</b>\n".
-            "{$petugas}\n\n".
-            "⏳ <b>Status :</b>\n".
-            "DITERIMA",
+                'nama_user_terima'=>$petugas,
 
+                'ket_terima'=>'Diterima melalui Telegram',
 
-            $tiket->id,
+            ]);
 
 
-            [
+            $telegram->sendGroupWithButton(
+
+                "✅ <b>TIKET DITERIMA</b>\n\n".
+                "🎫 <b>Tiket :</b>\n".
+                "{$tiket->tiket_id}\n\n".
+                "👨‍💻 <b>Petugas :</b>\n".
+                "{$petugas}\n\n".
+                "⏳ <b>Status :</b>\n".
+                "DITERIMA",
+
+
+                $tiket->id,
+
 
                 [
                     [
@@ -618,11 +623,9 @@ class TiketController extends Controller
                     ]
                 ]
 
-            ]
+            );
 
-        );
-
-    }
+        }
 
     private function kerjakanTelegram(
         $id,
