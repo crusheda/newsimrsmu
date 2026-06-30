@@ -330,31 +330,29 @@ class TiketController extends Controller
     private function formatPesanTelegram($tiket, $status, $tambahan = '')
     {
         $pesan =
-        "🚨 <b>TIKET</b> {$tiket->tiket_id}\n".
-        "🕒 ".$tiket->created_at->format('d/m/Y H:i')." WIB\n\n".
+            "🚨 <b>TIKET</b> {$tiket->tiket_id}\n".
+            "🕒 ".optional($tiket->created_at)->format('d/m/Y H:i')." WIB\n\n".
 
-        "👤 <b>Pelapor :</b>\n".
-        "{$tiket->nama}\n".
-        "{$tiket->unit}\n\n".
+            "👤 <b>Pelapor :</b>\n".
+            "{$tiket->nama}\n".
+            "{$tiket->unit}\n\n".
 
-        "📌 <b>Judul :</b>\n".
-        "{$tiket->title}\n\n".
+            "📌 <b>Judul :</b>\n".
+            "{$tiket->title}\n\n".
 
-        "📋 <b>Kategori :</b>\n".
-        "{$tiket->kategori->nama}\n\n".
+            "📋 <b>Kategori :</b>\n".
+            "{$tiket->kategori->nama}\n\n".
 
-        "📝 <b>Keluhan :</b>\n".
-        "{$tiket->ket_pengaduan}\n\n".
+            "📝 <b>Keluhan :</b>\n".
+            "{$tiket->ket_pengaduan}\n\n".
 
-        "━━━━━━━━━━━━━━\n".
-        "⏳ <b>Status :</b>\n".
-        "{$status}\n";
-
+            "━━━━━━━━━━━━━━\n".
+            "⏳ <b>Status :</b>\n".
+            "{$status}\n";
 
         if($tambahan){
             $pesan .= "\n".$tambahan;
         }
-
 
         return $pesan;
     }
@@ -742,22 +740,21 @@ class TiketController extends Controller
             "✅ Diterima\n".
             ($tiket->tgl_terima
                 ? $tiket->tgl_terima->format('d/m/Y H:i')
-                : '-') .
-            " WIB\n".
+                : '-') . " WIB\n".
 
             "👨‍💻 Oleh : {$tiket->nama_user_terima}\n\n".
 
             "🔧 Dikerjakan\n".
             ($tiket->tgl_kerjakan
                 ? $tiket->tgl_kerjakan->format('d/m/Y H:i')
-                : '-') .
-            " WIB\n".
+                : '-') . " WIB\n".
 
             "👨‍💻 Oleh : {$tiket->nama_user_kerjakan}\n\n".
 
             "🎉 Selesai\n".
-            $tiket->tgl_selesai->format('d/m/Y H:i').
-            " WIB\n\n".
+            ($tiket->tgl_selesai
+                ? $tiket->tgl_selesai->format('d/m/Y H:i')
+                : '-') . " WIB\n\n".
 
             "👨‍💻 Oleh : {$tiket->nama_user_selesai}";
 
