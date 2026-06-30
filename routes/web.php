@@ -37,8 +37,8 @@ Route::group(['prefix' => 'v4', 'as' => ''], function () {
 use \App\Http\Controllers\v4\Dashboard\DashboardController;
 use \App\Http\Controllers\v4\Kalender\KalenderController;
 use \App\Http\Controllers\v4\Setting\ProfilController;
-// use \App\Http\Controllers\v4\IT\TiketController; // WHATSAPP BAILEYS
-use App\Http\Controllers\v4\IT\Perbaikan\TiketController; // TELEGRAM
+// use \App\Http\Controllers\v4\IT\TiketWhatsappController; // WHATSAPP BAILEYS
+use App\Http\Controllers\v4\IT\Perbaikan\TiketController;
 use \App\Http\Controllers\v4\IT\EPinjam\EPinjamController;
 // use \App\Http\Controllers\v4\IT\EPinjam\EPinjamListController;
 use \App\Http\Controllers\v4\IT\EPinjam\EPinjamBarangController;
@@ -76,18 +76,18 @@ use \App\Http\Controllers\v4\Pelayanan\Kebidanan\SKLController;
 use \App\Http\Controllers\v4\Akreditasi\KecelakaanKerjaController;
 use App\Http\Controllers\v4\AI\KlaimBpjsController;
 
-use Telegram\Bot\Laravel\Facades\Telegram;
-Route::get('/telegram-test', function () {
+// use Telegram\Bot\Laravel\Facades\Telegram;
+// Route::get('/telegram-test', function () {
 
-    $me = Telegram::getMe();
+//     $me = Telegram::getMe();
 
-    return [
-        'id' => $me->getId(),
-        'name' => $me->getFirstName(),
-        'username' => $me->getUsername(),
-    ];
+//     return [
+//         'id' => $me->getId(),
+//         'name' => $me->getFirstName(),
+//         'username' => $me->getUsername(),
+//     ];
 
-});
+// });
 
 Route::group(['middleware' => ['auth','password.age'], 'prefix' => 'v4', 'as' => ''], function () { // SIMRSMU v.4
 

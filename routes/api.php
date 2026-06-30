@@ -17,8 +17,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\v4\ResetPasswordController;
 use \App\Http\Controllers\v4\Kalender\KalenderController;
 use \App\Http\Controllers\v4\Setting\ProfilController;
-// use \App\Http\Controllers\v4\IT\TiketController; // WHATSAPP BAILEYS
-use App\Http\Controllers\v4\IT\Perbaikan\TiketController; // TELEGRAM
+// use \App\Http\Controllers\v4\IT\TiketWhatsappController; // WHATSAPP BAILEYS
+use App\Http\Controllers\v4\IT\Perbaikan\TiketTelegramController; // TELEGRAM
+use App\Http\Controllers\v4\IT\Perbaikan\TiketController;
 use \App\Http\Controllers\v4\IT\EPinjam\EPinjamController;
 // use \App\Http\Controllers\v4\IT\EPinjam\EPinjamListController;
 use \App\Http\Controllers\v4\IT\EPinjam\EPinjamBarangController;
@@ -65,7 +66,7 @@ Route::prefix('v4')->group(function () { // PUBLIC API SIMRSMU v.4
 });
 
 // TELEGRAM BOT WEBHOOK (nanti untuk tombol Telegram)
-Route::post('v4/it/pengajuan/tiket/webhook', [TiketController::class,'telegramWebhook']);
+Route::post('v4/it/pengajuan/tiket/webhook', [TiketTelegramController::class,'telegramWebhook']);
 
 Route::prefix('v4')->middleware(['web','auth'])->group(function () { // PRIVATE AUTH SIMRSMU v.4
 
@@ -77,16 +78,17 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // PRIVATE 
         // PENGAJUAN TIKET
             // PERBAIKAN
                 Route::get('it/pengajuan/tiket/table', [TiketController::class, 'table']);
+                Route::get('it/pengajuan/tiket/{id}/hapus', [TiketController::class, 'hapus']);
                 // Route::post('it/pengajuan/tiket/kirim', [HelpdeskController::class, 'kirimTiket']);
 
                 // KIRIM TIKET
-                Route::post('it/pengajuan/tiket/kirim', [TiketController::class,'kirimTiket']);
+                Route::post('it/pengajuan/tiket/kirim', [TiketTelegramController::class,'kirimTiket']);
 
                 // UPDATE STATUS TIKET
-                Route::post('it/pengajuan/tiket/{id}/terima', [TiketController::class,'terima']);
-                Route::post('it/pengajuan/tiket/{id}/kerjakan', [TiketController::class,'kerjakan']);
-                Route::post('it/pengajuan/tiket/{id}/selesai', [TiketController::class,'selesai']);
-                Route::post('it/pengajuan/tiket/{id}/tolak', [TiketController::class,'tolak']);
+                Route::post('it/pengajuan/tiket/{id}/terima', [TiketTelegramController::class,'terima']);
+                Route::post('it/pengajuan/tiket/{id}/kerjakan', [TiketTelegramController::class,'kerjakan']);
+                Route::post('it/pengajuan/tiket/{id}/selesai', [TiketTelegramController::class,'selesai']);
+                Route::post('it/pengajuan/tiket/{id}/tolak', [TiketTelegramController::class,'tolak']);
 
         // E-PINJAM
             Route::get('it/epinjam', [EPinjamController::class, 'refresh']);

@@ -636,6 +636,34 @@
             })
         }
 
+        function hapus(id) {
+
+            if (!confirm('Yakin ingin menghapus Tiket Perbaikan ini?')) return;
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: `/api/v4/it/pengajuan/tiket/${id}/hapus`,
+                type: "DELETE",
+                success: function(res) {
+                    iziToast.success({
+                        title: 'Sukses',
+                        message: res.message
+                    });
+                },
+                error: function(err) {
+                    iziToast.error({
+                        message: err.responseJSON.message
+                    });
+                },
+                complete: function () {
+                    refresh();
+                }
+            });
+
+        }
+
         function resetForm() {
             $('#judul').val('');
             $('#kategori').val('').change();

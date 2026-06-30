@@ -9,12 +9,21 @@ class TelegramService
 
     protected $telegram;
 
-
     public function __construct()
     {
         $this->telegram = new Api(
-            env('TELEGRAM_BOT_TOKEN')
+            config('telegram.bot_token')
         );
+    }
+
+    public function getTopicId()
+    {
+        return config('telegram.topic_id');
+    }
+
+    public function getGroupId()
+    {
+        return config('telegram.group_id');
     }
 
     public function answerCallbackQuery($data)
@@ -25,8 +34,8 @@ class TelegramService
     public function sendGroup($message)
     {
         return $this->telegram->sendMessage([
-            'chat_id'=>env('TELEGRAM_GROUP_ID'),
-            'message_thread_id'=>551, // TOPIC FAST RESPON
+            'chat_id'=>config('telegram.group_id'),
+            'message_thread_id'=>config('telegram.topic_id'), // TOPIC FAST RESPON
             'text'=>$message,
             'parse_mode'=>'HTML'
         ]);
@@ -41,15 +50,11 @@ class TelegramService
         ]);
     }
 
-    public function sendGroupWithButton(
-        $message,
-        $tiketId,
-        $buttons = []
-    )
+    public function sendGroupWithButton($message, $tiketId, $buttons = [])
     {
         return $this->telegram->sendMessage([
-            'chat_id'=>env('TELEGRAM_GROUP_ID'),
-            'message_thread_id'=>551,
+            'chat_id'=>config('telegram.group_id'),
+            'message_thread_id'=>config('telegram.topic_id'), // TOPIC FAST RESPON
             'text'=>$message,
             'parse_mode'=>'HTML',
             'reply_markup'=>json_encode([
@@ -58,12 +63,7 @@ class TelegramService
         ]);
     }
 
-    public function editMessageButton(
-        $chatId,
-        $messageId,
-        $text,
-        $buttons = []
-    )
+    public function editMessageButton($chatId, $messageId, $text, $buttons = [])
     {
         $payload = [
             'chat_id' => $chatId,
