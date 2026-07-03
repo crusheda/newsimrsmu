@@ -342,7 +342,7 @@ class EPinjamController extends Controller
     public function updateStatus(Request $request)
     {
         $request->validate([
-            'id' => 'required|exists:epinjam_list,id',
+            'id' => 'required|exists:epinjam,id',
             'status' => 'required|boolean'
         ]);
 
@@ -350,31 +350,25 @@ class EPinjamController extends Controller
 
         try {
 
-            $item = epinjam_list::findOrFail($request->id);
+            $pinjam = epinjam::findOrFail($request->id);
 
-            if($item->pinjam->status == 0 && $request->status == 1){
+            if ($pinjam->status == 0 && $request->status == 1) {
                 return response()->json([
-                    'message'=>'Peminjaman sudah selesai, barang tidak dapat diaktifkan kembali.'
-                ],422);
+                    'message' => 'Peminjaman sudah selesai, barang tidak dapat diaktifkan kembali.'
+                ], 422);
             }
 
-            $item->update([
-                'status' => $request->status
-            ]);
+            // Update seluruh detail barang
+            epinjam_list::where('id_epinjam', $pinjam->id)
+                ->update([
+                    'status' => $request->status
+                ]);
 
-            // ambil parent epinjam
-            $pinjam = epinjam::find($item->id_epinjam);
-
-            // cek apakah masih ada item aktif
-            $hasActive = $pinjam->list()
-                ->where('status', 1)
-                ->exists();
-
-            // update status epinjam
+            // Update header
             $pinjam->update([
-                'user_admin_kembali' => Auth::user()->id,
+                'user_admin_kembali' => Auth::id(),
                 'tgl_kembali' => now(),
-                'status' => $hasActive ? 1 : 0
+                'status' => $request->status
             ]);
 
             DB::commit();
@@ -384,7 +378,7 @@ class EPinjamController extends Controller
                 'message' => 'Status barang berhasil diupdate'
             ]);
 
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
 
             DB::rollBack();
 
