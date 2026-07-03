@@ -91,7 +91,8 @@ class AkunPenggunaController extends Controller
             $user = User::create([
                 'name'     => $request->name,
                 'email'    => $request->email,
-                'password' => bcrypt($request->password)
+                'password' => bcrypt($request->password),
+                'last_update_password' => now()
             ]);
 
             // ✅ ASSIGN ROLE (Spatie)
@@ -235,6 +236,7 @@ class AkunPenggunaController extends Controller
 
             if (!empty($request->password)) {
                 $user->password = bcrypt($request->password);
+                $user->last_update_password = now()
             }
 
             $user->save();
