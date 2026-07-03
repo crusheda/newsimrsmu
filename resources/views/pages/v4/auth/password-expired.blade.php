@@ -112,7 +112,7 @@
 
                                     <div class="position-relative">
                                         <input type="password" name="password" id="password" class="form-control"
-                                            placeholder="Masukkan Password Baru" required>
+                                            onkeydown="allowPasswordInput(event)" oninput="sanitizePassword(this)" placeholder="Masukkan Password Baru" required>
                                         <button type="button"
                                             class="show-password-button text-muted position-absolute end-0 top-0 h-100 border-0 bg-transparent"
                                             onclick="togglePassword('password',this)">
@@ -128,7 +128,7 @@
                                     </label>
                                     <div class="position-relative">
                                         <input type="password" name="password_confirmation" id="password_confirmation"
-                                            class="form-control" placeholder="Konfirmasi Password Baru" required>
+                                            class="form-control" onkeydown="allowPasswordInput(event)" oninput="sanitizePassword(this)" placeholder="Konfirmasi Password Baru" required>
                                         <button type="button"
                                             class="show-password-button text-muted position-absolute end-0 top-0 h-100 border-0 bg-transparent"
                                             onclick="togglePassword('password_confirmation',this)">
@@ -232,6 +232,40 @@
 
     <script>
         let loadingReset = false;
+
+        function allowPasswordInput(e) {
+
+            // tombol yang tetap diizinkan
+            const allowedKeys = [
+                'Backspace',
+                'Delete',
+                'Tab',
+                'Escape',
+                'Enter',
+                'ArrowLeft',
+                'ArrowRight',
+                'ArrowUp',
+                'ArrowDown',
+                'Home',
+                'End'
+            ];
+
+            if (allowedKeys.includes(e.key) || e.ctrlKey || e.metaKey) {
+                return;
+            }
+
+            // hanya huruf, angka, dan !@#$%^&*
+            const regex = /^[A-Za-z0-9!@#$%^&*]$/;
+
+            if (!regex.test(e.key)) {
+                e.preventDefault();
+            }
+        }
+
+        function sanitizePassword(el) { // oninput digunakan sebagai pengaman kedua untuk menghapus karakter yang tidak diizinkan.
+            el.value = el.value.replace(/[^A-Za-z0-9!@#$%^&*]/g, '');
+            validateResetPassword();
+        }
 
         function toggleReq(id, status) {
             if (status) {

@@ -82,7 +82,7 @@
                             </span>
                         </label>
                         <input type="password" class="form-control" id="newPassword"
-                            name="new_password" autoComplete="new_password"
+                            name="new_password" autoComplete="new_password" onkeydown="allowPasswordInput(event)" oninput="sanitizePassword(this)"
                             placeholder="••••••••••" required />
                     </div>
 
@@ -95,7 +95,7 @@
                             </span>
                         </label>
                         <input type="password" class="form-control" id="confirmPassword"
-                            name="new_password_confirmation"
+                            name="new_password_confirmation" onkeydown="allowPasswordInput(event)" oninput="sanitizePassword(this)"
                             autoComplete="new_password_confirmation" placeholder="••••••••••"
                             required />
                         <small>
@@ -159,50 +159,6 @@
     let loading = false;
 
     $(document).ready(function() {
-
-        function toggleRequirement(id, status) {
-            if (status) {
-                $(id).removeClass('text-danger').addClass('text-success');
-            } else {
-                $(id).removeClass('text-success').addClass('text-danger');
-            }
-        }
-
-        function validatePassword() {
-
-            let password = $('#newPassword').val();
-            let confirm = $('#confirmPassword').val();
-
-            let length = password.length >= 8;
-            let uppercase = /[A-Z]/.test(password);
-            let number = /[0-9]/.test(password);
-            let special = /[!@#$%^&*]/.test(password);
-
-            toggleRequirement('#req-length', length);
-            toggleRequirement('#req-uppercase', uppercase);
-            toggleRequirement('#req-number', number);
-            toggleRequirement('#req-special', special);
-
-            let allValid = length && uppercase && number && special;
-
-            // RESET confirm dulu
-            $('#confirmPassword').removeClass('is-valid is-invalid');
-
-            // Confirm password
-            if(confirm.length > 0){
-                if(password === confirm){
-                    $('#confirmPassword').addClass('is-valid');
-                }else{
-                    $('#confirmPassword').addClass('is-invalid');
-                }
-            }
-
-            // Enable submit
-            $('#btn-submit-password').prop(
-                'disabled',
-                !(allValid && password === confirm)
-            );
-        }
 
         $('#newPassword, #confirmPassword').on('input', function () {
             validatePassword();
@@ -291,4 +247,82 @@
 
         });
     })
+
+    function allowPasswordInput(e) {
+
+        // tombol yang tetap diizinkan
+        const allowedKeys = [
+            'Backspace',
+            'Delete',
+            'Tab',
+            'Escape',
+            'Enter',
+            'ArrowLeft',
+            'ArrowRight',
+            'ArrowUp',
+            'ArrowDown',
+            'Home',
+            'End'
+        ];
+
+        if (allowedKeys.includes(e.key) || e.ctrlKey || e.metaKey) {
+            return;
+        }
+
+        // hanya huruf, angka, dan !@#$%^&*
+        const regex = /^[A-Za-z0-9!@#$%^&*]$/;
+
+        if (!regex.test(e.key)) {
+            e.preventDefault();
+        }
+    }
+
+    function sanitizePassword(el) { // oninput digunakan sebagai pengaman kedua untuk menghapus karakter yang tidak diizinkan.
+        el.value = el.value.replace(/[^A-Za-z0-9!@#$%^&*]/g, '');
+        validateResetPassword();
+    }
+
+    function toggleRequirement(id, status) {
+        if (status) {
+            $(id).removeClass('text-danger').addClass('text-success');
+        } else {
+            $(id).removeClass('text-success').addClass('text-danger');
+        }
+    }
+
+    function validatePassword() {
+
+        let password = $('#newPassword').val();
+        let confirm = $('#confirmPassword').val();
+
+        let length = password.length >= 8;
+        let uppercase = /[A-Z]/.test(password);
+        let number = /[0-9]/.test(password);
+        let special = /[!@#$%^&*]/.test(password);
+
+        toggleRequirement('#req-length', length);
+        toggleRequirement('#req-uppercase', uppercase);
+        toggleRequirement('#req-number', number);
+        toggleRequirement('#req-special', special);
+
+        let allValid = length && uppercase && number && special;
+
+        // RESET confirm dulu
+        $('#confirmPassword').removeClass('is-valid is-invalid');
+
+        // Confirm password
+        if(confirm.length > 0){
+            if(password === confirm){
+                $('#confirmPassword').addClass('is-valid');
+            }else{
+                $('#confirmPassword').addClass('is-invalid');
+            }
+        }
+
+        // Enable submit
+        $('#btn-submit-password').prop(
+            'disabled',
+            !(allValid && password === confirm)
+        );
+    }
 </script>

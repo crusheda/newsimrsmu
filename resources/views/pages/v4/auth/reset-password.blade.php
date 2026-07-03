@@ -66,6 +66,8 @@
                                                     id="password"
                                                     name="password"
                                                     placeholder="••••••••"
+                                                    onkeydown="allowPasswordInput(event)"
+                                                    oninput="sanitizePassword(this)"
                                                     required>
                                                 <button
                                                     class="btn btn-sm btn-teal-transparent"
@@ -87,6 +89,8 @@
                                                     id="password_confirmation"
                                                     name="password_confirmation"
                                                     placeholder="••••••••"
+                                                    onkeydown="allowPasswordInput(event)"
+                                                    oninput="sanitizePassword(this)"
                                                     required>
                                                 <button
                                                     class="btn btn-sm btn-teal-transparent"
@@ -184,6 +188,40 @@
 
     <script>
         let loadingReset = false;
+
+        function allowPasswordInput(e) {
+
+            // tombol yang tetap diizinkan
+            const allowedKeys = [
+                'Backspace',
+                'Delete',
+                'Tab',
+                'Escape',
+                'Enter',
+                'ArrowLeft',
+                'ArrowRight',
+                'ArrowUp',
+                'ArrowDown',
+                'Home',
+                'End'
+            ];
+
+            if (allowedKeys.includes(e.key) || e.ctrlKey || e.metaKey) {
+                return;
+            }
+
+            // hanya huruf, angka, dan !@#$%^&*
+            const regex = /^[A-Za-z0-9!@#$%^&*]$/;
+
+            if (!regex.test(e.key)) {
+                e.preventDefault();
+            }
+        }
+
+        function sanitizePassword(el) { // oninput digunakan sebagai pengaman kedua untuk menghapus karakter yang tidak diizinkan.
+            el.value = el.value.replace(/[^A-Za-z0-9!@#$%^&*]/g, '');
+            validateResetPassword();
+        }
 
         function toggleReq(id,status)
         {
