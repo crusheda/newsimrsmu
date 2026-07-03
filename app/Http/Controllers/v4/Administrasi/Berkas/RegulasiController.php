@@ -179,8 +179,10 @@ class RegulasiController extends Controller
 
             return response()->json($tgl, 200);
         } else {
-            $error = 'File sudah ada/pernah diupload sebelumnya!';
-            return response()->json($error, 400);
+            return response()->json([
+                'status'  => false,
+                'message' => 'File sudah ada/pernah diupload sebelumnya! Silakan cek kembali file yang akan diunggah.',
+            ], 400);
         }
     }
 
@@ -304,8 +306,10 @@ class RegulasiController extends Controller
                 $data->save();
                 return response()->json($tgl, 200);
             } else {
-                $error = 'File sudah ada/pernah diupload sebelumnya!';
-                return response()->json($error, 400);
+                return response()->json([
+                    'status'  => false,
+                    'message' => 'File sudah ada/pernah diupload sebelumnya! Silakan cek kembali file yang akan diunggah.',
+                ], 400);
             }
         }
 

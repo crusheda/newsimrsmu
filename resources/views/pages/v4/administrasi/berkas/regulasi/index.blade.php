@@ -1079,9 +1079,6 @@
         }
 
         function prosesUbah() {
-            $("#btn-ubah").prop('disabled', true);
-            $("#btn-ubah").find("i").toggleClass("fa-save fa-sync fa-spin");
-
             var user_id         = "{{ Auth::user()->id }}";
             var id_edit         = $("#id_edit").val();
             var jns_regulasi    = $("#jns_regulasi_edit").val();
@@ -1129,6 +1126,10 @@
                     contentType: false,
                     processData: false,
                     dataType: 'json',
+                    beforeSend: function(){
+                        $("#btn-ubah").prop('disabled', true);
+                        $("#btn-ubah").find("i").toggleClass("fa-save fa-sync fa-spin");
+                    },
                     success: function(res){
                         iziToast.success({
                             title: 'Pesan Sukses!',
@@ -1141,13 +1142,30 @@
                         }
                     },
                     error: function(res){
-                        console.log("error : " + JSON.stringify(res) );
+                        console.log(res.responseJSON);
+
+                        let message = '';
+
+                        if (res.status == 422) {
+                            $.each(res.responseJSON.errors, function(key, value) {
+                                message += value[0] + '<br>';
+                            });
+                        } else {
+                            message = res.responseJSON.message ?? 'Terjadi kesalahan';
+                        }
+
+                        iziToast.error({
+                            title: 'Error '+res.status+' - '+res.statusText+'!',
+                            message: message,
+                            position: 'topRight'
+                        });
+                    },
+                    complete: function() {
+                        $("#btn-ubah").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
+                        $("#btn-ubah").prop('disabled', false);
                     }
                 });
             }
-
-            $("#btn-ubah").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
-            $("#btn-ubah").prop('disabled', false);
         }
 
         function hapus(id) {
