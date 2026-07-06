@@ -236,7 +236,7 @@ class AkunPenggunaController extends Controller
 
             if (!empty($request->password)) {
                 $user->password = bcrypt($request->password);
-                $user->last_update_password = now()
+                $user->last_update_password = now();
             }
 
             $user->save();

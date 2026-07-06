@@ -28,7 +28,7 @@
                         <button class="btn btn-primary btn-wave" onclick="tambah()" id="btn-tambah">
                             <i class="ri-user-add-line me-1"></i> Tambah Akun Pengguna
                         </button>
-                        <button class="btn btn-warning btn-wave" onclick="refresh()" id="btn-refresh">
+                        <button class="btn btn-warning-transparent btn-wave" onclick="refresh()" id="btn-refresh">
                             <i class="ri-loop-left-line me-1"></i> Segarkan
                         </button>
                     </div>
