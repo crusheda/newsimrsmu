@@ -1,7 +1,16 @@
-<!-- Popper JS -->
+<!-- Moment JS -->
 <script src="{{ asset('libs/moment/min/moment.min.js') }}"></script>
 <script src="{{ asset('libs/moment/min/id.min.js') }}"></script>
 {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script> --}}
+
+<!-- Day JS -->
+<script src="{{ asset('libs/dayjs/dayjs.min.js') }}"></script>
+<script src="{{ asset('libs/dayjs/relativeTime.js') }}"></script>
+<script src="{{ asset('libs/dayjs/id.js') }}"></script>
+<script>
+    dayjs.extend(dayjs_plugin_relativeTime);
+    dayjs.locale('id');
+</script>
 
 <!-- Popper JS -->
 <script src="{{ asset('libs/@popperjs/core/umd/popper.min.js') }}"></script>

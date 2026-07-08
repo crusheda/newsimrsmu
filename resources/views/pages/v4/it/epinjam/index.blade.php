@@ -1103,6 +1103,7 @@
                 success: function(res) {
                     $("#tampil-tbody").empty();
                     var date = getDateTime();
+                    content = ``;
                     res.show.forEach(item => {
                         let barang = '';
                         item.list.forEach(list => {
@@ -1129,7 +1130,7 @@
                                 colorBtn = 'primary';
                             }
                         }
-                        content = `<tr id="data` + item.id + `">`;
+                        content += `<tr id="data` + item.id + `">`;
                         content += `<td><center>
                                 <div class='btn-group'>
                                     <a href='javascript:void(0);' class='link-${colorBtn} link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle' id="dropdown-${item.id}" data-bs-toggle='dropdown' aria-expanded='false'>${item.id}</a>
@@ -1171,8 +1172,17 @@
                                         </div>
                                     </td>`;
                         content += `<td style="white-space: normal; word-wrap: break-word; word-break: break-word;" class="text-uppercase">${role}</td>`;
-                        content += `<td><span class="badge bg-${colorBtn}">${status}</span></td>`;
-                        content += `<td>${formatTanggalIndo(item.tgl_pinjam)}</td>`;
+                        content += `<td><span class="badge bg-${colorBtn} fs-15">${status}</span></td>`;
+
+                        const tglPinjam = dayjs(item.tgl_pinjam);
+                        const badgePj = dayjs().diff(tglPinjam, 'month', true) >= 1
+                            ? '<span class="badge bg-danger-transparent p-1"><i class="ri-alarm-warning-line me-1"></i> Risky</span>'
+                            : '<span class="badge bg-success-transparent p-1"><i class="ri-flag-line me-1"></i> Safe</span>';
+                        const tooltipPj = dayjs().diff(tglPinjam, 'month', true) >= 1
+                            ? 'Peminjaman telah melewati batas waktu AMAN (1 Bulan)'
+                            : 'Peminjaman dilakukan masih dalam kurun waktu kurang dari 1 Bulan';
+                        content += `<td>${formatTanggalIndo(item.tgl_pinjam)}<br><div data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top"
+                                        data-bs-html="true" title="${tooltipPj}"><small class="me-1">(<b class="text-orange">${tglPinjam.fromNow()}</b>)</small> ${badgePj}</div></td>`;
 
                         let adminNamaKembali = item.user_admin_kembali?.nama ?? '';
                         content += `<td>${item.tgl_kembali? formatTanggalIndo(item.tgl_kembali) + `<br><small class='text-muted text-wrap'>Dikembalikan Kpd. ${adminNamaKembali}</small>` : '-'}</td>`;
@@ -1192,13 +1202,13 @@
                                         </div>
                                     </td>`;
                         content += `</tr>`;
-                        $('#tampil-tbody').append(content);
 
-                        // Showing Tooltip
-                        $('[data-bs-toggle="tooltip"]').tooltip({
-                            trigger : 'hover'
-                        })
                     });
+                    $('#tampil-tbody').append(content);
+                    // Showing Tooltip
+                    $('[data-bs-toggle="tooltip"]').tooltip({
+                        trigger : 'hover'
+                    })
                     var table = $('#dttable').DataTable({
                         order: [
                             [7, "desc"]

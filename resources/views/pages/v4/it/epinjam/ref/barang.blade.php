@@ -276,7 +276,7 @@
                     });
                     var table = $('#dttable').DataTable({
                         order: [
-                            [3, "asc"]
+                            [3, "desc"]
                         ],
                         bAutoWidth: false,
                         aoColumns : [
