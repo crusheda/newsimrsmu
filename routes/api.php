@@ -94,7 +94,9 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // PRIVATE 
             Route::get('it/epinjam', [EPinjamController::class, 'refresh']);
             Route::get('it/epinjam/loadtambah', [EPinjamController::class, 'loadTambah']);
             Route::post('it/epinjam/simpan', [EPinjamController::class, 'simpan']);
+            Route::get('it/epinjam/updatestatus/{id}', [EPinjamController::class, 'getUpdate']);
             Route::post('it/epinjam/updatestatus', [EPinjamController::class, 'updateStatus']);
+            Route::post('it/epinjam/updatestatussemua', [EPinjamController::class, 'updateStatusSemua']);
             Route::get('it/epinjam/ubah/{id}', [EPinjamController::class, 'ubah']);
             Route::put('it/epinjam/ubah/{id}/proses', [EPinjamController::class, 'prosesUbah']);
             Route::delete('it/epinjam/hapus/{id}', [EPinjamController::class, 'hapus']);

@@ -236,7 +236,7 @@
             </div>
         </div>
     </div>
-
+{{--
     <div class="modal fade" id="modalStatusBarang" tabindex="-1">
         <div class="modal-dialog modal-sm modal-dialog-centered">
             <div class="modal-content">
@@ -281,6 +281,57 @@
                         class="btn btn-info-transparent"
                         onclick="simpanStatusBarang()">
                         <i class="ri-supabase-line me-1"></i> Simpan
+                    </button>
+
+                </div>
+
+            </div>
+        </div>
+    </div> --}}
+
+    <!-- MODAL PERBARUI STATUS -->
+    <div class="modal fade" tabindex="-1" id="modalStatusBarang">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h6 class="modal-title">
+                        Perbarui <b class="text-info">Status Barang</b>
+                    </h6>
+
+                    <button class="btn-close"
+                        data-bs-dismiss="modal">
+                    </button>
+                </div>
+
+                <div class="modal-body">
+
+                    <input type="hidden" id="id_epinjam">
+
+                    <div class="p-2 pt-0 pb-0" id="list-status-barang"></div>
+
+                </div>
+
+                <div class="modal-footer d-flex justify-content-between">
+
+                    <button
+                        class="btn btn-danger"
+                        onclick="selesaikanSemua()">
+
+                        <i class="ri-check-double-line me-1"></i>
+
+                        Barang Dikembalikan Semua
+
+                    </button>
+
+                    <button
+                        class="btn btn-primary"
+                        onclick="simpanStatusBarang()">
+
+                        <i class="ri-save-line me-1"></i>
+
+                        Perbarui Status Barang
+
                     </button>
 
                 </div>
@@ -1117,12 +1168,13 @@
                                 </li>
                             `;
                         });
+                        var crdet = new Date(item.created_at).toLocaleString("sv-SE").substring(0, 10);
                         var updet = new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 10);
                         if (item.tgl_kembali) {
                             status = 'Dikembalikan';
                             colorBtn = 'success';
                         } else {
-                            if (updet == date) {
+                            if (crdet == date) {
                                 status = 'Mulai Dipinjam';
                                 colorBtn = 'info';
                             } else {
@@ -1136,7 +1188,7 @@
                                     <a href='javascript:void(0);' class='link-${colorBtn} link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline dropdown-toggle' id="dropdown-${item.id}" data-bs-toggle='dropdown' aria-expanded='false'>${item.id}</a>
                                     <ul class='dropdown-menu dropdown-menu-end'>`;
                                     if (item.status == 1) {
-                                        content += `<li><a href="javascript:void(0);" class='dropdown-item text-info' onclick="ubahStatusBarang(${item.id},${item.status})"><i class="ri-supabase-line me-1"></i> Perbarui Status</a></li>`;
+                                        content += `<li><a href="javascript:void(0);" class='dropdown-item text-info' onclick="ubahStatusBarang(${item.id})"><i class="ri-supabase-line me-1"></i> Perbarui Status</a></li>`;
                                         if (updet == date) {
                                             // content += `<li><a href="javascript:void(0);" class='dropdown-item text-warning' onclick="ubah(${item.id})"><i class="ri-edit-line me-1"></i> Ubah</a></li>`;
                                             content += `<li><a href="javascript:void(0);" class='dropdown-item disabled'><i class="ri-edit-line me-1"></i> Ubah</a></li>`;
@@ -1240,59 +1292,261 @@
             });
         }
 
-        function ubahStatusBarang(id, status)
+        // function ubahStatusBarang(id, status)
+        // {
+        //     $('#status_list_id').val(id);
+
+        //     $('#status_barang')
+        //         .val(status)
+        //         .trigger('change');
+
+        //     $('#modalStatusBarang').modal('show');
+        // }
+
+        // function simpanStatusBarang()
+        // {
+        //     let id = $('#status_list_id').val();
+        //     let status = $('#status_barang').val();
+
+        //     $.ajax({
+        //         headers: {
+        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //         },
+        //         url: "/api/v4/it/epinjam/updatestatus",
+        //         type: "POST",
+        //         data: {
+        //             id: id,
+        //             status: status
+        //         },
+        //         beforeSend:function(){
+        //             $('#modalStatusBarang button')
+        //                 .prop('disabled',true);
+        //         },
+        //         success:function(res){
+        //             $('#modalStatusBarang').modal('hide');
+        //             iziToast.success({
+        //                 title:'Berhasil',
+        //                 message:res.message,
+        //                 position:'topRight'
+        //             });
+        //             loadTambah();
+        //             refresh();
+        //             clearInput();
+        //         },
+        //         error:function(xhr){
+        //             iziToast.error({
+        //                 title:'Gagal',
+        //                 message:xhr.responseJSON.message,
+        //                 position:'topRight'
+        //             });
+        //         },
+        //         complete:function(){
+        //             $('#modalStatusBarang button')
+        //                 .prop('disabled',false);
+        //         }
+        //     });
+        // }
+
+        function ubahStatusBarang(id)
         {
-            $('#status_list_id').val(id);
+            $.get('/api/v4/it/epinjam/updatestatus/'+id,function(res){
 
-            $('#status_barang')
-                .val(status)
-                .trigger('change');
+                $('#id_epinjam').val(id);
 
-            $('#modalStatusBarang').modal('show');
+                let html='';
+
+                res.list.forEach(function(item){
+
+                    html += `
+                        <div class="row border rounded p-2">
+
+                            <div class="col-md-8 px-1 mb-2">
+
+                                <b>${item.barang.nama}</b><br>
+
+                                <small class="text-muted">
+                                    ${item.barang.kategori.nama}
+                                </small>
+
+                            </div>
+
+                            <div class="col-md-4 px-0">
+
+                                <select
+                                    class="form-select status-item"
+                                    data-id="${item.id}">
+
+                                    <option
+                                        value="1"
+                                        ${item.status==1?'selected':''}>
+
+                                        Dipinjam
+
+                                    </option>
+
+                                    <option
+                                        value="0"
+                                        ${item.status==0?'selected':''}>
+
+                                        Dikembalikan
+
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+                    `;
+
+                });
+
+                $('#list-status-barang').html(html);
+
+                $('#modalStatusBarang').modal('show');
+
+            });
         }
 
         function simpanStatusBarang()
         {
-            let id = $('#status_list_id').val();
-            let status = $('#status_barang').val();
+
+            let detail=[];
+
+            $('.status-item').each(function(){
+
+                detail.push({
+
+                    id:$(this).data('id'),
+
+                    status:$(this).val()
+
+                });
+
+            });
+
 
             $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+
+                headers:{
+                    'X-CSRF-TOKEN':
+                    $('meta[name="csrf-token"]').attr('content')
                 },
-                url: "/api/v4/it/epinjam/updatestatus",
-                type: "POST",
-                data: {
-                    id: id,
-                    status: status
+
+                url:'/api/v4/it/epinjam/updatestatus',
+
+                type:'POST',
+
+                data:{
+                    detail:detail
                 },
-                beforeSend:function(){
-                    $('#modalStatusBarang button')
-                        .prop('disabled',true);
-                },
+
                 success:function(res){
+
                     $('#modalStatusBarang').modal('hide');
+
                     iziToast.success({
+
                         title:'Berhasil',
-                        message:res.message,
-                        position:'topRight'
+
+                        message:res.message
+
                     });
-                    loadTambah();
+
                     refresh();
-                    clearInput();
-                },
-                error:function(xhr){
-                    iziToast.error({
-                        title:'Gagal',
-                        message:xhr.responseJSON.message,
-                        position:'topRight'
-                    });
-                },
-                complete:function(){
-                    $('#modalStatusBarang button')
-                        .prop('disabled',false);
+
+                    loadTambah();
+
                 }
+
             });
+
+        }
+
+        function selesaikanSemua()
+        {
+            let id = $('#id_epinjam').val();
+
+            Swal.fire({
+                title: 'Konfirmasi',
+                text: 'Seluruh barang pada transaksi ini akan dikembalikan. Lanjutkan?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Kembalikan Semua',
+                cancelButtonText: 'Batal'
+            }).then((result)=>{
+
+                if(!result.isConfirmed){
+                    return;
+                }
+
+                $.ajax({
+
+                    headers:{
+                        'X-CSRF-TOKEN':
+                        $('meta[name="csrf-token"]').attr('content')
+                    },
+
+                    url:'/api/v4/it/epinjam/updatestatussemua',
+
+                    type:'POST',
+
+                    data:{
+                        id:id
+                    },
+
+                    beforeSend:function(){
+
+                        $('#modalStatusBarang button')
+                            .prop('disabled',true);
+
+                    },
+
+                    success:function(res){
+
+                        $('#modalStatusBarang').modal('hide');
+
+                        iziToast.success({
+
+                            title:'Berhasil',
+
+                            message:res.message,
+
+                            position:'topRight'
+
+                        });
+
+                        refresh();
+
+                        loadTambah();
+
+                    },
+
+                    error:function(xhr){
+
+                        iziToast.error({
+
+                            title:'Gagal',
+
+                            message:xhr.responseJSON.message,
+
+                            position:'topRight'
+
+                        });
+
+                    },
+
+                    complete:function(){
+
+                        $('#modalStatusBarang button')
+                            .prop('disabled',false);
+
+                    }
+
+                });
+
+            });
+
         }
 
         function formatTanggalIndo(datetime) {

@@ -339,11 +339,133 @@ class EPinjamController extends Controller
         }
     }
 
+    // public function updateStatus(Request $request)
+    // {
+    //     $request->validate([
+    //         'id' => 'required|exists:epinjam,id',
+    //         'status' => 'required|boolean'
+    //     ]);
+
+    //     DB::beginTransaction();
+
+    //     try {
+
+    //         $pinjam = epinjam::findOrFail($request->id);
+
+    //         if ($pinjam->status == 0 && $request->status == 1) {
+    //             return response()->json([
+    //                 'message' => 'Peminjaman sudah selesai, barang tidak dapat diaktifkan kembali.'
+    //             ], 422);
+    //         }
+
+    //         // Update seluruh detail barang
+    //         epinjam_list::where('id_epinjam', $pinjam->id)
+    //             ->update([
+    //                 'status' => $request->status
+    //             ]);
+
+    //         // Update header
+    //         $pinjam->update([
+    //             'user_admin_kembali' => Auth::id(),
+    //             'tgl_kembali' => now(),
+    //             'status' => $request->status
+    //         ]);
+
+    //         DB::commit();
+
+    //         return response()->json([
+    //             'success' => true,
+    //             'message' => 'Status barang berhasil diupdate'
+    //         ]);
+
+    //     } catch (\Throwable $e) {
+
+    //         DB::rollBack();
+
+    //         return response()->json([
+    //             'message' => $e->getMessage()
+    //         ], 500);
+    //     }
+    // }
+
+    public function getUpdate($id)
+    {
+        $pinjam = epinjam::with([
+            'userPinjam.roles:id,name,deskripsi',
+            'list.barang.kategori'
+        ])->findOrFail($id);
+
+        return response()->json([
+            'id' => $pinjam->id,
+            'status' => $pinjam->status,
+            'tgl_pinjam' => $pinjam->tgl_pinjam,
+            'nama_user_pinjam' => $pinjam->nama_user_pinjam,
+            'list' => $pinjam->list
+        ]);
+    }
+
     public function updateStatus(Request $request)
     {
+        DB::beginTransaction();
+
+        try{
+
+            foreach($request->detail as $row){
+
+                epinjam_list::where('id',$row['id'])
+                    ->update([
+                        'status'=>$row['status']
+                    ]);
+
+            }
+
+            $epinjamId = epinjam_list::find($request->detail[0]['id'])
+                        ->id_epinjam;
+
+            $masihDipinjam = epinjam_list::where(
+                    'id_epinjam',
+                    $epinjamId
+                )
+                ->where('status',1)
+                ->exists();
+
+            epinjam::where('id',$epinjamId)
+                ->update([
+
+                    'status'=>$masihDipinjam ? 1 : 0,
+
+                    'tgl_kembali'=>$masihDipinjam
+                        ? null
+                        : now(),
+
+                    'user_admin_kembali'=>$masihDipinjam
+                        ? null
+                        : Auth::id()
+
+                ]);
+
+            DB::commit();
+
+            return response()->json([
+                'message'=>'Status berhasil diperbarui.'
+            ]);
+
+        }catch(\Throwable $e){
+
+            DB::rollBack();
+
+            return response()->json([
+                'message'=>$e->getMessage()
+            ],500);
+
+        }
+
+    }
+
+    public function updateStatusSemua(Request $request)
+    {
         $request->validate([
-            'id' => 'required|exists:epinjam,id',
-            'status' => 'required|boolean'
+            'id' => 'required|exists:epinjam,id'
         ]);
 
         DB::beginTransaction();
@@ -352,30 +474,22 @@ class EPinjamController extends Controller
 
             $pinjam = epinjam::findOrFail($request->id);
 
-            if ($pinjam->status == 0 && $request->status == 1) {
-                return response()->json([
-                    'message' => 'Peminjaman sudah selesai, barang tidak dapat diaktifkan kembali.'
-                ], 422);
-            }
-
-            // Update seluruh detail barang
             epinjam_list::where('id_epinjam', $pinjam->id)
                 ->update([
-                    'status' => $request->status
+                    'status' => 0
                 ]);
 
-            // Update header
             $pinjam->update([
-                'user_admin_kembali' => Auth::id(),
+                'status' => 0,
                 'tgl_kembali' => now(),
-                'status' => $request->status
+                'user_admin_kembali' => Auth::id(),
             ]);
 
             DB::commit();
 
             return response()->json([
                 'success' => true,
-                'message' => 'Status barang berhasil diupdate'
+                'message' => 'Seluruh barang berhasil dikembalikan.'
             ]);
 
         } catch (\Throwable $e) {
@@ -384,7 +498,8 @@ class EPinjamController extends Controller
 
             return response()->json([
                 'message' => $e->getMessage()
-            ], 500);
+            ],500);
+
         }
     }
 
