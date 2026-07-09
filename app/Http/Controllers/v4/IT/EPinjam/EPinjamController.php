@@ -34,26 +34,18 @@ class EPinjamController extends Controller
             'barang' => function ($q) {
 
                 $q->where('status', 1)
-                ->whereNull('deleted_at')
-                ->whereNotExists(function ($sub) {
+                    ->whereNull('deleted_at')
+                    ->whereDoesntHave('list', function ($list) {
 
-                        $sub->select(DB::raw(1))
-                            ->from('epinjam_list')
-                            ->whereColumn(
-                                'epinjam_list.id_barang',
-                                'epinjam_barang.id'
-                            )
-                            ->where('epinjam_list.status', 1)
-                            ->whereNull('epinjam_list.deleted_at');
+                        $list->where('status', 1);
 
-                });
+                    });
 
             }
         ])->get();
 
-
-        $barang = $barang->filter(function($kategori){
-            return $kategori->barang->count() > 0;
+        $barang = $barang->filter(function ($kategori) {
+            return $kategori->barang->isNotEmpty();
         })->values();
 
         $users = User::select('id', 'nama_lengkap', 'nama', 'name')

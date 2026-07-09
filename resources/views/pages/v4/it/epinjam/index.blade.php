@@ -99,7 +99,7 @@
             <div class="col-md-12">
                 <div class="card custom-card">
                     <div class="card-header d-flex align-items-center justify-content-between py-3">
-                        <h6 class="mb-0">Riwayat <b class="text-teal">Peminjaman</b></h6>
+                        <h6 class="mb-0">Riwayat <b class="text-primary">Peminjaman</b></h6>
                         <div class="btn-group my-1">
                             <button type="button" class="btn btn-sm btn-warning-transparent btn-wave" onclick="refresh()" id="btn-refresh">
                                 <i class="ri-refresh-line"></i> <span class="d-none d-md-inline ms-1">Refresh</span>
@@ -138,13 +138,13 @@
                                         <th class="cell-fit">
                                             <center>#ID</center>
                                         </th>
-                                        <th>NAMA PEMINJAM</th>
-                                        <th>JABATAN</th>
+                                        <th>NAMA PEMINJAM / <b class="text-teal">JABATAN</b> / <b class="text-warning">KEPERLUAN</b></th>
+                                        {{-- <th>JABATAN</th> --}}
                                         <th>STATUS</th>
                                         <th>MULAI PEMINJAMAN</th>
                                         <th>TGL. DIKEMBALIKAN</th>
                                         <th>DAFTAR BARANG</th>
-                                        <th>DIPERBARUI</th>
+                                        <th>TGL. DIPERBARUI</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tampil-tbody">
@@ -157,13 +157,13 @@
                                         <th class="cell-fit">
                                             <center>#ID</center>
                                         </th>
-                                        <th>NAMA PEMINJAM</th>
-                                        <th>JABATAN</th>
+                                        <th>NAMA PEMINJAM / <b class="text-teal">JABATAN</b> / <b class="text-warning">KEPERLUAN</b></th>
+                                        {{-- <th>JABATAN</th> --}}
                                         <th>STATUS</th>
                                         <th>MULAI PEMINJAMAN</th>
                                         <th>TGL. DIKEMBALIKAN</th>
                                         <th>DAFTAR BARANG</th>
-                                        <th>DIPERBARUI</th>
+                                        <th>TGL. DIPERBARUI</th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -315,8 +315,8 @@
                 <div class="modal-footer d-flex justify-content-between">
 
                     <button
-                        class="btn btn-danger"
-                        onclick="selesaikanSemua()">
+                        class="btn btn-danger" onclick="selesaikanSemua()" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="left"
+                        data-bs-html="true" title="Klik tombol ini untuk menandai semua barang sebagai <b class='text-danger'>Dikembalikan</b>">
 
                         <i class="ri-check-double-line me-1"></i>
 
@@ -325,8 +325,8 @@
                     </button>
 
                     <button
-                        class="btn btn-primary"
-                        onclick="simpanStatusBarang()">
+                        class="btn btn-primary" onclick="simpanStatusBarang()" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="right"
+                        data-bs-html="true" title="Klik tombol ini untuk menyimpan perubahan status Per <b class='text-primary'>ITEM BARANG</b>">
 
                         <i class="ri-save-line me-1"></i>
 
@@ -1218,12 +1218,17 @@
                         content += `<td>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
-                                                <a class='mb-0 text-truncate'>${nama}&nbsp;${tipePeminjam}</a>
-                                                <small class='text-muted text-wrap'>${item.keperluan ? 'Keperluan : '+item.keperluan : ''}</small>
+                                                <a class='mb-0 text-truncate link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover text-decoration-underline'>
+                                                    ${nama}&nbsp;${tipePeminjam}
+                                                </a>
+                                                <a class='mb-0 text-truncate text-teal fs-13' style="white-space: normal; word-wrap: break-word; word-break: break-word;" class="text-uppercase">
+                                                    ${role}
+                                                </a>
+                                                <small class='text-muted text-wrap'>${item.keperluan ? '<b class="text-warning">Keperluan</b> : '+item.keperluan : ''}</small>
                                             </div>
                                         </div>
                                     </td>`;
-                        content += `<td style="white-space: normal; word-wrap: break-word; word-break: break-word;" class="text-uppercase">${role}</td>`;
+                        // content += `<td style="white-space: normal; word-wrap: break-word; word-break: break-word;" class="text-uppercase">${role}</td>`;
                         content += `<td><span class="badge bg-${colorBtn} fs-15">${status}</span></td>`;
 
                         const tglPinjam = dayjs(item.tgl_pinjam);
@@ -1233,7 +1238,7 @@
                         const tooltipPj = dayjs().diff(tglPinjam, 'month', true) >= 1
                             ? 'Peminjaman telah melewati batas waktu AMAN (1 Bulan)'
                             : 'Peminjaman dilakukan masih dalam kurun waktu kurang dari 1 Bulan';
-                        content += `<td>${formatTanggalIndo(item.tgl_pinjam)}<br><div data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top"
+                        content += `<td>${formatTanggalIndo(item.tgl_pinjam)}<br><div data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="left"
                                         data-bs-html="true" title="${tooltipPj}"><small class="me-1">(<b class="text-orange">${tglPinjam.fromNow()}</b>)</small> ${badgePj}</div></td>`;
 
                         let adminNamaKembali = item.user_admin_kembali?.nama ?? '';
@@ -1263,7 +1268,7 @@
                     })
                     var table = $('#dttable').DataTable({
                         order: [
-                            [7, "desc"]
+                            [6, "desc"]
                         ],
                         // bAutoWidth: false,
                         // aoColumns : [
@@ -1349,62 +1354,86 @@
 
         function ubahStatusBarang(id)
         {
-            $.get('/api/v4/it/epinjam/updatestatus/'+id,function(res){
+            const btn = $('#dropdown-' + id);
 
-                $('#id_epinjam').val(id);
+            $.ajax({
+                url: '/api/v4/it/epinjam/updatestatus/' + id,
+                type: 'GET',
+                dataType: 'json',
+                beforeSend: function() {
+                    btn.prop('disabled', true);
+                    btn.empty().html('<i class="ri-refresh-line ri-spin"></i>');
+                },
+                success: function(res) {
 
-                let html='';
+                    $('#id_epinjam').val(id);
 
-                res.list.forEach(function(item){
+                    let html='';
 
-                    html += `
-                        <div class="row border rounded p-2">
+                    res.list.forEach(function(item){
 
-                            <div class="col-md-8 px-1 mb-2">
+                        html += `
+                            <div class="row border rounded p-2 mb-1 mt-1">
 
-                                <b>${item.barang.nama}</b><br>
+                                <div class="col-md-8 px-1 mb-2">
 
-                                <small class="text-muted">
-                                    ${item.barang.kategori.nama}
-                                </small>
+                                    <b>${item.barang.nama}</b><br>
+
+                                    <small class="text-muted">
+                                        ${item.barang.kategori.nama}
+                                    </small>
+
+                                    ${item.tgl_rencana_kembali?`<small class="text-danger">
+                                        <i class="ri-arrow-right-s-line text-warning"></i> Renc. Dikembalikan pada `+formatTanggalOnlyIndo(item.tgl_rencana_kembali)+`
+                                    </small>`:``}
+                                </div>
+
+                                <div class="col-md-4 px-0">
+
+                                    <select
+                                        class="form-select status-item"
+                                        data-id="${item.id}"
+                                        ${item.status==0?'disabled':''}>
+
+                                        <option
+                                            value="1"
+                                            ${item.status==1?'selected':''}>
+
+                                            Dipinjam
+
+                                        </option>
+
+                                        <option
+                                            value="0"
+                                            ${item.status==0?'selected':''}>
+
+                                            Dikembalikan
+
+                                        </option>
+
+                                    </select>
+
+                                </div>
 
                             </div>
+                        `;
 
-                            <div class="col-md-4 px-0">
+                    });
 
-                                <select
-                                    class="form-select status-item"
-                                    data-id="${item.id}">
+                    $('#list-status-barang').html(html);
 
-                                    <option
-                                        value="1"
-                                        ${item.status==1?'selected':''}>
-
-                                        Dipinjam
-
-                                    </option>
-
-                                    <option
-                                        value="0"
-                                        ${item.status==0?'selected':''}>
-
-                                        Dikembalikan
-
-                                    </option>
-
-                                </select>
-
-                            </div>
-
-                        </div>
-                    `;
-
-                });
-
-                $('#list-status-barang').html(html);
-
-                $('#modalStatusBarang').modal('show');
-
+                    $('#modalStatusBarang').modal('show');
+                },
+                error: function(xhr) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: xhr.responseJSON.message,
+                        position: 'topRight'
+                    });
+                },
+                complete: function() {
+                    btn.prop('disabled', false).empty().text(id);
+                }
             });
         }
 

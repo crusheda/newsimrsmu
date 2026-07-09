@@ -13,6 +13,11 @@ class epinjam_barang extends Model
 
     protected $guarded = [];
 
+    public function list() // RELASI TABEL EPINJAM_BARANG KE EPINJAM_LIST
+    {
+        return $this->hasMany(epinjam_list::class, 'id_barang', 'id');
+    }
+
     public function kategori() // RELASI TABEL EPINJAM_BARANG KE EPINJAM_KATEGORI
     {
         return $this->belongsTo(epinjam_kategori::class, 'id_kategori', 'id');
