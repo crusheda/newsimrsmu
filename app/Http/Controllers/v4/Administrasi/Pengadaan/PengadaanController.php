@@ -28,10 +28,23 @@ class PengadaanController extends Controller
     {
         $show = pengadaan::get();
         $ref = pengadaan_ref::get();
+        $bulan = [];
+
+        for ($i = 1; $i <= 12; $i++) {
+            $bulan[] = [
+                'value' => $i,
+                'label' => Carbon::create()->month($i)->translatedFormat('F')
+            ];
+        }
+
+        // Tahun (misal 5 tahun terakhir sampai tahun sekarang)
+        $tahun = range(Carbon::now()->year, Carbon::now()->year - 5);
 
         $data = [
             'show' => $show,
-            'ref' => $ref
+            'ref' => $ref,
+            'bulan' => $bulan,
+            'tahun' => $tahun
         ];
 
         return view('pages.v4.administrasi.pengadaan.index')->with('list', $data);
@@ -194,7 +207,7 @@ class PengadaanController extends Controller
         return response()->json($data, 200);
     }
 
-    public function riwayatPengadaan()
+    public function riwayatPengadaan(Request $request)
     {
         $user = auth()->user();
 
@@ -206,6 +219,9 @@ class PengadaanController extends Controller
         }
 
         try {
+
+            $tahun = $request->tahun;
+            $bulan = $request->bulan;
 
             $query = pengadaan::query()
                 ->join('users', 'users.id', '=', 'pengadaan.id_user')
@@ -241,6 +257,16 @@ class PengadaanController extends Controller
             // 🔐 Filter berdasarkan role
             if (!$user->can('admin_pengadaan')) {
                 $query->where('pengadaan.id_user', $user->id);
+            }
+
+            // Filter Tahun
+            if (!empty($tahun) && $tahun != 0) {
+                $query->whereYear('pengadaan.tgl_pengadaan', $tahun);
+            }
+
+            // Filter Bulan
+            if (!empty($bulan) && $bulan != 0) {
+                $query->whereMonth('pengadaan.tgl_pengadaan', $bulan);
             }
 
             $result = $query->get();
