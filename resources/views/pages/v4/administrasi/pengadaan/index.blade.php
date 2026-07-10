@@ -269,44 +269,42 @@
                 </div>
                 <div class="modal-body">
                     <div class="card custom-card overflow-hidden mb-0">
-                        @can('admin_pengadaan')
-                            <div class="card-header d-flex align-items-center justify-content-between py-3">
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <select class="form-control" id="filter_tahun_riwayat">
+                        <div class="card-header d-flex align-items-center justify-content-between py-3">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <select class="form-control" id="filter_tahun_riwayat">
 
-                                            <option value="0">Semua Tahun</option>
+                                        <option value="0">Semua Tahun</option>
 
-                                            @foreach ($list['tahun'] as $item)
-                                                <option value="{{ $item }}" @if (now()->format('Y') == $item) selected @endif>
-                                                    {{ $item }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        <select class="form-control" id="filter_bulan_riwayat">
+                                        @foreach ($list['tahun'] as $item)
+                                            <option value="{{ $item }}" @can('admin_pengadaan') @if (now()->format('Y') == $item) selected @endif @endcan>
+                                                {{ $item }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <select class="form-control" id="filter_bulan_riwayat">
 
-                                            <option value="0">Semua Bulan</option>
+                                        <option value="0">Semua Bulan</option>
 
-                                            @foreach ($list['bulan'] as $item)
-                                                <option value="{{ $item['value'] }}" @if (now()->format('m') == $item['value']) selected @endif>
-                                                    {{ $item['label'] }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        <button class="btn btn-secondary-transparent" onclick="bukaRiwayatPengadaan()" id="btn-terapkan-filter">
-                                            <i class="ri-filter-line me-1"></i> Terapkan
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-danger-transparent dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" disabled><i class="ri-spy-line"></i> <span class="d-none d-md-inline ms-1">Menu Admin</span></button>
-                                    {{-- <ul class="dropdown-menu p-2">
-                                        <li><a class="dropdown-item" href="javascript:void(0);" onclick="window.location.href='{{ route('v4.administrasi.pengadaan.barang') }}'">Daftar Barang</a></li>
-                                        <li><a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#rekap">Rekapitulasi</a></li>
-                                    </ul> --}}
+                                        @foreach ($list['bulan'] as $item)
+                                            <option value="{{ $item['value'] }}" @can('admin_pengadaan') @if (now()->format('m') == $item['value']) selected @endif @endcan>
+                                                {{ $item['label'] }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <button class="btn btn-secondary-transparent" onclick="bukaRiwayatPengadaan()" id="btn-terapkan-filter">
+                                        <i class="ri-filter-line me-1"></i> Terapkan
+                                    </button>
                                 </div>
                             </div>
-                        @endcan
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-danger-transparent dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" disabled><i class="ri-spy-line"></i> <span class="d-none d-md-inline ms-1">Menu Admin</span></button>
+                                {{-- <ul class="dropdown-menu p-2">
+                                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="window.location.href='{{ route('v4.administrasi.pengadaan.barang') }}'">Daftar Barang</a></li>
+                                    <li><a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#rekap">Rekapitulasi</a></li>
+                                </ul> --}}
+                            </div>
+                        </div>
                         <div class="card-body p-3">
                             <div class="table-responsive">
                                 <table id="dttable-riwayat" class="table nowrap text-nowrap">
