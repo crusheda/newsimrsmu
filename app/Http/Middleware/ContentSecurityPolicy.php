@@ -18,26 +18,36 @@ class ContentSecurityPolicy
         $response = $next($request);
 
         $csp = implode(' ', [
+
             "default-src 'self';",
 
-            // SCRIPT (Turnstile butuh ini)
-            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com blob:;",
+            // SCRIPT
+            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com https://meet.jit.si blob:;",
 
-            // STYLE (Google Fonts)
-            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;",
+            // STYLE
+            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://meet.jit.si;",
 
-            // FONT (WAJIB untuk Google Fonts)
-            "font-src 'self' https://fonts.gstatic.com data:;",
+            // FONT
+            "font-src 'self' https://fonts.gstatic.com https://meet.jit.si data:;",
 
-            // TURNSTILE
-            "frame-src 'self' blob: https://challenges.cloudflare.com;",
-            "connect-src 'self' https://challenges.cloudflare.com;",
+            // FRAME (Jitsi memakai iframe)
+            "frame-src 'self' blob: https://challenges.cloudflare.com https://meet.jit.si;",
+
+            // WEBSOCKET + API CONNECTION JITSI
+            "connect-src 'self' https://challenges.cloudflare.com https://meet.jit.si wss://meet.jit.si;",
+
+            // MEDIA (kamera dan microphone)
+            "media-src 'self' blob:;",
 
             // IMAGE
-            "img-src 'self' data: blob: https://*.simrsmu.com;",
+            "img-src 'self' data: blob: https://*.simrsmu.com https://meet.jit.si;",
+
         ]);
 
-        $response->headers->set('Content-Security-Policy', $csp);
+        $response->headers->set(
+            'Content-Security-Policy',
+            $csp
+        );
 
         return $response;
     }

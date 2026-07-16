@@ -749,7 +749,7 @@ class ProfilController extends Controller
 
                 // CEK DATA
                 $cekData = referensi::find($request->jenis);
-                datalogs::record($request->user_id, 'Baru saja memperbarui Surat '.$cekData->deskripsi.' terbaru', $no_surat, $getData, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+                datalogs::record($request->user_id, 'Baru saja memperbarui Surat '.$cekData->deskripsi.' terbaru', $no_surat, $getData, $data, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
 
                 return response()->json($tgl, 200);
             }
@@ -778,7 +778,7 @@ class ProfilController extends Controller
 
             // CEK DATA
             $cekData = referensi::find($request->jenis);
-            datalogs::record($request->user_id, 'Baru saja menambahkan Surat '.$cekData->deskripsi.' terbaru', $no_surat, null, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+            datalogs::record($request->user_id, 'Baru saja menambahkan Surat '.$cekData->deskripsi.' terbaru', $no_surat, null, $data, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
 
             return response()->json($tgl, 200);
         }

@@ -6,6 +6,8 @@
     data-width="fullwidth"
     data-menu-styles="transparent"
     data-page-style="flat"
+    {{-- data-toggled="double-menu-close"
+    data-vertical-style="doublemenu" --}}
     data-toggled="close"
     data-vertical-style="default"
     loader="disable" foxified>

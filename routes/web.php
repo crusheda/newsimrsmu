@@ -76,6 +76,8 @@ use \App\Http\Controllers\v4\Pelayanan\Kebidanan\SKLController;
 use \App\Http\Controllers\v4\Akreditasi\KecelakaanKerjaController;
 use App\Http\Controllers\v4\AI\KlaimBpjsController;
 
+use App\Http\Controllers\v4\Meeting\VideoMeetingController;
+
 // use Telegram\Bot\Laravel\Facades\Telegram;
 // Route::get('/telegram-test', function () {
 
@@ -90,6 +92,34 @@ use App\Http\Controllers\v4\AI\KlaimBpjsController;
 // });
 
 Route::group(['middleware' => ['auth','password.age'], 'prefix' => 'v4', 'as' => ''], function () { // SIMRSMU v.4
+
+    // JIT SI MEETING VIDEO
+        Route::get(
+            'meeting',
+            [VideoMeetingController::class,'index']
+        )
+        ->name('v4.meeting.index');
+
+
+        Route::get(
+            'meeting/create',
+            [VideoMeetingController::class,'create']
+        )
+        ->name('v4.meeting.create');
+
+
+        Route::post(
+            'meeting',
+            [VideoMeetingController::class,'store']
+        )
+        ->name('v4.meeting.store');
+
+
+        Route::get(
+            'meeting/{room}',
+            [VideoMeetingController::class,'room']
+        )
+        ->name('v4.meeting.room');
 
     // PUBLIK
     Route::get('dashboard', [DashboardController::class, 'index'])->name('v4.dashboard');
