@@ -1114,6 +1114,160 @@ class JadwalDinasController extends Controller
         return response()->json($periode);
     }
 
+    public function countAbsensi()
+    {
+        $pegawaiId = Auth::id();
+        $today = Carbon::today();
+
+        // ==========================
+        // PERIODE SEKARANG
+        // ==========================
+        if ($today->day >= 21) {
+
+            // 21 bulan ini -> 20 bulan depan
+            $currentStart = $today->copy()->day(21)->startOfDay();
+            $currentEnd   = $today->copy()->addMonth()->day(20)->endOfDay();
+
+            // 21 bulan lalu -> 20 bulan ini
+            $previousStart = $today->copy()->subMonth()->day(21)->startOfDay();
+            $previousEnd   = $today->copy()->day(20)->endOfDay();
+
+        } else {
+
+            // 21 bulan lalu -> 20 bulan ini
+            $currentStart = $today->copy()->subMonth()->day(21)->startOfDay();
+            $currentEnd   = $today->copy()->day(20)->endOfDay();
+
+            // 21 dua bulan lalu -> 20 bulan lalu
+            $previousStart = $today->copy()->subMonths(2)->day(21)->startOfDay();
+            $previousEnd   = $today->copy()->subMonth()->day(20)->endOfDay();
+        }
+
+        // ==========================
+        // DATA PERIODE SEKARANG
+        // ==========================
+
+        $bulanIni = DB::table('kepegawaian_absensi')
+            ->where('pegawai_id', $pegawaiId)
+            ->whereNull('deleted_at')
+            ->whereBetween('tgl_in', [$currentStart, $currentEnd])
+            ->selectRaw("
+                COUNT(CASE WHEN terlambat = 1 THEN 1 END) AS total_terlambat,
+
+                COALESCE(SUM(TIME_TO_SEC(keterlambatan)),0) AS total_detik_terlambat,
+
+                COALESCE(SUM(
+                    CASE
+                        WHEN lembur IS NULL OR lembur = ''
+                        THEN 0
+                        ELSE TIME_TO_SEC(lembur)
+                    END
+                ),0) AS total_detik_lembur,
+
+                COALESCE(SUM(
+                    TIME_TO_SEC(
+                        TIMEDIFF(ref_jam_pulang, ref_jam_masuk)
+                    )
+                ),0) AS total_detik_bekerja
+            ")
+            ->first();
+
+        // ==========================
+        // DATA PERIODE SEBELUMNYA
+        // ==========================
+
+        $bulanLalu = DB::table('kepegawaian_absensi')
+                    ->where('pegawai_id', $pegawaiId)
+                    ->whereNull('deleted_at')
+                    ->whereBetween('tgl_in', [$previousStart, $previousEnd])
+                    ->selectRaw("
+                        COUNT(CASE WHEN terlambat = 1 THEN 1 END) AS total_terlambat,
+
+                        COALESCE(SUM(TIME_TO_SEC(keterlambatan)),0) AS total_detik_terlambat
+                    ")
+                    ->first();
+
+        // ==========================
+        // PERSENTASE
+        // ==========================
+
+        $terlambatSekarang = (int) $bulanIni->total_terlambat;
+        $terlambatLalu     = (int) $bulanLalu->total_terlambat;
+
+        if ($terlambatLalu == 0) {
+
+            if ($terlambatSekarang == 0) {
+                $persentase = 0;
+                $status = 'tetap';
+            } else {
+                $persentase = 100;
+                $status = 'naik';
+            }
+
+        } else {
+
+            $persentase = round(
+                abs((($terlambatSekarang - $terlambatLalu) / $terlambatLalu) * 100),
+                2
+            );
+
+            if ($terlambatSekarang > $terlambatLalu) {
+                $status = 'naik';
+            } elseif ($terlambatSekarang < $terlambatLalu) {
+                $status = 'turun';
+            } else {
+                $status = 'tetap';
+            }
+        }
+
+        return response()->json([
+            'periode_sekarang' => [
+                'mulai'  => $currentStart->toDateString(),
+                'sampai' => $currentEnd->toDateString(),
+            ],
+
+            'periode_sebelumnya' => [
+                'mulai'  => $previousStart->toDateString(),
+                'sampai' => $previousEnd->toDateString(),
+            ],
+
+            'terlambat_bulan_ini'  => $terlambatSekarang,
+            'terlambat_bulan_lalu' => $terlambatLalu,
+
+            'persentase_perubahan' => $persentase,
+            'status'               => $status,
+
+            // Durasi terlambat
+            'total_waktu_terlambat_bulan_ini' => $this->secondsToTime(
+                $bulanIni->total_detik_terlambat
+            ),
+
+            'total_waktu_terlambat_bulan_lalu' => $this->secondsToTime(
+                $bulanLalu->total_detik_terlambat
+            ),
+
+            // Lainnya periode sekarang
+            'total_waktu_lembur' => $this->secondsToTime(
+                $bulanIni->total_detik_lembur
+            ),
+
+            'total_jam_bekerja' => $this->secondsToTime(
+                $bulanIni->total_detik_bekerja
+            ),
+        ]);
+    }
+
+    private function secondsToTime($seconds)
+    {
+        $seconds = max(0, (int) $seconds);
+
+        $hours = floor($seconds / 3600);
+        $minutes = floor(($seconds % 3600) / 60);
+        $secs = $seconds % 60;
+
+        return sprintf('%02d:%02d:%02d', $hours, $minutes, $secs);
+    }
+
     function totalCuti()
     {
         // $ref_users = DB::table('referensi_jadwal_users')

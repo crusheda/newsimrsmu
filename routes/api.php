@@ -375,6 +375,7 @@ Route::prefix('v4')->middleware(['web','auth'])->group(function () { // PRIVATE 
             // DASHBOARD / GRAPH
                 Route::get('sdi/jadwaldinas/totalabsensi/{range}', [JadwalDinasController::class, 'totalAbsensi']);
                 Route::get('sdi/jadwaldinas/grafikabsensi', [JadwalDinasController::class, 'grafikAbsensi']);
+                Route::get('sdi/jadwaldinas/countabsensi', [JadwalDinasController::class, 'countAbsensi']);
                 Route::get('sdi/jadwaldinas/totalcuti', [JadwalDinasController::class, 'totalCuti']);
                 Route::get('sdi/jadwaldinas/totalcutiunit', [JadwalDinasController::class, 'totalCutiUnit']);
 
