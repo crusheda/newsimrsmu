@@ -179,9 +179,7 @@
                         <div class="card-body">
                             <div class="d-flex align-items-start gap-3">
                                 <div class="flex-fill">
-                                    <span class="fs-13 fw-medium">Total Keterlambatan <span class="badge bg-outline-primary badge-sm" data-bs-toggle="tooltip"
-                                        data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Periode Bulan Ini"
-                                        >{{ \Carbon\Carbon::now()->isoFormat('MMMM Y') }}</span></span>
+                                    <span class="fs-13 fw-medium">Total Keterlambatan <b class="text-primary">Bulan Ini</b></span>
                                     <h1 class="fw-semibold my-2 lh-1" id="cx_total_terlambat_bulan_ini" style="cursor: pointer;"><i class="ri-refresh-line ri-spin fs-16"></i></h1>
                                     <div class="d-flex align-items-center justify-content-between">
                                         <span class="fs-12 d-block text-muted mt-1">
@@ -203,9 +201,7 @@
                         <div class="card-body">
                             <div class="d-flex align-items-start gap-3">
                                 <div class="flex-fill">
-                                    <span class="fs-13 fw-medium">Total Keterlambatan <span class="badge bg-outline-secondary badge-sm" data-bs-toggle="tooltip"
-                                        data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Periode Bulan Lalu"
-                                        >{{ \Carbon\Carbon::now()->subMonth()->isoFormat('MMMM Y') }}</span>
+                                    <span class="fs-13 fw-medium">Total Keterlambatan <b class="text-secondary">Bulan Lalu</b></span>
                                     </span>
                                     <h1 class="fw-semibold my-2 lh-1" id="cx_total_terlambat_bulan_lalu" style="cursor: pointer;"><i class="ri-refresh-line ri-spin fs-16"></i></h1>
                                     <div class="d-flex align-items-center justify-content-between">
