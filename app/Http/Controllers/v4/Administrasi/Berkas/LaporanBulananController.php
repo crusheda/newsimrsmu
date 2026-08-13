@@ -154,24 +154,27 @@ class LaporanBulananController extends Controller
         //     'file' => ['max:20000','mimes:pdf'],
         //     ]);
 
-        // tampung berkas yang sudah diunggah ke variabel baru
+        // Tampung berkas yang sudah diunggah ke variabel baru
         // 'file' merupakan nama input yang ada pada form
         $uploadedFile = $request->file('file');
 
-        // simpan berkas yang diunggah ke sub-direktori 'public/files'
-        // direktori 'files' otomatis akan dibuat jika belum ada
-        $path = $uploadedFile->store('public/files/laporan-bulanan/'.$request->thn.'/'.$request->bln);
-
-        $find = berkas_laporan_bulanan::where('id_user',$userId)->get();
+        // Cek apakah nama file sudah pernah diupload oleh user
+        $find = berkas_laporan_bulanan::where('id_user', $userId)->get();
 
         foreach ($find as $key => $value) {
             if ($value->title == $uploadedFile->getClientOriginalName()) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Maaf, Nama file '.$value->title.' sudah pernah diupload. Mohon ganti nama file.'
+                    'message' => 'Maaf, Nama file ' . $value->title . ' sudah pernah diupload. Mohon ganti nama file.'
                 ], 422);
             }
         }
+
+        // Jika belum ada, baru simpan berkas
+        // 'file' merupakan nama input yang ada pada form
+        $path = $uploadedFile->store(
+            'public/files/laporan-bulanan/' . $request->thn . '/' . $request->bln
+        );
 
         $data = new berkas_laporan_bulanan;
         $data->judul = $request->judul;
@@ -180,8 +183,8 @@ class LaporanBulananController extends Controller
         $data->id_user = $userId;
         $data->unit = json_encode($unit);
 
-            $data->title = $request->title ?? $uploadedFile->getClientOriginalName();
-            $data->filename = $path;
+        $data->title = $request->title ?? $uploadedFile->getClientOriginalName();
+        $data->filename = $path;
 
         $data->ket = $request->ket;
 
