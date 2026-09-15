@@ -35,6 +35,7 @@ Route::group(['prefix' => 'v4', 'as' => ''], function () {
 
 // PROTECTED ROUTES
 use \App\Http\Controllers\v4\Dashboard\DashboardController;
+use App\Http\Controllers\v4\Dashboard\BeritaController;
 use \App\Http\Controllers\v4\Kalender\KalenderController;
 use \App\Http\Controllers\v4\Setting\ProfilController;
 // use \App\Http\Controllers\v4\IT\TiketWhatsappController; // WHATSAPP BAILEYS
@@ -123,6 +124,7 @@ Route::group(['middleware' => ['auth','password.age'], 'prefix' => 'v4', 'as' =>
 
     // PUBLIK
     Route::get('dashboard', [DashboardController::class, 'index'])->name('v4.dashboard');
+    Route::get('berita', [BeritaController::class, 'index'])->name('v4.berita');
     Route::get('kalender', [KalenderController::class, 'index'])->name('v4.kalender');
     Route::get('profil', [ProfilController::class, 'index'])->name('v4.profil');
 

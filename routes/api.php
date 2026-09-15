@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// WEBSERVICE ANDROID
+use App\Http\Controllers\v4\Dashboard\BeritaController;
+
+// WEBSERVICE SIMRS
 use App\Http\Controllers\Auth\v4\ResetPasswordController;
 use \App\Http\Controllers\v4\Kalender\KalenderController;
 use \App\Http\Controllers\v4\Setting\ProfilController;
@@ -59,6 +63,16 @@ use \App\Http\Controllers\v4\Akreditasi\KecelakaanKerjaController;
 use App\Http\Controllers\v4\AI\KlaimBpjsController;
 
 Route::prefix('v4')->group(function () { // PUBLIC API SIMRSMU v.4
+
+    // ANDROID - BERITA
+    Route::get('berita', [BeritaController::class, 'indexAPI']);
+    Route::get('berita/{id}', [BeritaController::class, 'show']);
+    Route::post('berita', [BeritaController::class, 'store']);
+    Route::post('berita/{id}', [BeritaController::class, 'update']);
+    Route::delete('berita/{id}', [BeritaController::class, 'destroy']);
+
+    // CUTI
+    Route::get('cuti/{id_user}', [AbsensiController::class, 'flutterCuti']);
 
     // API RESET PASSWORD AFTER LUPA PASSWORD
     Route::post('reset-password', [ResetPasswordController::class,'reset']);

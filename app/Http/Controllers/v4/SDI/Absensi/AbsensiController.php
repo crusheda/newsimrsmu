@@ -17,6 +17,7 @@ use App\Models\kepegawaian\ref_jadwal_jabatan;
 use App\Models\model_has_roles;
 use App\Models\struktur_organisasi;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
@@ -1301,5 +1302,207 @@ class AbsensiController extends Controller
         $data->delete();
 
         return response()->json($push, 200);
+    }
+
+    /**
+     * WEBSERVICE ANDROID - FLUTTER -------------------------------------------------------------
+     * Ringkasan dan riwayat cuti pegawai.
+     */
+    public function flutterCuti(Request $request, int $id_user): JsonResponse
+    {
+        $tahun = (int) $request->get('tahun', now()->year);
+
+        if ($tahun < 2000 || $tahun > 2100) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tahun tidak valid.',
+                'data' => null,
+            ], 422);
+        }
+
+        /*
+         * Asumsi hak cuti tahunan.
+         * Nanti dapat disesuaikan jika aturan RS berbeda.
+         */
+        $hakCuti = 12;
+
+        $totalTerpakai = 0;
+        $riwayat = [];
+
+        for ($bulan = 1; $bulan <= 12; $bulan++) {
+
+            /*
+             * Bulan pada database disimpan dengan format:
+             * 01, 02, 03, ..., 12
+             */
+            $bulanDb = str_pad($bulan, 2, '0', STR_PAD_LEFT);
+
+            /*
+             * Cari jadwal bulan tersebut.
+             */
+            $jadwal = jadwal::query()
+                ->where('bulan', $bulanDb)
+                ->where('tahun', $tahun)
+                ->whereIn('progress',[2,3])
+                ->whereJsonContains('staf', (string) $id_user)
+                ->whereNull('deleted_at')
+                ->first();
+
+            if (!$jadwal) {
+                continue;
+            }
+
+            /*
+             * Cari detail jadwal untuk pegawai tersebut.
+             */
+            $detail = jadwal_detail::query()
+                ->where('id_jadwal', $jadwal->id)
+                ->where('pegawai_id', $id_user)
+                ->whereNull('deleted_at')
+                ->first();
+
+            if (!$detail) {
+                continue;
+            }
+
+            /*
+             * Jumlah hari dalam bulan.
+             */
+            $jumlahHari = Carbon::create($tahun, $bulan, 1)
+                ->daysInMonth;
+
+            /*
+             * Cari semua tanggal yang memiliki kode C.
+             */
+            $tanggalCuti = [];
+
+            for ($hari = 1; $hari <= $jumlahHari; $hari++) {
+
+                $kolom = 'tgl' . $hari;
+
+                $kode = strtoupper(
+                    trim((string) ($detail->{$kolom} ?? ''))
+                );
+
+                if ($kode === 'C') {
+                    $tanggalCuti[] = $hari;
+                }
+            }
+
+            if (empty($tanggalCuti)) {
+                continue;
+            }
+
+            /*
+             * Tambahkan total cuti terpakai.
+             */
+            $totalTerpakai += count($tanggalCuti);
+
+            /*
+             * Kelompokkan tanggal cuti yang berurutan.
+             *
+             * Contoh:
+             * 12, 13, 14, 20
+             *
+             * menjadi:
+             * 12-14
+             * 20
+             */
+            $groups = [];
+
+            $start = $tanggalCuti[0];
+            $previous = $tanggalCuti[0];
+
+            foreach (array_slice($tanggalCuti, 1) as $tanggal) {
+
+                if ($tanggal === $previous + 1) {
+                    $previous = $tanggal;
+                    continue;
+                }
+
+                $groups[] = [
+                    'mulai' => $start,
+                    'selesai' => $previous,
+                ];
+
+                $start = $tanggal;
+                $previous = $tanggal;
+            }
+
+            $groups[] = [
+                'mulai' => $start,
+                'selesai' => $previous,
+            ];
+
+            /*
+             * Masukkan ke riwayat.
+             */
+            foreach ($groups as $group) {
+
+                $tglMulai = Carbon::create(
+                    $tahun,
+                    $bulan,
+                    $group['mulai']
+                );
+
+                $tglSelesai = Carbon::create(
+                    $tahun,
+                    $bulan,
+                    $group['selesai']
+                );
+
+                $jumlahCuti = $tglMulai->diffInDays($tglSelesai) + 1;
+
+                $riwayat[] = [
+                    'bulan' => $bulan,
+                    'nama_bulan' => $tglMulai->translatedFormat('F'),
+
+                    'tgl_mulai' => $tglMulai->format('Y-m-d'),
+                    'tgl_selesai' => $tglSelesai->format('Y-m-d'),
+
+                    'tanggal' => $tglMulai->isSameDay($tglSelesai)
+                        ? $tglMulai->translatedFormat('d F Y')
+                        : $tglMulai->translatedFormat('d F Y')
+                            . ' - '
+                            . $tglSelesai->translatedFormat('d F Y'),
+
+                    'jumlah_hari' => $jumlahCuti,
+                ];
+            }
+        }
+
+        /*
+         * Urutkan berdasarkan tanggal.
+         */
+        usort($riwayat, function ($a, $b) {
+            return strcmp(
+                $a['tgl_mulai'],
+                $b['tgl_mulai']
+            );
+        });
+
+        /*
+         * Hitung sisa cuti.
+         */
+        $tersedia = max(
+            $hakCuti - $totalTerpakai,
+            0
+        );
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Data cuti berhasil diambil.',
+            'data' => [
+                'tahun' => $tahun,
+
+                'hak_cuti' => $hakCuti,
+
+                'terpakai' => $totalTerpakai,
+
+                'tersedia' => $tersedia,
+
+                'riwayat' => $riwayat,
+            ],
+        ]);
     }
 }
