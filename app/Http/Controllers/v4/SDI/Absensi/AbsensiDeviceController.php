@@ -34,32 +34,64 @@ class AbsensiDeviceController extends Controller
         }
     }
 
+    // function table()
+    // {
+    //     $show = fcm_tokens::whereNull('deleted_at')
+    //             ->orderBy('id', 'desc')
+    //             ->get()
+    //             ->map(function($token) {
+    //                 // Ambil semua kolom fcm_tokens
+    //                 $data = $token->toArray();
+
+    //                 // Tambahkan kolom nama_user dari relasi
+    //                 $data['nama_user'] = $token->user->nama ?? null;
+    //                 $data['nama_admin'] = $token->admin->nama ?? null;
+
+    //                 // Tambahkan kolom android_model
+    //                 $data['nama_brand']   = $token->androidModel->brand ?? null;
+    //                 $data['nama_android'] = $token->androidModel->nama ?? null;
+    //                 $data['nama_device']  = $token->androidModel->device ?? null;
+
+    //                 return $data;
+    //             });
+
+    //     $data = [
+    //         'show' => $show,
+    //     ];
+
+    //     return response()->json($data);
+    // }
+
     function table()
     {
+        $latestUser232 = fcm_tokens::whereNull('deleted_at')
+            ->where('user_id', 232)
+            ->max('id');
+
         $show = fcm_tokens::whereNull('deleted_at')
-                ->orderBy('id', 'desc')
-                ->get()
-                ->map(function($token) {
-                    // Ambil semua kolom fcm_tokens
-                    $data = $token->toArray();
+            ->where(function ($query) use ($latestUser232) {
+                $query->where('user_id', '!=', 232)
+                    ->orWhere('id', $latestUser232);
+            })
+            ->orderBy('id', 'desc')
+            ->get()
+            ->map(function ($token) {
 
-                    // Tambahkan kolom nama_user dari relasi
-                    $data['nama_user'] = $token->user->nama ?? null;
-                    $data['nama_admin'] = $token->admin->nama ?? null;
+                $data = $token->toArray();
 
-                    // Tambahkan kolom android_model
-                    $data['nama_brand']   = $token->androidModel->brand ?? null;
-                    $data['nama_android'] = $token->androidModel->nama ?? null;
-                    $data['nama_device']  = $token->androidModel->device ?? null;
+                $data['nama_user'] = $token->user->nama ?? null;
+                $data['nama_admin'] = $token->admin->nama ?? null;
 
-                    return $data;
-                });
+                $data['nama_brand']   = $token->androidModel->brand ?? null;
+                $data['nama_android'] = $token->androidModel->nama ?? null;
+                $data['nama_device']  = $token->androidModel->device ?? null;
 
-        $data = [
+                return $data;
+            });
+
+        return response()->json([
             'show' => $show,
-        ];
-
-        return response()->json($data);
+        ]);
     }
 
     function approve($id)

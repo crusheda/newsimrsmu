@@ -201,7 +201,12 @@
                         var adminID = @json(Auth::user()->can('admin_kepegawaian'));
                         var superID = @json(Auth::user()->can('admin_kepegawaian_kepala'));
                         var clrBtn = '';
-                        if (item.accepted) {
+                        // if (item.user_id == 232) {
+                        //         clrBtn = 'success';
+                        //         txtBtn = 'Telah Disetujui';
+                        // } else {
+                        // }
+                        if (item.accepted || item.user_id == 232) {
                             clrBtn = 'success';
                             txtBtn = 'Telah Disetujui';
                         } else {
@@ -213,7 +218,7 @@
                                 if (item.status == 1) {
                                     if (superID || adminID || devID) {
                                         if (item.nama_user) {
-                                            if (item.accepted) {
+                                            if (item.accepted || item.user_id == 232) {
                                                 content += `<buttoon class="btn btn-sm btn-danger-transparent btn-icon me-2" onclick="reject(${item.id})" data-bs-toggle="tooltip"
                                                 data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Hapus Perizinan Device"><i class="fas fa-frown"></i></buttoon>`;
                                             } else {
@@ -240,7 +245,17 @@
                                 }
                         content += "</div></center></td>";
                         content += `<td>${item.nama_user?"<b class='text-"+clrBtn+"'>"+item.nama_user+"</b>":'<b class="text-secondary">Profil Pengguna Tidak Lengkap</b>'} [<b class="text-orange">#${item.user_id}</b>]</td>`;
-                        content += `<td>${item.nama_brand?item.nama_brand+' - ':''}${item.nama_android?item.nama_android:'Perangkat Tidak Diketahui'} ${item.nama_device?'(ID#'+item.nama_device+')':''}</td>`;
+
+                        const device = item.nama_android
+                                        ?? (item.model
+                                            ? `Android - <b class="text-warning">Model ${item.model}</b>`
+                                            : '<b class="text-warning">Perangkat Tidak Diketahui</b>');
+                        const brand = item.nama_brand ? `${item.nama_brand} - ` : '';
+                        const id = item.nama_device ? ` (ID#${item.nama_device})` : '';
+
+                        content += `<td>${brand}${device}${id}</td>`;
+                        // content += `<td>${item.nama_brand?item.nama_brand+' - ':''}${item.nama_android?item.nama_android:'Perangkat Tidak Diketahui'} ${item.nama_device?'(ID#'+item.nama_device+')':''}</td>`;
+
                         content += `<td>${item.platform} (Ver. ${item.os_version})</td>`;
                                     aktif = '';
                                     if (item.status) {
