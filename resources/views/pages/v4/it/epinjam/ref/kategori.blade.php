@@ -295,9 +295,10 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 url: '/api/v4/it/epinjam/ref/kategori/ubah',
-                type: 'PUT',
+                type: 'POST',
                 dataType: 'json',
                 data: {
+                    _method: 'PUT',
                     id: $('#id_edit').val(),
                     kategori: $('#kategori_edit').val(),
                 },

@@ -295,9 +295,10 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 url: '/api/v4/it/epinjam/ref/asal/ubah',
-                type: 'PUT',
+                type: 'POST',
                 dataType: 'json',
                 data: {
+                    _method: 'PUT',
                     id: $('#id_edit').val(),
                     asal: $('#asal_edit').val(),
                 },

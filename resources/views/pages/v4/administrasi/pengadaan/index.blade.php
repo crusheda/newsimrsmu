@@ -1435,8 +1435,8 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     url: `/api/v4/administrasi/pengadaan/keranjang/update/${id}`,
-                    type: 'PUT',
-                    data: { qty: qty }
+                    type: 'POST',
+                    data: { _method: 'PUT', qty: qty }
                 });
             }, 500);
         }

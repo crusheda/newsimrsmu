@@ -467,9 +467,10 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 url: '/api/v4/it/epinjam/ref/barang/ubah',
-                type: 'PUT',
+                type: 'POST',
                 dataType: 'json',
                 data: {
+                    _method: 'PUT',
                     id: $('#id_edit').val(),
                     id_kategori: $('#kategori_edit').val(),
                     id_asal: $('#asal_edit').val(),

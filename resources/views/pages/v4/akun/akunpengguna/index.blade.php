@@ -630,9 +630,10 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 url: "/api/v4/akun/pengguna/ubah/" + id,
-                type: 'PUT',
+                type: 'POST',
                 dataType: 'json',
                 data: {
+                    _method: 'PUT',
                     name: name,
                     nip: nip,
                     email: email,
